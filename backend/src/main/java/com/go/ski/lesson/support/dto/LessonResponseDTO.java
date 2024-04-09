@@ -8,13 +8,13 @@ import java.time.LocalDate;
 
 @Getter
 public class LessonResponseDTO {
-    Integer lessonId;
-    Integer teamId;
-    String teamName;
-    String resortName;
-    LocalDate lessonDate;
-    String startTime;
-    Integer duration;
+    private Integer lessonId;
+    private Integer teamId;
+    private String teamName;
+    private String resortName;
+    private LocalDate lessonDate;
+    private String startTime;
+    private Integer duration;
 
     public LessonResponseDTO(Lesson lesson, LessonInfo lessonInfo) {
         lessonId = lesson.getLessonId();

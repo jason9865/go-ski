@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class UserLessonResponseDTO extends LessonResponseDTO {
-    Integer instructorId;
-    String instructorName;
-    String profileUrl;
+    private Integer instructorId;
+    private String instructorName;
+    private String profileUrl;
 
     public UserLessonResponseDTO(Lesson lesson, LessonInfo lessonInfo) {
         super(lesson, lessonInfo);

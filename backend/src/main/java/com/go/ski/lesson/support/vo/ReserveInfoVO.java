@@ -2,6 +2,8 @@ package com.go.ski.lesson.support.vo;
 
 import com.go.ski.lesson.support.dto.ReserveRequestDTO;
 import com.go.ski.lesson.support.dto.ReserveRequestFrameDTO;
+import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.redis.dto.PaymentCacheDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,5 +44,15 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
             case "휴일" -> lessonType = "1000000";
             default -> throw new IllegalArgumentException("Invalid lesson type");
         }
+    }
+
+    public ReserveInfoVO(PaymentCacheDto paymentCacheDto) {
+        super(paymentCacheDto);
+        lessonType = paymentCacheDto.getLessonInfo().getLessonType();
+    }
+
+    public ReserveInfoVO(LessonInfo lessonInfo) {
+        super(lessonInfo);
+        lessonType = lessonInfo.getLessonType();
     }
 }
