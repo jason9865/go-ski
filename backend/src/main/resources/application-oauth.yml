@@ -1,0 +1,11 @@
+oauth:
+  kakao:
+    client_id: ${KAKAO_CLIENT_ID} # REST API 키
+    redirect_uri: ${KAKAO_REDIRECT_URI}
+    client_secret: ${KAKAO_CLINET_SECRET} # Client Secret 키
+
+  naver:
+    client_id: ${NAVER_CLIENT_ID}
+    redirect_uri: ${NAVER_REDIRECT_URI}
+    client_secret: ${NAVER_CLIENT_SECRET}
+    state: ${NAVER_STATE}

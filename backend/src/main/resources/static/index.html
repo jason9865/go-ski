@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고승민의 스키교실</title>
+</head>
+<body>
+<button onclick="redirectToKakaoLogin()">카카오 로그인</button>
+
+<script>
+    function redirectToKakaoLogin() {
+        // 카카오 로그인을 위한 OAuth 인증 URL
+        var kakaoAuthUrl = 'https://kauth.kakao.com/oauth/authorize?client_id=786eaaa9fe8ffcea1b889b759d4a7524&redirect_uri=http://localhost:8081/login/kakao&response_type=code';
+
+        // 페이지 리디렉션
+        window.location.href = kakaoAuthUrl;
+    }
+</script>
+</body>
+</html>
