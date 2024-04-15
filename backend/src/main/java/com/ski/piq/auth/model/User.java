@@ -1,4 +1,4 @@
-package com.ski.piq.user.model;
+package com.ski.piq.auth.model;
 
 import com.ski.piq.oauth.dto.Domain;
 import jakarta.persistence.*;

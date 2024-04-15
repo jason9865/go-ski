@@ -1,8 +1,8 @@
-package com.ski.piq.user.controller;
+package com.ski.piq.auth.controller;
 
+import com.ski.piq.auth.service.AuthService;
 import com.ski.piq.common.response.ApiResponse;
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,24 +16,25 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 @RestController
-public class UserController {
+public class AuthController {
 
-    private final UserService userService;
+    private final AuthService userService;
 
-    @PostMapping("/login/{oauthServerType}")
+    @PostMapping("/signin/{oauthServerType}")
     ResponseEntity<ApiResponse<?>> login(
             HttpServletRequest request,
             HttpServletResponse response,
             @PathVariable OauthServerType oauthServerType,
-            @RequestBody Map<String, Object> params
+            @RequestBody Map<String, String> map
     ) {
-        userService.login(request, response, oauthServerType, (String) params.get("authCode"));
+        log.info("token: {}", map.get("token"));
+        userService.login(request, response, oauthServerType, map.get("token"));
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/signout")
     ResponseEntity<ApiResponse<?>> logout(HttpServletRequest request) {
         userService.logout(request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));

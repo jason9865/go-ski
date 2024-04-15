@@ -1,13 +1,11 @@
-package com.ski.piq.user.service;
+package com.ski.piq.auth.service;
 
+import com.ski.piq.auth.exception.AuthExceptionEnum;
+import com.ski.piq.auth.model.User;
+import com.ski.piq.auth.repository.UserRepository;
 import com.ski.piq.common.exception.ApiExceptionFactory;
 import com.ski.piq.oauth.client.OauthMemberClientComposite;
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.user.exception.UserExceptionEnum;
-import com.ski.piq.user.model.LoginLog;
-import com.ski.piq.user.model.User;
-import com.ski.piq.user.repository.LoginLogRepository;
-import com.ski.piq.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +20,24 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
 
     private final OauthMemberClientComposite oauthMemberClientComposite;
     private final UserRepository userRepository;
-    private final LoginLogRepository loginLogRepository;
 
     public void login(HttpServletRequest request, HttpServletResponse response, OauthServerType oauthServerType, String authCode) {
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent != null) {
+            userAgent = userAgent.split("\\s+")[0];
+            if (!userAgent.equals("Mozilla/5.0")) {
+                userAgent = "";
+            }
+        } else {
+            userAgent = "";
+        }
+
         try {
-            User user = oauthMemberClientComposite.fetch(oauthServerType, authCode);
+            User user = oauthMemberClientComposite.fetch(userAgent, oauthServerType, authCode);
             User saved;
             Optional<User> optionalUser = userRepository.findByDomain(user.getDomain());
             if (optionalUser.isEmpty()) {
@@ -39,13 +46,10 @@ public class UserService {
                 saved = userRepository.findByDomain(user.getDomain()).get();
             }
 
-            LoginLog loginLog = LoginLog.builder().userId(saved.getUserId()).loginIp(getClientIP(request)).build();
-            loginLogRepository.save(loginLog);
-
             log.info("{} 유저 로그인", saved.getUserId());
         } catch (WebClientException wce) {
             log.error(wce.getMessage());
-            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_CODE);
+            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.WRONG_CODE);
         }
     }
 

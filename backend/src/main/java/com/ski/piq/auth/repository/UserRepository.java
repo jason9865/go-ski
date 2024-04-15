@@ -1,7 +1,7 @@
-package com.ski.piq.user.repository;
+package com.ski.piq.auth.repository;
 
 import com.ski.piq.oauth.dto.Domain;
-import com.ski.piq.user.model.User;
+import com.ski.piq.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

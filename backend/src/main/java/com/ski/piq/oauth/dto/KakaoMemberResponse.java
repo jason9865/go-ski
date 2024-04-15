@@ -3,11 +3,11 @@ package com.ski.piq.oauth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ski.piq.user.model.User;
+import com.ski.piq.auth.model.User;
 
 import java.time.LocalDateTime;
 
-import static com.ski.piq.oauth.type.OauthServerType.KAKAO;
+import static com.ski.piq.oauth.type.OauthServerType.kakao;
 
 
 @JsonNaming(SnakeCaseStrategy.class)
@@ -20,7 +20,7 @@ public record KakaoMemberResponse(
 
     public User toDomain() {
         return User.builder()
-                .domain(new Domain(String.valueOf(id), KAKAO))
+                .domain(new Domain(String.valueOf(id), kakao))
                 .nickname(kakaoAccount.profile.nickname)
                 .gender(kakaoAccount.gender)
                 .email(kakaoAccount.email)

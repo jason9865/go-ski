@@ -4,7 +4,7 @@ import com.ski.piq.oauth.config.KakaoOauthConfig;
 import com.ski.piq.oauth.dto.KakaoMemberResponse;
 import com.ski.piq.oauth.dto.KakaoToken;
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.user.model.User;
+import com.ski.piq.auth.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,13 +20,17 @@ public class KakaoMemberClient implements OauthMemberClient {
 
     @Override
     public OauthServerType supportServer() {
-        return OauthServerType.KAKAO;
+        return OauthServerType.kakao;
     }
 
     @Override
-    public User fetch(String authCode) {
-        KakaoToken tokenInfo = kakaoApiClient.fetchToken(tokenRequestParams(authCode));
-        KakaoMemberResponse kakaoMemberResponse = kakaoApiClient.fetchMember("Bearer " + tokenInfo.accessToken());
+    public User fetch(String userAgent, String authCode) {
+        String accessToken = "";
+        if (userAgent.equals("Mozilla/5.0")) {
+            KakaoToken tokenInfo = kakaoApiClient.fetchToken(tokenRequestParams(authCode));
+            accessToken = tokenInfo.accessToken();
+        }
+        KakaoMemberResponse kakaoMemberResponse = kakaoApiClient.fetchMember("Bearer " + accessToken);
         return kakaoMemberResponse.toDomain();
     }
 
@@ -37,6 +41,7 @@ public class KakaoMemberClient implements OauthMemberClient {
         params.add("redirect_uri", kakaoOauthConfig.redirectUri());
         params.add("code", authCode);
         params.add("client_secret", kakaoOauthConfig.clientSecret());
+        log.info("{}", params);
         return params;
     }
 }
