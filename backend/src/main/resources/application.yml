@@ -19,12 +19,12 @@ spring:
     hikari:
       maximum-pool-size: 50
 
-#  # Redis
-#  data:
-#    redis:
-#      host: ${REDIS_HOST}
-#      port: ${REDIS_PORT}
-#      password: ${REDIS_PASSWORD}
+  # Redis
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
   cache:
     type: redis
@@ -38,10 +38,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   profiles:
-    include: oauth
+    include: jwt, oauth
 
 # Swagger
 springdoc:

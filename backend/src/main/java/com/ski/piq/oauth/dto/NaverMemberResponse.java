@@ -3,9 +3,9 @@ package com.ski.piq.oauth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ski.piq.user.model.User;
+import com.ski.piq.auth.core.model.User;
 
-import static com.ski.piq.oauth.type.OauthServerType.NAVER;
+import static com.ski.piq.oauth.type.OauthServerType.naver;
 
 @JsonNaming(value = SnakeCaseStrategy.class)
 public record NaverMemberResponse(
@@ -16,10 +16,7 @@ public record NaverMemberResponse(
 
     public User toDomain() {
         return User.builder()
-                .domain(new Domain(String.valueOf(response.id), NAVER))
-                .nickname(response.name)
-                .email(response.email)
-                .gender(response.gender)
+                .domain(new Domain(String.valueOf(response.id), naver))
                 .build();
     }
 

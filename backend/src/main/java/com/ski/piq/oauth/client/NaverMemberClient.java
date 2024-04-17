@@ -1,10 +1,10 @@
 package com.ski.piq.oauth.client;
 
+import com.ski.piq.auth.core.model.User;
 import com.ski.piq.oauth.config.NaverOauthConfig;
 import com.ski.piq.oauth.dto.NaverMemberResponse;
 import com.ski.piq.oauth.dto.NaverToken;
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,13 +19,16 @@ public class NaverMemberClient implements OauthMemberClient {
 
     @Override
     public OauthServerType supportServer() {
-        return OauthServerType.NAVER;
+        return OauthServerType.naver;
     }
 
     @Override
-    public User fetch(String authCode) {
-        NaverToken tokenInfo = naverApiClient.fetchToken(tokenRequestParams(authCode));
-        NaverMemberResponse naverMemberResponse = naverApiClient.fetchMember("Bearer " + tokenInfo.accessToken());
+    public User fetch(String authCode, String accessToken) {
+        if (authCode != null) {
+            NaverToken tokenInfo = naverApiClient.fetchToken(tokenRequestParams(authCode));
+            accessToken = tokenInfo.accessToken();
+        }
+        NaverMemberResponse naverMemberResponse = naverApiClient.fetchMember("Bearer " + accessToken);
         return naverMemberResponse.toDomain();
     }
 

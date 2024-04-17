@@ -11,7 +11,7 @@
 <script>
     function redirectToKakaoLogin() {
         // 카카오 로그인을 위한 OAuth 인증 URL
-        var kakaoAuthUrl = 'https://kauth.kakao.com/oauth/authorize?client_id=786eaaa9fe8ffcea1b889b759d4a7524&redirect_uri=http://localhost:8081/login/kakao&response_type=code';
+        var kakaoAuthUrl = 'https://kauth.kakao.com/oauth/authorize?client_id=786eaaa9fe8ffcea1b889b759d4a7524&redirect_uri=http://localhost:8081/api/v1/user/login/kakao&response_type=code';
 
         // 페이지 리디렉션
         window.location.href = kakaoAuthUrl;
