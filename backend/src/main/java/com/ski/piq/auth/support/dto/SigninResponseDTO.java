@@ -9,14 +9,12 @@ import java.util.UUID;
 
 @Getter
 public class SigninResponseDTO {
-    private UUID uuid;
     private String name;
     private String profileUrl;
     private Gender gender;
     private Role role;
 
     public SigninResponseDTO(User user) {
-        uuid = user.getUuid();
         name = user.getName();
         profileUrl = user.getProfileUrl();
         gender = user.getGender();
