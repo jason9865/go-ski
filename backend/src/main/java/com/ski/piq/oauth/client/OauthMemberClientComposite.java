@@ -1,7 +1,7 @@
 package com.ski.piq.oauth.client;
 
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.auth.model.User;
+import com.ski.piq.auth.core.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -24,8 +24,8 @@ public class OauthMemberClientComposite {
                 ));
     }
 
-    public User fetch(String userAgent, OauthServerType oauthServerType, String authCode) {
-        return getClient(oauthServerType).fetch(userAgent, authCode);
+    public User fetch(OauthServerType oauthServerType, String authCode, String accessToken) {
+        return getClient(oauthServerType).fetch(authCode, accessToken);
     }
 
     private OauthMemberClient getClient(OauthServerType oauthServerType) {

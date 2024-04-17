@@ -1,10 +1,10 @@
 package com.ski.piq.oauth.client;
 
+import com.ski.piq.auth.core.model.User;
 import com.ski.piq.oauth.config.KakaoOauthConfig;
 import com.ski.piq.oauth.dto.KakaoMemberResponse;
 import com.ski.piq.oauth.dto.KakaoToken;
 import com.ski.piq.oauth.type.OauthServerType;
-import com.ski.piq.auth.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,9 +24,8 @@ public class KakaoMemberClient implements OauthMemberClient {
     }
 
     @Override
-    public User fetch(String userAgent, String authCode) {
-        String accessToken = "";
-        if (userAgent.equals("Mozilla/5.0")) {
+    public User fetch(String authCode, String accessToken) {
+        if (authCode != null) {
             KakaoToken tokenInfo = kakaoApiClient.fetchToken(tokenRequestParams(authCode));
             accessToken = tokenInfo.accessToken();
         }
