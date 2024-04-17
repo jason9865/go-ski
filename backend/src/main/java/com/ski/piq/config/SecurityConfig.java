@@ -22,11 +22,12 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+//    private final JwtUtil jwtUtil;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_BLACKLIST = {
-            "/api/v1/**"
+//            "/api/v1/**"
     };
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성

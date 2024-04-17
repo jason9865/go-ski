@@ -1,0 +1,6 @@
+jwt:
+  access:
+    expiration: 600000 # 10 분
+
+  refresh:
+    expiration: 86400000 # 24 시간
