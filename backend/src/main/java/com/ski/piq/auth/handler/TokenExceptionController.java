@@ -1,6 +1,6 @@
 package com.ski.piq.auth.handler;
 
-import com.ski.piq.auth.support.exception.AuthExceptionEnum;
+import com.ski.piq.user.support.exception.AuthExceptionEnum;
 import com.ski.piq.common.exception.ApiExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

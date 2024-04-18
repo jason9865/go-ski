@@ -1,8 +1,8 @@
 package com.ski.piq.config;
 
 
-import com.ski.piq.oauth.client.KakaoApiClient;
-import com.ski.piq.oauth.client.NaverApiClient;
+import com.ski.piq.auth.oauth.client.KakaoApiClient;
+import com.ski.piq.auth.oauth.client.NaverApiClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;

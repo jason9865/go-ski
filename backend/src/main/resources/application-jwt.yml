@@ -4,3 +4,4 @@ jwt:
 
   refresh:
     expiration: 86400000 # 24 시간
+    secret_key: ${REFRESH_SECRET_KEY}
