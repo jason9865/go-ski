@@ -4,7 +4,7 @@ import com.go.ski.auth.oauth.config.KakaoOauthConfig;
 import com.go.ski.auth.oauth.dto.KakaoMemberResponse;
 import com.go.ski.auth.oauth.dto.KakaoToken;
 import com.go.ski.auth.oauth.type.OauthServerType;
-import com.go.ski.user.user.core.model.User;
+import com.go.ski.user.core.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

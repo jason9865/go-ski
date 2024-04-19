@@ -1,7 +1,7 @@
 package com.go.ski.auth.oauth.client;
 
 import com.go.ski.auth.oauth.type.OauthServerType;
-import com.go.ski.user.user.core.model.User;
+import com.go.ski.user.core.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

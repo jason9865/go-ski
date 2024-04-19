@@ -1,9 +1,9 @@
 package com.go.ski.auth.jwt.util;
 
 
-import com.go.ski.redis.redis.dto.LoginTokenDto;
-import com.go.ski.redis.redis.repository.LoginTokenRepository;
-import com.go.ski.user.user.support.vo.Role;
+import com.go.ski.redis.dto.LoginTokenDto;
+import com.go.ski.redis.repository.LoginTokenRepository;
+import com.go.ski.user.support.vo.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;

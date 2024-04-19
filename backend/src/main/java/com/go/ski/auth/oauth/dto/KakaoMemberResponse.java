@@ -3,7 +3,7 @@ package com.go.ski.auth.oauth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.go.ski.user.user.core.model.User;
+import com.go.ski.user.core.model.User;
 
 import java.time.LocalDateTime;
 
