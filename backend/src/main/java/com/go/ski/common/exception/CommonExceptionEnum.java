@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum CommonExceptionEnum implements ExceptionEnum {
     DATA_ACCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "데이터베이스 오류입니다."),
-    UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "알 수 없는 오류입니다.");
+    UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "알 수 없는 오류입니다."),
+
+    INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, 400, "잘못된 파일 형식입니다"),
+    IMAGE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,500,"이미지 업로드에 실패했습니다.");
 
     private final HttpStatus status;
     private final int code;
