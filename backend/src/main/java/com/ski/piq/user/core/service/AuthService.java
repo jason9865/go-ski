@@ -42,7 +42,7 @@ public class AuthService {
     public void signup(User domainUser, SignupRequestDTO signupRequestDTO) {
         User user = User.builder()
                 .domain(domainUser.getDomain())
-                .name(signupRequestDTO.getName())
+                .userName(signupRequestDTO.getUserName())
                 .birthDate(signupRequestDTO.getBirthDate())
                 .phoneNumber(signupRequestDTO.getPhoneNumber())
                 .gender(signupRequestDTO.getGender())

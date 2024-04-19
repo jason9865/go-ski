@@ -7,13 +7,13 @@ import lombok.Getter;
 
 @Getter
 public class SigninResponseDTO {
-    private String name;
+    private String userName;
     private String profileUrl;
     private Gender gender;
     private Role role;
 
     public SigninResponseDTO(User user) {
-        name = user.getName();
+        userName = user.getUserName();
         profileUrl = user.getProfileUrl();
         gender = user.getGender();
         role = user.getRole();

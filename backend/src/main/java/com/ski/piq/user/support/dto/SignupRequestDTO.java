@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SignupRequestDTO {
-    private String name;
+    private String userName;
     private MultipartFile profileImage;
     private Gender gender;
     private Timestamp birthDate;

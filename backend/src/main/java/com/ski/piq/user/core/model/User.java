@@ -41,7 +41,7 @@ public class User {
 
     @Setter
     @Column(nullable = false, columnDefinition = "VARCHAR(20) CHARACTER SET UTF8")
-    private String name;
+    private String userName;
 
     @Setter
     @Column(nullable = false)

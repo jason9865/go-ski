@@ -51,7 +51,7 @@ public class AuthController {
             log.info("로그인 성공");
             // JWT refresh token 만들어야함
             SigninResponseDTO signinResponseDTO = new SigninResponseDTO(user);
-            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(signinResponseDTO));
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
         }
     }
 
