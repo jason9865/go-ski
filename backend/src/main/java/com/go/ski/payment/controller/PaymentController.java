@@ -27,22 +27,22 @@ public class PaymentController {
 
 	//결제 준비
 	@PostMapping("/charge")
-	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(@RequestBody KakaopayPrepareRequestDTO req) {
-		KakaopayPrepareResponseDTO resp = kakaoPayService.getPrepareResponse(req);
+	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(@RequestBody KakaopayPrepareRequestDTO request) {
+		KakaopayPrepareResponseDTO resp = kakaoPayService.getPrepareResponse(request);
 		log.info("value : {}", resp);
 		return ResponseEntity.ok().body(resp);
 	}
 	//결제 승인
 	@PostMapping("/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(@RequestBody KakaopayApproveRequestDTO req) {
-		KakaopayApproveResponseDTO resp = kakaoPayService.getApproveResponse(req);
+	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(@RequestBody KakaopayApproveRequestDTO request) {
+		KakaopayApproveResponseDTO resp = kakaoPayService.getApproveResponse(request);
 		return ResponseEntity.ok().body(resp);
 	}
 
 	//결제 취소
 	@PostMapping("/cancel")
-	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(@RequestBody KakaopayCancelRequestDTO req) {
-		KakaopayCancelResponseDTO resp = kakaoPayService.getCancelResponse(req);
+	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(@RequestBody KakaopayCancelRequestDTO request) {
+		KakaopayCancelResponseDTO resp = kakaoPayService.getCancelResponse(request);
 		return ResponseEntity.ok().body(resp);
 	}
 	//pgTokenTest
