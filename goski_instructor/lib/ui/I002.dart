@@ -154,12 +154,12 @@ class I002 extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      '이름',
+                                      '이름 입력',
                                       style: TextStyle(
                                         color: Color(0xFF141212),
                                         fontSize: 15,
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'Jua',
+                                        fontWeight: FontWeight.w100,
                                         height: 0,
                                       ),
                                     ),
@@ -193,9 +193,9 @@ class I002 extends StatelessWidget {
                                             '이름 입력',
                                             style: TextStyle(
                                               color: Color(0x7F141212),
-                                              fontSize: 15,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                              fontFamily: 'Jua',
+                                              fontWeight: FontWeight.w100,
                                               height: 0,
                                             ),
                                           ),
@@ -296,9 +296,9 @@ class I002 extends StatelessWidget {
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 15,
-                                                        fontFamily: 'Inter',
+                                                        fontFamily: 'Jua',
                                                         fontWeight:
-                                                            FontWeight.w700,
+                                                            FontWeight.w100,
                                                         height: 0,
                                                       ),
                                                     ),
