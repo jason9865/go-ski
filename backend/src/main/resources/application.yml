@@ -38,7 +38,7 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
   profiles:
     include: jwt, oauth, s3
