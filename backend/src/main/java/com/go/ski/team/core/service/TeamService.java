@@ -69,7 +69,7 @@ public class TeamService {
 
         teamImageRepository.saveAll(tobeSavedImages);
         log.info("팀 소개 이미지 저장 성공 - 소개 이미지 개수 : {}장", tobeSavedImages.size());
-        
+
         // 3. 중고급 옵션 생성
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
         levelOptionRepository.save(levelOption);
