@@ -1,7 +1,6 @@
-kakao:
-  pay:
-    test_id : ${PAY_CID}
-    client_id: ${PAY_CLIENT_ID}
-    client_secret: ${PAY_CLIENT_SECRET}
-    secret_key: ${PAY_SECRET_KEY}
-    secret_key_dev: ${PAY_SECRET_KEY_DEV}
+pay:
+  test_id : ${TEST_CID}
+  client_id: ${PAY_CLIENT_ID}
+  client_secret: ${PAY_CLIENT_SECRET}
+  secret_key: ${PAY_SECRET_KEY}
+  secret_key_dev: ${PAY_SECRET_KEY_DEV}
