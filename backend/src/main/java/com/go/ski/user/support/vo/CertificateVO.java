@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class Certificate {
+public class CertificateVO {
     private int certificateId;
     private MultipartFile certificateImage;
 }

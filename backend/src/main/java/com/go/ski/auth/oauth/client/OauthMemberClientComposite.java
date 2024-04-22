@@ -24,8 +24,8 @@ public class OauthMemberClientComposite {
                 ));
     }
 
-    public User fetch(OauthServerType oauthServerType, String authCode, String accessToken) {
-        return getClient(oauthServerType).fetch(authCode, accessToken);
+    public User fetch(OauthServerType oauthServerType, String role, String authCode, String accessToken) {
+        return getClient(oauthServerType).fetch(role, authCode, accessToken);
     }
 
     private OauthMemberClient getClient(OauthServerType oauthServerType) {
