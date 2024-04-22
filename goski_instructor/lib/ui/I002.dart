@@ -5,11 +5,12 @@ class I002 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screeWidth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
-            width: 393,
+            width: screeWidth,
             height: 1010,
             clipBehavior: Clip.antiAlias,
             decoration: const BoxDecoration(color: Color(0xFFF2F6F7)),

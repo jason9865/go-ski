@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goski_instructor/ui/I002.dart';
+// import 'package:goski_instructor/ui/I004.dart';
 
 void main() {
   runApp(const MyApp());
