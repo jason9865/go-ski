@@ -9,12 +9,12 @@ import java.util.List;
 public class TeamCreateRequestDTO {
 
     private String teamName;
-    private String resortId;
+    private Integer resortId;
     private MultipartFile teamProfileImage;
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
-    private List<TeamImageRequestDTO> teamImages;
+    private List<TeamImageDTO> teamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;

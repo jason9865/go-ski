@@ -32,7 +32,7 @@ public class Team {
 
     @Setter
     @Column(nullable = false)
-    private String profileUrl;
+    private String teamProfileUrl;
 
     @Setter
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class Team {
 
     @Setter
     @Column(nullable = false)
-    private String teamCost;
+    private Integer teamCost;
 
     @Setter
     @Column(nullable = false)

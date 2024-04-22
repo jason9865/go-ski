@@ -28,6 +28,6 @@ public class TeamInstructor {
 
     @Setter
     @Column(nullable = false)
-    private boolean isInvitedAccepted;
+    private boolean isInviteAccepted;
 
 }

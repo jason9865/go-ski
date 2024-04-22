@@ -1,5 +1,6 @@
 package com.go.ski.team.core.model;
 
+import com.go.ski.team.support.dto.TeamCreateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
