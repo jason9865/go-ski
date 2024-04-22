@@ -14,7 +14,7 @@ public class TeamCreateRequestDTO {
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
-    private List<TeamImageDTO> teamImages;
+    private List<MultipartFile> teamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;
