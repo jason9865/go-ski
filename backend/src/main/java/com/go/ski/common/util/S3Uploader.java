@@ -1,5 +1,6 @@
 package com.go.ski.common.util;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -45,6 +46,16 @@ public class S3Uploader {
 
         return amazonS3.getUrl(bucket, fileName).toString();
 
+    }
+
+    public void deleteFile(String filePath, String imageUrl){
+        try {
+            amazonS3.deleteObject(bucket, filePath + "/" + imageUrl.split("/")[4]);
+            log.info("Delete file - {}", imageUrl.split("/")[4]);
+        } catch (AmazonServiceException e){
+            log.error(e.getErrorMessage());
+            throw ApiExceptionFactory.fromExceptionEnum(CommonExceptionEnum.IMAGE_DELETE_ERROR);
+        }
     }
 
     // uuid와 확장자명을 이용하여 새로운 파일 이름 생성
