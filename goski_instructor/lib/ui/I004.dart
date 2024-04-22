@@ -9,7 +9,7 @@ class I004 extends StatelessWidget {
   Widget build(BuildContext context) {
     double screeWidth = MediaQuery.of(context).size.width;
     logger.e(screeWidth);
-    double screeHeight = MediaQuery.of(context).size.height;
+    // double screeHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
         children: [
