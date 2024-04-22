@@ -1,5 +1,6 @@
 package com.go.ski.user.core.model;
 
+import com.go.ski.user.support.vo.InstructAvailable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,16 +22,12 @@ public class Instructor {
     private User user;
 
     @Setter
-    @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 4")
-    private byte level;
-
-    @Setter
     private String description;
 
     @Setter
-    private byte isInstructAvailable;
+    private InstructAvailable isInstructAvailable;
 
     @Setter
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int designatedCost;
+    private int dayoff;
 }

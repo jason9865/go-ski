@@ -21,6 +21,7 @@ public record KakaoMemberResponse(
     public User toDomain() {
         return User.builder()
                 .domain(new Domain(String.valueOf(id), kakao))
+                .profileUrl(kakaoAccount.profile.profileImageUrl)
                 .build();
     }
 

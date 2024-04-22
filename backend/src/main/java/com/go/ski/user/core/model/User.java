@@ -45,10 +45,10 @@ public class User {
 
     @Setter
     @Column(nullable = false)
-    private Timestamp birthDate;
+    private LocalDateTime birthDate;
 
     @Setter
-    @Column(nullable = false, columnDefinition = "VARCHAR(11)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(13)")
     private String phoneNumber;
 
     @Setter
