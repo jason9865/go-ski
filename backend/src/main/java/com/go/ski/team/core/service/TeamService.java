@@ -5,7 +5,6 @@ import com.go.ski.common.util.S3Uploader;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
-import com.go.ski.team.support.dto.TeamImageDTO;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -14,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +59,11 @@ public class TeamService {
 
         log.info("팀 생성 성공 - teamId : {}", savedTeam.getTeamId());
         // 2. 팀 이미지 생성
-        List<TeamImageDTO> imageList = request.getTeamImages(); // requestDTO에 담겨있는 image들
+        List<MultipartFile> imageList = request.getTeamImages(); // requestDTO에 담겨있는 image들
 
         List<TeamImage> tobeSavedImages = new ArrayList<>();
-        for(TeamImageDTO image : imageList) {
-            String imageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image.getImage());
+        for(MultipartFile image : imageList) {
+            String imageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
             tobeSavedImages.add(TeamImage.builder().imageUrl(imageUrl).team(savedTeam).build());
         }
 
