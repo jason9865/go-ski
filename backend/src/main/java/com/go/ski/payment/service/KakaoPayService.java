@@ -41,25 +41,25 @@ public class KakaoPayService {
 
 	//결제 준비
 	//클라이언트의 결제 준비 요청을 kakao 서버로 던지기 위해 변환
-	public KakaopayPrepareResponseDTO getPrepareResponse(KakaopayPrepareRequestDTO req) {
+	public KakaopayPrepareResponseDTO getPrepareResponse(KakaopayPrepareRequestDTO request) {
 		//헤더 설정 추후에 서비스 모드로 변경
 		HttpHeaders headers = getHeader("test");
 
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
-		params.put("partner_order_id", req.getPartnerOrderId());
-		params.put("partner_user_id", req.getPartnerUserId());
-		params.put("item_name", req.getItemName());
-		params.put("quantity", Integer.toString(req.getQuantity()));
-		params.put("total_amount", Integer.toString(req.getTotalAmount()));
-		params.put("tax_free_amount", Integer.toString(req.getTaxFreeAmount()));
-		params.put("approval_url", req.getApprovalUrl());
-		params.put("cancel_url", req.getCancelUrl());
-		params.put("fail_url", req.getFailUrl());
+		params.put("partner_order_id", request.getPartnerOrderId());
+		params.put("partner_user_id", request.getPartnerUserId());
+		params.put("item_name", request.getItemName());
+		params.put("quantity", Integer.toString(request.getQuantity()));
+		params.put("total_amount", Integer.toString(request.getTotalAmount()));
+		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));
+		params.put("approval_url", request.getApprovalUrl());
+		params.put("cancel_url", request.getCancelUrl());
+		params.put("fail_url", request.getFailUrl());
 
 		log.info("data : {}", params);
-		HttpEntity<Map<String, String>> reqEntity = new HttpEntity<>(params, headers);
-		ResponseEntity<KakaopayPrepareResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/ready", reqEntity, KakaopayPrepareResponseDTO.class);
+		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
+		ResponseEntity<KakaopayPrepareResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/ready", requestEntity, KakaopayPrepareResponseDTO.class);
 		log.info("data : {}", responseEntity);
 		return responseEntity.getBody();
 	}
@@ -91,20 +91,20 @@ public class KakaoPayService {
 	 * 할부 유형
 	 * 카드 상품 코드
 	 * */
-	public KakaopayApproveResponseDTO getApproveResponse(KakaopayApproveRequestDTO req) {
+	public KakaopayApproveResponseDTO getApproveResponse(KakaopayApproveRequestDTO request) {
 		HttpHeaders headers = getHeader("test");
 
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
-		params.put("tid", req.getTid());
-		params.put("partner_order_id", req.getPartnerOrderId());
-		params.put("partner_user_id", req.getPartnerUserId());
-		params.put("pg_token", req.getPgToken());
+		params.put("tid", request.getTid());
+		params.put("partner_order_id", request.getPartnerOrderId());
+		params.put("partner_user_id", request.getPartnerUserId());
+		params.put("pg_token", request.getPgToken());
 
 		log.info("params : {}", params);
 
-		HttpEntity<Map<String, String>> reqEntity = new HttpEntity<>(params, headers);
-		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve", reqEntity, KakaopayApproveResponseDTO.class);
+		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
+		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve", requestEntity, KakaopayApproveResponseDTO.class);
 		log.info("data : {}", responseEntity);
 		// 여기서 결제 정보를 db에 저장
 
@@ -113,18 +113,18 @@ public class KakaoPayService {
 
 	//결제 취소
 	//환급 금액은 내가 설정
-	public KakaopayCancelResponseDTO getCancelResponse(KakaopayCancelRequestDTO req) {
+	public KakaopayCancelResponseDTO getCancelResponse(KakaopayCancelRequestDTO request) {
 		HttpHeaders headers = getHeader("test");
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
-		params.put("tid", req.getTid());
-		params.put("cancel_amount", String.valueOf(req.getCancelAmount()));
-		params.put("cancel_tax_free_amount", String.valueOf(req.getCancelTaxFreeAmount()));
+		params.put("tid", request.getTid());
+		params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
+		params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
 
 		log.info("params : {}", params);
 
-		HttpEntity<Map<String, String>> reqEntity = new HttpEntity<>(params, headers);
-		ResponseEntity<KakaopayCancelResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve", reqEntity, KakaopayCancelResponseDTO.class);
+		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
+		ResponseEntity<KakaopayCancelResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve", requestEntity, KakaopayCancelResponseDTO.class);
 		log.info("data : {}", responseEntity);
 
 		return responseEntity.getBody();
