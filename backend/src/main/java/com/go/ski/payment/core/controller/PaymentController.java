@@ -1,4 +1,4 @@
-package com.go.ski.payment.controller;
+package com.go.ski.payment.core.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.go.ski.payment.dto.request.KakaopayApproveRequestDTO;
-import com.go.ski.payment.dto.request.KakaopayCancelRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayApproveResponseDTO;
-import com.go.ski.payment.dto.response.KakaopayCancelResponseDTO;
-import com.go.ski.payment.dto.request.KakaopayPrepareRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayPrepareResponseDTO;
-import com.go.ski.payment.service.KakaoPayService;
+import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
+import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.core.service.KakaoPayService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

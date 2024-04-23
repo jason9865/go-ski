@@ -1,4 +1,4 @@
-package com.go.ski.payment.dto.request;
+package com.go.ski.payment.support.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
