@@ -29,8 +29,8 @@ public class TeamController {
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<?>> createTeam(HttpServletRequest request, TeamCreateRequestDTO requestDTO) {
         log.info("=====TeamController.createTeam=====");
-        Integer userId = Integer.parseInt(request.getAttribute("userId").toString());
-        teamService.createTeam(requestDTO,userId);
+        User user = (User) request.getAttribute("user");
+        teamService.createTeam(requestDTO,user);
         log.info("=====팀 생성 완료=====");
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
@@ -47,9 +47,9 @@ public class TeamController {
     public ResponseEntity<ApiResponse> updateTeamInfo(@PathVariable Integer teamId, HttpServletRequest request,
                                                       TeamUpdateRequestDTO requestDTO) {
         log.info("=====TeamController.updateTeamInfo=====");
-        Integer userId = Integer.parseInt(request.getAttribute("userId").toString());
-        log.info("userId -> {}",userId);
-        teamService.updateTeamInfo(userId, teamId,requestDTO);
+        User user = (User) request.getAttribute("user");
+        log.info("userId -> {}",user.toString());
+        teamService.updateTeamInfo(user, teamId,requestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

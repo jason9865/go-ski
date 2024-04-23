@@ -40,11 +40,9 @@ public class TeamService {
 
 
     @Transactional
-    public void createTeam(TeamCreateRequestDTO request,Integer userId) {
+    public void createTeam(TeamCreateRequestDTO request,User user) {
         log.info("TeamService.createTeam");
-        // Team 테이블에 저장할 User, SkiResort 생성
-        User user = getUser(userId);
-        log.info("flag! - {}", request.toString());
+        // Team 테이블에 저장할 SkiResort 생성
 
         SkiResort skiResort = getSkiResort(request.getResortId());
         // 0. 프로필 이미지부터 S3에 저장
@@ -110,9 +108,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeamInfo(Integer userId, Integer teamId, TeamUpdateRequestDTO request) {
-        // Team 테이블에 저장할 User, SkiResort 생성
-        User user = getUser(userId);
+    public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request) {
+        // Team 테이블에 저장할 SkiResort 생성
         log.info("flag! - {}", request.toString());
         SkiResort skiResort = getSkiResort(request.getResortId());
 
@@ -171,11 +168,6 @@ public class TeamService {
 
     }
 
-    public User getUser(Integer userId) {
-        log.info("getUser - {}",userId);
-        return userRepository.findById(userId)
-                .orElseThrow(() ->new RuntimeException("해당 유저가 없습니다!")); // 추후 변경
-    }
 
     public SkiResort getSkiResort(Integer resortId) {
         return skiResortRepository.findById(resortId)
