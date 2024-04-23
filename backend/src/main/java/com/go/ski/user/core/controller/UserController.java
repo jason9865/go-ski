@@ -133,14 +133,16 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> getUser(HttpServletRequest request) {
         log.info("교육생, 사장 프로필 요청");
         User user = (User) request.getAttribute("user");
-        ProfileUserResponseDTO profileUserResponseDTO = ProfileUserResponseDTO.builder()
-                .userName(user.getUserName())
-                .profileUrl(user.getProfileUrl())
-                .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole())
-                .birthDate(user.getBirthDate())
-                .gender(user.getGender())
-                .build();
+        ProfileUserResponseDTO profileUserResponseDTO = userService.getUser(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(profileUserResponseDTO));
+    }
+
+    @GetMapping("/profile/inst")
+    public ResponseEntity<ApiResponse<?>> getInstructor(HttpServletRequest request) {
+        log.info("강사 프로필 요청");
+        User user = (User) request.getAttribute("user");
+        ProfileUserResponseDTO profileUserResponseDTO = userService.getUser(user);
+        ProfileInstructorResponseDTO profileInstructorResponseDTO = userService.getInstructor(user, profileUserResponseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(profileInstructorResponseDTO));
     }
 }

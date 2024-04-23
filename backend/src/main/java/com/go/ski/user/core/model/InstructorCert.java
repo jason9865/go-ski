@@ -20,7 +20,7 @@ public class InstructorCert {
     private int instCertId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
     @ManyToOne

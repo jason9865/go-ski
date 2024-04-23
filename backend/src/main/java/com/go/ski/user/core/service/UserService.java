@@ -15,7 +15,8 @@ import com.go.ski.user.core.repository.InstructorCertRepository;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.dto.*;
-import com.go.ski.user.support.vo.CertificateVO;
+import com.go.ski.user.support.vo.CertificateImageVO;
+import com.go.ski.user.support.vo.CertificateUrlVO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,8 +125,29 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void getUser(User user) {
+    public ProfileUserResponseDTO getUser(User user) {
+        return ProfileUserResponseDTO.builder()
+                .userName(user.getUserName())
+                .profileUrl(user.getProfileUrl())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
+                .birthDate(user.getBirthDate())
+                .gender(user.getGender())
+                .build();
+    }
 
+    public ProfileInstructorResponseDTO getInstructor(User user, ProfileUserResponseDTO profileUserResponseDTO) {
+        Instructor instructor = Instructor.builder().instructorId(user.getUserId()).build();
+        List<InstructorCert> instructorCerts = instructorCertRepository.findAllByInstructor(instructor);
+
+        List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
+        for (InstructorCert instructorCert : instructorCerts) {
+            certificateUrlVOs.add(CertificateUrlVO.builder()
+                    .certificateId(instructorCert.getCertificate().getCertificateId())
+                    .certificateImageUrl(instructorCert.getCertificateImageUrl())
+                    .build());
+        }
+        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs);
     }
 
     public void createTokens(HttpServletResponse response, User user) {
@@ -147,14 +170,14 @@ public class UserService {
     }
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
-        List<CertificateVO> certificateVOs = instructorImagesDTO.getCertificateVOs();
-        if (certificateVOs != null && !certificateVOs.isEmpty()) {
-            for (CertificateVO certificateVO : certificateVOs) {
-                log.info("{}", certificateVO);
+        List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
+        if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
+            for (CertificateImageVO certificateImageVO : certificateImageVOs) {
+                log.info("{}", certificateImageVO);
 
-                Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateVO.getCertificateId());
+                Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateImageVO.getCertificateId());
                 if (optionalCertificate.isPresent()) {
-                    String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateVO.getCertificateImage());
+                    String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImageVO.getCertificateImage());
                     log.info("certificateImageUrl: {}", certificateImageUrl);
 
                     InstructorCert instructorCert = InstructorCert.builder()
