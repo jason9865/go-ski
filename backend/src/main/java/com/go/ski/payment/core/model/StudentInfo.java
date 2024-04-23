@@ -1,5 +1,7 @@
 package com.go.ski.payment.core.model;
 
+import static jakarta.persistence.EnumType.*;
+
 import com.go.ski.payment.support.vo.Age;
 import com.go.ski.payment.support.vo.Height;
 import com.go.ski.payment.support.vo.Weight;
@@ -7,6 +9,7 @@ import com.go.ski.user.support.vo.Gender;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,15 +26,15 @@ public class StudentInfo {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lesson_id")
 	private Lesson lesson;
-	@Column
+	@Enumerated(STRING)
 	private Height height;
-	@Column
+	@Enumerated(STRING)
 	private Weight weight;
 	@Column
 	private Integer footSize;
-	@Column
+	@Enumerated(STRING)
 	private Age age;
-	@Column
+	@Enumerated(STRING)
 	private Gender gender;
 	@Column
 	private String  name;
