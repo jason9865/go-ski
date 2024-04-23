@@ -9,7 +9,9 @@ import 'package:goski_instructor/ui/component/goski_badge.dart';
 import 'package:goski_instructor/ui/component/goski_tag.dart';
 // import 'package:goski_instructor/ui/component/main_header.dart';
 import 'package:goski_instructor/ui/component/sub_header.dart';
+import 'package:logger/logger.dart';
 
+Logger logger = Logger();
 void main() {
   runApp(const MyApp());
 }
@@ -32,25 +34,66 @@ class MyApp extends StatelessWidget {
             mediaQueryData.size.width,
             mediaQueryData.size.height,
           );
-
+          logger.d(
+              "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
           return Scaffold(
             // appBar: MainHeader(),
-            appBar: SubHeader(title: "페이지 이름"),
+            appBar: const SubHeader(title: "페이지 이름"),
             // body: I002(), // 가정: I002는 어떤 커스텀 위젯입니다.
             body: Scaffold(
               body: Center(
                 child: Column(
                   children: [
-                    GoskiBadge(text: 'OO 리조트', backgroundColor: goskiBlue),
-                    GoskiBadge(text: '재강습', backgroundColor: goskiDarkGray),
-                    GoskiBadge(text: '진행 예정', backgroundColor: goskiBlue),
-                    GoskiBadge(text: '피드백 작성', backgroundColor: goskiDarkPink),
-                    GoskiBadge(text: '피드백 미작성', backgroundColor: goskiGreen),
-                    SizedBox(height: 50,),
-                    GoskiTag(text: '# 친절해요', textColor: goskiBlack, backgroundColor: goskiLightGray, selectedTextColor: goskiWhite, selectedBackgroundColor: goskiDarkGray, isSelected: false, hasBorder: false),
-                    GoskiTag(text: '재밌음', textColor: goskiBlack, backgroundColor: goskiWhite, selectedTextColor: goskiWhite, selectedBackgroundColor: goskiDarkGray, borderColor: goskiDarkGray, isSelected: false, hasBorder: true,),
-                    GoskiTag(text: '140cm 미만', textColor: goskiBlack, backgroundColor: goskiWhite, selectedTextColor: goskiWhite, selectedBackgroundColor: goskiDarkGray, isSelected: false, isRound: false, hasBorder: true,),
-                    GoskiTag(text: '140cm ~ 150cm', textColor: goskiBlack, backgroundColor: goskiWhite, selectedTextColor: goskiWhite, selectedBackgroundColor: goskiDarkGray, isSelected: false, isRound: false, hasBorder: true,),
+                    const GoskiBadge(
+                        text: 'OO 리조트', backgroundColor: goskiBlue),
+                    const GoskiBadge(
+                        text: '재강습', backgroundColor: goskiDarkGray),
+                    const GoskiBadge(text: '진행 예정', backgroundColor: goskiBlue),
+                    const GoskiBadge(
+                        text: '피드백 작성', backgroundColor: goskiDarkPink),
+                    const GoskiBadge(
+                        text: '피드백 미작성', backgroundColor: goskiGreen),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    GoskiTag(
+                        text: '# 친절해요',
+                        textColor: goskiBlack,
+                        backgroundColor: goskiLightGray,
+                        selectedTextColor: goskiWhite,
+                        selectedBackgroundColor: goskiDarkGray,
+                        isSelected: false,
+                        hasBorder: false),
+                    GoskiTag(
+                      text: '재밌음',
+                      textColor: goskiBlack,
+                      backgroundColor: goskiWhite,
+                      selectedTextColor: goskiWhite,
+                      selectedBackgroundColor: goskiDarkGray,
+                      borderColor: goskiDarkGray,
+                      isSelected: false,
+                      hasBorder: true,
+                    ),
+                    GoskiTag(
+                      text: '140cm 미만',
+                      textColor: goskiBlack,
+                      backgroundColor: goskiWhite,
+                      selectedTextColor: goskiWhite,
+                      selectedBackgroundColor: goskiDarkGray,
+                      isSelected: false,
+                      isRound: false,
+                      hasBorder: true,
+                    ),
+                    GoskiTag(
+                      text: '140cm ~ 150cm',
+                      textColor: goskiBlack,
+                      backgroundColor: goskiWhite,
+                      selectedTextColor: goskiWhite,
+                      selectedBackgroundColor: goskiDarkGray,
+                      isSelected: false,
+                      isRound: false,
+                      hasBorder: true,
+                    ),
                   ],
                 ),
               ),
