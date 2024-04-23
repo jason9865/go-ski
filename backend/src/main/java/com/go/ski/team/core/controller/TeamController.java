@@ -4,6 +4,7 @@ import com.go.ski.auth.jwt.util.JwtUtil;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.team.core.service.TeamService;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
+import com.go.ski.team.support.dto.TeamResponseDTO;
 import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,20 +23,21 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
 
     private final TeamService teamService;
-    private final JwtUtil jwtUtil;
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createTeam( TeamCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> createTeam(TeamCreateRequestDTO requestDTO) {
         log.info("=====TeamController.createTeam=====");
         teamService.createTeam(requestDTO);
         log.info("=====팀 생성 완료=====");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
 
-//    @GetMapping("/{teamId}")
-//    public ResponseEntity<ApiResponse<?>> searchTeamInfo(@PathVariable String teamId){
-//        log.info("=====TeamController.searchTeamInfo=====");
-//
-//    }
+    @GetMapping("/{teamId}")
+    public ResponseEntity<ApiResponse<?>> searchTeamInfo(@PathVariable Integer teamId){
+        log.info("=====TeamController.searchTeamInfo=====");
+        TeamResponseDTO response = teamService.getTeamInfo(teamId);
+        log.info("=====팀 정보 조회 완료=====");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
 }

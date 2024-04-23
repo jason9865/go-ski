@@ -1,11 +1,13 @@
 package com.go.ski.team.support.dto;
 
-import lombok.Getter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class TeamCreateRequestDTO {
 
     private String teamName;

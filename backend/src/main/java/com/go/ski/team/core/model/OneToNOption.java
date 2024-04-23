@@ -28,7 +28,7 @@ public class OneToNOption {
     @Column(nullable = false)
     private Integer oneFourFee;
 
-    @Column(nullable = false)
+    @Column(name="one_n_fee",nullable = false)
     private Integer oneNFee;
 
     public static OneToNOption createOneToNOption(Team team, TeamCreateRequestDTO requestDTO) {
