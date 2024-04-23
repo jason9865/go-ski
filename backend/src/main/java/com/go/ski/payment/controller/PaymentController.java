@@ -28,22 +28,22 @@ public class PaymentController {
 	//결제 준비
 	@PostMapping("/charge")
 	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(@RequestBody KakaopayPrepareRequestDTO request) {
-		KakaopayPrepareResponseDTO resp = kakaoPayService.getPrepareResponse(request);
-		log.info("value : {}", resp);
-		return ResponseEntity.ok().body(resp);
+		KakaopayPrepareResponseDTO response = kakaoPayService.getPrepareResponse(request);
+		log.info("value : {}", response);
+		return ResponseEntity.ok().body(response);
 	}
 	//결제 승인
 	@PostMapping("/approve")
 	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(@RequestBody KakaopayApproveRequestDTO request) {
-		KakaopayApproveResponseDTO resp = kakaoPayService.getApproveResponse(request);
-		return ResponseEntity.ok().body(resp);
+		KakaopayApproveResponseDTO response = kakaoPayService.getApproveResponse(request);
+		return ResponseEntity.ok().body(response);
 	}
 
 	//결제 취소
 	@PostMapping("/cancel")
 	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(@RequestBody KakaopayCancelRequestDTO request) {
-		KakaopayCancelResponseDTO resp = kakaoPayService.getCancelResponse(request);
-		return ResponseEntity.ok().body(resp);
+		KakaopayCancelResponseDTO response = kakaoPayService.getCancelResponse(request);
+		return ResponseEntity.ok().body(response);
 	}
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음

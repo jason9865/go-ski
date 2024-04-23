@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.payment.dto.util.Amount;
 import com.go.ski.payment.dto.util.CardInfo;
 
+import lombok.Getter;
+
+@Getter
 public class KakaopayApproveResponseDTO {
 		@JsonProperty("aid")
 		private String aid;
