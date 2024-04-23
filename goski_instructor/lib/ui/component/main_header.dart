@@ -17,7 +17,7 @@ class MainHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Image.asset('assets/images/logo.png'),
       ),
       actions: [
-        HeaderRightIcons(),
+        headerRightIcons(context),
       ],
     );
   }
