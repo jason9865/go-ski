@@ -5,10 +5,7 @@ import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.service.UserService;
-import com.go.ski.user.support.dto.ProfileImageDTO;
-import com.go.ski.user.support.dto.SigninRequestDTO;
-import com.go.ski.user.support.dto.SignupRequestDTO;
-import com.go.ski.user.support.dto.UpdateInstructorRequestDTO;
+import com.go.ski.user.support.dto.*;
 import com.go.ski.user.support.exception.UserExceptionEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,40 +47,43 @@ public class UserController {
     }
 
     @PostMapping("/signup/student")
-    public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupRequestDTO signupRequestDTO) {
-        log.info("교육생 회원가입 요청: {}", signupRequestDTO);
-        if (!"STUDENT".equals(signupRequestDTO.getRole().toString())) {
+    public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupUserRequestDTO signupUserRequestDTO) {
+        log.info("교육생 회원가입 요청: {}", signupUserRequestDTO);
+        if (!"STUDENT".equals(signupUserRequestDTO.getRole().toString()) && !"OWNER".equals(signupUserRequestDTO.getRole().toString())) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
-        signup(request, response, signupRequestDTO);
-
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
-    }
-
-    @PostMapping("/signup/inst")
-    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupRequestDTO signupRequestDTO) {
-        log.info("강사 회원가입 요청: {}", signupRequestDTO);
-        if (!"INSTRUCTOR".equals(signupRequestDTO.getRole().toString()) && !"OWNER".equals(signupRequestDTO.getRole().toString())) {
-            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
-        }
-
-        signup(request, response, signupRequestDTO);
-
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
-    }
-
-    private void signup(HttpServletRequest request, HttpServletResponse response, SignupRequestDTO signupRequestDTO) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_LOGIN);
         }
 
         User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
-        User user = userService.signupUser(domainUser, signupRequestDTO);
+        User user = userService.signupUser(response, domainUser, signupUserRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @PostMapping("/signup/inst")
+    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
+        log.info("강사 회원가입 요청: {}", signupInstructorRequestDTO);
+        if (!"INSTRUCTOR".equals(signupInstructorRequestDTO.getRole().toString())) {
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
+        }
+
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_LOGIN);
+        }
+
+        User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
+        User user = userService.signupInstructor(response, domainUser, signupInstructorRequestDTO);
+
+        log.info("회원가입 성공");
+        userService.createTokens(response, user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
     @GetMapping("/signout")

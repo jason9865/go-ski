@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class InstructorCertificateDTO extends ProfileImageDTO {
+public class InstructorImagesDTO extends ProfileImageDTO {
     private List<CertificateVO> certificateVOs;
 }

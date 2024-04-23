@@ -14,10 +14,7 @@ import com.go.ski.user.core.repository.CertificateRepository;
 import com.go.ski.user.core.repository.InstructorCertRepository;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
-import com.go.ski.user.support.dto.InstructorCertificateDTO;
-import com.go.ski.user.support.dto.ProfileImageDTO;
-import com.go.ski.user.support.dto.SignupRequestDTO;
-import com.go.ski.user.support.dto.UpdateInstructorRequestDTO;
+import com.go.ski.user.support.dto.*;
 import com.go.ski.user.support.vo.CertificateVO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,31 +51,45 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public User signupUser(User domainUser, SignupRequestDTO signupRequestDTO) {
+    public User signupUser(HttpServletResponse response, User domainUser, SignupUserRequestDTO signupUserRequestDTO) {
         User user = User.builder()
                 .domain(domainUser.getDomain())
-                .userName(signupRequestDTO.getUserName())
-                .birthDate(signupRequestDTO.getBirthDate())
-                .phoneNumber(signupRequestDTO.getPhoneNumber())
-                .gender(signupRequestDTO.getGender())
-                .role(signupRequestDTO.getRole())
+                .userName(signupUserRequestDTO.getUserName())
+                .birthDate(signupUserRequestDTO.getBirthDate())
+                .phoneNumber(signupUserRequestDTO.getPhoneNumber())
+                .gender(signupUserRequestDTO.getGender())
+                .role(signupUserRequestDTO.getRole())
                 .profileUrl(domainUser.getProfileUrl())
                 .build();
 
         // 프로필 이미지 업로드 후 save
-        uploadProfileImage(user, signupRequestDTO);
+        uploadProfileImage(user, signupUserRequestDTO);
+        return user;
+    }
 
-        if ("INSTRUCTOR".equals(user.getRole().name())) {
-            Instructor instructor = Instructor.builder()
-                    .instructorId(user.getUserId())
-                    .user(user)
-                    .build();
-            instructorRepository.save(instructor);
+    @Transactional
+    public User signupInstructor(HttpServletResponse response, User domainUser, SignupInstructorRequestDTO signupInstructorRequestDTO) {
+        User user = User.builder()
+                .domain(domainUser.getDomain())
+                .userName(signupInstructorRequestDTO.getUserName())
+                .birthDate(signupInstructorRequestDTO.getBirthDate())
+                .phoneNumber(signupInstructorRequestDTO.getPhoneNumber())
+                .gender(signupInstructorRequestDTO.getGender())
+                .role(signupInstructorRequestDTO.getRole())
+                .profileUrl(domainUser.getProfileUrl())
+                .build();
 
-            // 자격증 사진 업로드 후 save
-            uploadCertificateImages(instructor, signupRequestDTO);
-        }
+        // 프로필 이미지 업로드 후 save
+        uploadProfileImage(user, signupInstructorRequestDTO);
+
+        Instructor instructor = Instructor.builder()
+                .instructorId(user.getUserId())
+                .user(user)
+                .build();
+        instructorRepository.save(instructor);
+
+        // 자격증 사진 업로드 후 save
+        uploadCertificateImages(instructor, signupInstructorRequestDTO);
         return user;
     }
 
@@ -127,8 +138,8 @@ public class UserService {
         }
     }
 
-    private void uploadCertificateImages(Instructor instructor, InstructorCertificateDTO instructorCertificateDTO) {
-        List<CertificateVO> certificateVOs = instructorCertificateDTO.getCertificateVOs();
+    private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
+        List<CertificateVO> certificateVOs = instructorImagesDTO.getCertificateVOs();
         if (certificateVOs != null && !certificateVOs.isEmpty()) {
             for (CertificateVO certificateVO : certificateVOs) {
                 log.info("{}", certificateVO);
