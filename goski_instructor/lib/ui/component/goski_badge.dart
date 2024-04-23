@@ -32,6 +32,7 @@ class GoskiBadge extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(8))),
       backgroundColor: backgroundColor,
       side: BorderSide.none,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
 }
