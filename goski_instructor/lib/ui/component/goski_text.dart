@@ -20,24 +20,38 @@ class GoskiText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isExpanded) {
       return Expanded(
-        child: Text(
-            style: TextStyle(
-                color: color,
-                fontSize: size,
-                fontWeight: isBold ? FontWeight.w400 : FontWeight.w700
-            ),
-            text
-        ),
+        child:
+            GoskiTextBody(color: color, size: size, isBold: isBold, text: text),
       );
     } else {
-      return Text(
-          style: TextStyle(
-              color: color,
-              fontSize: size,
-              fontWeight: isBold ? FontWeight.w400 : FontWeight.w700
-          ),
-          text
-      );
+      return GoskiTextBody(
+          color: color, size: size, isBold: isBold, text: text);
     }
+  }
+}
+
+class GoskiTextBody extends StatelessWidget {
+  const GoskiTextBody({
+    super.key,
+    required this.color,
+    required this.size,
+    required this.isBold,
+    required this.text,
+  });
+
+  final Color color;
+  final double size;
+  final bool isBold;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      style: TextStyle(
+          color: color,
+          fontSize: size,
+          fontWeight: isBold ? FontWeight.w400 : FontWeight.w700),
+      text,
+    );
   }
 }

@@ -7,13 +7,13 @@ const buttonBlack = Color(0xFF141212);
 // 밝은 회색
 const goskiLightGray = Color(0xFFE5E5E5);
 // 어두운 회색
-const goskiDarkGray = Color(0xFFE5E5E5);
+const goskiDarkGray = Color(0x80000000);
 // 점선 회색
 const goskiDashGray = Color(0x33000000);
 // 라이트 핑크
-const goskiLightPink = Color(0xFFFFC8C8);
+const goskiLightPink = Color(0xFFFA9494);
 // 다크 핑크
-const goskiDarkPink = Color(0xFFFA9494);
+const goskiDarkPink = Color(0xFFFC3468);
 // 빨간색
 const goskiRed = Color(0xFFFF0000);
 // 노란색 - 별
