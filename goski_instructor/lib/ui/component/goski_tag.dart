@@ -13,6 +13,7 @@ class GoskiTag extends StatefulWidget {
       selectedBackgroundColor;
   final bool isRound, hasBorder;
   final bool isSelected;
+  final void Function(bool)? onClicked;
 
   GoskiTag({
     super.key,
@@ -25,6 +26,7 @@ class GoskiTag extends StatefulWidget {
     this.isRound = true,
     required this.isSelected,
     required this.hasBorder,
+    this.onClicked
   });
 
   @override
@@ -32,7 +34,7 @@ class GoskiTag extends StatefulWidget {
 }
 
 class _GoskiTagState extends State<GoskiTag> {
-  bool isSelected = false;
+  bool isSelected = false; // TODO. 추후에 삭제 필요, 대신 onClicked 사용
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,12 @@ class _GoskiTagState extends State<GoskiTag> {
         setState(() {
           isSelected = selected;
         });
+
+        if (widget.onClicked != null) {
+          setState(() {
+            widget.onClicked!(selected);
+          });
+        }
       },
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       elevation: 0,
@@ -59,7 +67,7 @@ class _GoskiTagState extends State<GoskiTag> {
       backgroundColor: widget.backgroundColor,
       selectedColor: widget.selectedBackgroundColor,
       side: BorderSide(
-        color: widget.borderColor,
+        color: isSelected ? Colors.transparent : widget.borderColor,
         width: 1,
       ),
       showCheckmark: false,
