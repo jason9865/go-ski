@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UpdateInstructorRequestDTO extends InstructorCertificateDTO {
+public class UpdateInstructorRequestDTO extends InstructorImagesDTO {
     private String description;
     private IsInstructAvailable isInstructAvailable;
     private int dayoff;
