@@ -23,17 +23,19 @@ class GoskiTextField extends StatefulWidget {
 }
 
 class _GoskiTextFieldState extends State<GoskiTextField> {
-  String inptText = '';
+  // String inptText = '';
   final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController.text = widget.text;
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getWidthByRatio(0.02);
-
-    if (!widget.canEdit) {
-      _textEditingController.text = widget.text;
-    }
 
     return Container(
       width: widget.width == 0 ? double.infinity : widget.width,
@@ -47,7 +49,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
         controller: _textEditingController,
         onChanged: (text) {
           setState(() {
-            inptText = text;
+            _textEditingController.text = text;
           });
         },
         decoration: InputDecoration(
@@ -56,7 +58,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
               color: goskiDarkGray, fontSize: 15, fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
-          contentPadding: EdgeInsets.all(5),
+          contentPadding: const EdgeInsets.all(5),
         ),
         style: const TextStyle(
             color: goskiBlack, fontSize: 15, fontWeight: FontWeight.w400),
