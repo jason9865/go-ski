@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:goski_instructor/const/text_theme.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/I002.dart';
 // import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/ui/component/main_header.dart';
+import 'package:goski_instructor/ui/component/sub_header.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+        fontFamily: 'NotoSansKR',
+        textTheme: AppTextTheme.lightTextTheme,
+      ),
       home: Builder(
         builder: (context) {
           final mediaQueryData = MediaQuery.of(context);
@@ -23,7 +30,11 @@ class MyApp extends StatelessWidget {
             mediaQueryData.size.height,
           );
 
-          return const I002();
+          return const Scaffold(
+            // appBar: MainHeader(),
+            appBar: SubHeader(title: "페이지 이름"),
+            body: I002(), // 가정: I002는 어떤 커스텀 위젯입니다.
+          );
         },
       ),
     );
