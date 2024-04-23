@@ -4,12 +4,13 @@ import 'package:goski_instructor/const/color.dart';
 
 import '../../const/util/screen_size_controller.dart';
 
-class GoskiTextfield extends StatefulWidget {
+/// width를 0으로 입력시 expanded된 textField 생성 가능
+class GoskiTextField extends StatefulWidget {
   final double width;
   final bool canEdit;
   final String text, hintText;
 
-  const GoskiTextfield({
+  const GoskiTextField({
     super.key,
     required this.width,
     this.canEdit = true,
@@ -18,12 +19,12 @@ class GoskiTextfield extends StatefulWidget {
   });
 
   @override
-  State<GoskiTextfield> createState() => _GoskiTextfieldState();
+  State<GoskiTextField> createState() => _GoskiTextFieldState();
 }
 
-class _GoskiTextfieldState extends State<GoskiTextfield> {
+class _GoskiTextFieldState extends State<GoskiTextField> {
   String inptText = '';
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _GoskiTextfieldState extends State<GoskiTextfield> {
     }
 
     return Container(
-      width: widget.width,
+      width: widget.width == 0 ? double.infinity : widget.width,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
           color: widget.canEdit ? goskiWhite : goskiLightGray,
@@ -51,7 +52,7 @@ class _GoskiTextfieldState extends State<GoskiTextfield> {
         },
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle:  const TextStyle(
+          hintStyle: const TextStyle(
               color: goskiDarkGray, fontSize: 15, fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
@@ -60,7 +61,6 @@ class _GoskiTextfieldState extends State<GoskiTextfield> {
         style: const TextStyle(
             color: goskiBlack, fontSize: 15, fontWeight: FontWeight.w400),
         cursorColor: goskiBlack,
-
       ),
     );
   }
