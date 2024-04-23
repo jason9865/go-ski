@@ -12,7 +12,7 @@ class GoskiTextField extends StatefulWidget {
 
   const GoskiTextField({
     super.key,
-    required this.width,
+    this.width = 0,
     this.canEdit = true,
     this.text = '',
     this.hintText = '',
