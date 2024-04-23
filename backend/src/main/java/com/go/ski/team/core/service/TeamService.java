@@ -40,14 +40,13 @@ public class TeamService {
 
 
     @Transactional
-    public void createTeam(TeamCreateRequestDTO request) {
+    public void createTeam(TeamCreateRequestDTO request,Integer userId) {
         log.info("TeamService.createTeam");
-        Integer userId = 1; // 테스트용 임시 값 -> 추후 변경 예정
-
         // Team 테이블에 저장할 User, SkiResort 생성
         User user = getUser(userId);
-        SkiResort skiResort = getSkiResort(request.getResortId());
+        log.info("flag! - {}", request.toString());
 
+        SkiResort skiResort = getSkiResort(request.getResortId());
         // 0. 프로필 이미지부터 S3에 저장
         String teamProfileUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage());
 
@@ -111,12 +110,13 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeamInfo(Integer teamId, TeamUpdateRequestDTO request) {
-        Integer userId = 1; // 테스트용 임시 값 -> 추후 변경 예정
+    public void updateTeamInfo(Integer userId, Integer teamId, TeamUpdateRequestDTO request) {
         // Team 테이블에 저장할 User, SkiResort 생성
         User user = getUser(userId);
+        log.info("flag! - {}", request.toString());
         SkiResort skiResort = getSkiResort(request.getResortId());
 
+        log.info("1. 팀 정보 수정");
         // 1. 팀 정보 수정
         // 1-1. 팀 프로필 사진 수정
         String originalFileUrl = getTeamProfileUrl(teamId);
@@ -134,9 +134,10 @@ public class TeamService {
                 .dayoff(dayoffListToInteger(request.getDayoff()))
                 .build();
 
-        teamRepository.save(newTeam);
-        log.info("팀 정보 수정 성공 - teamId : {}", newTeam.getTeamId());
+        Team savedTeam = teamRepository.save(newTeam);
+        log.info("팀 정보 수정 성공 - teamId : {}", savedTeam.getTeamId());
 
+        log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
         // 2-1. 새로운 이미지 s3에 저장
         List<MultipartFile> newTeamImages = request.getTeamImages();
@@ -144,7 +145,7 @@ public class TeamService {
         List<TeamImage> tobeSavedImages = new ArrayList<>();
         for(MultipartFile image : newTeamImages) {
             String newTeamImageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
-            tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(newTeam).build());
+            tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(savedTeam).build());
         }
 
         // 2-2. 예전 이미지 s3에서 삭제
@@ -158,26 +159,19 @@ public class TeamService {
         log.info("팀 소개 이미지 수정 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
 
         // 3. 중고급 옵션 수정
-        LevelOption levelOption = LevelOption.createLevelOption(newTeam, request);
+        LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
         levelOptionRepository.save(levelOption);
         log.info("중 고급 옵션 저장 성공");
 
         // 4. 1:N 옵션 수정
-        OneToNOption oneToNOption = OneToNOption.createOneToNOption(newTeam, request);
+        OneToNOption oneToNOption = OneToNOption.createOneToNOption(savedTeam, request);
         oneToNOptionRepository.save(oneToNOption);
         log.info("1:N 옵션 저장 성공");
 
     }
 
-    // 토큰에서 userId 추출
-    public Integer getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("제발제발 - {}", authentication.toString());
-        String userId = authentication.getName(); // getSubject()에서 반환한 userId
-        return Integer.parseInt(userId);
-    }
-
     public User getUser(Integer userId) {
+        log.info("getUser - {}",userId);
         return userRepository.findById(userId)
                 .orElseThrow(() ->new RuntimeException("해당 유저가 없습니다!")); // 추후 변경
     }

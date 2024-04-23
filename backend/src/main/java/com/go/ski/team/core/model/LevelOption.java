@@ -38,6 +38,7 @@ public class LevelOption {
 
     public static LevelOption createLevelOption(Team team, TeamUpdateRequestDTO requestDTO) {
         LevelOption levelOption = new LevelOption();
+        levelOption.teamId = team.getTeamId();
         levelOption.team = team;
         levelOption.intermediateFee = requestDTO.getIntermediateFee();
         levelOption.advancedFee = requestDTO.getAdvancedFee();

@@ -26,9 +26,10 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createTeam(TeamCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> createTeam(HttpServletRequest request, TeamCreateRequestDTO requestDTO) {
         log.info("=====TeamController.createTeam=====");
-        teamService.createTeam(requestDTO);
+        Integer userId = Integer.parseInt(request.getAttribute("userId").toString());
+        teamService.createTeam(requestDTO,userId);
         log.info("=====팀 생성 완료=====");
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
@@ -42,9 +43,12 @@ public class TeamController {
     }
 
     @PatchMapping("/update/{teamId}")
-    public ResponseEntity<ApiResponse> updateTeamInfo(@PathVariable Integer teamId, TeamUpdateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse> updateTeamInfo(@PathVariable Integer teamId, HttpServletRequest request,
+                                                      TeamUpdateRequestDTO requestDTO) {
         log.info("=====TeamController.updateTeamInfo=====");
-        teamService.updateTeamInfo(teamId,requestDTO);
+        Integer userId = Integer.parseInt(request.getAttribute("userId").toString());
+        log.info("userId -> {}",userId);
+        teamService.updateTeamInfo(userId, teamId,requestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

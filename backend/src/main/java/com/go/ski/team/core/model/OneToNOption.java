@@ -44,6 +44,7 @@ public class OneToNOption {
 
     public static OneToNOption createOneToNOption(Team team, TeamUpdateRequestDTO requestDTO) {
         OneToNOption oneToNOption = new OneToNOption();
+        oneToNOption.teamId = team.getTeamId();
         oneToNOption.team = team;
         oneToNOption.oneTwoFee = requestDTO.getOneTwoFee();
         oneToNOption.oneThreeFee = requestDTO.getOneThreeFee();
