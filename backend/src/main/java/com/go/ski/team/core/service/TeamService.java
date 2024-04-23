@@ -7,6 +7,7 @@ import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
 import com.go.ski.team.support.dto.TeamResponseDTO;
+import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
 import com.go.ski.team.support.vo.TeamImageVO;
 import com.go.ski.user.core.model.User;
@@ -40,18 +41,14 @@ public class TeamService {
 
     @Transactional
     public void createTeam(TeamCreateRequestDTO request) {
-        Integer userId = 1;
-        log.info("TeamService.createTeam - userId -> {}",userId);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->new RuntimeException("해당 유저가 없습니다!")); // 추후 변경
+        log.info("TeamService.createTeam");
+        Integer userId = 1; // 테스트용 임시 값 -> 추후 변경 예정
 
-        log.info("request 정보 - {}",request.toString());
+        // Team 테이블에 저장할 User, SkiResort 생성
+        User user = getUser(userId);
+        SkiResort skiResort = getSkiResort(request.getResortId());
 
-        SkiResort skiResort= skiResortRepository.findById(request.getResortId())
-                .orElseThrow(() -> new RuntimeException("해당 리조트가 존재하지 않습니다!"));
-
-        log.info("user정보 -> {}",skiResort.getResortName());
-        // 0. 이미지부터 S3에 저장
+        // 0. 프로필 이미지부터 S3에 저장
         String teamProfileUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage());
 
         // 1. 팀 생성
@@ -106,11 +103,70 @@ public class TeamService {
                 ;
 
         // bitmask -> List로 변환
-        teamResponseDTO.setDayOffList(toDayOfWeek(teamResponseDTO.getDayoff()));
+        teamResponseDTO.setDayoffList(toDayOfWeek(teamResponseDTO.getDayoff()));
 
         // teamResponseDTO에 저장
         teamResponseDTO.setTeamImages(teamImages);
         return teamResponseDTO;
+    }
+
+    @Transactional
+    public void updateTeamInfo(Integer teamId, TeamUpdateRequestDTO request) {
+        Integer userId = 1; // 테스트용 임시 값 -> 추후 변경 예정
+        // Team 테이블에 저장할 User, SkiResort 생성
+        User user = getUser(userId);
+        SkiResort skiResort = getSkiResort(request.getResortId());
+
+        // 1. 팀 정보 수정
+        // 1-1. 팀 프로필 사진 수정
+        String originalFileUrl = getTeamProfileUrl(teamId);
+        String newTeamProfileUrl = s3Uploader.updateFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage(), originalFileUrl);
+
+        // 1-2. 팀 테이블 수정
+        Team newTeam = Team.builder()
+                .teamId(teamId)
+                .user(user)
+                .skiResort(skiResort)
+                .teamName(request.getTeamName())
+                .teamProfileUrl(newTeamProfileUrl)
+                .description(request.getDescription())
+                .teamCost(request.getTeamCost())
+                .dayoff(dayoffListToInteger(request.getDayoff()))
+                .build();
+
+        teamRepository.save(newTeam);
+        log.info("팀 정보 수정 성공 - teamId : {}", newTeam.getTeamId());
+
+        // 2. 팀 소개 이미지 변경
+        // 2-1. 새로운 이미지 s3에 저장
+        List<MultipartFile> newTeamImages = request.getTeamImages();
+
+        List<TeamImage> tobeSavedImages = new ArrayList<>();
+        for(MultipartFile image : newTeamImages) {
+            String newTeamImageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
+            tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(newTeam).build());
+        }
+
+        // 2-2. 예전 이미지 s3에서 삭제
+        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
+        for(TeamImage image : oldTeamImages) {
+            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
+                    image.getImageUrl());
+        }
+
+        teamImageRepository.saveAll(tobeSavedImages);
+        log.info("팀 소개 이미지 수정 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
+
+        // 3. 중고급 옵션 수정
+        LevelOption levelOption = LevelOption.createLevelOption(newTeam, request);
+        levelOptionRepository.save(levelOption);
+        log.info("중 고급 옵션 저장 성공");
+
+        // 4. 1:N 옵션 수정
+        OneToNOption oneToNOption = OneToNOption.createOneToNOption(newTeam, request);
+        oneToNOptionRepository.save(oneToNOption);
+        log.info("1:N 옵션 저장 성공");
+
     }
 
     // 토큰에서 userId 추출
@@ -121,7 +177,24 @@ public class TeamService {
         return Integer.parseInt(userId);
     }
 
-    public Integer dayoffListToInteger(List<Integer> dayoffList) {
+    public User getUser(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() ->new RuntimeException("해당 유저가 없습니다!")); // 추후 변경
+    }
+
+    public SkiResort getSkiResort(Integer resortId) {
+        return skiResortRepository.findById(resortId)
+                .orElseThrow(() -> new RuntimeException("해당 리조트가 존재하지 않습니다!"));
+    }
+
+    public String getTeamProfileUrl(Integer teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND))
+                .getTeamProfileUrl()
+                ;
+    }
+
+    public static Integer dayoffListToInteger(List<Integer> dayoffList) {
         return dayoffList.stream()
                 .mapToInt(day -> 1 << day)
                 .sum();

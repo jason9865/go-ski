@@ -58,6 +58,18 @@ public class S3Uploader {
         }
     }
 
+    public String updateFile(String filePath, MultipartFile multipartFile, String originalFileUrl) {
+
+        // 기존 파일 삭제
+        deleteFile(filePath, originalFileUrl);
+
+        // 새로운 파일 추가
+        return uploadFile(filePath, multipartFile);
+
+    }
+
+
+
     // uuid와 확장자명을 이용하여 새로운 파일 이름 생성
     // example.jpg -> 5f62b792-3d22-4a02-a3ff-92fc133bd0fd.jpg
     private String createFileName(String fileName) {

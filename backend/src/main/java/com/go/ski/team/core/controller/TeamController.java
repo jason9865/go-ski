@@ -5,6 +5,7 @@ import com.go.ski.common.response.ApiResponse;
 import com.go.ski.team.core.service.TeamService;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
 import com.go.ski.team.support.dto.TeamResponseDTO;
+import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,13 @@ public class TeamController {
         TeamResponseDTO response = teamService.getTeamInfo(teamId);
         log.info("=====팀 정보 조회 완료=====");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @PatchMapping("/update/{teamId}")
+    public ResponseEntity<ApiResponse> updateTeamInfo(@PathVariable Integer teamId, TeamUpdateRequestDTO requestDTO) {
+        log.info("=====TeamController.updateTeamInfo=====");
+        teamService.updateTeamInfo(teamId,requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
 }

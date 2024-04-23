@@ -26,7 +26,7 @@ public class TeamResponseDTO {
     @JsonIgnore
     private Integer dayoff;
     @Setter
-    private List<Integer> dayOffList;
+    private List<Integer> dayoffList;
     @Setter
     private List<TeamImageVO> teamImages;
     private Integer intermediateFee;

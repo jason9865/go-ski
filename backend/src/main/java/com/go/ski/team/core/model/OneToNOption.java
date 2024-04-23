@@ -1,6 +1,7 @@
 package com.go.ski.team.core.model;
 
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
+import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,5 +41,16 @@ public class OneToNOption {
         oneToNOption.oneNFee = requestDTO.getOneNFee();
         return oneToNOption;
     }
+
+    public static OneToNOption createOneToNOption(Team team, TeamUpdateRequestDTO requestDTO) {
+        OneToNOption oneToNOption = new OneToNOption();
+        oneToNOption.team = team;
+        oneToNOption.oneTwoFee = requestDTO.getOneTwoFee();
+        oneToNOption.oneThreeFee = requestDTO.getOneThreeFee();
+        oneToNOption.oneFourFee = requestDTO.getOneFourFee();
+        oneToNOption.oneNFee = requestDTO.getOneNFee();
+        return oneToNOption;
+    }
+
 
 }
