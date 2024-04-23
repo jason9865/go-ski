@@ -17,7 +17,14 @@ Widget headerRightIcons(BuildContext context) {
             context: context,
             builder: (BuildContext context) => CustomModal(
               title: "외부 일정 등록",
-              content: const Text("---컨텐츠 위젯---"),
+              content: const SizedBox(
+                height: 500,
+                child: Center(
+                    child: Text(
+                  "컨텐츠",
+                  style: TextStyle(fontSize: 50),
+                )),
+              ),
               // 버튼 눌렀을 때 동작할 함수 추가 필요
               onConfirm: () => Navigator.of(context).pop(),
             ),
