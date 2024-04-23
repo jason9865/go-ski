@@ -148,13 +148,14 @@ public class TeamService {
             tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(savedTeam).build());
         }
 
-        // 2-2. 예전 이미지 s3에서 삭제
+        // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
         List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
         for(TeamImage image : oldTeamImages) {
             s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
                     image.getImageUrl());
         }
 
+        teamImageRepository.deleteAll(oldTeamImages);
         teamImageRepository.saveAll(tobeSavedImages);
         log.info("팀 소개 이미지 수정 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
 
