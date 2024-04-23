@@ -29,7 +29,7 @@ class CustomContainer extends StatelessWidget {
         ? SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               vertical: screenSizeController.getHeightByRatio(0.01),
-              horizontal: screenSizeController.getHeightByRatio(0.015),
+              horizontal: screenSizeController.getWidthByRatio(0.03),
             ),
             child: Column(
               children: [
@@ -52,7 +52,7 @@ class CustomContainer extends StatelessWidget {
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(
                 vertical: screenSizeController.getHeightByRatio(0.01),
-                horizontal: screenSizeController.getHeightByRatio(0.015),
+                horizontal: screenSizeController.getWidthByRatio(0.03),
               ),
               child: Column(
                 children: [

@@ -25,7 +25,6 @@ class CustomModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
 
-    logger.d(screenSizeController.getHeightByRatio(0.023));
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
