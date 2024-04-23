@@ -30,16 +30,19 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] ALL_USER_ROUTES = {
-
+            "/api/v1/user/signout", "/api/v1/user/resign"
     };
 
     private static final String[] STUDENT_ROUTES = {
+            "/api/v1/user/update/user", "/api/v1/user/profile/user"
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
+            "/api/v1/user/update/inst", "/api/v1/user/profile/inst"
     };
 
     private static final String[] OWNER_ROUTES = {
+            "/api/v1/user/update/user", "/api/v1/user/profile/user"
     };
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성

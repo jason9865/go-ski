@@ -14,12 +14,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class SignupRequestDTO {
+public class SignupRequestDTO extends InstructorCertificateDTO {
     private String userName;
-    private MultipartFile profileImage;
     private Gender gender;
     private LocalDateTime birthDate;
     private String phoneNumber;
     private Role role;
-    private List<CertificateVO> certificateVOs;
 }

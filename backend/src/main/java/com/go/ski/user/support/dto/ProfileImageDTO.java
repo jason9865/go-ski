@@ -1,4 +1,4 @@
-package com.go.ski.user.support.vo;
+package com.go.ski.user.support.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @ToString
-public class CertificateVO {
-    private int certificateId;
-    private MultipartFile certificateImage;
+public class ProfileImageDTO {
+    private MultipartFile profileImage;
 }
