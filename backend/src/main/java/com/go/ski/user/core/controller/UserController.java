@@ -128,4 +128,19 @@ public class UserController {
         userService.logout(response);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
+
+    @GetMapping("/profile/user")
+    public ResponseEntity<ApiResponse<?>> getUser(HttpServletRequest request) {
+        log.info("교육생, 사장 프로필 요청");
+        User user = (User) request.getAttribute("user");
+        ProfileUserResponseDTO profileUserResponseDTO = ProfileUserResponseDTO.builder()
+                .userName(user.getUserName())
+                .profileUrl(user.getProfileUrl())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
+                .birthDate(user.getBirthDate())
+                .gender(user.getGender())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(profileUserResponseDTO));
+    }
 }

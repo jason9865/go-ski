@@ -123,6 +123,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void getUser(User user) {
+
+    }
+
     public void createTokens(HttpServletResponse response, User user) {
         String accessToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "access");
         String refreshToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "refresh");
