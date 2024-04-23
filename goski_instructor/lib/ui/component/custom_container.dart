@@ -22,6 +22,29 @@ class CustomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
 
-    return const SingleChildScrollView();
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(
+        vertical: screenSizeController.getHeightByRatio(0.01),
+      ),
+      child: Column(
+        children: [
+          content,
+          if (onConfirm != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소'),
+                ),
+                TextButton(
+                  onPressed: onConfirm,
+                  child: const Text('저장'),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
   }
 }
