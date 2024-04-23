@@ -15,7 +15,7 @@ class GoskiTag extends StatefulWidget {
   final bool isSelected;
   final void Function(bool)? onClicked;
 
-  GoskiTag({
+  const GoskiTag({
     super.key,
     required this.text,
     required this.textColor,
@@ -71,6 +71,7 @@ class _GoskiTagState extends State<GoskiTag> {
         width: 1,
       ),
       showCheckmark: false,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
 }
