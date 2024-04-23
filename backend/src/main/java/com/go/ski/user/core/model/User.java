@@ -52,6 +52,7 @@ public class User {
     private String fcmMobile;
 
     private LocalDateTime createdDate;
+    @Setter
     private LocalDateTime expiredDate;
 
     @PrePersist

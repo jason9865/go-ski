@@ -39,14 +39,17 @@ public class UserController {
             HttpSession session = request.getSession(); // session에 도메인 정보 넣어두고 회원가입 요청에서 사용
             session.setAttribute("user", user);
         } else {
+            if (user.getExpiredDate() != null) {
+                log.info("탈퇴한 유저: {}", user.getExpiredDate());
+                throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.RESIGNED_USER);
+            }
             log.info("로그인 성공");
             userService.createTokens(response, user);
         }
-
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
-    @PostMapping("/signup/student")
+    @PostMapping("/signup/user")
     public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupUserRequestDTO signupUserRequestDTO) {
         log.info("교육생 회원가입 요청: {}", signupUserRequestDTO);
         if (!"STUDENT".equals(signupUserRequestDTO.getRole().toString()) && !"OWNER".equals(signupUserRequestDTO.getRole().toString())) {
@@ -59,7 +62,7 @@ public class UserController {
         }
 
         User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
-        User user = userService.signupUser(response, domainUser, signupUserRequestDTO);
+        User user = userService.signupUser(domainUser, signupUserRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);
@@ -79,7 +82,7 @@ public class UserController {
         }
 
         User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
-        User user = userService.signupInstructor(response, domainUser, signupInstructorRequestDTO);
+        User user = userService.signupInstructor(domainUser, signupInstructorRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);
@@ -94,26 +97,35 @@ public class UserController {
     }
 
     @PatchMapping("/update/user")
-    public ResponseEntity<ApiResponse<?>> updateUser(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ProfileImageDTO profileImageDTO) {
+    public ResponseEntity<ApiResponse<?>> updateUser(HttpServletRequest request, @ModelAttribute ProfileImageDTO profileImageDTO) {
         log.info("교육생, 사장 업데이트 요청: {}", profileImageDTO);
         if (profileImageDTO == null) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM);
         }
-        int userId = Integer.parseInt(request.getAttribute("userId").toString());
-        userService.updateUser(userId, profileImageDTO);
+        User user = (User) request.getAttribute("user");
+        userService.updateUser(user, profileImageDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
     @PatchMapping("/update/inst")
-    public ResponseEntity<ApiResponse<?>> updateInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute UpdateInstructorRequestDTO updateInstructorRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> updateInstructor(HttpServletRequest request, @ModelAttribute UpdateInstructorRequestDTO updateInstructorRequestDTO) {
         log.info("강사 업데이트 요청: {}", updateInstructorRequestDTO);
         if (updateInstructorRequestDTO == null) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM);
         }
-        int userId = Integer.parseInt(request.getAttribute("userId").toString());
-        userService.updateInstructor(userId, updateInstructorRequestDTO);
+        User user = (User) request.getAttribute("user");
+        userService.updateInstructor(user, updateInstructorRequestDTO);
 
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @DeleteMapping("/resign")
+    public ResponseEntity<ApiResponse<?>> deleteUser(HttpServletRequest request, HttpServletResponse response) {
+        log.info("유저 회원탈퇴");
+        User user = (User) request.getAttribute("user");
+        userService.resign(user);
+        userService.logout(response);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 }

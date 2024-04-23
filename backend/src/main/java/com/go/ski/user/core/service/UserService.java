@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClientException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class UserService {
         }
     }
 
-    public User signupUser(HttpServletResponse response, User domainUser, SignupUserRequestDTO signupUserRequestDTO) {
+    public User signupUser(User domainUser, SignupUserRequestDTO signupUserRequestDTO) {
         User user = User.builder()
                 .domain(domainUser.getDomain())
                 .userName(signupUserRequestDTO.getUserName())
@@ -68,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    public User signupInstructor(HttpServletResponse response, User domainUser, SignupInstructorRequestDTO signupInstructorRequestDTO) {
+    public User signupInstructor(User domainUser, SignupInstructorRequestDTO signupInstructorRequestDTO) {
         User user = User.builder()
                 .domain(domainUser.getDomain())
                 .userName(signupInstructorRequestDTO.getUserName())
@@ -100,23 +101,26 @@ public class UserService {
         response.setHeader("refreshToken", null);
     }
 
-    public void updateUser(int userId, ProfileImageDTO profileImageDTO) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public void updateUser(User user, ProfileImageDTO profileImageDTO) {
         uploadProfileImage(user, profileImageDTO);
     }
 
     @Transactional
-    public void updateInstructor(int userId, UpdateInstructorRequestDTO updateInstructorRequestDTO) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public void updateInstructor(User user, UpdateInstructorRequestDTO updateInstructorRequestDTO) {
         uploadProfileImage(user, updateInstructorRequestDTO);
 
-        Instructor instructor = instructorRepository.findById(userId).orElseThrow();
+        Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
         instructor.setDescription(updateInstructorRequestDTO.getDescription());
         instructor.setDayoff(updateInstructorRequestDTO.getDayoff());
         instructor.setIsInstructAvailable(updateInstructorRequestDTO.getIsInstructAvailable());
         instructorRepository.save(instructor);
 
         uploadCertificateImages(instructor, updateInstructorRequestDTO);
+    }
+
+    public void resign(User user) {
+        user.setExpiredDate(LocalDateTime.now());
+        userRepository.save(user);
     }
 
     public void createTokens(HttpServletResponse response, User user) {

@@ -3,6 +3,8 @@ package com.go.ski.auth.jwt.util;
 
 import com.go.ski.redis.dto.LoginTokenDto;
 import com.go.ski.redis.repository.LoginTokenRepository;
+import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.vo.Role;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import java.util.List;
 public class JwtUtil {
 
     private final LoginTokenRepository loginTokenRepository;
+    private final UserRepository userRepository;
     @Value("${jwt.access.expiration}")
     private long accessExpiration;
     @Value("${jwt.access.secret_key}")
@@ -80,7 +83,7 @@ public class JwtUtil {
             Date expiration = claims.getExpiration();
             if (expiration.before(new Date())) {
                 log.info("토큰이 만료되었습니다: {}", expiration);
-                return null;
+                throw new Exception();
             }
 
             // 레디스에서 검증
@@ -91,7 +94,7 @@ public class JwtUtil {
 
                 if (!loginTokenDto.getAccessToken().equals(accessToken)) {
                     log.info("Redis 검증 실패");
-                    return null;
+                    throw new Exception();
                 }
 
                 // 리프레시가 유효하면 토큰 재발급해야함
@@ -103,7 +106,14 @@ public class JwtUtil {
                 response.setHeader("refreshToken", newRefreshToken);
             }
 
-            request.setAttribute("userId", subject); // 이후 API에서 사용할 userId
+            // DB에서 유저 객체를 가져와서 DELETE 확인
+            User user = userRepository.findById(Integer.valueOf(subject)).orElseThrow();
+            if (user.getExpiredDate() != null) {
+                log.info("탈퇴한 유저: {}", user.getExpiredDate());
+                throw new Exception();
+            }
+
+            request.setAttribute("user", user); // 이후 API에서 사용할 유저
             return new UsernamePasswordAuthenticationToken(subject, "", List.of(new SimpleGrantedAuthority(role)));
         } catch (Exception e) {
             log.info(e.getMessage());
