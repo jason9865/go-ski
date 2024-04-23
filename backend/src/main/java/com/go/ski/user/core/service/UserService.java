@@ -16,7 +16,6 @@ import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.dto.SignupRequestDTO;
 import com.go.ski.user.support.exception.AuthExceptionEnum;
 import com.go.ski.user.support.vo.CertificateVO;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +63,9 @@ public class UserService {
     public User signupUser(User domainUser, SignupRequestDTO signupRequestDTO) {
         MultipartFile profileImage = signupRequestDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
-            String profileUrl = s3Uploader.uploadFile("/user/profile", profileImage);
+            String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
             domainUser.setProfileUrl(profileUrl);
+            log.info("profileUrl: {}", profileUrl);
         }
 
         User user = User.builder()
@@ -77,7 +77,7 @@ public class UserService {
                 .role(signupRequestDTO.getRole())
                 .profileUrl(domainUser.getProfileUrl())
                 .build();
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         if ("INSTRUCTOR".equals(user.getRole().name())) {
             Instructor instructor = Instructor.builder()
@@ -90,9 +90,13 @@ public class UserService {
             List<CertificateVO> certificateVOs = signupRequestDTO.getCertificateVOs();
             if (certificateVOs != null && !certificateVOs.isEmpty()) {
                 for (CertificateVO certificateVO : certificateVOs) {
+                    log.info("{}", certificateVO);
+
                     Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateVO.getCertificateId());
                     if (optionalCertificate.isPresent()) {
-                        String certificateImageUrl = s3Uploader.uploadFile("/certificate/" + user.getUserId(), certificateVO.getCertificateImage());
+                        String certificateImageUrl = s3Uploader.uploadFile("certificate/" + user.getUserId(), certificateVO.getCertificateImage());
+                        log.info("certificateImageUrl: {}", certificateImageUrl);
+
                         InstructorCert instructorCert = InstructorCert.builder()
                                 .certificate(optionalCertificate.get())
                                 .instructor(instructor)
@@ -107,7 +111,11 @@ public class UserService {
         return user;
     }
 
-    public void logout(HttpServletRequest request) {
-        log.info("유저 로그아웃");
+    public void logout(HttpServletResponse response) {
+        String refreshToken = response.getHeader("refreshToken");
+        log.info("리프레시 토큰: {}", refreshToken);
+        jwtUtil.deleteToken(refreshToken);
+        response.setHeader("accessToken", null);
+        response.setHeader("refreshToken", null);
     }
 }

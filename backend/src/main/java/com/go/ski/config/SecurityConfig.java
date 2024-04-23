@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] ALL_USER_ROUTES = {
-
+            "/api/v1/user/signout"
     };
 
     private static final String[] STUDENT_ROUTES = {

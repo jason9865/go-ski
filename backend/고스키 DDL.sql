@@ -6,15 +6,16 @@ CREATE TABLE `user` (
 	`domain_user_key`	VARCHAR(255)	NOT NULL,
 	`domain_name`	ENUM('kakao')	NOT NULL,
 	`user_name`	VARCHAR(20)	NOT NULL,
-	`birth_date`	TIMESTAMP	NOT NULL,
-	`phone_number`	VARCHAR(13)	NOT NULL,
+	`birth_date`	DATETIME(6)	NOT NULL,
+	`phone_number`	VARCHAR(13)	NOT NULL CHECK (phone_number REGEXP '^[0-9]{3}-[0-9]{4}-[0-9]{4}$'),
 	`profile_url`	VARCHAR(255)	NULL,
 	`gender`	ENUM('MALE', 'FEMALE')	NOT NULL,
 	`role`	ENUM('STUDENT', 'INSTRUCTOR', 'OWNER')	NOT NULL,
 	`fcm_web`	VARCHAR(255)	NULL,
 	`fcm_mobile`	VARCHAR(255)	NULL,
 	`created_date`	DATETIME(6)	NOT NULL,
-    `expired_date`  DATETIME(6)		NULL
+    `expired_date`  DATETIME(6)		NULL,
+    CONSTRAINT `domain_unique` UNIQUE (`domain_user_key`, `domain_name`)
 );
 
 CREATE TABLE `instructor` (

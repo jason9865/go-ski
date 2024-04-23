@@ -85,8 +85,9 @@ public class UserController {
     }
 
     @GetMapping("/signout")
-    public ResponseEntity<ApiResponse<?>> logout(HttpServletRequest request) {
-        userService.logout(request);
+    public ResponseEntity<ApiResponse<?>> logout(HttpServletResponse response) {
+        log.info("유저 로그아웃");
+        userService.logout(response);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 }

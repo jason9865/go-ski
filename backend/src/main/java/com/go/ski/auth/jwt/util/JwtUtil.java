@@ -5,7 +5,6 @@ import com.go.ski.redis.dto.LoginTokenDto;
 import com.go.ski.redis.repository.LoginTokenRepository;
 import com.go.ski.user.support.vo.Role;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
@@ -69,12 +67,11 @@ public class JwtUtil {
         token = token.split(" ")[1];
 
         try {
-            // 토큰에서 claims를 먼저 추출하여 타입을 확인
-            String type = Jwts.parserBuilder().build().parseClaimsJws(token).getBody().get("type", String.class);
-            if (!type.equals("access") && !type.equals("refresh")) {
-                log.info("유효하지 않은 토큰 타입: {}", type);
-                return null;
+            String type = "access";
+            if (request.getHeader("accessToken") != null) {
+                type = "refresh";
             }
+
 
             Claims claims = validateToken(token, type);
             // claims 검증
@@ -91,6 +88,7 @@ public class JwtUtil {
             if (type.equals("refresh")) {
                 LoginTokenDto loginTokenDto = loginTokenRepository.findById(token).orElseThrow();
                 String accessToken = request.getHeader("accessToken");
+                accessToken = accessToken.split(" ")[1];
 
                 if (!loginTokenDto.getAccessToken().equals(accessToken)) {
                     log.info("Redis 검증 실패");
@@ -106,6 +104,7 @@ public class JwtUtil {
                 response.setHeader("refreshToken", newRefreshToken);
             }
 
+            request.setAttribute("userId", subject); // 이후 API에서 사용할 userId
             return new UsernamePasswordAuthenticationToken(subject, "", List.of(new SimpleGrantedAuthority(role)));
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -116,11 +115,10 @@ public class JwtUtil {
     private Claims validateToken(String token, String type) throws JwtException {
         // 타입에 맞는 키를 가져옴
         String secretKey = type.equals("access") ? accessSecretKey : refreshSecretKey;
-        Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
         // 토큰을 파싱하고 클레임을 검증합니다.
         Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token);
 

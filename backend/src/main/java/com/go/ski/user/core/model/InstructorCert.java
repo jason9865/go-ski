@@ -1,7 +1,10 @@
 package com.go.ski.user.core.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -17,7 +20,7 @@ public class InstructorCert {
     private int instCertId;
 
     @ManyToOne
-    @JoinColumn(name = "instructor_id")
+    @JoinColumn(name = "user_id")
     private Instructor instructor;
 
     @ManyToOne
