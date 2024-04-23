@@ -20,6 +20,8 @@ const goskiRed = Color(0xFFFF0000);
 const goskiYellow = Color(0xFFFFEB00);
 // 흰색
 const goskiWhite = Color(0xFFFFFFFF);
+// 검정색
+const goskiBlack = Color(0xFF000000);
 // 파란색
 const goskiBlue = Color(0xFF156CEE);
 // 뱃지 - 녹색
