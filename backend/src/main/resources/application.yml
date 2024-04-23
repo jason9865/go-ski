@@ -38,10 +38,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
   profiles:
-    include: jwt, oauth, pay
+    include: jwt, oauth, s3, pay
 
 # Swagger
 springdoc:
