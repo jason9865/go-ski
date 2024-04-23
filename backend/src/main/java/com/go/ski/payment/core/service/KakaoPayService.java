@@ -1,4 +1,4 @@
-package com.go.ski.payment.service;
+package com.go.ski.payment.core.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.go.ski.payment.dto.request.KakaopayApproveRequestDTO;
-import com.go.ski.payment.dto.request.KakaopayCancelRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayApproveResponseDTO;
-import com.go.ski.payment.dto.request.KakaopayPrepareRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayCancelResponseDTO;
-import com.go.ski.payment.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
+import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

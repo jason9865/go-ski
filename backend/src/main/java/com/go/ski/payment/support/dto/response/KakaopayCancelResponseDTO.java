@@ -1,9 +1,9 @@
-package com.go.ski.payment.dto.response;
+package com.go.ski.payment.support.dto.response;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.go.ski.payment.dto.util.Amount;
+import com.go.ski.payment.support.dto.util.Amount;
 
 import lombok.Getter;
 
