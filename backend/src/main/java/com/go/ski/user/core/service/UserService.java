@@ -1,5 +1,6 @@
 package com.go.ski.user.core.service;
 
+import com.go.ski.auth.exception.AuthExceptionEnum;
 import com.go.ski.auth.jwt.util.JwtUtil;
 import com.go.ski.auth.oauth.client.OauthMemberClientComposite;
 import com.go.ski.auth.oauth.type.OauthServerType;
@@ -13,10 +14,11 @@ import com.go.ski.user.core.repository.CertificateRepository;
 import com.go.ski.user.core.repository.InstructorCertRepository;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
+import com.go.ski.user.support.dto.InstructorCertificateDTO;
+import com.go.ski.user.support.dto.ProfileImageDTO;
 import com.go.ski.user.support.dto.SignupRequestDTO;
-import com.go.ski.user.support.exception.AuthExceptionEnum;
+import com.go.ski.user.support.dto.UpdateInstructorRequestDTO;
 import com.go.ski.user.support.vo.CertificateVO;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,22 +54,8 @@ public class UserService {
         }
     }
 
-    public void createTokens(HttpServletResponse response, User user) {
-        String accessToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "access");
-        String refreshToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "refresh");
-        jwtUtil.saveToken(refreshToken, accessToken);
-        response.setHeader("accessToken", accessToken);
-        response.setHeader("refreshToken", refreshToken);
-    }
-
     @Transactional
     public User signupUser(User domainUser, SignupRequestDTO signupRequestDTO) {
-        MultipartFile profileImage = signupRequestDTO.getProfileImage();
-        if (profileImage != null && !profileImage.isEmpty()) {
-            String profileUrl = s3Uploader.uploadFile("/user/profile", profileImage);
-            domainUser.setProfileUrl(profileUrl);
-        }
-
         User user = User.builder()
                 .domain(domainUser.getDomain())
                 .userName(signupRequestDTO.getUserName())
@@ -77,37 +65,87 @@ public class UserService {
                 .role(signupRequestDTO.getRole())
                 .profileUrl(domainUser.getProfileUrl())
                 .build();
-        userRepository.save(user);
+
+        // 프로필 이미지 업로드 후 save
+        uploadProfileImage(user, signupRequestDTO);
 
         if ("INSTRUCTOR".equals(user.getRole().name())) {
             Instructor instructor = Instructor.builder()
-                    .userId(user.getUserId())
+                    .instructorId(user.getUserId())
                     .user(user)
                     .build();
             instructorRepository.save(instructor);
 
-            // 강사인 경우 자격증도 db에 입력해야함
-            List<CertificateVO> certificateVOs = signupRequestDTO.getCertificateVOs();
-            if (certificateVOs != null && !certificateVOs.isEmpty()) {
-                for (CertificateVO certificateVO : certificateVOs) {
-                    Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateVO.getCertificateId());
-                    if (optionalCertificate.isPresent()) {
-                        String certificateImageUrl = s3Uploader.uploadFile("/certificate/" + user.getUserId(), certificateVO.getCertificateImage());
-                        InstructorCert instructorCert = InstructorCert.builder()
-                                .certificate(optionalCertificate.get())
-                                .instructor(instructor)
-                                .certificateImageUrl(certificateImageUrl)
-                                .build();
-                        instructorCertRepository.save(instructorCert);
-                    }
-                }
-            }
+            // 자격증 사진 업로드 후 save
+            uploadCertificateImages(instructor, signupRequestDTO);
         }
-
         return user;
     }
 
-    public void logout(HttpServletRequest request) {
-        log.info("유저 로그아웃");
+    public void logout(HttpServletResponse response) {
+        String refreshToken = response.getHeader("refreshToken");
+        jwtUtil.deleteToken(refreshToken);
+        response.setHeader("accessToken", null);
+        response.setHeader("refreshToken", null);
+    }
+
+    public void updateUser(int userId, ProfileImageDTO profileImageDTO) {
+        User user = userRepository.findById(userId).orElseThrow();
+        uploadProfileImage(user, profileImageDTO);
+    }
+
+    @Transactional
+    public void updateInstructor(int userId, UpdateInstructorRequestDTO updateInstructorRequestDTO) {
+        User user = userRepository.findById(userId).orElseThrow();
+        uploadProfileImage(user, updateInstructorRequestDTO);
+
+        Instructor instructor = instructorRepository.findById(userId).orElseThrow();
+        instructor.setDescription(updateInstructorRequestDTO.getDescription());
+        instructor.setDayoff(updateInstructorRequestDTO.getDayoff());
+        instructor.setIsInstructAvailable(updateInstructorRequestDTO.getIsInstructAvailable());
+        instructorRepository.save(instructor);
+
+        uploadCertificateImages(instructor, updateInstructorRequestDTO);
+    }
+
+    public void createTokens(HttpServletResponse response, User user) {
+        String accessToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "access");
+        String refreshToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "refresh");
+        jwtUtil.saveToken(refreshToken, accessToken);
+        response.setHeader("accessToken", accessToken);
+        response.setHeader("refreshToken", refreshToken);
+    }
+
+    private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
+        MultipartFile profileImage = profileImageDTO.getProfileImage();
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
+            log.info("profileUrl: {}", profileUrl);
+
+            user.setProfileUrl(profileUrl);
+            userRepository.save(user);
+        }
+    }
+
+    private void uploadCertificateImages(Instructor instructor, InstructorCertificateDTO instructorCertificateDTO) {
+        List<CertificateVO> certificateVOs = instructorCertificateDTO.getCertificateVOs();
+        if (certificateVOs != null && !certificateVOs.isEmpty()) {
+            for (CertificateVO certificateVO : certificateVOs) {
+                log.info("{}", certificateVO);
+
+                Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateVO.getCertificateId());
+                if (optionalCertificate.isPresent()) {
+                    String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateVO.getCertificateImage());
+                    log.info("certificateImageUrl: {}", certificateImageUrl);
+
+                    InstructorCert instructorCert = InstructorCert.builder()
+                            .certificate(optionalCertificate.get())
+                            .instructor(instructor)
+                            .certificateImageUrl(certificateImageUrl)
+                            .build();
+                    instructorCertRepository.save(instructorCert);
+                }
+            }
+        }
     }
 }
