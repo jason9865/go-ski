@@ -1,5 +1,5 @@
 package com.go.ski.user.support.vo;
 
-public enum InstructAvailable {
+public enum IsInstructAvailable {
     SKI, BOARD, ALL
 }

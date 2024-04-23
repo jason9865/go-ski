@@ -19,7 +19,7 @@ CREATE TABLE `user` (
 );
 
 CREATE TABLE `instructor` (
-	`user_id`	INT(11)	NOT NULL,
+	`instructor_id`	INT(11)	NOT NULL,
 	`description`	VARCHAR(255)	NULL,
 	`is_instruct_available`	ENUM('SKI', 'BOARD', 'ALL')	NULL,
 	`dayoff`	INT	NOT NULL	DEFAULT 0

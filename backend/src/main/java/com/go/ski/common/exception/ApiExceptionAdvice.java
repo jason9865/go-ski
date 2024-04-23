@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 
 @Slf4j
@@ -23,6 +24,15 @@ public class ApiExceptionAdvice {
         return ResponseEntity
                 .status(e.getStatus())
                 .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus
+    public ResponseEntity<ApiResponse<?>> handleNoSuchElementException(NoSuchElementException e) {
+        log.error("에러 메시지: {}", e.getMessage());
+        return ResponseEntity
+                .status(CommonExceptionEnum.NO_SUCH_ELEMENT.getStatus())
+                .body(ApiResponse.error(CommonExceptionEnum.NO_SUCH_ELEMENT.getMessage()));
     }
 
     @ExceptionHandler(DataAccessException.class)

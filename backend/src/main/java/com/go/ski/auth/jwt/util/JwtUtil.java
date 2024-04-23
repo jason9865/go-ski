@@ -72,7 +72,6 @@ public class JwtUtil {
                 type = "refresh";
             }
 
-
             Claims claims = validateToken(token, type);
             // claims 검증
             String subject = claims.getSubject();

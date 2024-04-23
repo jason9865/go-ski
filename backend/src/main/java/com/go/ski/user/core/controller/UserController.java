@@ -5,9 +5,11 @@ import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.service.UserService;
+import com.go.ski.user.support.dto.ProfileImageDTO;
 import com.go.ski.user.support.dto.SigninRequestDTO;
 import com.go.ski.user.support.dto.SignupRequestDTO;
-import com.go.ski.user.support.exception.AuthExceptionEnum;
+import com.go.ski.user.support.dto.UpdateInstructorRequestDTO;
+import com.go.ski.user.support.exception.UserExceptionEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -51,7 +53,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupRequestDTO signupRequestDTO) {
         log.info("교육생 회원가입 요청: {}", signupRequestDTO);
         if (!"STUDENT".equals(signupRequestDTO.getRole().toString())) {
-            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.WRONG_REQUEST);
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
         signup(request, response, signupRequestDTO);
@@ -63,7 +65,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupRequestDTO signupRequestDTO) {
         log.info("강사 회원가입 요청: {}", signupRequestDTO);
         if (!"INSTRUCTOR".equals(signupRequestDTO.getRole().toString()) && !"OWNER".equals(signupRequestDTO.getRole().toString())) {
-            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.WRONG_REQUEST);
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
         signup(request, response, signupRequestDTO);
@@ -74,7 +76,7 @@ public class UserController {
     private void signup(HttpServletRequest request, HttpServletResponse response, SignupRequestDTO signupRequestDTO) {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_LOGIN);
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_LOGIN);
         }
 
         User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
@@ -88,6 +90,30 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> logout(HttpServletResponse response) {
         log.info("유저 로그아웃");
         userService.logout(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @PatchMapping("/update/user")
+    public ResponseEntity<ApiResponse<?>> updateUser(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ProfileImageDTO profileImageDTO) {
+        log.info("교육생, 사장 업데이트 요청: {}", profileImageDTO);
+        if (profileImageDTO == null) {
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM);
+        }
+        int userId = Integer.parseInt(request.getAttribute("userId").toString());
+        userService.updateUser(userId, profileImageDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @PatchMapping("/update/inst")
+    public ResponseEntity<ApiResponse<?>> updateInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute UpdateInstructorRequestDTO updateInstructorRequestDTO) {
+        log.info("강사 업데이트 요청: {}", updateInstructorRequestDTO);
+        if (updateInstructorRequestDTO == null) {
+            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM);
+        }
+        int userId = Integer.parseInt(request.getAttribute("userId").toString());
+        userService.updateInstructor(userId, updateInstructorRequestDTO);
+
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 }
