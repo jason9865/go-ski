@@ -4,7 +4,7 @@ import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/I002.dart';
 // import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
-import 'package:goski_instructor/ui/component/main_header.dart';
+// import 'package:goski_instructor/ui/component/main_header.dart';
 import 'package:goski_instructor/ui/component/sub_header.dart';
 
 void main() {

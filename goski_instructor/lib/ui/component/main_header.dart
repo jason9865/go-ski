@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/ui/component/build_right_icons.dart';
+import 'package:goski_instructor/ui/component/header_right_icons.dart';
 
 class MainHeader extends StatelessWidget implements PreferredSizeWidget {
   const MainHeader({super.key});
@@ -17,7 +17,7 @@ class MainHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Image.asset('assets/images/logo.png'),
       ),
       actions: [
-        buildRightIcons(),
+        HeaderRightIcons(),
       ],
     );
   }

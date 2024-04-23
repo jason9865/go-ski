@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/ui/component/build_right_icons.dart';
+import 'package:goski_instructor/ui/component/header_right_icons.dart';
 
 class SubHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -21,7 +21,7 @@ class SubHeader extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, style: Theme.of(context).textTheme.displayMedium),
       centerTitle: false,
       actions: [
-        buildRightIcons(),
+        HeaderRightIcons(),
       ],
     );
   }

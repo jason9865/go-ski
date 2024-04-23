@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildRightIcons() {
+Widget HeaderRightIcons() {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
