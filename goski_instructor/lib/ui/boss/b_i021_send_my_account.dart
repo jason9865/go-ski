@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -98,13 +99,6 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                                 (states) => goskiButtonBlack),
                             value: dummyData[index][1],
                             groupValue: _selected,
-                            // onChanged: (value) {
-                            //   setState(
-                            //     () {
-                            //       _selected = value;
-                            //     },
-                            //   );
-                            // },
                             onChanged: null,
                           ),
                         ],
@@ -124,16 +118,17 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
         SizedBox(
           height: screenSizeController.getHeightByRatio(0.02),
         ),
-        const GoskiTextField(hintText: '금액을 입력하세요'),
+        GoskiTextField(hintText: tr('enterAmount')),
         SizedBox(
           height: screenSizeController.getHeightByRatio(0.02),
         ),
         GoskiBigsizeButton(
-            width: screenSizeController.getWidthByRatio(1),
-            text: '보내기',
-            onTap: () {
-              widget.onClicked!();
-            })
+          width: screenSizeController.getWidthByRatio(1),
+          text: '보내기',
+          onTap: () {
+            widget.onClicked?.call();
+          },
+        )
       ],
     );
   }

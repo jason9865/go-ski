@@ -2,6 +2,8 @@
   "setting" : "설정",
   "hello" : "안녕하세요, {}!",
   "cancel" : "취소",
+  "confirm" : "확인",
+  "save" : "저장",
   "ski": "스키",
   "board": "보드",
   "level1": "Level 1",
@@ -16,5 +18,14 @@
   "position": "직책",
   "name": "이름",
   "phoneNumber": "전화번호",
-  "signup" : "회원가입"
+  "signup" : "회원가입",
+  "enterAmount": "금액을 입력하세요",
+  "notificationSetting": "알림 설정",
+  "inviteTeamNotification": "팀 초대",
+  "lessonReservationNotification": "강습 예약 알림",
+  "lessonCancelNotification": "강습 취소 알림",
+  "lessonChangeNotification": "강습 변경 알림",
+  "lessonBeforeHourNotification": "강습 시작 1시간 전 알림",
+  "lessonBeforeHalfAnHourNotification": "강습 시작 30분 전 알림",
+  "lessonCompleteNotification": "강습 완료 정산 알림"
 }
