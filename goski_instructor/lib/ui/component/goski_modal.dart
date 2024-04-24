@@ -55,7 +55,7 @@ class GoskiModal extends StatelessWidget {
       titlePadding: EdgeInsets.symmetric(
           vertical: screenSizeController.getHeightByRatio(0.01)),
       actionsPadding: EdgeInsets.symmetric(
-        vertical: screenSizeController.getHeightByRatio(0.02),
+        // vertical: screenSizeController.getHeightByRatio(0.02),
         horizontal: horizontalPadding,
       ),
       backgroundColor: goskiBackground,
@@ -67,7 +67,11 @@ class GoskiModal extends StatelessWidget {
                   vertical: screenSizeController.getHeightByRatio(0.01)),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: const TextStyle(
+                  color: goskiBlack,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
