@@ -28,5 +28,13 @@
   "lessonChangeNotification": "강습 변경 알림",
   "lessonBeforeHourNotification": "강습 시작 1시간 전 알림",
   "lessonBeforeHalfAnHourNotification": "강습 시작 30분 전 알림",
-  "lessonCompleteNotification": "강습 완료 정산 알림"
+  "lessonCompleteNotification": "강습 완료 정산 알림",
+  "enterName" : "이름 입력",
+  "birthDate" : "생년월일",
+  "enterBirthDate" : "YYMMDD",
+  "enterPhoneNumber" : "01012341234",
+  "gender" : "성별",
+  "isBoss" : "사장여부",
+  "certificate" : "자격증",
+  "selectCertificate" : "자격증을 선택해주세요."
 }
