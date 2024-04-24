@@ -1,4 +1,4 @@
-package com.go.ski.payment.service;
+package com.go.ski.payment.core.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.go.ski.payment.dto.request.KakaopayApproveRequestDTO;
-import com.go.ski.payment.dto.request.KakaopayCancelRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayApproveResponseDTO;
-import com.go.ski.payment.dto.request.KakaopayPrepareRequestDTO;
-import com.go.ski.payment.dto.response.KakaopayCancelResponseDTO;
-import com.go.ski.payment.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
+import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
+import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +48,14 @@ public class KakaoPayService {
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
 		params.put("partner_order_id", request.getPartnerOrderId());
-		params.put("partner_user_id", request.getPartnerUserId());
-		params.put("item_name", request.getItemName());
-		params.put("quantity", Integer.toString(request.getQuantity()));
-		params.put("total_amount", Integer.toString(request.getTotalAmount()));
-		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));
-		params.put("approval_url", request.getApprovalUrl());
-		params.put("cancel_url", request.getCancelUrl());
-		params.put("fail_url", request.getFailUrl());
+		params.put("partner_user_id", request.getPartnerUserId());//실제로는 무슨 값이 들어가야하는지?
+		params.put("item_name", request.getItemName());//팀 이름, 레벨, 명 수 이렇게 묶을 생각임
+		params.put("quantity", Integer.toString(request.getQuantity()));// 무조건 1
+		params.put("total_amount", Integer.toString(request.getTotalAmount()));// 계산한 값 보내줌
+		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));// 부가가치세가 면제
+		params.put("approval_url", request.getApprovalUrl());//url 보내줌
+		params.put("cancel_url", request.getCancelUrl());//url 보내줌
+		params.put("fail_url", request.getFailUrl());//url 보내줌
 
 		log.info("data : {}", params);
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
