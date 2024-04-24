@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 
@@ -30,10 +31,12 @@ import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final TeamInstructorRepository teamInstructorRepository;
     private final SkiResortRepository skiResortRepository;
     private final TeamImageRepository teamImageRepository;
     private final LevelOptionRepository levelOptionRepository;
     private final OneToNOptionRepository oneToNOptionRepository;
+    private final PermissionRepository permissionRepository;
     private final S3Uploader s3Uploader;
 
 
@@ -41,8 +44,8 @@ public class TeamService {
     public void createTeam(TeamCreateRequestDTO request,User user) {
         log.info("TeamService.createTeam");
         // Team 테이블에 저장할 SkiResort 생성
-
         SkiResort skiResort = getSkiResort(request.getResortId());
+
         // 0. 프로필 이미지부터 S3에 저장
         String teamProfileUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage());
 
@@ -60,17 +63,9 @@ public class TeamService {
         Team savedTeam = teamRepository.save(team);
 
         log.info("팀 생성 성공 - teamId : {}", savedTeam.getTeamId());
+
         // 2. 팀 이미지 생성
-        List<MultipartFile> imageList = request.getTeamImages(); // requestDTO에 담겨있는 image들
-
-        List<TeamImage> tobeSavedImages = new ArrayList<>();
-        for(MultipartFile image : imageList) {
-            String imageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
-            tobeSavedImages.add(TeamImage.builder().imageUrl(imageUrl).team(savedTeam).build());
-        }
-
-        teamImageRepository.saveAll(tobeSavedImages);
-        log.info("팀 소개 이미지 저장 성공 - 소개 이미지 개수 : {}장", tobeSavedImages.size());
+        saveTeamImages(request.getTeamImages(),savedTeam);
 
         // 3. 중고급 옵션 생성
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
@@ -136,24 +131,10 @@ public class TeamService {
         log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
         // 2-1. 새로운 이미지 s3에 저장
-        List<MultipartFile> newTeamImages = request.getTeamImages();
-
-        List<TeamImage> tobeSavedImages = new ArrayList<>();
-        for(MultipartFile image : newTeamImages) {
-            String newTeamImageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
-            tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(savedTeam).build());
-        }
+        saveTeamImages(request.getTeamImages(),savedTeam);
 
         // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
-        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
-        for(TeamImage image : oldTeamImages) {
-            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
-                    image.getImageUrl());
-        }
-
-        teamImageRepository.deleteAll(oldTeamImages);
-        teamImageRepository.saveAll(tobeSavedImages);
-        log.info("팀 소개 이미지 수정 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
+        deleteTeamImages(teamId);
 
         // 3. 중고급 옵션 수정
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
@@ -172,13 +153,62 @@ public class TeamService {
         return teamRepository.findTeamList(user.getUserId());
     }
 
-//    @Transactional
-//    public void deleteTeam(Integer teamId) {
-//        Team team = teamRepository.findById(teamId)
-//                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
-//
-//        teamRepository.delete(team);
-//    }
+    @Transactional
+    public void deleteTeam(Integer teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+
+        List<TeamInstructor> teamInstructors = teamInstructorRepository.findAllByTeam(team)
+                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
+
+        // 레벨 옵션 삭제
+//        LevelOption levelOption = levelOptionRepository.findByTeam(team);
+//        levelOptionRepository.delete(levelOption);
+        levelOptionRepository.deleteAllByTeam(team);
+        // 1:N 옵션 삭제
+//        OneToNOption oneToNOption = oneToNOptionRepository.findByTeam(team);
+//        oneToNOptionRepository.delete(oneToNOption);
+        oneToNOptionRepository.deleteAllByTeam(team);
+
+        // 팀 소개 사진 삭제
+        deleteTeamImages(teamId);
+
+        // 팀 프로필 삭제
+        s3Uploader.deleteFile(FileUploadPath.TEAM_PROFILE_PATH.path, team.getTeamProfileUrl());
+
+        // 강습 팀 강사 권한 삭제
+//        Permission permission = permissionRepository.findByTeamInstructor(teamInstructor);
+//        permissionRepository.delete(permission);
+        permissionRepository.deleteAllByTeamInstructor(teamInstructors);
+
+        // 강습 팀 테이블 강사 삭제
+        teamInstructorRepository.deleteAll(teamInstructors);
+
+        // 팀 삭제
+        teamRepository.delete(team);
+    }
+
+    private void saveTeamImages(List<MultipartFile> newTeamImages, Team savedTeam) {
+        List<TeamImage> tobeSavedImages = new ArrayList<>();
+        for(MultipartFile image : newTeamImages) {
+            String newTeamImageUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_IMAGE_PATH.path,image);
+            tobeSavedImages.add(TeamImage.builder().imageUrl(newTeamImageUrl).team(savedTeam).build());
+        }
+
+        teamImageRepository.saveAll(tobeSavedImages);
+        log.info("팀 소개 이미지 저장 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
+    }
+
+    private void deleteTeamImages(Integer teamId) {
+        // teamId로 teamImage 리스트 가져오기
+        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
+        for(TeamImage image : oldTeamImages) {
+            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
+                    image.getImageUrl());
+        }
+
+        teamImageRepository.deleteAll(oldTeamImages);
+    }
 
     public SkiResort getSkiResort(Integer resortId) {
         return skiResortRepository.findById(resortId)

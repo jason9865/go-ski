@@ -1,5 +1,6 @@
 package com.go.ski.team.core.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.go.ski.team.core.model.Team;
@@ -19,4 +20,9 @@ public interface TeamInstructorRepository extends JpaRepository<TeamInstructor, 
     Optional<TeamInstructor> findTeamInstructorByInstructorId(Integer instructorId);
 
 	Optional<TeamInstructor> findByTeamAndInstructor(Team team, Instructor instructor);
+
+    Optional<TeamInstructor> findByTeam(Team team);
+
+    Optional<List<TeamInstructor>> findAllByTeam(Team team);
+
 }
