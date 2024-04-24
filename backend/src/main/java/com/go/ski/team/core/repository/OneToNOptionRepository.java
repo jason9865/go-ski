@@ -9,6 +9,6 @@ public interface OneToNOptionRepository extends JpaRepository<OneToNOption, Inte
 
     OneToNOption findByTeam(Team team);
 
-    void deleteAllByTeam(Team team);
+    void deleteByTeam(Team team);
 
 }

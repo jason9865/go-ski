@@ -162,13 +162,10 @@ public class TeamService {
                         .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
 
         // 레벨 옵션 삭제
-//        LevelOption levelOption = levelOptionRepository.findByTeam(team);
-//        levelOptionRepository.delete(levelOption);
-        levelOptionRepository.deleteAllByTeam(team);
+        levelOptionRepository.deleteByTeam(team);
+
         // 1:N 옵션 삭제
-//        OneToNOption oneToNOption = oneToNOptionRepository.findByTeam(team);
-//        oneToNOptionRepository.delete(oneToNOption);
-        oneToNOptionRepository.deleteAllByTeam(team);
+        oneToNOptionRepository.deleteByTeam(team);
 
         // 팀 소개 사진 삭제
         deleteTeamImages(teamId);
@@ -177,12 +174,10 @@ public class TeamService {
         s3Uploader.deleteFile(FileUploadPath.TEAM_PROFILE_PATH.path, team.getTeamProfileUrl());
 
         // 강습 팀 강사 권한 삭제
-//        Permission permission = permissionRepository.findByTeamInstructor(teamInstructor);
-//        permissionRepository.delete(permission);
         permissionRepository.deleteAllByTeamInstructor(teamInstructors);
 
         // 강습 팀 테이블 강사 삭제
-        teamInstructorRepository.deleteAll(teamInstructors);
+        teamInstructorRepository.deleteAllInBatch(teamInstructors);
 
         // 팀 삭제
         teamRepository.delete(team);
@@ -207,7 +202,7 @@ public class TeamService {
                     image.getImageUrl());
         }
 
-        teamImageRepository.deleteAll(oldTeamImages);
+        teamImageRepository.deleteAllInBatch(oldTeamImages);
     }
 
     public SkiResort getSkiResort(Integer resortId) {

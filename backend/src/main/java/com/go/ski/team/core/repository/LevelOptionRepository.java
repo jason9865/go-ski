@@ -11,6 +11,6 @@ public interface LevelOptionRepository extends JpaRepository<LevelOption, Intege
 
     LevelOption findByTeam(Team team);
 
-    void deleteAllByTeam(Team team);
+    void deleteByTeam(Team team);
 
 }
