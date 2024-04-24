@@ -124,7 +124,7 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
         ),
         GoskiBigsizeButton(
           width: screenSizeController.getWidthByRatio(1),
-          text: '보내기',
+          text: tr('send'),
           onTap: () {
             widget.onClicked?.call();
           },
