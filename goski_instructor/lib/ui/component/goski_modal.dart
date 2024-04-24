@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
 import 'package:logger/logger.dart';
 
 /*
@@ -25,7 +24,7 @@ onPressed: () {
 
 Logger logger = Logger();
 
-class CustomModal extends StatelessWidget {
+class GoskiModal extends StatelessWidget {
   // 헤더에 들어갈 모달 제목
   final String title;
   // 내용들
@@ -34,7 +33,7 @@ class CustomModal extends StatelessWidget {
   final VoidCallback? onConfirm;
   final String? buttonName;
 
-  const CustomModal({
+  const GoskiModal({
     super.key,
     required this.title,
     required this.child,

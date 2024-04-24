@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/ui/component/goski_bigsize_button.dart';
 import 'package:logger/logger.dart';
 
 /*
@@ -18,7 +17,7 @@ return CustomContainer(
 
 Logger logger = Logger();
 
-class CustomContainer extends StatelessWidget {
+class GoskiContainer extends StatelessWidget {
   // 내용들
   final Widget child;
   // 버튼 눌렀을 때 동작할 메서드, 있을 수도 있고 없을 수도 있음
@@ -26,7 +25,7 @@ class CustomContainer extends StatelessWidget {
   // 버튼 이름
   final String? buttonName;
 
-  const CustomContainer({
+  const GoskiContainer({
     super.key,
     required this.child,
     this.onConfirm,

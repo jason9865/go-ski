@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/ui/component/custom_modal.dart';
+import 'package:goski_instructor/ui/component/goski_modal.dart';
 import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
 
 // 헤더 오른쪽 아이콘들
@@ -17,7 +17,7 @@ Widget headerRightIcons(BuildContext context) {
           // 설정 페이지로 이동하는 대신 모달을 표시
           showDialog(
             context: context,
-            builder: (BuildContext context) => CustomModal(
+            builder: (BuildContext context) => GoskiModal(
               title: "외부 일정 등록",
               // 버튼 눌렀을 때 동작할 함수 추가 필요
               onConfirm: () => Navigator.of(context).pop(),

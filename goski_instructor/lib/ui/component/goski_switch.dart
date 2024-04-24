@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/const/util/screen_size_controller.dart';
 
 class GoskiSwitch extends StatefulWidget {
   final List<String> items;
   final double width;
 
-  const GoskiSwitch({Key? key, required this.items, required this.width})
-      : super(key: key);
+  const GoskiSwitch({super.key, required this.items, required this.width});
 
   @override
   _GoskiSwitchState createState() => _GoskiSwitchState();
@@ -21,7 +18,7 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
   Widget build(BuildContext context) {
     double chipWidth = widget.width / widget.items.length - 2;
 
-    return Container(
+    return SizedBox(
       width: widget.width,
       height: 40,
       // decoration: BoxDecoration(
@@ -55,22 +52,22 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
             selectedColor: buttonBlack,
             showCheckmark: false, // 선택시 체크 표시 비활성화
             shape: index == 0
-                ? RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                bottomLeft: Radius.circular(8),
-              ),
-            )
+                ? const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                  )
                 : index == widget.items.length - 1
-                ? RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(8),
-                bottomRight: Radius.circular(8),
-              ),
-            )
-                : RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
+                    ? const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      )
+                    : const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
           );
         }),
       ),
