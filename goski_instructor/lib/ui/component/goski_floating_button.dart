@@ -11,7 +11,7 @@ class GoskiFloatingButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: onTap,
       foregroundColor: goskiWhite,
-      backgroundColor: buttonBlack,
+      backgroundColor: goskiButtonBlack,
       shape: const CircleBorder(),
       child: const Icon(
         Icons.add,
