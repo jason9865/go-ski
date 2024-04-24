@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface TeamRepository extends JpaRepository<Team,Integer>,TeamRepositoryCustom {
 
     @Query("SELECT " +

@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class LevelOption {
 
     @Id
-    private int teamId;
+    private Integer teamId;
 
     @MapsId
     @OneToOne

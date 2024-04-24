@@ -1,8 +1,10 @@
 package com.go.ski.team.core.model;
 
+import com.go.ski.team.support.dto.TeamInstructorUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.parameters.P;
 
 @Entity
 @Builder
@@ -13,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Permission {
 
     @Id
-    private int teamInstructorId;
+    private Integer teamInstructorId;
 
     @MapsId
     @OneToOne
@@ -48,5 +50,17 @@ public class Permission {
     @ColumnDefault("0")
     private Integer designatedCost;
 
-
+    public static Permission createPermission(TeamInstructor teamInstructor, TeamInstructorUpdateRequestDTO requestDTO) {
+        return Permission.builder()
+                .teamInstructorId(teamInstructor.getTeamInstructorId())
+                .teamInstructor(teamInstructor)
+                .invitePermission(requestDTO.getInvitePermission())
+                .addPermission(requestDTO.getAddPermission())
+                .modifyPermission(requestDTO.getModifyPermission())
+                .deletePermission(requestDTO.getDeletePermission())
+                .costPermission(requestDTO.getCostPermission())
+                .position(requestDTO.getPosition())
+                .designatedCost(requestDTO.getDesignatedCost())
+                .build();
+    }
 }

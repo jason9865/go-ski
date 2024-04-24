@@ -65,4 +65,11 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
+    @PatchMapping("/update/member")
+    public ResponseEntity<ApiResponse<?>> updateInstructor(@RequestBody TeamInstructorUpdateRequestDTO requestDTO) {
+        log.info("====TeamController.searchTeamList====");
+        teamInstructorService.updateTeamInstructorInfo(requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
 }

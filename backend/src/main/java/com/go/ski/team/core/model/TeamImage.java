@@ -12,7 +12,7 @@ public class TeamImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int teamImageId;
+    private Integer teamImageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="team_id")
