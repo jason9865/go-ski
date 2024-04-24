@@ -1,9 +1,7 @@
 package com.go.ski.review.core.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.go.ski.payment.core.model.Lesson;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -19,6 +17,9 @@ public class Review {
     private Integer reviewId;
 
     // Lesson Entity 연관관계 매핑해야함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private Lesson lesson;
 
     private String contents;
 
