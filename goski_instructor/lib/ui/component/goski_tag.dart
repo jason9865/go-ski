@@ -4,6 +4,7 @@ import 'package:goski_instructor/const/util/screen_size_controller.dart';
 
 import 'goski_text.dart';
 
+// TODO. 라운드만 가지도록 변경
 class GoskiTag extends StatefulWidget {
   final String text;
   final Color textColor,

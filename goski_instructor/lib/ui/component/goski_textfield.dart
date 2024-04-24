@@ -15,7 +15,7 @@ class GoskiTextField extends StatefulWidget {
     this.width = 0,
     this.canEdit = true,
     this.text = '',
-    this.hintText = '',
+    required this.hintText,
   });
 
   @override

@@ -18,7 +18,7 @@ class GoskiCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20)
         ),
-        elevation: 1,
+        elevation: 2,
         shadowColor: goskiLightGray,
         clipBehavior: Clip.hardEdge,
         child: child,
