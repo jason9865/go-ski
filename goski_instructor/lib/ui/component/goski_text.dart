@@ -54,6 +54,6 @@ class GoskiTextBody extends StatelessWidget {
           fontSize: size,
           fontWeight: isBold ? FontWeight.w400 : FontWeight.w700),
       text,
-    ).tr();
+    );
   }
 }
