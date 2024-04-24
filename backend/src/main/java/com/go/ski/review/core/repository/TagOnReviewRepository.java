@@ -17,7 +17,7 @@ public interface TagOnReviewRepository extends JpaRepository<TagOnReview, Intege
             "FROM TagOnReview tor " +
             "LEFT OUTER JOIN TagReview tr " +
             "ON tor.tagReview.tagReviewId = tr.tagReviewId " +
-            "WHERE tor.review = :review")
-    List<InstructorTagsVO> findByReview(Review review);
+            "WHERE tor.review.reviewId = :reviewId")
+    List<InstructorTagsVO> findByReviewId(Integer reviewId);
 
 }

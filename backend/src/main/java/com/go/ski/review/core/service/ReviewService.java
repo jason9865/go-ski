@@ -8,18 +8,26 @@ import com.go.ski.review.core.model.TagReview;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.review.core.repository.TagOnReviewRepository;
 import com.go.ski.review.core.repository.TagReviewRepository;
+import com.go.ski.review.support.dto.InstructorReviewResponseDTO;
 import com.go.ski.review.support.dto.ReviewCreateRequestDTO;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.review.support.dto.TagReviewResponseDTO;
+import com.go.ski.review.support.vo.InstructorReviewVO;
 import com.go.ski.review.support.vo.InstructorTagsVO;
-import jakarta.transaction.Transactional;
+import com.go.ski.user.core.model.Instructor;
+import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.InstructorRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -28,7 +36,9 @@ public class ReviewService {
     private final TagOnReviewRepository tagOnReviewRepository;
     private final TagReviewRepository tagReviewRepository;
     private final LessonRepository lessonRepository;
+    private final InstructorRepository instructorRepository;
 
+    @Transactional(readOnly = true)
     public List<TagReviewResponseDTO> getTagReviews() {
         return tagReviewRepository.findAll()
                 .stream()
@@ -63,7 +73,7 @@ public class ReviewService {
         tagOnReviewRepository.saveAll(tagOnReviewList);
     }
 
-    public List<ReviewResponseDTO> getReview(Integer lessonId) {
+    public List<ReviewResponseDTO> getReviews(Integer lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!"));
 
@@ -71,8 +81,23 @@ public class ReviewService {
 
         List<ReviewResponseDTO> result = new ArrayList<>();
         for (Review review : reviewList) {
-            List<InstructorTagsVO> instructorTags = tagOnReviewRepository.findByReview(review);
+            List<InstructorTagsVO> instructorTags = tagOnReviewRepository.findByReviewId(review.getReviewId());
             result.add(ReviewResponseDTO.toDTO(review,instructorTags));
+        }
+        return result;
+    }
+
+    public List<InstructorReviewResponseDTO> getInstructorReviews(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+        Instructor instructor = instructorRepository.findById(user.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 강사가 없습니다!"));
+
+        List<InstructorReviewVO> instructorReviews = reviewRepository.findByInstructor(instructor);
+
+        List<InstructorReviewResponseDTO> result = new ArrayList<>();
+        for (InstructorReviewVO reviewVO : instructorReviews) {
+            List<InstructorTagsVO> instructorTags = tagOnReviewRepository.findByReviewId(reviewVO.getReviewId());
+            result.add(new InstructorReviewResponseDTO(reviewVO, instructorTags));
         }
         return result;
     }

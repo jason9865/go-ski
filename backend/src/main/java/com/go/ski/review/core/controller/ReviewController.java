@@ -2,9 +2,11 @@ package com.go.ski.review.core.controller;
 
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.review.core.service.ReviewService;
+import com.go.ski.review.support.dto.InstructorReviewResponseDTO;
 import com.go.ski.review.support.dto.ReviewCreateRequestDTO;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.review.support.dto.TagReviewResponseDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,9 +38,16 @@ public class ReviewController {
     }
 
     @GetMapping("/{lessonId}")
-    public ResponseEntity<ApiResponse<?>> searchReview(@PathVariable Integer lessonId) {
-        log.info("====ReviewController.writeReview====");
-        List<ReviewResponseDTO> response = reviewService.getReview(lessonId);
+    public ResponseEntity<ApiResponse<?>> searchReviews(@PathVariable Integer lessonId) {
+        log.info("====ReviewController.searchReviews====");
+        List<ReviewResponseDTO> response = reviewService.getReviews(lessonId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<ApiResponse<?>> searchInstructorReviews(HttpServletRequest request){
+        log.info("====ReviewController.searchInstructorReviews====");
+        List<InstructorReviewResponseDTO> response = reviewService.getInstructorReviews(request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
