@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
@@ -51,7 +52,7 @@ class GoskiContainer extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: onConfirm,
-                      child: Text("$buttonName"),
+                      child: Text("$buttonName").tr(),
                     ),
                   ],
                 ),

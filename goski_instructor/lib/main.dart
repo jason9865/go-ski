@@ -5,6 +5,7 @@ import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/test.dart';
 // import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/ui/common/i001_login.dart';
 import 'package:goski_instructor/ui/component/goski_main_header.dart';
 // import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
@@ -43,11 +44,20 @@ class MyApp extends StatelessWidget {
           );
           logger.d(
               "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
-          return const Scaffold(
-            appBar: GoskiMainHeader(),
-            // appBar: SubHeader(title: "페이지 이름"),
-            body: Test(),
-          );
+
+          final LoginController loginController = Get.put(LoginController());
+
+          return Obx(() {
+            if (loginController.isLogin.value) {
+              return const Scaffold(
+                appBar: GoskiMainHeader(),
+                // appBar: SubHeader(title: "페이지 이름"),
+                body: Test(),
+              );
+            } else {
+              return const LoginScreen();
+            }
+          });
         },
       ),
     );

@@ -10,5 +10,11 @@
   "teaching1": "Teaching 1",
   "teaching2": "Teaching 2",
   "teaching3": "Teaching 3",
-  "demonstrator": "Demonstrator"
+  "demonstrator": "Demonstrator",
+  "forInstructor" : "for instructor",
+  "loginBottomText" : "TO THE NEXT LEVEL!",
+  "position": "직책",
+  "name": "이름",
+  "phoneNumber": "전화번호",
+  "signup" : "회원가입"
 }

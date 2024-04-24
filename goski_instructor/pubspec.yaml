@@ -101,6 +101,9 @@ flutter:
     - family: Jua
       fonts:
         - asset: assets/fonts/BMJUA_ttf.ttf
+    - family: RubikGlitch
+      fonts:
+        - asset: assets/fonts/RubikGlitch-Regular.ttf
 
     # - family: Trajan Pro
     #   fonts:
