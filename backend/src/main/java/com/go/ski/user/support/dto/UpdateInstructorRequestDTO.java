@@ -11,5 +11,5 @@ import lombok.ToString;
 public class UpdateInstructorRequestDTO extends InstructorImagesDTO {
     private String description;
     private IsInstructAvailable isInstructAvailable;
-    private int dayoff;
+    private Integer dayoff;
 }

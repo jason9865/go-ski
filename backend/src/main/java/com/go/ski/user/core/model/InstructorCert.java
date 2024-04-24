@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class InstructorCert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int instCertId;
+    private Integer instCertId;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")

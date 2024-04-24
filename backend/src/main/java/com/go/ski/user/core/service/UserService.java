@@ -32,7 +32,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
 

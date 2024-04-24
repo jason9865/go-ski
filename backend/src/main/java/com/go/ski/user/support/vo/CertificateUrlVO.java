@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CertificateUrlVO {
-    int certificateId;
+    Integer certificateId;
     String certificateImageUrl;
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class Certificate {
     @Id
-    private int certificateId;
+    private Integer certificateId;
 
     private String certificateName;
 
