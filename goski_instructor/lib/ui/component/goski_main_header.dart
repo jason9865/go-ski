@@ -4,8 +4,8 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/component/goski_header_right_icons.dart';
 
-class MainHeader extends StatelessWidget implements PreferredSizeWidget {
-  const MainHeader({super.key});
+class GoskiMainHeader extends StatelessWidget implements PreferredSizeWidget {
+  const GoskiMainHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
