@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
 import 'package:logger/logger.dart';
 
 /*
@@ -28,7 +29,7 @@ class CustomModal extends StatelessWidget {
   // 헤더에 들어갈 모달 제목
   final String title;
   // 내용들
-  final Widget content;
+  final Widget child;
   // 버튼 눌렀을 때 동작할 메서드, 있을 수도 있고 없을 수도 있음
   final VoidCallback? onConfirm;
   final String? buttonName;
@@ -36,7 +37,7 @@ class CustomModal extends StatelessWidget {
   const CustomModal({
     super.key,
     required this.title,
-    required this.content,
+    required this.child,
     this.onConfirm,
     this.buttonName,
   });
@@ -44,18 +45,20 @@ class CustomModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
-
+    final double horizontalPadding = screenSizeController.getWidthByRatio(0.05);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      // contentPadding: const EdgeInsets.all(5.0),
+      contentPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       insetPadding:
           EdgeInsets.all(screenSizeController.getHeightByRatio(0.023)),
       titlePadding: EdgeInsets.symmetric(
           vertical: screenSizeController.getHeightByRatio(0.01)),
       actionsPadding: EdgeInsets.symmetric(
-          vertical: screenSizeController.getHeightByRatio(0.01)),
+        vertical: screenSizeController.getHeightByRatio(0.02),
+        horizontal: horizontalPadding,
+      ),
       backgroundColor: goskiBackground,
       title: SizedBox(
         child: Column(
@@ -82,23 +85,19 @@ class CustomModal extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            content,
+            child,
           ],
         ),
       ),
       actions: onConfirm != null && buttonName != null
           ? <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 뒤로 가기
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Text('취소'),
-                  ),
-                  TextButton(
-                    onPressed: onConfirm,
-                    child: Text("$buttonName"),
                   ),
                 ],
               ),

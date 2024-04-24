@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/component/goski_bigsize_button.dart';
 import 'package:logger/logger.dart';
 
 /*
@@ -19,7 +20,7 @@ Logger logger = Logger();
 
 class CustomContainer extends StatelessWidget {
   // 내용들
-  final Widget content;
+  final Widget child;
   // 버튼 눌렀을 때 동작할 메서드, 있을 수도 있고 없을 수도 있음
   final VoidCallback? onConfirm;
   // 버튼 이름
@@ -27,7 +28,7 @@ class CustomContainer extends StatelessWidget {
 
   const CustomContainer({
     super.key,
-    required this.content,
+    required this.child,
     this.onConfirm,
     this.buttonName,
   });
@@ -41,15 +42,14 @@ class CustomContainer extends StatelessWidget {
         ? SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               vertical: screenSizeController.getHeightByRatio(0.01),
-              horizontal: screenSizeController.getWidthByRatio(0.03),
+              horizontal: screenSizeController.getWidthByRatio(0.06),
             ),
             child: Column(
               children: [
-                content,
+                child,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // 버튼
                     TextButton(
                       onPressed: onConfirm,
                       child: Text("$buttonName"),
@@ -68,7 +68,7 @@ class CustomContainer extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  content,
+                  child,
                   // 버튼이 없는 경우 공백 추가
                   SizedBox(
                     height: screenSizeController.getHeightByRatio(0.02),
