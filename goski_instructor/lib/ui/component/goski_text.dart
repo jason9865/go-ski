@@ -20,11 +20,9 @@ class GoskiText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isExpanded) {
-      return SizedBox(
-        width: double.infinity,
-        child:
-            GoskiTextBody(color: color, size: size, isBold: isBold, text: text),
-      );
+      return Expanded(
+          child: GoskiTextBody(
+              color: color, size: size, isBold: isBold, text: text));
     } else {
       return GoskiTextBody(
           color: color, size: size, isBold: isBold, text: text);
