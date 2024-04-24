@@ -73,6 +73,7 @@ public class ReviewService {
         tagOnReviewRepository.saveAll(tagOnReviewList);
     }
 
+    @Transactional(readOnly = true)
     public List<ReviewResponseDTO> getReviews(Integer lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!"));
@@ -87,6 +88,7 @@ public class ReviewService {
         return result;
     }
 
+    @Transactional
     public List<InstructorReviewResponseDTO> getInstructorReviews(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
         Instructor instructor = instructorRepository.findById(user.getUserId())
