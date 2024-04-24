@@ -48,14 +48,14 @@ public class KakaoPayService {
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
 		params.put("partner_order_id", request.getPartnerOrderId());
-		params.put("partner_user_id", request.getPartnerUserId());
-		params.put("item_name", request.getItemName());
-		params.put("quantity", Integer.toString(request.getQuantity()));
-		params.put("total_amount", Integer.toString(request.getTotalAmount()));
-		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));
-		params.put("approval_url", request.getApprovalUrl());
-		params.put("cancel_url", request.getCancelUrl());
-		params.put("fail_url", request.getFailUrl());
+		params.put("partner_user_id", request.getPartnerUserId());//실제로는 무슨 값이 들어가야하는지?
+		params.put("item_name", request.getItemName());//팀 이름, 레벨, 명 수 이렇게 묶을 생각임
+		params.put("quantity", Integer.toString(request.getQuantity()));// 무조건 1
+		params.put("total_amount", Integer.toString(request.getTotalAmount()));// 계산한 값 보내줌
+		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));// 부가가치세가 면제
+		params.put("approval_url", request.getApprovalUrl());//url 보내줌
+		params.put("cancel_url", request.getCancelUrl());//url 보내줌
+		params.put("fail_url", request.getFailUrl());//url 보내줌
 
 		log.info("data : {}", params);
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);

@@ -6,14 +6,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.go.ski.payment.core.service.PayService;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
+import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.core.service.KakaoPayService;
+import com.go.ski.payment.support.dto.response.ReserveLessonPaymentResponseDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/payment")
 public class PaymentController {
 
+	private final PayService payService;
 	private final KakaoPayService kakaoPayService;
 
 	//결제 준비
@@ -45,6 +50,17 @@ public class PaymentController {
 		KakaopayCancelResponseDTO response = kakaoPayService.getCancelResponse(request);
 		return ResponseEntity.ok().body(response);
 	}
+	//강습 예약 결제 API -> 요청 uri 나중에 페이 연동 많아지면 domain 추가
+
+	//결제의 단계가 준비랑, 승인임
+	@PostMapping("/reserve")
+	public ResponseEntity<ReserveLessonPaymentResponseDTO> testPreparePayment(
+		HttpServletRequest httpServletRequest,
+		@RequestBody ReserveLessonPaymentRequestDTO request) {
+		ReserveLessonPaymentResponseDTO response = payService.getResponse(httpServletRequest, request);
+		return ResponseEntity.ok().body(response);
+	}
+
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음
 	// @GetMapping("/getPg/{pg_token}")

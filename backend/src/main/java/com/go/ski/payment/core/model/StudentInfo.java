@@ -16,16 +16,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer studentInfoId;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lesson_id")
-	private Lesson lesson;
+	private LessonInfo lessonInfo;
 	@Enumerated(STRING)
 	private Height height;
 	@Enumerated(STRING)
@@ -37,5 +45,5 @@ public class StudentInfo {
 	@Enumerated(STRING)
 	private Gender gender;
 	@Column
-	private String  name;
+	private String name;
 }

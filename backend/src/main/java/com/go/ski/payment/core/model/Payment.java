@@ -27,3 +27,4 @@ public class Payment {
 	@Column
 	private LocalDate paymentDate;
 }
+
