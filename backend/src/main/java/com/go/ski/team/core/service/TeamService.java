@@ -172,9 +172,6 @@ public class TeamService {
         // 팀 프로필 삭제
         s3Uploader.deleteFile(FileUploadPath.TEAM_PROFILE_PATH.path, team.getTeamProfileUrl());
 
-        // 강습 팀 강사 권한 삭제
-        permissionRepository.deleteAllByTeamInstructor(teamInstructors);
-
         // 강습 팀 테이블 강사 삭제
         teamInstructorRepository.deleteAllInBatch(teamInstructors);
 
