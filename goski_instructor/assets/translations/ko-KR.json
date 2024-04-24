@@ -15,5 +15,6 @@
   "loginBottomText" : "TO THE NEXT LEVEL!",
   "position": "직책",
   "name": "이름",
-  "phoneNumber": "전화번호"
+  "phoneNumber": "전화번호",
+  "signup" : "회원가입"
 }
