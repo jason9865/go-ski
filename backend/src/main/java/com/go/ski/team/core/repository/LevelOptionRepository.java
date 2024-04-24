@@ -8,9 +8,4 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 public interface LevelOptionRepository extends JpaRepository<LevelOption, Integer> {
-
-    LevelOption findByTeam(Team team);
-
-    void deleteByTeam(Team team);
-
 }

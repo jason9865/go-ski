@@ -161,14 +161,12 @@ public class TeamService {
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findAllByTeam(team)
                         .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
 
-        // 레벨 옵션 삭제
-        levelOptionRepository.deleteByTeam(team);
-
-        // 1:N 옵션 삭제
-        oneToNOptionRepository.deleteByTeam(team);
-
-        // 팀 소개 사진 삭제
-        deleteTeamImages(teamId);
+        // s3에서 팀 소개 사진 삭제
+        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
+        for(TeamImage image : oldTeamImages) {
+            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
+                    image.getImageUrl());
+        }
 
         // 팀 프로필 삭제
         s3Uploader.deleteFile(FileUploadPath.TEAM_PROFILE_PATH.path, team.getTeamProfileUrl());
