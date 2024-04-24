@@ -4,6 +4,24 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:logger/logger.dart';
 
+/*
+  ## 사용법
+  ### title && content는 필수 parameter
+  ### onConfirm && buttonName은 필수x, 근데 쓸거면 같이 써줘야 버튼 제대로 렌더링됨
+  ### 버튼은 추후 customButton으로 수정
+onPressed: () {
+  showDialog(
+    context = context,
+    builder = (BuildContext context) => CustomModal(
+      title: 모달 이름,
+      content: 모달에 들어갈 컨텐츠(위젯)
+      onConfirm: () => 함수 정의,
+      buttonName: "버튼이름",
+    ),
+  );
+};
+*/
+
 Logger logger = Logger();
 
 class CustomModal extends StatelessWidget {
@@ -13,12 +31,14 @@ class CustomModal extends StatelessWidget {
   final Widget content;
   // 버튼 눌렀을 때 동작할 메서드, 있을 수도 있고 없을 수도 있음
   final VoidCallback? onConfirm;
+  final String? buttonName;
 
   const CustomModal({
     super.key,
     required this.title,
     required this.content,
     this.onConfirm,
+    this.buttonName,
   });
 
   @override
@@ -66,7 +86,7 @@ class CustomModal extends StatelessWidget {
           ],
         ),
       ),
-      actions: onConfirm != null
+      actions: onConfirm != null && buttonName != null
           ? <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -78,12 +98,16 @@ class CustomModal extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: onConfirm,
-                    child: const Text('저장'),
+                    child: Text("$buttonName"),
                   ),
                 ],
               ),
             ]
-          : null,
+          : <Widget>[
+              SizedBox(
+                height: screenSizeController.getHeightByRatio(0.02),
+              )
+            ],
     );
   }
 }

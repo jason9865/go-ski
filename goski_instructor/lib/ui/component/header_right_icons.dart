@@ -27,6 +27,7 @@ Widget headerRightIcons(BuildContext context) {
               ),
               // 버튼 눌렀을 때 동작할 함수 추가 필요
               onConfirm: () => Navigator.of(context).pop(),
+              buttonName: "저장",
             ),
           );
         },

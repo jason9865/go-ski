@@ -11,7 +11,7 @@ class MainHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       // backgroundColor: goskiBackground,
-      backgroundColor: goskiDarkGray,
+      backgroundColor: goskiBackground,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.asset('assets/images/logo.png'),

@@ -13,7 +13,7 @@ class SubHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       // backgroundColor: goskiBackground,
-      backgroundColor: goskiDarkGray,
+      backgroundColor: goskiBackground,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),

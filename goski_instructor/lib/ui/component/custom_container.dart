@@ -3,6 +3,18 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:logger/logger.dart';
 
+/*
+  ## 사용법
+  ### content는 필수 parameter
+  ### onConfirm && buttonName은 필수x, 근데 쓸거면 같이 써줘야 버튼 제대로 렌더링됨
+  ### 버튼은 추후 customButton으로 수정
+return CustomContainer(
+      content: 컨테이너에 들어갈 컨텐츠(위젯)
+      onConfirm: () => 버튼 눌렀을 때 동작할 함수,
+      buttonName: "버튼 이름",
+    );
+*/
+
 Logger logger = Logger();
 
 class CustomContainer extends StatelessWidget {
