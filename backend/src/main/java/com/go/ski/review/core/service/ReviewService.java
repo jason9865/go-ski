@@ -76,7 +76,7 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewResponseDTO> getReviews(Integer lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!"));
+                .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!")); // 추후 변경 예정
 
         List<Review> reviewList= reviewRepository.findByLesson(lesson);
 
@@ -88,11 +88,11 @@ public class ReviewService {
         return result;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<InstructorReviewResponseDTO> getInstructorReviews(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
         Instructor instructor = instructorRepository.findById(user.getUserId())
-                .orElseThrow(() -> new RuntimeException("해당 강사가 없습니다!"));
+                .orElseThrow(() -> new RuntimeException("해당 강사가 없습니다!")); // 추후 변경 예정
 
         List<InstructorReviewVO> instructorReviews = reviewRepository.findByInstructor(instructor);
 
