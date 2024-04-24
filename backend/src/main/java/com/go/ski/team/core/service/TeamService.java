@@ -6,6 +6,7 @@ import com.go.ski.common.util.S3Uploader;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
+import com.go.ski.team.support.dto.TeamInfoResponseDTO;
 import com.go.ski.team.support.dto.TeamResponseDTO;
 import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -15,15 +16,13 @@ import com.go.ski.user.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.go.ski.team.support.dto.TeamResponseDTO.toDayOfWeek;
+import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 
 @Slf4j
 @Service
@@ -31,7 +30,6 @@ import static com.go.ski.team.support.dto.TeamResponseDTO.toDayOfWeek;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final SkiResortRepository skiResortRepository;
     private final TeamImageRepository teamImageRepository;
     private final LevelOptionRepository levelOptionRepository;
@@ -40,11 +38,9 @@ public class TeamService {
 
 
     @Transactional
-    public void createTeam(TeamCreateRequestDTO request,Integer userId) {
+    public void createTeam(TeamCreateRequestDTO request,User user) {
         log.info("TeamService.createTeam");
-        // Team 테이블에 저장할 User, SkiResort 생성
-        User user = getUser(userId);
-        log.info("flag! - {}", request.toString());
+        // Team 테이블에 저장할 SkiResort 생성
 
         SkiResort skiResort = getSkiResort(request.getResortId());
         // 0. 프로필 이미지부터 S3에 저장
@@ -88,10 +84,10 @@ public class TeamService {
     }
 
     @Transactional
-    public TeamResponseDTO getTeamInfo(Integer teamId) {
+    public TeamInfoResponseDTO getTeamInfo(Integer teamId) {
 
         // 팀 이미지를 제외한 팀 정보 데이터를 우선 가져오고
-        TeamResponseDTO teamResponseDTO = teamRepository.findTeamInfo(teamId)
+        TeamInfoResponseDTO teamInfoResponseDTO = teamRepository.findTeamInfo(teamId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         // teadId에 해당하는 이미지를 가져온 다음
@@ -101,18 +97,18 @@ public class TeamService {
                 .toList()
                 ;
 
-        // bitmask -> List로 변환
-        teamResponseDTO.setDayoffList(toDayOfWeek(teamResponseDTO.getDayoff()));
-
         // teamResponseDTO에 저장
-        teamResponseDTO.setTeamImages(teamImages);
-        return teamResponseDTO;
+        teamInfoResponseDTO.setTeamImages(teamImages);
+
+        // bitmask -> List로 변환
+        teamInfoResponseDTO.setDayoffList(toDayOfWeek(teamInfoResponseDTO.getDayoff()));
+
+        return teamInfoResponseDTO;
     }
 
     @Transactional
-    public void updateTeamInfo(Integer userId, Integer teamId, TeamUpdateRequestDTO request) {
-        // Team 테이블에 저장할 User, SkiResort 생성
-        User user = getUser(userId);
+    public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request) {
+        // Team 테이블에 저장할 SkiResort 생성
         log.info("flag! - {}", request.toString());
         SkiResort skiResort = getSkiResort(request.getResortId());
 
@@ -171,11 +167,18 @@ public class TeamService {
 
     }
 
-    public User getUser(Integer userId) {
-        log.info("getUser - {}",userId);
-        return userRepository.findById(userId)
-                .orElseThrow(() ->new RuntimeException("해당 유저가 없습니다!")); // 추후 변경
+    @Transactional
+    public List<TeamResponseDTO> getTeamList(User user) {
+        return teamRepository.findTeamList(user.getUserId());
     }
+
+//    @Transactional
+//    public void deleteTeam(Integer teamId) {
+//        Team team = teamRepository.findById(teamId)
+//                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+//
+//        teamRepository.delete(team);
+//    }
 
     public SkiResort getSkiResort(Integer resortId) {
         return skiResortRepository.findById(resortId)

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface TeamImageRepository extends JpaRepository<TeamImage, Integer> {
 
     @Query("SELECT ti FROM TeamImage ti WHERE ti.team.teamId = :teamId")

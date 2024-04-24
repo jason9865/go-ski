@@ -13,7 +13,7 @@ import lombok.*;
 public class OneToNOption {
 
     @Id
-    private int teamId;
+    private Integer teamId;
 
     @MapsId
     @OneToOne
