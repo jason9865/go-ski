@@ -5,10 +5,6 @@ import com.go.ski.team.support.dto.TeamCreateRequestDTO;
 import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.logging.Level;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +18,6 @@ public class LevelOption {
     @MapsId
     @OneToOne
     @JoinColumn(name="team_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Team team;
 
     @Column(nullable = false)

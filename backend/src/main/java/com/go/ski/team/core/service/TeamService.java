@@ -180,7 +180,6 @@ public class TeamService {
 
         // 팀 삭제
         teamRepository.delete(team);
-        log.info("flag!");
     }
 
     private void saveTeamImages(List<MultipartFile> newTeamImages, Team savedTeam) {

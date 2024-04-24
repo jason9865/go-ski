@@ -4,8 +4,6 @@ import com.go.ski.team.support.dto.TeamCreateRequestDTO;
 import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "one_to_n_option")
@@ -20,7 +18,6 @@ public class OneToNOption {
     @MapsId
     @OneToOne
     @JoinColumn(name="team_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Team team;
 
     @Column(nullable = false)
