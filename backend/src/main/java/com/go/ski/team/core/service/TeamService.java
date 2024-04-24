@@ -6,6 +6,7 @@ import com.go.ski.common.util.S3Uploader;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
+import com.go.ski.team.support.dto.TeamInfoResponseDTO;
 import com.go.ski.team.support.dto.TeamResponseDTO;
 import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -15,15 +16,13 @@ import com.go.ski.user.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.go.ski.team.support.dto.TeamResponseDTO.toDayOfWeek;
+import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 
 @Slf4j
 @Service
@@ -86,10 +85,10 @@ public class TeamService {
     }
 
     @Transactional
-    public TeamResponseDTO getTeamInfo(Integer teamId) {
+    public TeamInfoResponseDTO getTeamInfo(Integer teamId) {
 
         // 팀 이미지를 제외한 팀 정보 데이터를 우선 가져오고
-        TeamResponseDTO teamResponseDTO = teamRepository.findTeamInfo(teamId)
+        TeamInfoResponseDTO teamInfoResponseDTO = teamRepository.findTeamInfo(teamId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         // teadId에 해당하는 이미지를 가져온 다음
@@ -100,11 +99,11 @@ public class TeamService {
                 ;
 
         // bitmask -> List로 변환
-        teamResponseDTO.setDayoffList(toDayOfWeek(teamResponseDTO.getDayoff()));
+        teamInfoResponseDTO.setDayoffList(toDayOfWeek(teamInfoResponseDTO.getDayoff()));
 
         // teamResponseDTO에 저장
-        teamResponseDTO.setTeamImages(teamImages);
-        return teamResponseDTO;
+        teamInfoResponseDTO.setTeamImages(teamImages);
+        return teamInfoResponseDTO;
     }
 
     @Transactional
@@ -168,6 +167,10 @@ public class TeamService {
 
     }
 
+    @Transactional
+    public List<TeamResponseDTO> getTeamList(User user) {
+        return teamRepository.findTeamList(user.getUserId());
+    }
 
     public SkiResort getSkiResort(Integer resortId) {
         return skiResortRepository.findById(resortId)

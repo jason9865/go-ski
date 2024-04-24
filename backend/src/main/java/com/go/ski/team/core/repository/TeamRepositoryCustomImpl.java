@@ -3,15 +3,11 @@ package com.go.ski.team.core.repository;
 import com.go.ski.team.core.model.QLevelOption;
 import com.go.ski.team.core.model.QOneToNOption;
 import com.go.ski.team.core.model.QTeam;
-import com.go.ski.team.core.model.QTeamImage;
-import com.go.ski.team.support.dto.TeamResponseDTO;
+import com.go.ski.team.support.dto.TeamInfoResponseDTO;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,11 +21,11 @@ public class TeamRepositoryCustomImpl implements TeamRepositoryCustom{
 
 
     @Override
-    public Optional<TeamResponseDTO> findTeamInfo(Integer teamId) {
+    public Optional<TeamInfoResponseDTO> findTeamInfo(Integer teamId) {
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(Projections.fields(
-                                TeamResponseDTO.class,
+                                TeamInfoResponseDTO.class,
                                 qTeam.teamId,
                                 qTeam.teamName,
                                 qTeam.skiResort.resortId,

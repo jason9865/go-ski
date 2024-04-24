@@ -3,10 +3,7 @@ package com.go.ski.team.core.controller;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.team.core.service.TeamInstructorService;
 import com.go.ski.team.core.service.TeamService;
-import com.go.ski.team.support.dto.TeamCreateRequestDTO;
-import com.go.ski.team.support.dto.TeamInstructorResponseDTO;
-import com.go.ski.team.support.dto.TeamResponseDTO;
-import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
+import com.go.ski.team.support.dto.*;
 import com.go.ski.user.core.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +35,13 @@ public class TeamController {
     @GetMapping("/{teamId}")
     public ResponseEntity<ApiResponse<?>> searchTeamInfo(@PathVariable Integer teamId){
         log.info("=====TeamController.searchTeamInfo=====");
-        TeamResponseDTO response = teamService.getTeamInfo(teamId);
+        TeamInfoResponseDTO response = teamService.getTeamInfo(teamId);
         log.info("=====팀 정보 조회 완료=====");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
     @PatchMapping("/update/{teamId}")
-    public ResponseEntity<ApiResponse> updateTeamInfo(@PathVariable Integer teamId, HttpServletRequest request,
+    public ResponseEntity<ApiResponse<?>> updateTeamInfo(@PathVariable Integer teamId, HttpServletRequest request,
                                                       TeamUpdateRequestDTO requestDTO) {
         log.info("=====TeamController.updateTeamInfo=====");
         User user = (User) request.getAttribute("user");
@@ -54,9 +51,17 @@ public class TeamController {
     }
 
     @GetMapping("/member/{teamId}")
-    public ResponseEntity<ApiResponse> searchTeamInstructorList(@PathVariable Integer teamId) {
+    public ResponseEntity<ApiResponse<?>> searchTeamInstructorList(@PathVariable Integer teamId) {
         log.info("=====TeamController.searchTeamInstructorList=====");
         List<TeamInstructorResponseDTO> response = teamInstructorService.getTeamInstructorList(teamId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<ApiResponse<?>> searchTeamList(HttpServletRequest request) {
+        log.info("====TeamController.searchTeamList====");
+        User user = (User) request.getAttribute("user");
+        List<TeamResponseDTO> response = teamService.getTeamList(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 

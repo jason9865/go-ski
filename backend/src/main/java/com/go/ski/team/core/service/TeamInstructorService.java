@@ -14,8 +14,7 @@ public class TeamInstructorService {
     private final TeamInstructorRepository teamInstructorRepository;
 
     public List<TeamInstructorResponseDTO> getTeamInstructorList(Integer teamId) {
-        List<TeamInstructorResponseDTO> teamInstructorList = teamInstructorRepository.findTeamInstructors(teamId);
-        return teamInstructorList;
+        return teamInstructorRepository.findTeamInstructors(teamId);
     }
 
 
