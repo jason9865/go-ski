@@ -1,7 +1,7 @@
 package com.go.ski.payment.support.vo;
 
 public enum Weight {
-	WEIGHT_UNDER_40KG("40kg 이하"),
+	WEIGHT_UNDER_40KG("40kg 미만"),
 	WEIGHT_40KG_TO_49KG("40kg~49kg"),
 	WEIGHT_50KG_TO_59KG("50kg~59kg"),
 	WEIGHT_60KG_TO_69KG("60kg~69kg"),
@@ -16,11 +16,11 @@ public enum Weight {
 		this.value = value;
 	}
 
-	public String getValue(String value) {
+	public String getValue() {
 		return value;
 	}
 
-	public Weight fromValue(String value){
+	public static Weight fromValue(String value){
 		for(Weight weight : Weight.values()) {
 			if(weight.value.equals(value)) {
 				return weight;

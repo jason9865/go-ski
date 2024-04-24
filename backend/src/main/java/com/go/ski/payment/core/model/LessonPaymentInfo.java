@@ -1,5 +1,6 @@
 package com.go.ski.payment.core.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class LessonPaymentInfo {
 	@Id
 	private Integer lessonId; //1대 1 lesson
 	@MapsId
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lesson_id")
 	private Lesson lesson;
 	@Column
@@ -35,4 +36,15 @@ public class LessonPaymentInfo {
 	@Column
 	private Integer duration;
 
+	public static LessonPaymentInfo toLessonPaymentInfoForPayment(Lesson lesson, Integer basicFee, Integer designatedFee, Integer peopleOptionFee, Integer levelOptionFee, Integer duration) {
+		return LessonPaymentInfo.builder()
+			.lessonId(lesson.getLessonId())
+			.lesson(lesson)
+			.basicFee(basicFee)
+			.designatedFee(designatedFee)
+			.peopleOptionFee(peopleOptionFee)
+			.levelOptionFee(levelOptionFee)
+			.duration(duration)
+			.build();
+	}
 }

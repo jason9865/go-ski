@@ -54,10 +54,12 @@ public class PaymentController {
 
 	//결제의 단계가 준비랑, 승인임
 	@PostMapping("/reserve")
-	public ResponseEntity<ReserveLessonPaymentResponseDTO> testPreparePayment(
+	public ResponseEntity<KakaopayPrepareResponseDTO> testPreparePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ReserveLessonPaymentRequestDTO request) {
-		ReserveLessonPaymentResponseDTO response = payService.getResponse(httpServletRequest, request);
+		
+		log.info(request.toString());
+		KakaopayPrepareResponseDTO response = payService.getResponse(httpServletRequest, request);
 		return ResponseEntity.ok().body(response);
 	}
 
