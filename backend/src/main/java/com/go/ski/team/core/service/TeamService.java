@@ -86,7 +86,7 @@ public class TeamService {
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         // teadId에 해당하는 이미지를 가져온 다음
-        List<TeamImageVO> teamImages = teamImageRepository.findAllByTeamId(teamId)
+        List<TeamImageVO> teamImages = teamImageRepository.findByTeamId(teamId)
                 .stream()
                 .map(TeamImageVO::toVO)
                 .toList()
@@ -158,11 +158,12 @@ public class TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
-        List<TeamInstructor> teamInstructors = teamInstructorRepository.findAllByTeam(team)
+        List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeam(team)
                         .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
 
+
         // s3에서 팀 소개 사진 삭제
-        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
+        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
         for(TeamImage image : oldTeamImages) {
             s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
                     image.getImageUrl());
@@ -179,6 +180,7 @@ public class TeamService {
 
         // 팀 삭제
         teamRepository.delete(team);
+        log.info("flag!");
     }
 
     private void saveTeamImages(List<MultipartFile> newTeamImages, Team savedTeam) {
@@ -194,7 +196,7 @@ public class TeamService {
 
     private void deleteTeamImages(Integer teamId) {
         // teamId로 teamImage 리스트 가져오기
-        List<TeamImage> oldTeamImages = teamImageRepository.findAllByTeamId(teamId);
+        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
         for(TeamImage image : oldTeamImages) {
             s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
                     image.getImageUrl());
