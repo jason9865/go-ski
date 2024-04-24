@@ -72,4 +72,11 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
+//    @DeleteMapping("/delete/{teamId}")
+//    public ResponseEntity<ApiResponse<?>> removeTeam(@PathVariable Integer teamId){
+//        log.info("====TeamController.deleteTeam====");
+//        teamService.deleteTeam(teamId);
+//        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+//    }
+
 }

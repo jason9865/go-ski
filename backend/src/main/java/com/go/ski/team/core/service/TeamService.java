@@ -30,7 +30,6 @@ import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final SkiResortRepository skiResortRepository;
     private final TeamImageRepository teamImageRepository;
     private final LevelOptionRepository levelOptionRepository;
@@ -98,11 +97,12 @@ public class TeamService {
                 .toList()
                 ;
 
+        // teamResponseDTO에 저장
+        teamInfoResponseDTO.setTeamImages(teamImages);
+
         // bitmask -> List로 변환
         teamInfoResponseDTO.setDayoffList(toDayOfWeek(teamInfoResponseDTO.getDayoff()));
 
-        // teamResponseDTO에 저장
-        teamInfoResponseDTO.setTeamImages(teamImages);
         return teamInfoResponseDTO;
     }
 
@@ -171,6 +171,14 @@ public class TeamService {
     public List<TeamResponseDTO> getTeamList(User user) {
         return teamRepository.findTeamList(user.getUserId());
     }
+
+//    @Transactional
+//    public void deleteTeam(Integer teamId) {
+//        Team team = teamRepository.findById(teamId)
+//                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+//
+//        teamRepository.delete(team);
+//    }
 
     public SkiResort getSkiResort(Integer resortId) {
         return skiResortRepository.findById(resortId)
