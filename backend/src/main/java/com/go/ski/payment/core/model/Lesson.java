@@ -13,10 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lesson {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +47,13 @@ public class Lesson {
 	private LessonPaymentInfo lessonPaymentInfo;
 	//payload에 들어갈 내용
 	//lesson id, 대표자 이름,
+	public static Lesson toLessonForPayment(User user, Team team, Instructor instructor, Integer isOwn) {
+		return Lesson.builder()
+			.user(user)
+			.team(team)
+			.instructor(instructor)
+			.isOwn(isOwn)
+			.representativeName(user.getUserName())
+			.build();
+	}
 }
