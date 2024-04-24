@@ -18,18 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table(name = "user",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "domain_unique",
-                        columnNames = {
-                                "domain_user_key",
-                                "domain_name"
-                        }
-                ),
-        }
-)
-@Check(constraints = "phone_number REGEXP '^[0-9]{3}-[0-9]{4}-[0-9]{4}$'")
+@Table
 public class User {
 
     @Id
@@ -40,15 +29,12 @@ public class User {
     private Domain domain;
 
     @Setter
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) CHARACTER SET UTF8")
     private String userName;
 
     @Setter
-    @Column(nullable = false)
     private LocalDateTime birthDate;
 
     @Setter
-    @Column(nullable = false, columnDefinition = "VARCHAR(13)")
     private String phoneNumber;
 
     @Setter
@@ -56,22 +42,18 @@ public class User {
 
     @Setter
     @Enumerated(STRING)
-    @Column(nullable = false)
     private Gender gender;
 
     @Setter
     @Enumerated(STRING)
-    @Column(nullable = false)
     private Role role;
 
     private String fcmWeb;
     private String fcmMobile;
 
     private LocalDateTime createdDate;
-
-    // User와 Instructor는 1대1 관계
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Instructor instructor;
+    @Setter
+    private LocalDateTime expiredDate;
 
     @PrePersist
     protected void onCreate() {

@@ -3,12 +3,11 @@ package com.go.ski.user.support.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @ToString
-public class SigninRequestDTO {
-    private String role;
-    private String code;
-    private String token;
+public class ProfileImageDTO {
+    private MultipartFile profileImage;
 }

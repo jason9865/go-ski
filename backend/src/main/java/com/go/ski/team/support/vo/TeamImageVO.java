@@ -1,15 +1,20 @@
 package com.go.ski.team.support.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.go.ski.team.core.model.TeamImage;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamImageVO {
 
     private Integer teamImageId;
     private String imageUrl;
+
+    public static TeamImageVO toVO(TeamImage teamImage) {
+        TeamImageVO teamImageVO = new TeamImageVO();
+        teamImageVO.teamImageId = teamImage.getTeamImageId();
+        teamImageVO.imageUrl = teamImage.getImageUrl();
+        return teamImageVO;
+    }
 
 }
