@@ -1,0 +1,14 @@
+{
+  "setting" : "설정",
+  "hello" : "안녕하세요, {}!",
+  "cancel" : "취소",
+  "ski": "스키",
+  "board": "보드",
+  "level1": "Level 1",
+  "level2": "Level 2",
+  "level3": "Level 3",
+  "teaching1": "Teaching 1",
+  "teaching2": "Teaching 2",
+  "teaching3": "Teaching 3",
+  "demonstrator": "Demonstrator"
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GoskiText extends StatelessWidget {
   final String text;
@@ -53,6 +54,6 @@ class GoskiTextBody extends StatelessWidget {
           fontSize: size,
           fontWeight: isBold ? FontWeight.w400 : FontWeight.w700),
       text,
-    );
+    ).tr();
   }
 }
