@@ -73,6 +73,7 @@ class GoskiContainer extends StatelessWidget {
         : Container(
             decoration: const BoxDecoration(color: goskiBackground),
             width: screenSizeController.getWidthByRatio(1),
+            height: screenSizeController.getHeightByRatio(1),
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(
                 vertical: screenSizeController.getHeightByRatio(0.01),
