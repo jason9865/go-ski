@@ -23,7 +23,6 @@ class GoskiTextField extends StatefulWidget {
 }
 
 class _GoskiTextFieldState extends State<GoskiTextField> {
-  // String inptText = '';
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
