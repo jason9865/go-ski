@@ -1,4 +1,4 @@
-package com.go.ski.payment.dto.response;
+package com.go.ski.payment.support.dto.response;
 
 import java.util.Date;
 
