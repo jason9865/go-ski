@@ -12,23 +12,21 @@ class GoskiTag extends StatefulWidget {
       borderColor,
       selectedTextColor,
       selectedBackgroundColor;
-  final bool isRound, hasBorder;
+  final bool hasBorder;
   final bool isSelected;
   final void Function(bool)? onClicked;
 
-  const GoskiTag({
-    super.key,
-    required this.text,
-    required this.textColor,
-    required this.backgroundColor,
-    this.borderColor = Colors.transparent,
-    required this.selectedTextColor,
-    required this.selectedBackgroundColor,
-    this.isRound = true,
-    required this.isSelected,
-    required this.hasBorder,
-    this.onClicked
-  });
+  const GoskiTag(
+      {super.key,
+      required this.text,
+      required this.textColor,
+      required this.backgroundColor,
+      this.borderColor = Colors.transparent,
+      required this.selectedTextColor,
+      required this.selectedBackgroundColor,
+      required this.isSelected,
+      required this.hasBorder,
+      this.onClicked});
 
   @override
   State<GoskiTag> createState() => _GoskiTagState();
@@ -62,9 +60,9 @@ class _GoskiTagState extends State<GoskiTag> {
       },
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       elevation: 0,
-      shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.all(Radius.circular(widget.isRound ? 500 : 8))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(500)),
+      ),
       backgroundColor: widget.backgroundColor,
       selectedColor: widget.selectedBackgroundColor,
       side: BorderSide(
