@@ -194,8 +194,3 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,java,gradle
-.idea/
-.DS_Store
-._.DS_Store
-**/.DS_Store
-**/._.DS_Store
