@@ -40,5 +40,12 @@
   "certificatePhoto" : "자격증 사진",
   "registerPhoto" : "사진 등록",
   "male" : "남자",
-  "female" : "여자"
+  "female" : "여자",
+  "TeamList" : "팀원 목록",
+  "inviteTeammate": "팀원 초대",
+  "couponCount": "{}장",
+  "moneyUnit" : "{}원",
+  "dueYear" : "사용기한 : {}년 ",
+  "dueMonth" : "{}월 ",
+  "dueDay" : "{}일 까지"
 }
