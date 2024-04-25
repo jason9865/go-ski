@@ -83,5 +83,16 @@
   "hintStudentNumber": "인원 선택",
   "hintReservationPerson": "예약자를 입력하세요",
   "hintSpecialNote": "특이사항을 입력하세요",
-  "hintMainInstructor": "강사명 / 팀"
+  "hintMainInstructor": "강사명 / 팀",
+  "createTeam" : "팀 생성",
+  "teamName" : "팀명",
+  "enterTeamName" : "팀명을 입력해주세요.",
+  "skiResort" : "스키장",
+  "selectSkiResort" : "스키장을 선택해주세요.",
+  "teamIntroduction" : "팀 소개",
+  "enterTeamIntroduction" : "팀 소개를 입력해주세요.",
+  "teamIntroductionImage" : "팀 소개 사진",
+  "settingTeamPrice" : "팀 단가 설정(1시간 기준)",
+  "pricePerPerson" : "인원수 별 가격",
+  "pricePerLesson" : "강습 단계별 가격"
 }

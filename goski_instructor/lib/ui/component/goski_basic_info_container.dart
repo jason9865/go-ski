@@ -19,19 +19,22 @@ class BasicInfoContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GoskiText(
-          text: tr(text),
-          size: labelLarge,
-          isBold: true,
-          isExpanded: true,
-        ),
-        GoskiTextField(
-          width: screenSizeController.getWidthByRatio(0.6),
-          hintText: tr(textField),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        children: [
+          GoskiText(
+            text: tr(text),
+            size: labelLarge,
+            isBold: true,
+            isExpanded: true,
+          ),
+          GoskiTextField(
+            width: screenSizeController.getWidthByRatio(0.6),
+            hintText: tr(textField),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           width: screenSizeController.getWidthByRatio(0.3),
           height: screenSizeController.getHeightByRatio(0.2),
           decoration: BoxDecoration(
-            border: Border.all(color: goskiDarkGray, width: 1),
+            border: Border.all(color: goskiLightGray, width: 1),
             borderRadius: BorderRadius.circular(15),
           ),
           child: ClipRRect(
