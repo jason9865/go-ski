@@ -23,7 +23,7 @@ class GoskiBigsizeButton extends StatelessWidget {
         // 배경색 설정
         foregroundColor: MaterialStateProperty.all(goskiWhite),
         // 텍스트 색상 설정
-        minimumSize: MaterialStateProperty.all(Size(width * 0.94, 50)),
+        minimumSize: MaterialStateProperty.all(Size(width * 0.9, 50)),
         // 최소 크기 설정
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(

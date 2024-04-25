@@ -43,7 +43,7 @@ class GoskiContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GoskiBigsizeButton(
-                        width: screenSizeController.getWidthByRatio(0.9),
+                        width: screenSizeController.getWidthByRatio(1),
                         text: tr("$buttonName"),
                         onTap: onConfirm!, // 콜백 함수 실행
                       ),
