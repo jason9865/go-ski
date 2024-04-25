@@ -10,6 +10,6 @@ import java.util.List;
 public interface TeamImageRepository extends JpaRepository<TeamImage, Integer> {
 
     @Query("SELECT ti FROM TeamImage ti WHERE ti.team.teamId = :teamId")
-    List<TeamImage> findAllByTeamId(Integer teamId);
+    List<TeamImage> findByTeamId(Integer teamId);
 
 }
