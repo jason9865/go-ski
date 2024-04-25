@@ -43,10 +43,11 @@ class GoskiContainer extends StatelessWidget {
     return onConfirm != null && buttonName != null
         ? Container(
             padding: EdgeInsets.symmetric(
+              vertical: screenSizeController.getHeightByRatio(0.01),
               horizontal: screenSizeController.getWidthByRatio(0.05),
             ),
             width: screenSizeController.getWidthByRatio(1),
-            height: screenSizeController.getHeightByRatio(1),
+            height: screenSizeController.getHeightByRatio(0.93),
             decoration: const BoxDecoration(color: goskiBackground),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,11 +82,12 @@ class GoskiContainer extends StatelessWidget {
           )
         : Container(
             padding: EdgeInsets.symmetric(
+              vertical: screenSizeController.getHeightByRatio(0.01),
               horizontal: screenSizeController.getWidthByRatio(0.05),
             ),
             decoration: const BoxDecoration(color: goskiBackground),
             width: screenSizeController.getWidthByRatio(1),
-            height: screenSizeController.getHeightByRatio(1),
+            height: screenSizeController.getHeightByRatio(0.93),
             child: SingleChildScrollView(
               child: Column(
                 children: [

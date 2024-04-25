@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/common/i002_signup.dart';
 
 final screenSizeController = Get.find<ScreenSizeController>();
 
@@ -96,7 +97,8 @@ class KakaoLoginButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // 로그인 로직 구현
-        Get.find<LoginController>().login();
+        // Get.find<LoginController>().login();
+        Get.to(() => const SignUpScreen());
       },
       child: Image.asset(
         "assets/images/kakao_login.png",

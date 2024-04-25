@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
+import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -34,171 +37,193 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      onConfirm: () => 0,
-      buttonName: "signup",
-      child: GoskiCard(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 150,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: goskiDarkGray, width: 1),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          14), // Container borderRadius - 1
-                      child: profileImage == ""
-                          ? const Icon(Icons.photo,
-                              size: 50, color: Colors.grey)
-                          : Image.asset(profileImage, fit: BoxFit.cover),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: pickProfileImage,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: GoskiContainer(
+                onConfirm: () => Get.find<LoginController>().login(),
+                buttonName: "signup",
+                child: GoskiCard(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
                       children: [
-                        const Icon(Icons.photo_outlined),
-                        GoskiText(
-                          text: tr("registerPhoto"),
-                          size: bodySmall,
-                          isBold: true,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: goskiDarkGray, width: 1),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    14), // Container borderRadius - 1
+                                child: profileImage == ""
+                                    ? const Icon(Icons.photo,
+                                        size: 50, color: Colors.grey)
+                                    : Image.asset(profileImage,
+                                        fit: BoxFit.cover),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            GestureDetector(
+                              onTap: pickProfileImage,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.photo_outlined),
+                                  GoskiText(
+                                    text: tr("registerPhoto"),
+                                    size: bodySmall,
+                                    isBold: true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const BuildInterval(),
-              const BuildBasicInfo(),
-              const BuildInterval(),
-              Row(
-                children: [
-                  GoskiText(
-                    text: tr("isBoss"),
-                    size: labelLarge,
-                    isBold: true,
-                    isExpanded: true,
-                  ),
-                  Checkbox(
-                      value: isBoss,
-                      onChanged: (newValue) {
-                        setState(() {
-                          isBoss = newValue!;
-                        });
-                      }),
-                ],
-              ),
-              !isBoss
-                  ? Column(
-                      children: [
+                        const BuildInterval(),
+                        const BuildBasicInfo(),
+                        const BuildInterval(),
                         Row(
                           children: [
                             GoskiText(
-                              text: tr("certificate"),
+                              text: tr("isBoss"),
                               size: labelLarge,
                               isBold: true,
                               isExpanded: true,
                             ),
-                            IconButton(
-                              onPressed: () => {
-                                showGoskiBottomSheet(
-                                  context: context,
-                                  child: const SizedBox(
-                                    height: 400,
-                                    child: SizedBox(
-                                      height: 300,
-                                      child: Center(
-                                        child: Text("자격증 바텀시트"),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                addCertificate(),
-                              },
-                              icon: const Icon(Icons.add),
-                            ),
+                            Checkbox(
+                                value: isBoss,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    isBoss = newValue!;
+                                  });
+                                }),
                           ],
                         ),
-                        ...certificates,
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoskiText(
-                                  text: tr("certificatePhoto"),
-                                  size: labelLarge,
-                                  isBold: true,
-                                  isExpanded: true,
-                                ),
-                                IconButton(
-                                  onPressed: pickCertificateImage,
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                            certificateImages.isNotEmpty
-                                ? Card(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: SizedBox(
-                                      height: 120,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: certificateImages.length,
-                                        itemBuilder: (context, index) {
-                                          return Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5),
-                                                child: Image.asset(
-                                                  certificateImages[index],
-                                                  width: 100,
-                                                  height: 100,
-                                                  fit: BoxFit.cover,
+                        !isBoss
+                            ? Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      GoskiText(
+                                        text: tr("certificate"),
+                                        size: labelLarge,
+                                        isBold: true,
+                                        isExpanded: true,
+                                      ),
+                                      IconButton(
+                                        onPressed: () => {
+                                          showGoskiBottomSheet(
+                                            context: context,
+                                            child: const SizedBox(
+                                              height: 400,
+                                              child: SizedBox(
+                                                height: 300,
+                                                child: Center(
+                                                  child: Text("자격증 바텀시트"),
                                                 ),
                                               ),
-                                              Positioned(
-                                                right: -12,
-                                                top: -10,
-                                                child: IconButton(
-                                                  icon: const Icon(
-                                                    Icons.remove_circle,
-                                                    color: goskiBlack,
-                                                  ),
-                                                  onPressed: () =>
-                                                      removeCertificateImage(
-                                                          index),
-                                                ),
-                                              ),
-                                            ],
-                                          );
+                                            ),
+                                          ),
+                                          addCertificate(),
                                         },
+                                        icon: const Icon(Icons.add),
                                       ),
-                                    ),
-                                  )
-                                : Container(),
-                          ],
-                        ),
+                                    ],
+                                  ),
+                                  ...certificates,
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GoskiText(
+                                            text: tr("certificatePhoto"),
+                                            size: labelLarge,
+                                            isBold: true,
+                                            isExpanded: true,
+                                          ),
+                                          IconButton(
+                                            onPressed: pickCertificateImage,
+                                            icon: const Icon(Icons.add),
+                                          ),
+                                        ],
+                                      ),
+                                      certificateImages.isNotEmpty
+                                          ? Card(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                              child: SizedBox(
+                                                height: 120,
+                                                child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      certificateImages.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Stack(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      5),
+                                                          child: Image.asset(
+                                                            certificateImages[
+                                                                index],
+                                                            width: 100,
+                                                            height: 100,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          right: -12,
+                                                          top: -10,
+                                                          child: IconButton(
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .remove_circle,
+                                                              color: goskiBlack,
+                                                            ),
+                                                            onPressed: () =>
+                                                                removeCertificateImage(
+                                                                    index),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container(),
                       ],
-                    )
-                  : Container(),
-            ],
-          ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
