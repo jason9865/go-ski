@@ -58,7 +58,7 @@ class _UpdateInstructorInfoScreenState
             padding: const EdgeInsets.all(12.0),
             child: Column(
               children: [
-                buildRegisterProfilePhoto(),
+                buildUpdateProfileImage(),
                 const BuildInterval(),
                 const BuildBasicInfo(),
                 const BuildInterval(),
@@ -100,7 +100,7 @@ class _UpdateInstructorInfoScreenState
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GoskiText(
-                              text: tr("certificatePhoto"),
+                              text: tr("certificateImage"),
                               size: labelLarge,
                               isBold: true,
                               isExpanded: true,
@@ -128,7 +128,7 @@ class _UpdateInstructorInfoScreenState
     );
   }
 
-  Widget buildRegisterProfilePhoto() {
+  Widget buildUpdateProfileImage() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -155,7 +155,7 @@ class _UpdateInstructorInfoScreenState
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("updateProfilePhoto"),
+                text: tr("updateProfileImage"),
                 size: bodySmall,
                 isBold: true,
               ),

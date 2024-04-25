@@ -58,7 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          buildRegisterProfilePhoto(),
+                          buildRegisterProfileImage(),
                           const BuildInterval(),
                           const BuildBasicInfo(),
                           const BuildInterval(),
@@ -118,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             GoskiText(
-                                              text: tr("certificatePhoto"),
+                                              text: tr("certificateImage"),
                                               size: labelLarge,
                                               isBold: true,
                                               isExpanded: true,
@@ -150,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget buildRegisterProfilePhoto() {
+  Widget buildRegisterProfileImage() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -177,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("registerProfilePhoto"),
+                text: tr("registerProfileImage"),
                 size: bodySmall,
                 isBold: true,
               ),
