@@ -99,7 +99,7 @@ public class ReviewService {
         List<InstructorReviewResponseDTO> result = new ArrayList<>();
         for (InstructorReviewVO reviewVO : instructorReviews) {
             List<InstructorTagsVO> instructorTags = tagOnReviewRepository.findByReviewId(reviewVO.getReviewId());
-            result.add(new InstructorReviewResponseDTO(reviewVO, instructorTags));
+            result.add(InstructorReviewResponseDTO.toDTO(reviewVO,instructorTags));
         }
         return result;
     }
