@@ -45,29 +45,32 @@ class GoskiContainer extends StatelessWidget {
             width: screenSizeController.getWidthByRatio(1),
             height: screenSizeController.getHeightByRatio(1),
             decoration: const BoxDecoration(color: goskiBackground),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                vertical: screenSizeController.getHeightByRatio(0.01),
-                horizontal: screenSizeController.getWidthByRatio(0.06),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  child,
-                  const SizedBox(
-                    height: 10,
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    vertical: screenSizeController.getHeightByRatio(0.01),
+                    horizontal: screenSizeController.getWidthByRatio(0.06),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                     children: [
-                      GoskiBigsizeButton(
-                          width: screenSizeController.getWidthByRatio(0.9),
-                          text: tr("signup"),
-                          onTap: () => 0),
+                      child,
+                      const SizedBox(
+                        height: 10,
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GoskiBigsizeButton(
+                        width: screenSizeController.getWidthByRatio(0.9),
+                        text: tr("signup"),
+                        onTap: () => 0),
+                  ],
+                ),
+              ],
             ),
           )
         : Container(

@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/ui/common/i001_login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
@@ -28,7 +27,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isBoss = false;
-  List<Widget> certificates = []; // 자격증을 저장할 리스트
+  List<Widget> certificates = []; // 자격증을 렌더링할 리스트
   // List<File> certificateImages = []; // 자격증 이미지 파일 리스트, 나중에 진짜 파일 가져올 때 사용
   List<String> certificateImages = []; // 이미지 경로를 저장하는 리스트
   String profileImage = "";
@@ -65,20 +64,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(width: 20),
                   GestureDetector(
                     onTap: pickProfileImage,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.photo_outlined),
-                        Text("사진 등록", style: TextStyle(fontSize: bodyMedium)),
+                        const Icon(Icons.photo_outlined),
+                        GoskiText(
+                          text: tr("registerPhoto"),
+                          size: bodySmall,
+                          isBold: true,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              const BasicInfo(),
+              const BuildInterval(),
+              const BuildBasicInfo(),
+              const BuildInterval(),
               Row(
                 children: [
                   GoskiText(
@@ -113,7 +115,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   context: context,
                                   child: const SizedBox(
                                     height: 400,
-                                    child: Text("자격증 바텀시트 나와라"),
+                                    child: SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: Text("자격증 바텀시트"),
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 addCertificate(),
@@ -126,11 +133,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                GoskiText(
+                                  text: tr("certificatePhoto"),
+                                  size: labelLarge,
+                                  isBold: true,
+                                  isExpanded: true,
+                                ),
                                 IconButton(
                                   onPressed: pickCertificateImage,
-                                  icon: const Icon(Icons.photo_camera),
+                                  icon: const Icon(Icons.add),
                                 ),
                               ],
                             ),
@@ -192,6 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> pickProfileImage() async {
+    // 추후에 디바이스에서 사진 가져올 때 사용할 변수들
     // final ImagePicker picker = ImagePicker();
     // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -202,6 +216,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> pickCertificateImage() async {
+    // 추후에 디바이스에서 사진 가져올 때 사용할 변수들
     // final ImagePicker picker = ImagePicker();
     // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -236,9 +251,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 15,
-          )
+          const BuildInterval(),
         ],
       ),
     );
@@ -253,8 +266,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-class BasicInfo extends StatelessWidget {
-  const BasicInfo({
+class BuildCertificate extends StatelessWidget {
+  const BuildCertificate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class BuildBasicInfo extends StatelessWidget {
+  const BuildBasicInfo({
     super.key,
   });
 
@@ -266,9 +288,7 @@ class BasicInfo extends StatelessWidget {
           text: "name",
           textField: "enterName",
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const BuildInterval(),
         Row(
           children: [
             GoskiText(
@@ -278,20 +298,16 @@ class BasicInfo extends StatelessWidget {
               isExpanded: true,
             ),
             GoskiSwitch(
-                items: const ['남자', '여자'],
+                items: [tr('male'), tr('female')],
                 width: screenSizeController.getWidthByRatio(0.6)),
           ],
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const BuildInterval(),
         const BasicInfoContainer(
           text: "birthDate",
           textField: "enterBirthDate",
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const BuildInterval(),
         const BasicInfoContainer(
           text: "phoneNumber",
           textField: "enterPhoneNumber",
@@ -325,6 +341,17 @@ class BasicInfoContainer extends StatelessWidget {
           hintText: tr(textField),
         ),
       ],
+    );
+  }
+}
+
+class BuildInterval extends StatelessWidget {
+  const BuildInterval({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: screenSizeController.getHeightByRatio(0.016),
     );
   }
 }

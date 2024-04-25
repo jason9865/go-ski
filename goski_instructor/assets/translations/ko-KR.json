@@ -36,5 +36,9 @@
   "gender" : "성별",
   "isBoss" : "사장여부",
   "certificate" : "자격증",
-  "selectCertificate" : "자격증을 선택해주세요."
+  "selectCertificate" : "자격증을 선택해주세요.",
+  "certificatePhoto" : "자격증 사진",
+  "registerPhoto" : "사진 등록",
+  "male" : "남자",
+  "female" : "여자"
 }
