@@ -20,7 +20,8 @@ class BasicInfoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenSizeController.getWidthByRatio(0.01)),
       child: Row(
         children: [
           GoskiText(

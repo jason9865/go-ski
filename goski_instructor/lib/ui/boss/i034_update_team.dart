@@ -5,7 +5,6 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/common/d_i018_add_external_schedule.dart';
-import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
 import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
 import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
@@ -20,16 +19,20 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-class CreateTeamScreen extends StatefulWidget {
-  const CreateTeamScreen({super.key});
+class UpdateTeamScreen extends StatefulWidget {
+  const UpdateTeamScreen({super.key});
 
   @override
-  State<CreateTeamScreen> createState() => _CreateTeamScreenState();
+  State<UpdateTeamScreen> createState() => _CreateTeamScreenState();
 }
 
-class _CreateTeamScreenState extends State<CreateTeamScreen> {
-  String teamImage = "";
-  List<String> teamIntroductionImages = []; // 팀 소개 이미지 경로를 저장하는 리스트
+class _CreateTeamScreenState extends State<UpdateTeamScreen> {
+  String teamImage = "assets/images/person1.png";
+  List<String> teamIntroductionImages = [
+    "assets/images/person3.png",
+    "assets/images/person3.png",
+    "assets/images/person3.png"
+  ]; // 팀 소개 이미지 경로를 저장하는 리스트
   final List<String> days = [
     'Monday',
     'Tuesday',
@@ -52,9 +55,24 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
               children: [
                 buildRegisterTeamImage(),
                 const BuildInterval(),
-                const BasicInfoContainer(
-                  text: "teamName",
-                  textField: "enterTeamName",
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenSizeController.getWidthByRatio(0.01)),
+                  child: Row(
+                    children: [
+                      GoskiText(
+                        text: tr('teamName'),
+                        size: labelLarge,
+                        isBold: true,
+                        isExpanded: true,
+                      ),
+                      GoskiTextField(
+                        width: screenSizeController.getWidthByRatio(0.6),
+                        hintText: tr('팀 이름1'),
+                        canEdit: false,
+                      ),
+                    ],
+                  ),
                 ),
                 const BuildInterval(),
                 buildSelectSkiResort(),
@@ -87,6 +105,24 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                 buildTeamPriceSetting(),
                 const BuildInterval(),
                 buildHolidaySetting(),
+                Padding(
+                  padding: EdgeInsets.all(
+                      screenSizeController.getHeightByRatio(0.01)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        tr('deleteTeam'),
+                        style: const TextStyle(
+                          fontSize: bodyMedium,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w600,
+                          color: goskiDarkGray,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
