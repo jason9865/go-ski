@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
 import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
+import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
@@ -362,45 +364,6 @@ class BuildBasicInfo extends StatelessWidget {
           textField: "enterPhoneNumber",
         ),
       ],
-    );
-  }
-}
-
-class BasicInfoContainer extends StatelessWidget {
-  final String text;
-  final String textField;
-  const BasicInfoContainer({
-    required this.text,
-    required this.textField,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GoskiText(
-          text: tr(text),
-          size: labelLarge,
-          isBold: true,
-          isExpanded: true,
-        ),
-        GoskiTextField(
-          width: screenSizeController.getWidthByRatio(0.6),
-          hintText: tr(textField),
-        ),
-      ],
-    );
-  }
-}
-
-class BuildInterval extends StatelessWidget {
-  const BuildInterval({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: screenSizeController.getHeightByRatio(0.016),
     );
   }
 }
