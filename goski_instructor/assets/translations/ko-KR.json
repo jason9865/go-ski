@@ -83,5 +83,13 @@
   "hintStudentNumber": "인원 선택",
   "hintReservationPerson": "예약자를 입력하세요",
   "hintSpecialNote": "특이사항을 입력하세요",
-  "hintMainInstructor": "강사명 / 팀"
+  "hintMainInstructor": "강사명 / 팀",
+  "editTeamMemberInfo": "팀원 정보 수정",
+  "hintPosition": "직책 선택",
+  "setLessonPrice": "지정 강습 단가 설정",
+  "hintSetLessonPrice": "시간당 추가 강습 단가를 입력해주세요",
+  "permissionInviteTeam": "팀 초대 권한",
+  "permissionAddTeam": "팀 추가 권한",
+  "permissionEditTeam": "팀 조정 권한",
+  "permissionDeleteTeam": "팀 삭제 권한"
 }
