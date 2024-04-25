@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/test.dart';
-import 'package:goski_instructor/ui/common/i001_login.dart';
-import 'package:goski_instructor/ui/component/goski_main_header.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
+import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,7 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          buildRegisterProfilePhoto(),
+                          buildRegisterProfileImage(),
                           const BuildInterval(),
                           const BuildBasicInfo(),
                           const BuildInterval(),
@@ -121,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             GoskiText(
-                                              text: tr("certificatePhoto"),
+                                              text: tr("certificateImage"),
                                               size: labelLarge,
                                               isBold: true,
                                               isExpanded: true,
@@ -153,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget buildRegisterProfilePhoto() {
+  Widget buildRegisterProfileImage() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -180,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("registerProfilePhoto"),
+                text: tr("registerProfileImage"),
                 size: bodySmall,
                 isBold: true,
               ),
@@ -341,45 +338,6 @@ class BuildBasicInfo extends StatelessWidget {
           textField: "enterPhoneNumber",
         ),
       ],
-    );
-  }
-}
-
-class BasicInfoContainer extends StatelessWidget {
-  final String text;
-  final String textField;
-  const BasicInfoContainer({
-    required this.text,
-    required this.textField,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GoskiText(
-          text: tr(text),
-          size: labelLarge,
-          isBold: true,
-          isExpanded: true,
-        ),
-        GoskiTextField(
-          width: screenSizeController.getWidthByRatio(0.6),
-          hintText: tr(textField),
-        ),
-      ],
-    );
-  }
-}
-
-class BuildInterval extends StatelessWidget {
-  const BuildInterval({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: screenSizeController.getHeightByRatio(0.016),
     );
   }
 }
