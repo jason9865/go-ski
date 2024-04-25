@@ -95,5 +95,7 @@
   "settingTeamPrice" : "팀 단가 설정(1시간 기준)",
   "pricePerPerson" : "인원수 별 가격",
   "pricePerLesson" : "강습 단계별 가격",
-  "deleteTeam" : "팀 삭제"
+  "deleteTeam" : "팀 삭제",
+  "searchByPhoneNumber" : "전화번호로 검색",
+  "invite" : "초대"
 }
