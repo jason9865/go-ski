@@ -1,21 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goski_instructor/ui/component/goski_textfield.dart';
 
 import '../../const/util/screen_size_controller.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
-import 'd_i033_edit_team_member_info.dart';
+import '../component/goski_textfield.dart';
 
-class SetPricePeopleDialog extends StatelessWidget {
-  const SetPricePeopleDialog({super.key});
+class SetPriceStepDialog extends StatelessWidget {
+  const SetPriceStepDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getHeightByRatio(0.015);
-    const titleRatio = 4;
+    const titleRatio = 5;
     const double titleFontSize = 20;
 
     return Flexible(
@@ -24,50 +23,38 @@ class SetPricePeopleDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleAlignCenterWithInputRow(
-              title: tr('one_one_price'),
-              titleRatio: titleRatio,
-              fontSize: titleFontSize,
-              child: GoskiTextField(
-                hintText: tr('enterPrice'),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: padding,
-            ),
-            TitleAlignCenterWithInputRow(
-              title: tr('one_two_price'),
-              titleRatio: titleRatio,
-              fontSize: titleFontSize,
-              child: GoskiTextField(
-                hintText: tr('enterPrice'),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: padding,
-            ),
-            TitleAlignCenterWithInputRow(
-              title: tr('one_three_price'),
-              titleRatio: titleRatio,
-              fontSize: titleFontSize,
-              child: GoskiTextField(
-                hintText: tr('enterPrice'),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: padding,
-            ),
-            TitleAlignCenterWithInputRow(
-              title: tr('one_four_price'),
-              titleRatio: titleRatio,
-              fontSize: titleFontSize,
-              child: GoskiTextField(
-                hintText: tr('enterPrice'),
-                textAlign: TextAlign.center,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  flex: titleRatio,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          GoskiText(
+                            text: tr('intermediate'),
+                            size: titleFontSize,
+                            isBold: true,
+                          ),
+                          GoskiText(
+                            text: tr('${tr('level2')}, ${tr('teaching2')}'),
+                            size: 15,
+                            isBold: true,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  flex: 10 - titleRatio,
+                  child: GoskiTextField(
+                    hintText: tr('enterAdditionalPrice'),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: padding,
@@ -82,12 +69,12 @@ class SetPricePeopleDialog extends StatelessWidget {
                       Column(
                         children: [
                           GoskiText(
-                            text: tr('one_n_price'),
+                            text: tr('advanced'),
                             size: titleFontSize,
                             isBold: true,
                           ),
                           GoskiText(
-                            text: tr('(${tr('price_per_people')})'),
+                            text: tr('${tr('level3')}, ${tr('teaching3')}'),
                             size: 15,
                             isBold: true,
                           ),

@@ -11,6 +11,7 @@ class GoskiTextField extends StatefulWidget {
   final bool canEdit, hasInnerPadding;
   final int? maxLines;
   final String text, hintText;
+  final TextAlign textAlign;
 
   const GoskiTextField({
     super.key,
@@ -19,7 +20,8 @@ class GoskiTextField extends StatefulWidget {
     this.maxLines = 1,
     this.text = '',
     required this.hintText,
-    this.hasInnerPadding = true
+    this.hasInnerPadding = true,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -48,6 +50,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
           border: Border.all(width: 1, color: goskiDarkGray),
           borderRadius: BorderRadius.circular(10)),
       child: TextField(
+        textAlign: widget.textAlign,
         readOnly: !widget.canEdit,
         controller: _textEditingController,
         onChanged: (text) {

@@ -100,5 +100,8 @@
   "one_n_price": "4인 초과",
   "price_per_people": "1인당 추가금",
   "enterPrice": "금액 입력",
-  "enterAdditionalPrice": "추가 금액 입력"
+  "enterAdditionalPrice": "추가 금액 입력",
+  "setPriceStep": "단계별 강습비 설정",
+  "intermediate": "중급",
+  "advanced": "고급"
 }
