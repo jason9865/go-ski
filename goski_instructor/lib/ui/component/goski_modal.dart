@@ -12,9 +12,9 @@ import 'package:logger/logger.dart';
 onPressed: () {
   showDialog(
     context = context,
-    builder = (BuildContext context) => CustomModal(
+    builder = (BuildContext context) => GoskiModal(
       title: 모달 이름,
-      content: 모달에 들어갈 컨텐츠(위젯)
+      child: 모달에 들어갈 컨텐츠(위젯),
       onConfirm: () => 함수 정의,
       buttonName: "버튼이름",
     ),
@@ -46,6 +46,7 @@ class GoskiModal extends StatelessWidget {
     final screenSizeController = Get.find<ScreenSizeController>();
     final double horizontalPadding = screenSizeController.getWidthByRatio(0.05);
     return AlertDialog(
+      clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -68,10 +69,9 @@ class GoskiModal extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  color: goskiBlack,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700
-                ),
+                    color: goskiBlack,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -83,8 +83,10 @@ class GoskiModal extends StatelessWidget {
         ),
       ),
       // titlePadding: const EdgeInsets.all(20),
-      content: SizedBox(
+      content: Container(
         width: screenSizeController.getWidthByRatio(1),
+        constraints: BoxConstraints(
+            maxHeight: screenSizeController.getHeightByRatio(0.9)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

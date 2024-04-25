@@ -5,17 +5,23 @@ import 'package:goski_instructor/const/color.dart';
 import '../../const/util/screen_size_controller.dart';
 
 /// width를 0으로 입력시 expanded된 textField 생성 가능
+/// TODO. 입력받은 텍스트를 외부에서 가져다 사용할 수 있어야 됨
 class GoskiTextField extends StatefulWidget {
   final double width;
-  final bool canEdit;
+  final bool canEdit, hasInnerPadding;
+  final int? maxLines;
   final String text, hintText;
+  final TextAlign textAlign;
 
   const GoskiTextField({
     super.key,
     this.width = 0,
     this.canEdit = true,
+    this.maxLines = 1,
     this.text = '',
     required this.hintText,
+    this.hasInnerPadding = true,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -44,6 +50,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
           border: Border.all(width: 1, color: goskiDarkGray),
           borderRadius: BorderRadius.circular(10)),
       child: TextField(
+        textAlign: widget.textAlign,
         readOnly: !widget.canEdit,
         controller: _textEditingController,
         onChanged: (text) {
@@ -57,11 +64,12 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
               color: goskiDarkGray, fontSize: 15, fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
-          contentPadding: const EdgeInsets.all(5),
+          contentPadding: EdgeInsets.all(widget.hasInnerPadding ? 5 :0),
         ),
         style: const TextStyle(
             color: goskiBlack, fontSize: 15, fontWeight: FontWeight.w400),
         cursorColor: goskiBlack,
+        maxLines: widget.maxLines,
       ),
     );
   }

@@ -25,24 +25,21 @@ class SendMyAccountBottomSheet extends StatefulWidget {
 }
 
 class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
-  List dummyData = [
-    [null, '국민은행1', '123456-12-123456'],
-    [null, '국민은행2', '123456-12-123456'],
-    [null, '국민은행3', '123456-12-123456'],
-    [null, '국민은행4', '123456-12-123456'],
-    [null, '국민은행5', '123456-12-123456'],
-    [null, '국민은행6', '123456-12-123456'],
-    [null, '국민은행7', '123456-12-123456'],
-    [null, '국민은행8', '123456-12-123456'],
-    [null, '국민은행9', '123456-12-123456'],
-    [null, '국민은행10', '123456-12-123456'],
+  List<Account> dummyData = [
+    Account(bankName: '국민은행1', depositorName: '송준석', accountNumber: '123456-12-123451', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행2', depositorName: '송준석', accountNumber: '123456-12-123452', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행3', depositorName: '송준석', accountNumber: '123456-12-123453', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행4', depositorName: '송준석', accountNumber: '123456-12-123454', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행5', depositorName: '송준석', accountNumber: '123456-12-123455', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행6', depositorName: '송준석', accountNumber: '123456-12-123456', imagePath: 'assets/images/logo.png'),
   ];
-  String? _selected = "국민은행1";
+  String? _selectedAccountNumber = '123456-12-123451';
 
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final imageSize = screenSizeController.getWidthByRatio(0.2);
+    final space = screenSizeController.getWidthByRatio(0.005);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -61,7 +58,7 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        _selected = dummyData[index][1];
+                        _selectedAccountNumber = dummyData[index].accountNumber;
                       });
                     },
                     child: Container(
@@ -71,23 +68,30 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                           Image.asset(
                             width: imageSize,
                             height: imageSize,
-                            'assets/images/logo.png',
+                            dummyData[index].imagePath,
                           ),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 GoskiText(
-                                  text: dummyData[index][1]!,
+                                  text: dummyData[index].depositorName,
                                   size: 15,
                                   isBold: true,
                                 ),
                                 SizedBox(
-                                  height: screenSizeController
-                                      .getHeightByRatio(0.005),
+                                  height: space,
                                 ),
                                 GoskiText(
-                                  text: dummyData[index][2]!,
+                                  text: dummyData[index].bankName,
+                                  size: 15,
+                                  isBold: false,
+                                ),
+                                SizedBox(
+                                  height: space,
+                                ),
+                                GoskiText(
+                                  text: dummyData[index].accountNumber,
                                   size: 15,
                                   isBold: false,
                                 ),
@@ -97,8 +101,8 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                           Radio<String>(
                             fillColor: MaterialStateColor.resolveWith(
                                 (states) => goskiButtonBlack),
-                            value: dummyData[index][1],
-                            groupValue: _selected,
+                            value: dummyData[index].accountNumber,
+                            groupValue: _selectedAccountNumber,
                             onChanged: null,
                           ),
                         ],
@@ -132,4 +136,18 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
       ],
     );
   }
+}
+
+class Account {
+  final String bankName;
+  final String depositorName;
+  final String accountNumber;
+  final String imagePath;
+
+  Account({
+    required this.bankName,
+    required this.depositorName,
+    required this.accountNumber,
+    required this.imagePath
+  });
 }
