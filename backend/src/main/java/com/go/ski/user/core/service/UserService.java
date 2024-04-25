@@ -46,8 +46,7 @@ public class UserService {
     public User login(OauthServerType oauthServerType, String role, String authCode, String accessToken) {
         try {
             User user = oauthMemberClientComposite.fetch(oauthServerType, role, authCode, accessToken);
-            Optional<User> optionalUser = userRepository.findByDomain(user.getDomain());
-            return optionalUser.orElse(user);
+            return userRepository.findByDomain(user.getDomain()).orElse(user);
         } catch (WebClientException wce) {
             throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.WRONG_CODE);
         }
@@ -137,7 +136,7 @@ public class UserService {
 
     public ProfileInstructorResponseDTO getInstructor(User user, ProfileUserResponseDTO profileUserResponseDTO) {
         Instructor instructor = Instructor.builder().instructorId(user.getUserId()).build();
-        List<InstructorCert> instructorCerts = instructorCertRepository.findAllByInstructor(instructor);
+        List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
 
         List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
         for (InstructorCert instructorCert : instructorCerts) {
@@ -169,6 +168,8 @@ public class UserService {
     }
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
+        instructorCertRepository.deleteByInstructor(instructor);
+
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
