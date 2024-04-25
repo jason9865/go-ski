@@ -48,5 +48,10 @@
   "dueYear" : "사용기한 : {}년 ",
   "dueMonth" : "{}월 ",
   "dueDay" : "{}일 까지",
+  "date": "일시",
+  "location": "장소",
+  "reservationPerson": "예약자",
+  "studentInfo": "수강생 정보",
+  "requestMessage": "요청사항"
   "addAccount" : "+ 추가하기"
 }
