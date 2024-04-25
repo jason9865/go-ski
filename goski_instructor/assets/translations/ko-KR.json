@@ -47,12 +47,5 @@
   "moneyUnit" : "{}원",
   "dueYear" : "사용기한 : {}년 ",
   "dueMonth" : "{}월 ",
-  "dueDay" : "{}일 까지",
-  "TeamList": "팀원 목록",
-  "inviteTeammate": "팀원 초대",
-  "couponCount": "{}장",
-  "moneyUnit" : "{}원",
-  "dueYear" : "사용기한 : {}년 ",
-  "dueMonth" : "{}월 ",
   "dueDay" : "{}일 까지"
 }
