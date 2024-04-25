@@ -6,8 +6,6 @@ import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.logging.Level;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

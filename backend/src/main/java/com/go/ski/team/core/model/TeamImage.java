@@ -2,6 +2,8 @@ package com.go.ski.team.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -16,6 +18,7 @@ public class TeamImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="team_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Team team;
 
     @Column(nullable = false)
