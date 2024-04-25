@@ -10,8 +10,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class FeedbackCreateRequestDTO extends FeedbackRequestDTO{
+public class FeedbackRequestDTO {
 
-    private Integer lessonId;
+    private String content;
+    private List<MultipartFile> images;
+    private List<MultipartFile> videos;
 
 }

@@ -25,7 +25,7 @@ public class Feedback {
 
     private String content;
 
-    @OneToMany(mappedBy = "FeedbackMedia",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "feedback",cascade = CascadeType.ALL)
     private List<FeedbackMedia> feedbackMedia;
 
 
