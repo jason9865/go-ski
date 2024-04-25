@@ -103,5 +103,10 @@
   "enterAdditionalPrice": "추가 금액 입력",
   "setPriceStep": "단계별 강습비 설정",
   "intermediate": "중급",
-  "advanced": "고급"
+  "advanced": "고급",
+  "delete": "삭제",
+  "deleteAccount": "계좌 삭제",
+  "deleteAccountContent": "{}({})\n계좌를 삭제하시겠습니까?",
+  "deleteMember": "팀원 삭제",
+  "deleteMemberContent": "{} 강사를 {} 팀에서\n삭제하시겠습니까?"
 }
