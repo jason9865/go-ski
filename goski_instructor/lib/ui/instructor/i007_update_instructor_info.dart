@@ -1,12 +1,7 @@
-import 'dart:io';
-import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/test.dart';
-import 'package:goski_instructor/ui/common/i001_login.dart';
-import 'package:goski_instructor/ui/component/goski_main_header.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
@@ -20,134 +15,112 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-// loginController, 추후에 refactoring
-class LoginController extends GetxController {
-  RxBool isLogin = false.obs;
-
-  void login() {
-    isLogin.value = true;
-    // Get.to(() => const Test());
-    logger.d("로그인 ${isLogin.value}");
-  }
-}
-
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class UpdateInstructorInfoScreen extends StatefulWidget {
+  const UpdateInstructorInfoScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<UpdateInstructorInfoScreen> createState() =>
+      _UpdateInstructorInfoScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  bool isBoss = false;
-  List<String> certificates = []; // 자격증을 렌더링할 리스트
+class _UpdateInstructorInfoScreenState
+    extends State<UpdateInstructorInfoScreen> {
+  List<String> certificates = [
+    tr('certificate'),
+    tr('certificate')
+  ]; // 자격증을 렌더링할 리스트
   // List<File> certificateImages = []; // 자격증 이미지 파일 리스트, 나중에 진짜 파일 가져올 때 사용
-  List<String> certificateImages = []; // 이미지 경로를 저장하는 리스트
-  String profileImage = "";
+  List<String> certificateImages = [
+    "assets/images/certificate.png",
+    "assets/images/certificate.png"
+  ]; // 이미지 경로를 저장하는 리스트
+  String profileImage = "assets/images/person2.png";
+  final List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: GoskiContainer(
-                onConfirm: () => Get.find<LoginController>().login(),
-                buttonName: "signup",
-                child: SingleChildScrollView(
-                  child: GoskiCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        children: [
-                          buildRegisterProfilePhoto(),
-                          const BuildInterval(),
-                          const BuildBasicInfo(),
-                          const BuildInterval(),
-                          Row(
-                            children: [
-                              GoskiText(
-                                text: tr("isBoss"),
-                                size: labelLarge,
-                                isBold: true,
-                                isExpanded: true,
+    return GoskiContainer(
+      onConfirm: () => 0,
+      buttonName: "signup",
+      child: SingleChildScrollView(
+        child: GoskiCard(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                buildRegisterProfilePhoto(),
+                const BuildInterval(),
+                const BuildBasicInfo(),
+                const BuildInterval(),
+                buildSelfIntroduction(),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        GoskiText(
+                          text: tr("certificate"),
+                          size: labelLarge,
+                          isBold: true,
+                          isExpanded: true,
+                        ),
+                        IconButton(
+                          onPressed: () => {
+                            showGoskiBottomSheet(
+                              context: context,
+                              child: const SizedBox(
+                                height: 400,
+                                child: SizedBox(
+                                  height: 300,
+                                  child: Center(
+                                    child: Text("자격증 바텀시트"),
+                                  ),
+                                ),
                               ),
-                              Checkbox(
-                                  value: isBoss,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      isBoss = newValue!;
-                                    });
-                                  }),
-                            ],
-                          ),
-                          !isBoss
-                              ? Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        GoskiText(
-                                          text: tr("certificate"),
-                                          size: labelLarge,
-                                          isBold: true,
-                                          isExpanded: true,
-                                        ),
-                                        IconButton(
-                                          onPressed: () => {
-                                            showGoskiBottomSheet(
-                                              context: context,
-                                              child: const SizedBox(
-                                                height: 400,
-                                                child: SizedBox(
-                                                  height: 300,
-                                                  child: Center(
-                                                    child: Text("자격증 바텀시트"),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            addCertificate(tr('certificate')),
-                                          },
-                                          icon: const Icon(Icons.add),
-                                        ),
-                                      ],
-                                    ),
-                                    buildCertificatesList(),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            GoskiText(
-                                              text: tr("certificatePhoto"),
-                                              size: labelLarge,
-                                              isBold: true,
-                                              isExpanded: true,
-                                            ),
-                                            IconButton(
-                                              onPressed: pickCertificateImage,
-                                              icon: const Icon(Icons.add),
-                                            ),
-                                          ],
-                                        ),
-                                        certificateImages.isNotEmpty
-                                            ? buildCertificateImageList()
-                                            : Container(),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                        ],
-                      ),
+                            ),
+                            addCertificate(tr('certificate')),
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ),
+                    buildCertificatesList(),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GoskiText(
+                              text: tr("certificatePhoto"),
+                              size: labelLarge,
+                              isBold: true,
+                              isExpanded: true,
+                            ),
+                            IconButton(
+                              onPressed: pickCertificateImage,
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                        certificateImages.isNotEmpty
+                            ? buildCertificateImageList()
+                            : Container(),
+                      ],
+                    ),
+                    const BuildInterval(),
+                    buildHolidaySetting(),
+                  ],
+                )
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -180,13 +153,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("registerProfilePhoto"),
+                text: tr("updateProfilePhoto"),
                 size: bodySmall,
                 isBold: true,
               ),
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget buildSelfIntroduction() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            GoskiText(
+              text: tr('selfIntroduction'),
+              size: labelLarge,
+              isBold: true,
+              isExpanded: true,
+            )
+          ],
+        ),
+        const BuildInterval(),
+        GoskiTextField(
+          hintText: tr('enterSelfIntroduction'),
+          maxLines: 3,
+        )
       ],
     );
   }
@@ -257,6 +252,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget buildHolidaySetting() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            GoskiText(
+              text: tr('holiday'),
+              size: labelLarge,
+              isBold: true,
+              isExpanded: true,
+            )
+          ],
+        ),
+        const BuildInterval(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: days.map((day) {
+            return DayCheckbox(
+              day: tr(day),
+            );
+          }).toList(),
+        )
+      ],
     );
   }
 
@@ -380,6 +401,48 @@ class BuildInterval extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: screenSizeController.getHeightByRatio(0.016),
+    );
+  }
+}
+
+class DayCheckbox extends StatefulWidget {
+  final String day;
+
+  const DayCheckbox({
+    super.key,
+    required this.day,
+  });
+
+  @override
+  State<DayCheckbox> createState() => _DayCheckboxState();
+}
+
+class _DayCheckboxState extends State<DayCheckbox> {
+  bool isChecked = false; // 기본값은 false
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GoskiText(
+          text: tr(widget.day),
+          size: bodyMedium,
+          isBold: true,
+        ),
+        Transform.translate(
+          offset: const Offset(
+              0.0, -10.0), // Checkbox가 기본적으로 차지하고 있는 padding이 있어서 수동으로 위치 조정
+          child: Checkbox(
+            value: isChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                isChecked = value ?? isChecked;
+              });
+            },
+            activeColor: goskiBlack,
+          ),
+        ),
+      ],
     );
   }
 }
