@@ -96,6 +96,8 @@
   "pricePerPerson" : "인원수 별 가격",
   "pricePerLesson" : "강습 단계별 가격",
   "deleteTeam" : "팀 삭제",
+  "searchByPhoneNumber" : "전화번호로 검색",
+  "invite" : "초대",
   "editTeamMemberInfo": "팀원 정보 수정",
   "hintPosition": "직책 선택",
   "setLessonPrice": "지정 강습 단가 설정",
