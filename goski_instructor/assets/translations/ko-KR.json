@@ -53,5 +53,10 @@
   "reservationPerson": "예약자",
   "studentInfo": "수강생 정보",
   "requestMessage": "요청사항",
-  "addAccount" : "+ 추가하기"
+  "addAccount" : "+ 추가하기",
+  "title": "제목",
+  "titleHint": "제목을 입력하세요",
+  "content": "내용",
+  "contentHint": "내용을 입력하세요",
+  "addImage": "이미지 첨부하기"
 }
