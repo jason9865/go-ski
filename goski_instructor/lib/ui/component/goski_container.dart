@@ -42,46 +42,51 @@ class GoskiContainer extends StatelessWidget {
     // 기능 함수와 버튼 이름이 들어오면 버튼 렌더링, 아니면 버튼 대신 공백 렌더링
     return onConfirm != null && buttonName != null
         ? Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenSizeController.getWidthByRatio(0.05),
+            ),
             width: screenSizeController.getWidthByRatio(1),
             height: screenSizeController.getHeightByRatio(1),
             decoration: const BoxDecoration(color: goskiBackground),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    vertical: screenSizeController.getHeightByRatio(0.01),
-                    horizontal: screenSizeController.getWidthByRatio(0.06),
-                  ),
-                  child: Column(
-                    children: [
-                      child,
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        child,
+                      ],
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GoskiBigsizeButton(
-                        width: screenSizeController.getWidthByRatio(0.9),
-                        text: tr("signup"),
-                        onTap: () => 0),
-                  ],
+                SizedBox(
+                  height: screenSizeController.getHeightByRatio(0.01),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: screenSizeController.getHeightByRatio(0.02)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GoskiBigsizeButton(
+                          width: screenSizeController.getWidthByRatio(0.9),
+                          text: tr("signup"),
+                          onTap: () => 0),
+                    ],
+                  ),
                 ),
               ],
             ),
           )
         : Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenSizeController.getWidthByRatio(0.05),
+            ),
             decoration: const BoxDecoration(color: goskiBackground),
             width: screenSizeController.getWidthByRatio(1),
             height: screenSizeController.getHeightByRatio(1),
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                vertical: screenSizeController.getHeightByRatio(0.01),
-                horizontal: screenSizeController.getWidthByRatio(0.03),
-              ),
               child: Column(
                 children: [
                   child,
