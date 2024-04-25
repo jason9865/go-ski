@@ -14,7 +14,6 @@ import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
 import com.go.ski.feedback.support.exception.FeedbackExceptionEnum;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.repository.LessonRepository;
-import com.go.ski.team.core.model.TeamImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,8 +38,7 @@ public class FeedbackService {
 
         Feedback feedback = feedbackRepository.findByLesson(lesson)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND));
-
-
+        
         return FeedbackResponseDTO.toDTO(feedback);
     }
 
@@ -82,7 +80,7 @@ public class FeedbackService {
     }
 
     public void saveMediaFiles(FeedbackRequestDTO request, Feedback feedback) {
-        // 분리되어있는 images와 videos 리스트를 하나로 합치기
+        // dto에 분리되어있는 images와 videos 리스트를 하나로 합치기
         List<MultipartFile> mediaFiles = request.getImages();
         mediaFiles.addAll(request.getVideos());
 
