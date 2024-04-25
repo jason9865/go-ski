@@ -19,4 +19,6 @@ public class FeedbackMedia {
     @JoinColumn(name="feedback_id")
     private Feedback feedback;
 
+    private String mediaUrl;
+
 }
