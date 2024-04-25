@@ -8,7 +8,12 @@ import 'package:goski_instructor/ui/component/goski_text.dart';
 import '../../const/util/screen_size_controller.dart';
 
 class NotificationSettingDialog extends StatefulWidget {
-  const NotificationSettingDialog({super.key});
+  final int role; // 1은 강사, 2는 사장으로 가정
+
+  const NotificationSettingDialog({
+    super.key,
+    required this.role,
+  });
 
   @override
   State<NotificationSettingDialog> createState() =>
@@ -17,7 +22,7 @@ class NotificationSettingDialog extends StatefulWidget {
 
 class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
   final screenSizeController = Get.find<ScreenSizeController>();
-  List titleList = [
+  final List instructorList = [
     tr('inviteTeamNotification'),
     tr('lessonReservationNotification'),
     tr('lessonCancelNotification'),
@@ -25,7 +30,14 @@ class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
     tr('lessonBeforeHourNotification'),
     tr('lessonBeforeHalfAnHourNotification'),
   ];
-  List isCheckedList = [false, true, true, false, false, true];
+  final List instructorIsCheckedList = [false, true, true, false, false, true];
+  final List bossList = [
+    tr('lessonReservationNotification'),
+    tr('lessonCancelNotification'),
+    tr('lessonChangeNotification'),
+    tr('lessonCompleteNotification'),
+  ];
+  final List bossIsCheckedList = [false, true, true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +45,19 @@ class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
       children: [
         ListView.separated(
           shrinkWrap: true,
-          itemCount: titleList.length,
+          itemCount: widget.role == 1 ? instructorList.length : bossList.length,
           itemBuilder: (context, index) {
             return NotificationSettingRow(
-                title: titleList[index],
-                isChecked: isCheckedList[index],
+                title:
+                    widget.role == 1 ? instructorList[index] : bossList[index],
+                isChecked: widget.role == 1
+                    ? instructorIsCheckedList[index]
+                    : bossIsCheckedList[index],
                 onClicked: (value) {
                   setState(() {
-                    isCheckedList[index] = value;
+                    widget.role == 1
+                        ? instructorIsCheckedList[index] = value
+                        : bossIsCheckedList[index] = value;
                   });
                 });
           },
@@ -50,7 +67,9 @@ class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
             );
           },
         ),
-        SizedBox(height: screenSizeController.getHeightByRatio(0.05),),
+        SizedBox(
+          height: screenSizeController.getHeightByRatio(0.05),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
