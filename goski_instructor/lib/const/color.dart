@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // 배경 색
 const goskiBackground = Color(0xFFF2F6F7);
 // 버튼 - 검정
-const buttonBlack = Color(0xFF141212);
+const goskiButtonBlack = Color(0xFF141212);
 // 밝은 회색
 const goskiLightGray = Color(0xFFE5E5E5);
 // 어두운 회색

@@ -28,7 +28,7 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
           return ChoiceChip(
             padding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
-            backgroundColor: selectedIndex == index ? buttonBlack : goskiWhite,
+            backgroundColor: selectedIndex == index ? goskiButtonBlack : goskiWhite,
             label: Container(
               width: chipWidth,
               height: 40,
@@ -49,7 +49,7 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
                 selectedIndex = selected ? index : selectedIndex;
               });
             },
-            selectedColor: buttonBlack,
+            selectedColor: goskiButtonBlack,
             showCheckmark: false, // 선택시 체크 표시 비활성화
             shape: index == 0
                 ? const RoundedRectangleBorder(

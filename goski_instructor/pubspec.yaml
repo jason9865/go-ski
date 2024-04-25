@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.6
   easy_localization: ^3.0.6
   intl: ^0.18.1
+  image_picker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -102,6 +103,9 @@ flutter:
     - family: Jua
       fonts:
         - asset: assets/fonts/BMJUA_ttf.ttf
+    - family: RubikGlitch
+      fonts:
+        - asset: assets/fonts/RubikGlitch-Regular.ttf
 
     # - family: Trajan Pro
     #   fonts:
