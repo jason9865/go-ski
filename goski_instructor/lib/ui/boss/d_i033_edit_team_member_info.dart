@@ -61,7 +61,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
                       children: [
                         TitleAlignCenterWithInputRow(
                           title: tr('position'),
-                          child: TightPaddingBorderWhiteContainer(
+                          child: _TightPaddingBorderWhiteContainer(
                             child: TextWithIconRow(
                               text: tr('hintPosition'),
                               icon: Icons.keyboard_arrow_down,
@@ -132,7 +132,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
               },
             ),
             SizedBox(
-              height: contentPadding,
+              height: contentPadding * 2,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,11 +163,15 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
 class TitleAlignCenterWithInputRow extends StatelessWidget {
   final String title;
   final Widget child;
+  final int titleRatio;
+  final double fontSize;
 
   const TitleAlignCenterWithInputRow({
     super.key,
     required this.title,
     required this.child,
+    this.titleRatio = 4,
+    this.fontSize = 15,
   });
 
   @override
@@ -175,20 +179,20 @@ class TitleAlignCenterWithInputRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          flex: 4,
+          flex: titleRatio,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GoskiText(
                 text: title,
-                size: 15,
+                size: fontSize,
                 isBold: true,
               ),
             ],
           ),
         ),
         Flexible(
-          flex: 6,
+          flex: 10 - titleRatio,
           child: child,
         ),
       ],
@@ -196,11 +200,10 @@ class TitleAlignCenterWithInputRow extends StatelessWidget {
   }
 }
 
-class TightPaddingBorderWhiteContainer extends StatelessWidget {
+class _TightPaddingBorderWhiteContainer extends StatelessWidget {
   final Widget? child;
 
-  const TightPaddingBorderWhiteContainer({
-    super.key,
+  const _TightPaddingBorderWhiteContainer({
     required this.child,
   });
 
