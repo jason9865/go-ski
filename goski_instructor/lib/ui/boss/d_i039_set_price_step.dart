@@ -14,7 +14,7 @@ class SetPriceStepDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getHeightByRatio(0.015);
-    const titleRatio = 5;
+    const titleRatio = 4;
     const double titleFontSize = 20;
 
     return Flexible(
@@ -38,7 +38,7 @@ class SetPriceStepDialog extends StatelessWidget {
                             isBold: true,
                           ),
                           GoskiText(
-                            text: tr('${tr('level2')}, ${tr('teaching2')}'),
+                            text: tr('level2'),
                             size: 15,
                             isBold: true,
                           ),
@@ -74,7 +74,7 @@ class SetPriceStepDialog extends StatelessWidget {
                             isBold: true,
                           ),
                           GoskiText(
-                            text: tr('${tr('level3')}, ${tr('teaching3')}'),
+                            text: tr('level3'),
                             size: 15,
                             isBold: true,
                           ),
