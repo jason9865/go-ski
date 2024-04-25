@@ -23,7 +23,6 @@ class GoskiContainer extends StatelessWidget {
     final screenSizeController = Get.find<ScreenSizeController>();
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: screenSizeController.getHeightByRatio(0.01),
         horizontal: screenSizeController.getWidthByRatio(0.05),
       ),
       width: screenSizeController.getWidthByRatio(1),
