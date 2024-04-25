@@ -5,12 +5,7 @@ import java.time.LocalDate;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.vo.LessonType;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +31,7 @@ public class LessonInfo {
 	@Column
 	private Integer duration;
 	@Column
+	@Enumerated(EnumType.STRING)
 	private LessonType lessonType;
 	@Column
 	private Integer studentCount;
