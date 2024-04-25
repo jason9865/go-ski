@@ -43,7 +43,9 @@ class SendMessageDialog extends StatelessWidget {
                 isBold: true,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  // TODO. 이미지 첨부하기 동작 추가 필요
+                },
                 child: Row(
                   children: [
                     SvgPicture.asset(
@@ -94,6 +96,7 @@ class SendMessageDialog extends StatelessWidget {
                 width: screenSizeController.getWidthByRatio(1),
                 text: tr('send'),
                 onTap: () {
+                  // TODO. 보내기 버튼 동작 추가 필요
                   Navigator.pop(context);
                 },
               )
