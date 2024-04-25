@@ -44,6 +44,7 @@ class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
     return Column(
       children: [
         ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget.role == 1 ? instructorList.length : bossList.length,
           itemBuilder: (context, index) {

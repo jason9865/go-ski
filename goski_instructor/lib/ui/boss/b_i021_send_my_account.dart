@@ -25,13 +25,13 @@ class SendMyAccountBottomSheet extends StatefulWidget {
 }
 
 class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
-  List<_Account> dummyData = [
-    _Account(bankName: '국민은행1', depositorName: '송준석', accountNumber: '123456-12-123451', imagePath: 'assets/images/logo.png'),
-    _Account(bankName: '국민은행2', depositorName: '송준석', accountNumber: '123456-12-123452', imagePath: 'assets/images/logo.png'),
-    _Account(bankName: '국민은행3', depositorName: '송준석', accountNumber: '123456-12-123453', imagePath: 'assets/images/logo.png'),
-    _Account(bankName: '국민은행4', depositorName: '송준석', accountNumber: '123456-12-123454', imagePath: 'assets/images/logo.png'),
-    _Account(bankName: '국민은행5', depositorName: '송준석', accountNumber: '123456-12-123455', imagePath: 'assets/images/logo.png'),
-    _Account(bankName: '국민은행6', depositorName: '송준석', accountNumber: '123456-12-123456', imagePath: 'assets/images/logo.png'),
+  List<Account> dummyData = [
+    Account(bankName: '국민은행1', depositorName: '송준석', accountNumber: '123456-12-123451', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행2', depositorName: '송준석', accountNumber: '123456-12-123452', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행3', depositorName: '송준석', accountNumber: '123456-12-123453', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행4', depositorName: '송준석', accountNumber: '123456-12-123454', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행5', depositorName: '송준석', accountNumber: '123456-12-123455', imagePath: 'assets/images/logo.png'),
+    Account(bankName: '국민은행6', depositorName: '송준석', accountNumber: '123456-12-123456', imagePath: 'assets/images/logo.png'),
   ];
   String? _selectedAccountNumber = '123456-12-123451';
 
@@ -138,13 +138,13 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
   }
 }
 
-class _Account {
+class Account {
   final String bankName;
   final String depositorName;
   final String accountNumber;
   final String imagePath;
 
-  _Account({
+  Account({
     required this.bankName,
     required this.depositorName,
     required this.accountNumber,
