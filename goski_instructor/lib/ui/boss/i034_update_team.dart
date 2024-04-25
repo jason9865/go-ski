@@ -46,7 +46,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
   Widget build(BuildContext context) {
     return GoskiContainer(
       onConfirm: () => 0,
-      buttonName: "createTeam",
+      buttonName: "update",
       child: SingleChildScrollView(
         child: GoskiCard(
           child: Padding(
