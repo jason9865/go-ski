@@ -49,7 +49,7 @@ class _UpdateInstructorInfoScreenState
   Widget build(BuildContext context) {
     return GoskiContainer(
       onConfirm: () => 0,
-      buttonName: "signup",
+      buttonName: "update",
       child: SingleChildScrollView(
         child: GoskiCard(
           child: Padding(

@@ -69,5 +69,6 @@
   "Thursday" : "목",
   "Friday" : "금",
   "Saturday" : "토",
-  "Sunday" : "일"
+  "Sunday" : "일",
+  "update" : "수정"
 }
