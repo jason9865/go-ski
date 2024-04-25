@@ -8,7 +8,7 @@ import '../../const/util/screen_size_controller.dart';
 /// TODO. 입력받은 텍스트를 외부에서 가져다 사용할 수 있어야 됨
 class GoskiTextField extends StatefulWidget {
   final double width;
-  final bool canEdit;
+  final bool canEdit, hasInnerPadding;
   final int? maxLines;
   final String text, hintText;
 
@@ -19,6 +19,7 @@ class GoskiTextField extends StatefulWidget {
     this.maxLines = 1,
     this.text = '',
     required this.hintText,
+    this.hasInnerPadding = true
   });
 
   @override
@@ -60,7 +61,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
               color: goskiDarkGray, fontSize: 15, fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
-          contentPadding: const EdgeInsets.all(5),
+          contentPadding: EdgeInsets.all(widget.hasInnerPadding ? 5 :0),
         ),
         style: const TextStyle(
             color: goskiBlack, fontSize: 15, fontWeight: FontWeight.w400),

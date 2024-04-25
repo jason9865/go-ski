@@ -58,5 +58,18 @@
   "titleHint": "제목을 입력하세요",
   "content": "내용",
   "contentHint": "내용을 입력하세요",
-  "addImage": "이미지 첨부하기"
+  "addImage": "이미지 첨부하기",
+  "addExternalSchedule": "외부 일정 등록",
+  "mainInstructor": "담당 강사",
+  "type": "종류",
+  "selectDateTime": "일정 선택",
+  "studentNumber": "강습 인원",
+  "specialNote": "특이사항",
+  "rest": "휴무",
+  "hintDate": "날짜를 선택하세요",
+  "hintTime": "시간을 선택하세요",
+  "hintStudentNumber": "인원 선택",
+  "hintReservationPerson": "예약자를 입력하세요",
+  "hintSpecialNote": "특이사항을 입력하세요",
+  "hintMainInstructor": "강사명 / 팀"
 }
