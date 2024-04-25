@@ -70,10 +70,7 @@ public class JwtUtil {
         token = token.split(" ")[1];
 
         try {
-            String type = "access";
-            if (request.getHeader("accessToken") != null) {
-                type = "refresh";
-            }
+            String type = request.getHeader("accessToken") != null ? "access" : "refresh";
 
             Claims claims = validateToken(token, type);
             // claims 검증
