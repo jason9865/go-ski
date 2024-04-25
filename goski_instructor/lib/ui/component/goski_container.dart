@@ -6,8 +6,6 @@ import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/component/goski_bigsize_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-// 가정: GoskiCard와 GoskiText는 적절히 정의된 커스텀 위젯
-
 class GoskiContainer extends StatelessWidget {
   final Widget child;
   final VoidCallback? onConfirm;
@@ -34,6 +32,9 @@ class GoskiContainer extends StatelessWidget {
       child: Column(
         children: [
           Expanded(child: child),
+          SizedBox(
+            height: screenSizeController.getHeightByRatio(0.01),
+          ),
           onConfirm != null && buttonName != null
               ? Padding(
                   padding: EdgeInsets.only(

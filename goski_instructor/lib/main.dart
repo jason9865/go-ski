@@ -6,6 +6,7 @@ import 'package:goski_instructor/test.dart';
 // import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
+import 'package:goski_instructor/ui/common/i002_signup.dart';
 import 'package:goski_instructor/ui/component/goski_main_header.dart';
 // import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
@@ -23,9 +24,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final LoginController loginController = Get.put(LoginController());
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -44,8 +45,6 @@ class MyApp extends StatelessWidget {
           );
           logger.d(
               "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
-
-          final LoginController loginController = Get.put(LoginController());
 
           return Obx(() {
             if (loginController.isLogin.value) {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/test.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
 import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +21,17 @@ import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+
+// loginController, 추후에 refactoring
+class LoginController extends GetxController {
+  RxBool isLogin = false.obs;
+
+  void login() {
+    isLogin.value = true;
+    // Get.to(() => const Test());
+    logger.d("로그인 ${isLogin.value}");
+  }
+}
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

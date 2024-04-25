@@ -5,15 +5,10 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/ui/common/i002_signup.dart';
+import 'package:logger/logger.dart';
 
+Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
-
-// loginController, 추후에 refactoring
-class LoginController extends GetxController {
-  RxBool isLogin = false.obs;
-
-  void login() => isLogin.value = true;
-}
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
