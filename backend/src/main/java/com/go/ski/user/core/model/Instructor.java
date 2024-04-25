@@ -13,6 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Table
+@ToString
 public class Instructor {
     @Id
     private Integer instructorId; // User의 PK를 여기서도 PK로 사용

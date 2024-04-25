@@ -19,7 +19,7 @@ public class TeamInstructor {
     private Integer teamInstructorId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
     @ManyToOne(fetch = FetchType.LAZY)
