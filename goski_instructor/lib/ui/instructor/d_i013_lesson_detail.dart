@@ -121,6 +121,7 @@ class LessonDetailDialog extends StatelessWidget {
   }
 }
 
+// TODO. 추후에 컴포넌트 폴더로 이동해도 될 것 같음
 class BorderWhiteContainer extends StatelessWidget {
   final Widget? child;
 
@@ -146,6 +147,7 @@ class BorderWhiteContainer extends StatelessWidget {
   }
 }
 
+// 수강생 정보 카드 안 파란 배경 영역
 class BackgroundContainer extends StatelessWidget {
   final Widget title;
   final List<Widget> children;
