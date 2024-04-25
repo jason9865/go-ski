@@ -108,5 +108,5 @@
   "deleteAccount": "계좌 삭제",
   "deleteAccountContent": "{}({})\n계좌를 삭제하시겠습니까?",
   "deleteMember": "팀원 삭제",
-  "deleteMemberContent": "{} 강사를 {} 팀에서\n삭제하시겠습니까?"
+  "deleteMemberContent": "{} 강사를\n{} 팀에서\n삭제하시겠습니까?"
 }
