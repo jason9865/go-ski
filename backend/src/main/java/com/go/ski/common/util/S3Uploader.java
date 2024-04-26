@@ -50,8 +50,9 @@ public class S3Uploader {
 
     public void deleteFile(String filePath, String imageUrl){
         try {
-            amazonS3.deleteObject(bucket, filePath + "/" + imageUrl.split("/")[4]);
-            log.info("Delete file - {}", imageUrl.split("/")[4]);
+            Integer length = imageUrl.split("/").length;
+            amazonS3.deleteObject(bucket, filePath + "/" + imageUrl.split("/")[length - 1]);
+            log.info("Delete file - {}", imageUrl.split("/")[length - 1]);
         } catch (AmazonServiceException e){
             log.error(e.getErrorMessage());
             throw ApiExceptionFactory.fromExceptionEnum(CommonExceptionEnum.IMAGE_DELETE_ERROR);

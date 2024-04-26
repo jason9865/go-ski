@@ -130,11 +130,14 @@ public class TeamService {
 
         log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
+        // 예전 팀 소개 사진들
+        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
+
         // 2-1. 새로운 이미지 s3에 저장
         saveTeamImages(request.getTeamImages(),savedTeam);
 
         // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
-        deleteTeamImages(teamId);
+        deleteTeamImages(oldTeamImages);
 
         // 3. 중고급 옵션 수정
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
@@ -190,9 +193,8 @@ public class TeamService {
         log.info("팀 소개 이미지 저장 성공 - 새로 올라온 소개 이미지 개수 : {}장", tobeSavedImages.size());
     }
 
-    private void deleteTeamImages(Integer teamId) {
+    private void deleteTeamImages(List<TeamImage> oldTeamImages) {
         // teamId로 teamImage 리스트 가져오기
-        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
         for(TeamImage image : oldTeamImages) {
             s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
                     image.getImageUrl());
