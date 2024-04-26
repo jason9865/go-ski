@@ -47,54 +47,49 @@ class TeamListScreen extends StatelessWidget {
     return Scaffold(
         body: GoskiContainer(
           child: GoskiCard(
-              child:
-              GoskiContainer(
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  // 팀원 목록 + 팀원 초대 버튼
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GoskiText(
-                          text: tr('TeamList'),
-                          size: titleMedium,
-                          isBold: true,
-                        ),
-                        // GoskiSmallsizeButton(
-                        //     width: screenSizeController.getWidthByRatio(1),
-                        //     text: tr('inviteTeammate'),
-                        //     onTap: () {
-                        //       print('팀원 초대 버튼');
-                        //     })
-                      ]),
-                  SizedBox(
-                    height: screenSizeController.getHeightByRatio(0.02),
-                  ),
-                  // 팀원 리스트
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: instructors.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final instructor = instructors[index];
+              child: Column(children: [
+            // 팀원 목록 + 팀원 초대 버튼
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              GoskiText(
+                text: tr('TeamList'),
+                size: titleMedium,
+                isBold: true,
+              ),
+              // GoskiSmallsizeButton(
+              //     width: screenSizeController.getWidthByRatio(1),
+              //     text: tr('inviteTeammate'),
+              //     onTap: () {
+              //       print('팀원 초대 버튼');
+              //     })
+            ]),
+            SizedBox(
+              height: screenSizeController.getHeightByRatio(0.02),
+            ),
+            // 팀원 리스트
+            Container(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: instructors.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final instructor = instructors[index];
 
-                        return GoskiInstructorCard(
-                          position: instructor.position,
-                          badgeColor: instructor.badgeColor,
-                          name: instructor.name,
-                          phoneNumber: instructor.phoneNumber,
-                          imagePath: instructor.imagePath,
-                        );
-                      },
-                    ),
-                  ),
-                ]),
-              )),
+                  return GoskiInstructorCard(
+                    position: instructor.position,
+                    badgeColor: instructor.badgeColor,
+                    name: instructor.name,
+                    phoneNumber: instructor.phoneNumber,
+                    imagePath: instructor.imagePath,
+                  );
+                },
+              ),
+            ),
+          ])),
         ),
         floatingActionButton: GoskiFloatingButton(
           onTap: () {
             print("Floating Action Button");
           },
-        )
-    );
+        ));
   }
 }
 
