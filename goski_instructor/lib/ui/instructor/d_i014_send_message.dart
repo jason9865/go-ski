@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -81,14 +80,26 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
             child: GestureDetector(
               onTap: () async {
                 if (hasImage) {
-                  // TODO. 이미지 삭제 기능 추가 필요
                   showDialog(
                       context: context,
                       builder: (context) {
                         return GoskiModal(
                           title: image != null ? image!.name : '이미지 오류',
-                          child: Image.file(
-                            File(image!.path)
+                          child: Column(
+                            children: [
+                              Image.file(
+                                File(image!.path),
+                                width: double.infinity,
+                              ),
+                              SizedBox(height: screenSizeController.getHeightByRatio(0.025),),
+                              GoskiSmallsizeButton(
+                                width: screenSizeController.getWidthByRatio(3),
+                                text: tr('confirm'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
                           ),
                         );
                       });
@@ -98,15 +109,14 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   setState(() {
                     hasImage = !hasImage;
                   });
-                };
+                }
               },
               child: hasImage
                   ? Row(
                       children: [
                         Expanded(
                           child: GoskiText(
-                            text:
-                                image != null ? image!.name : '이미지 오류', // TODO. 파일명으로 변경 필요
+                            text: image != null ? image!.name : '이미지 오류',
                             size: goskiFontMedium,
                           ),
                         ),

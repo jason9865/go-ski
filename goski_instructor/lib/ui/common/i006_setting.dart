@@ -130,7 +130,7 @@ class SettingContent extends StatelessWidget {
                   EdgeInsets.all(screenSizeController.getWidthByRatio(0.03)),
               child: GoskiText(
                 text: tr(content),
-                size: goskiFontMedium,
+                size: goskiFontLarge,
                 color: goskiBlack,
               ),
             )
