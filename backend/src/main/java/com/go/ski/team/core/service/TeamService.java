@@ -168,12 +168,11 @@ public class TeamService {
         // s3에서 팀 소개 사진 삭제
         List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
         for(TeamImage image : oldTeamImages) {
-            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
-                    image.getImageUrl());
+            s3Uploader.deleteFile(image.getImageUrl());
         }
 
         // 팀 프로필 삭제
-        s3Uploader.deleteFile(FileUploadPath.TEAM_PROFILE_PATH.path, team.getTeamProfileUrl());
+        s3Uploader.deleteFile(team.getTeamProfileUrl());
 
         // 강습 팀 테이블 강사 삭제
         teamInstructorRepository.deleteAllInBatch(teamInstructors);
@@ -196,8 +195,7 @@ public class TeamService {
     private void deleteTeamImages(List<TeamImage> oldTeamImages) {
         // teamId로 teamImage 리스트 가져오기
         for(TeamImage image : oldTeamImages) {
-            s3Uploader.deleteFile(FileUploadPath.TEAM_IMAGE_PATH.path,
-                    image.getImageUrl());
+            s3Uploader.deleteFile(image.getImageUrl());
         }
 
         teamImageRepository.deleteAllInBatch(oldTeamImages);
