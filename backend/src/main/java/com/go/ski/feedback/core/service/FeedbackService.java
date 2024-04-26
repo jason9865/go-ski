@@ -62,14 +62,15 @@ public class FeedbackService {
         Feedback oldfeedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND));
 
-        saveMediaFiles(request,oldfeedback);
-        deleteMediaFiles(oldfeedback);
 
         Feedback newFeedback = Feedback.builder()
                 .feedbackId(feedbackId)
                 .lesson(oldfeedback.getLesson())
                 .content(request.getContent())
                 .build();
+
+        deleteMediaFiles(oldfeedback);
+        saveMediaFiles(request,newFeedback);
 
         feedbackRepository.save(newFeedback);
     }
@@ -79,7 +80,7 @@ public class FeedbackService {
                 .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다."));
     }
 
-    public void saveMediaFiles(FeedbackRequestDTO request, Feedback feedback) {
+    private void saveMediaFiles(FeedbackRequestDTO request, Feedback feedback) {
         // dto에 분리되어있는 images와 videos 리스트를 하나로 합치기
         List<MultipartFile> mediaFiles = request.getImages();
         mediaFiles.addAll(request.getVideos());

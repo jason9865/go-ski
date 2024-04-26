@@ -36,7 +36,7 @@ public class FeedbackController {
 
     @PatchMapping("/update/{feedbackId}")
     public ResponseEntity<ApiResponse<?>> updateFeedback(@PathVariable Integer feedbackId, FeedbackUpdateRequestDTO requestDTO) {
-        log.info("FeedbackController.writeFeedback");
+        log.info("FeedbackController.updateFeedback");
         feedbackService.updateFeedback(feedbackId, requestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }

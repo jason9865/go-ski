@@ -130,11 +130,12 @@ public class TeamService {
 
         log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
-        // 2-1. 새로운 이미지 s3에 저장
+        // 2-1. 예전 이미지 s3와 TeamImage테이블에서 삭제
+        deleteTeamImages(teamId);
+
+        // 2-2. 새로운 이미지 s3에 저장
         saveTeamImages(request.getTeamImages(),savedTeam);
 
-        // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
-        deleteTeamImages(teamId);
 
         // 3. 중고급 옵션 수정
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
