@@ -78,7 +78,7 @@ class _InviteTeamScreenState extends State<InviteTeamScreen> {
                   hintText: tr('searchByPhoneNumber'),
                   hintStyle: const TextStyle(
                     color: goskiDarkGray,
-                    fontSize: bodyMedium,
+                    fontSize: goskiFontMedium,
                   ),
                 ),
               ),
@@ -116,7 +116,7 @@ class _InviteTeamScreenState extends State<InviteTeamScreen> {
           title: Text(
             member.name,
             style: const TextStyle(
-              fontSize: bodyMedium,
+              fontSize: goskiFontMedium,
               fontWeight: FontWeight.w500,
             ),
           ),

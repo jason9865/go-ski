@@ -53,7 +53,7 @@ class LoginContent extends StatelessWidget {
             'forInstructor',
             style: TextStyle(
               fontFamily: 'RubikGlitch',
-              fontSize: bodyMedium,
+              fontSize: goskiFontMedium,
               color: goskiBlack,
               fontWeight: FontWeight.w100,
             ),
@@ -113,7 +113,7 @@ class BottomText extends StatelessWidget {
       'loginBottomText',
       style: TextStyle(
         fontFamily: 'RubikGlitch',
-        fontSize: titleMedium,
+        fontSize: goskiFontLarge,
         color: goskiBlack,
       ),
     ).tr();

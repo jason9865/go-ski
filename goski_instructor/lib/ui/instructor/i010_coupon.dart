@@ -75,12 +75,12 @@ class CouponScreen extends StatelessWidget {
                                     .format(coupon.discountAmount)
                               ])
                             : '${coupon.discountRate}%',
-                        size: titleLarge,
+                        size: goskiFontXXLarge,
                         color: goskiLightPink,
                       ),
                       GoskiText(
                         text: coupon.couponName,
-                        size: titleMedium,
+                        size: goskiFontLarge,
                         color: goskiBlack,
                       ),
                       Row(
@@ -91,7 +91,7 @@ class CouponScreen extends StatelessWidget {
                                   .format(coupon.expirationDate)
                                   .toString()
                             ]),
-                            size: bodySmall,
+                            size: goskiFontSmall,
                             color: goskiDarkGray,
                           ),
                           GoskiText(
@@ -100,7 +100,7 @@ class CouponScreen extends StatelessWidget {
                                   .format(coupon.expirationDate)
                                   .toString()
                             ]),
-                            size: bodySmall,
+                            size: goskiFontSmall,
                             color: goskiDarkGray,
                           ),
                           GoskiText(
@@ -109,7 +109,7 @@ class CouponScreen extends StatelessWidget {
                                   .format(coupon.expirationDate)
                                   .toString()
                             ]),
-                            size: bodySmall,
+                            size: goskiFontSmall,
                             color: goskiDarkGray,
                           )
                         ],
@@ -137,7 +137,7 @@ class CouponScreen extends StatelessWidget {
                         GoskiText(
                           text: tr('couponCount',
                               args: [coupon.couponCount.toString()]),
-                          size: titleMedium,
+                          size: goskiFontLarge,
                         ),
                       ],
                     ),

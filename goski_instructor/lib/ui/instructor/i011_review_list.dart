@@ -119,12 +119,12 @@ class ReviewListScreen extends StatelessWidget {
                         children: [
                           GoskiText(
                             text: review.lessonDate,
-                            size: bodySmall,
+                            size: goskiFontSmall,
                             color: goskiDarkGray,
                           ),
                           GoskiText(
                             text: " ${review.lessonTime}",
-                            size: bodySmall,
+                            size: goskiFontSmall,
                             color: goskiDarkGray,
                           )
                         ],
@@ -137,7 +137,7 @@ class ReviewListScreen extends StatelessWidget {
                         children: [
                           GoskiText(
                             text: review.representativeName,
-                            size: bodyMedium,
+                            size: goskiFontMedium,
                             isBold: true,
                           ),
                           Row(
@@ -157,7 +157,7 @@ class ReviewListScreen extends StatelessWidget {
                       SizedBox(
                         height: screenSizeController.getHeightByRatio(0.01),
                       ),
-                      GoskiText(text: review.content, size: bodyMedium),
+                      GoskiText(text: review.content, size: goskiFontMedium),
                       SizedBox(
                         height: screenSizeController.getHeightByRatio(0.01),
                       ),

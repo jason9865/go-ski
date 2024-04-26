@@ -25,98 +25,82 @@ class AccountListScreen extends StatelessWidget {
           bankName: '국민은행1',
           depositorName: '홍길동1',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행2',
           depositorName: '홍길동2',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행3',
           depositorName: '홍길동3',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행4',
           depositorName: '홍길동4',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행1',
           depositorName: '홍길동1',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행2',
           depositorName: '홍길동2',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행3',
           depositorName: '홍길동3',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행4',
           depositorName: '홍길동4',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행1',
           depositorName: '홍길동1',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행2',
           depositorName: '홍길동2',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행3',
           depositorName: '홍길동3',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행4',
           depositorName: '홍길동4',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행1',
           depositorName: '홍길동1',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행2',
           depositorName: '홍길동2',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
       _Account(
           bankName: '국민은행3',
           depositorName: '홍길동3',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/logo.png'
-      ),
+          imagePath: 'assets/images/logo.png'),
       _Account(
           bankName: '국민은행4',
           depositorName: '홍길동4',
           accountNumber: '123456-12-123456',
-          imagePath : 'assets/images/penguin.png'
-      ),
+          imagePath: 'assets/images/penguin.png'),
     ];
 
     return GoskiContainer(
@@ -143,25 +127,23 @@ class AccountListScreen extends StatelessWidget {
                       children: [
                         GoskiText(
                           text: account.depositorName,
-                          size: bodyMedium,
+                          size: goskiFontMedium,
                           isBold: true,
                         ),
                         SizedBox(
-                          height: screenSizeController
-                              .getHeightByRatio(0.005),
+                          height: screenSizeController.getHeightByRatio(0.005),
                         ),
                         GoskiText(
                           text: account.bankName,
-                          size: bodyMedium,
+                          size: goskiFontMedium,
                           isBold: false,
                         ),
                         SizedBox(
-                          height: screenSizeController
-                              .getHeightByRatio(0.005),
+                          height: screenSizeController.getHeightByRatio(0.005),
                         ),
                         GoskiText(
                           text: account.accountNumber,
-                          size: bodyMedium,
+                          size: goskiFontMedium,
                           isBold: false,
                         ),
                       ],
@@ -183,10 +165,9 @@ class _Account {
   final String accountNumber;
   final String imagePath;
 
-  _Account({
-    required this.bankName,
-    required this.depositorName,
-    required this.accountNumber,
-    required this.imagePath
-  });
+  _Account(
+      {required this.bankName,
+      required this.depositorName,
+      required this.accountNumber,
+      required this.imagePath});
 }

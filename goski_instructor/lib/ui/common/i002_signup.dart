@@ -73,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       children: [
                                         GoskiText(
                                           text: tr("certificate"),
-                                          size: labelLarge,
+                                          size: goskiFontLarge,
                                           isBold: true,
                                           isExpanded: true,
                                         ),
@@ -107,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           children: [
                                             GoskiText(
                                               text: tr("certificateImage"),
-                                              size: labelLarge,
+                                              size: goskiFontLarge,
                                               isBold: true,
                                               isExpanded: true,
                                             ),
@@ -166,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const Icon(Icons.photo_outlined),
               GoskiText(
                 text: tr("registerProfileImage"),
-                size: bodySmall,
+                size: goskiFontSmall,
                 isBold: true,
               ),
             ],
@@ -181,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: [
         GoskiText(
           text: tr("isBoss"),
-          size: labelLarge,
+          size: goskiFontLarge,
           isBold: true,
           isExpanded: true,
         ),
@@ -201,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: [
         GoskiText(
           text: tr("강습 종류"),
-          size: labelLarge,
+          size: goskiFontLarge,
           isBold: true,
           isExpanded: true,
         ),
@@ -347,7 +347,7 @@ class BuildBasicInfo extends StatelessWidget {
           children: [
             GoskiText(
               text: tr("gender"),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             ),

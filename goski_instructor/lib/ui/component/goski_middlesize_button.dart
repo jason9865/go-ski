@@ -42,7 +42,7 @@ class GoskiMiddlesizeButton extends StatelessWidget {
           ),
           Text(
             text,
-            style: const TextStyle(fontSize: labelMedium),
+            style: const TextStyle(fontSize: goskiFontMedium),
             textAlign: TextAlign.center,
           ),
         ],

@@ -148,10 +148,10 @@ class LessonListScreen extends StatelessWidget {
                                   children: [
                                     GoskiText(
                                         text: tr(buttonString),
-                                        size: bodyMedium),
+                                        size: goskiFontMedium),
                                     const Icon(
                                       Icons.keyboard_arrow_right,
-                                      size: bodyMedium,
+                                      size: goskiFontMedium,
                                     ),
                                   ],
                                 )),
@@ -172,7 +172,7 @@ class LessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('location'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -180,7 +180,7 @@ class LessonListScreen extends StatelessWidget {
                                     ),
                                     GoskiText(
                                         text: tr(lesson.resortName),
-                                        size: bodySmall),
+                                        size: goskiFontSmall),
                                   ],
                                 ),
                                 SizedBox(
@@ -198,7 +198,7 @@ class LessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('date'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -212,7 +212,7 @@ class LessonListScreen extends StatelessWidget {
                                           text: tr(DateFormat('yyyy.MM.dd (E)')
                                               .format(lesson.startTime)
                                               .toString()),
-                                          size: bodySmall,
+                                          size: goskiFontSmall,
                                           color: goskiDarkGray,
                                         ),
                                         Row(
@@ -221,14 +221,14 @@ class LessonListScreen extends StatelessWidget {
                                               text: tr(DateFormat('HH:mm')
                                                   .format(lesson.startTime)
                                                   .toString()),
-                                              size: bodySmall,
+                                              size: goskiFontSmall,
                                               color: goskiDarkGray,
                                             ),
                                             GoskiText(
                                               text: tr(DateFormat('~HH:mm')
                                                   .format(lesson.endTime)
                                                   .toString()),
-                                              size: bodySmall,
+                                              size: goskiFontSmall,
                                               color: goskiDarkGray,
                                             ),
                                           ],
@@ -251,7 +251,7 @@ class LessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('reservationPerson'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -262,7 +262,7 @@ class LessonListScreen extends StatelessWidget {
                                           lesson.studentList[0].studentName,
                                           lesson.studentList.length.toString()
                                         ]),
-                                        size: bodySmall),
+                                        size: goskiFontSmall),
                                   ],
                                 )
                               ],

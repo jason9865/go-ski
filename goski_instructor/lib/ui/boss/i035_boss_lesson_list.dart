@@ -143,7 +143,7 @@ class BossLessonListScreen extends StatelessWidget {
                                   ),
                                   GoskiText(
                                     text: tr(lesson.rating.toString()),
-                                    size: bodySmall,
+                                    size: goskiFontSmall,
                                     color: goskiDarkGray,
                                   ),
                                 ],
@@ -164,7 +164,7 @@ class BossLessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('location'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -172,7 +172,7 @@ class BossLessonListScreen extends StatelessWidget {
                                     ),
                                     GoskiText(
                                         text: tr(lesson.resortName),
-                                        size: bodySmall),
+                                        size: goskiFontSmall),
                                   ],
                                 ),
                                 SizedBox(
@@ -190,7 +190,7 @@ class BossLessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('date'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -204,7 +204,7 @@ class BossLessonListScreen extends StatelessWidget {
                                           text: tr(DateFormat('yyyy.MM.dd (E)')
                                               .format(lesson.startTime)
                                               .toString()),
-                                          size: bodySmall,
+                                          size: goskiFontSmall,
                                           color: goskiDarkGray,
                                         ),
                                         Row(
@@ -213,14 +213,14 @@ class BossLessonListScreen extends StatelessWidget {
                                               text: tr(DateFormat('HH:mm')
                                                   .format(lesson.startTime)
                                                   .toString()),
-                                              size: bodySmall,
+                                              size: goskiFontSmall,
                                               color: goskiDarkGray,
                                             ),
                                             GoskiText(
                                               text: tr(DateFormat('~HH:mm')
                                                   .format(lesson.endTime)
                                                   .toString()),
-                                              size: bodySmall,
+                                              size: goskiFontSmall,
                                               color: goskiDarkGray,
                                             ),
                                           ],
@@ -243,7 +243,7 @@ class BossLessonListScreen extends StatelessWidget {
                                         children: [
                                           GoskiText(
                                             text: tr('reservationPerson'),
-                                            size: bodyMedium,
+                                            size: goskiFontMedium,
                                             isBold: true,
                                           ),
                                         ],
@@ -254,7 +254,7 @@ class BossLessonListScreen extends StatelessWidget {
                                           lesson.studentList[0].studentName,
                                           lesson.studentList.length.toString()
                                         ]),
-                                        size: bodySmall),
+                                        size: goskiFontSmall),
                                   ],
                                 )
                               ],

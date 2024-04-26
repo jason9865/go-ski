@@ -52,7 +52,7 @@ class TeamListScreen extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               GoskiText(
                 text: tr('TeamList'),
-                size: titleMedium,
+                size: goskiFontLarge,
                 isBold: true,
               ),
               // GoskiSmallsizeButton(

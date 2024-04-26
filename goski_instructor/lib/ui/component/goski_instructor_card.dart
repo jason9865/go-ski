@@ -63,7 +63,7 @@ class GoskiInstructorCard extends StatelessWidget {
                             children: [
                               GoskiText(
                                   text: tr('position'),
-                                  size: bodyMedium,
+                                  size: goskiFontMedium,
                                   isBold: true),
                             ],
                           )),
@@ -83,13 +83,13 @@ class GoskiInstructorCard extends StatelessWidget {
                           children: [
                             GoskiText(
                               text: tr('name'),
-                              size: bodyMedium,
+                              size: goskiFontMedium,
                               isBold: true,
                             ),
                           ],
                         ),
                       ),
-                      GoskiText(text: tr(name), size: bodyMedium),
+                      GoskiText(text: tr(name), size: goskiFontMedium),
                     ],
                   ),
                 ),
@@ -101,11 +101,11 @@ class GoskiInstructorCard extends StatelessWidget {
                         width: 80,
                         child: GoskiText(
                           text: tr('phoneNumber'),
-                          size: bodyMedium,
+                          size: goskiFontMedium,
                           isBold: true,
                         ),
                       ),
-                      GoskiText(text: tr(phoneNumber), size: bodyMedium),
+                      GoskiText(text: tr(phoneNumber), size: goskiFontMedium),
                     ],
                   ),
                 ),
