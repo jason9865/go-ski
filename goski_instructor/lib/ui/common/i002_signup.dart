@@ -74,7 +74,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         GoskiText(
                                           text: tr("certificate"),
                                           size: goskiFontLarge,
-                                          isBold: true,
                                           isExpanded: true,
                                         ),
                                         IconButton(
@@ -108,7 +107,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             GoskiText(
                                               text: tr("certificateImage"),
                                               size: goskiFontLarge,
-                                              isBold: true,
                                               isExpanded: true,
                                             ),
                                             IconButton(
@@ -167,7 +165,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               GoskiText(
                 text: tr("registerProfileImage"),
                 size: goskiFontSmall,
-                isBold: true,
               ),
             ],
           ),
@@ -182,7 +179,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         GoskiText(
           text: tr("isBoss"),
           size: goskiFontLarge,
-          isBold: true,
           isExpanded: true,
         ),
         Checkbox(
@@ -202,7 +198,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         GoskiText(
           text: tr("강습 종류"),
           size: goskiFontLarge,
-          isBold: true,
           isExpanded: true,
         ),
         GoskiSwitch(
@@ -348,7 +343,6 @@ class BuildBasicInfo extends StatelessWidget {
             GoskiText(
               text: tr("gender"),
               size: goskiFontLarge,
-              isBold: true,
               isExpanded: true,
             ),
             GoskiSwitch(

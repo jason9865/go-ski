@@ -85,7 +85,7 @@ class SettingScreen extends StatelessWidget {
                       screenSizeController.getWidthByRatio(0.03)),
                   child: GoskiText(
                     text: tr('deleteUser'),
-                    size: labelMedium,
+                    size: goskiFontMedium,
                     color: goskiDarkGray,
                   ),
                 )
@@ -130,7 +130,7 @@ class SettingContent extends StatelessWidget {
                   EdgeInsets.all(screenSizeController.getWidthByRatio(0.03)),
               child: GoskiText(
                 text: tr(content),
-                size: labelLarge,
+                size: goskiFontMedium,
                 color: goskiBlack,
               ),
             )
@@ -157,7 +157,7 @@ class SettingTitle extends StatelessWidget {
           padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.03)),
           child: GoskiText(
             text: tr(title),
-            size: labelMedium,
+            size: goskiFontMedium,
             color: goskiDarkGray,
           ),
         )
