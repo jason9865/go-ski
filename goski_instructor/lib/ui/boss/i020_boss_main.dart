@@ -80,9 +80,13 @@ class BossMainScreen extends StatelessWidget {
                               children: [
                                 GoskiText(
                                   text: tr('최지찬'),
-                                  size: titleLarge,
+                                  size: goskiFontXXLarge,
                                 ),
-                                GoskiText(text: tr('helloBoss'), size: titleMedium, color: goskiDarkGray,)
+                                GoskiText(
+                                  text: tr('helloBoss'),
+                                  size: goskiFontLarge,
+                                  color: goskiDarkGray,
+                                )
                               ],
                             ),
                           ],
@@ -92,17 +96,21 @@ class BossMainScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0
-                    ),
+                        vertical: 8.0, horizontal: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GoskiText(text: tr('availableWithdrawal'), size: titleMedium),
+                        GoskiText(
+                            text: tr('availableWithdrawal'),
+                            size: goskiFontLarge),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            GoskiText(text: tr('xxxxxxxx원'), size: titleMedium, isBold: true,),
+                            GoskiText(
+                              text: tr('xxxxxxxx원'),
+                              size: goskiFontLarge,
+                              isBold: true,
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -139,13 +147,11 @@ class BossMainScreen extends StatelessWidget {
                 itemCount: skiTeamList.length,
                 itemBuilder: (BuildContext context, int index) {
                   final skiTeam = skiTeamList[index];
-            
+
                   return GoskiCard(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 16.0
-                      ),
+                          vertical: 8.0, horizontal: 16.0),
                       child: Column(
                         children: [
                           Row(
@@ -157,8 +163,9 @@ class BossMainScreen extends StatelessWidget {
                                   // 사용자 프로필 사진
                                   skiTeam.teamProfileImage),
                               GoskiText(
-                                text: tr('skiTeamName', args: [skiTeam.teamName]),
-                                size: titleMedium,
+                                text:
+                                    tr('skiTeamName', args: [skiTeam.teamName]),
+                                size: goskiFontLarge,
                                 isBold: true,
                               ),
                             ],
@@ -170,15 +177,18 @@ class BossMainScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GoskiMiddlesizeButton(
-                                  width: screenSizeController.getWidthByRatio(1),
+                                  width:
+                                      screenSizeController.getWidthByRatio(1),
                                   text: tr('teamSchedule'),
                                   onTap: onTap),
                               GoskiMiddlesizeButton(
-                                  width: screenSizeController.getWidthByRatio(1),
+                                  width:
+                                      screenSizeController.getWidthByRatio(1),
                                   text: tr('updateTeamInfo'),
                                   onTap: onTap),
                               GoskiMiddlesizeButton(
-                                  width: screenSizeController.getWidthByRatio(1),
+                                  width:
+                                      screenSizeController.getWidthByRatio(1),
                                   text: tr('settlement'),
                                   onTap: onTap),
                             ],

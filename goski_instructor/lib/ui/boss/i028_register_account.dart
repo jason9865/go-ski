@@ -46,7 +46,7 @@ class RegisterAccountScreen extends StatelessWidget {
                         ),
                         child: GoskiText(
                           text: tr('inputAccountInfo'),
-                          size: labelLarge,
+                          size: goskiFontLarge,
                           isBold: true,
                           isExpanded: true,
                         ),
@@ -95,7 +95,7 @@ class RegisterAccountScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        textSize: bodyMedium,
+                        textSize: goskiFontMedium,
                       ),
                     ],
                   ),

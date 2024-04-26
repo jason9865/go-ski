@@ -25,7 +25,7 @@ class _DayCheckboxState extends State<DayCheckbox> {
       children: [
         GoskiText(
           text: tr(widget.day),
-          size: bodyMedium,
+          size: goskiFontMedium,
           isBold: true,
         ),
         Transform.translate(

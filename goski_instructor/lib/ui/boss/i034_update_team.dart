@@ -42,6 +42,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
     'Saturday',
     'Sunday'
   ];
+
   @override
   Widget build(BuildContext context) {
     return GoskiContainer(
@@ -62,7 +63,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                     children: [
                       GoskiText(
                         text: tr('teamName'),
-                        size: labelLarge,
+                        size: goskiFontLarge,
                         isBold: true,
                         isExpanded: true,
                       ),
@@ -86,7 +87,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                       children: [
                         GoskiText(
                           text: tr("teamIntroductionImage"),
-                          size: labelLarge,
+                          size: goskiFontLarge,
                           isBold: true,
                           isExpanded: true,
                         ),
@@ -114,7 +115,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                       Text(
                         tr('deleteTeam'),
                         style: const TextStyle(
-                          fontSize: bodyMedium,
+                          fontSize: goskiFontMedium,
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w600,
                           color: goskiDarkGray,
@@ -159,7 +160,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
               const Icon(Icons.photo_outlined),
               GoskiText(
                 text: tr("registerProfileImage"),
-                size: bodySmall,
+                size: goskiFontSmall,
               ),
             ],
           ),
@@ -201,7 +202,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
       children: [
         GoskiText(
           text: tr('skiResort'),
-          size: labelLarge,
+          size: goskiFontLarge,
           isBold: true,
           isExpanded: true,
         ),
@@ -238,7 +239,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
           children: [
             GoskiText(
               text: tr('teamIntroduction'),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             )
@@ -301,7 +302,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
           children: [
             GoskiText(
               text: tr('settingTeamPrice'),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             ),
@@ -320,7 +321,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                 children: <Widget>[
                   GoskiText(
                     text: tr('pricePerPerson'),
-                    size: bodyMedium,
+                    size: goskiFontMedium,
                     isExpanded: true,
                   ),
                   GestureDetector(
@@ -339,7 +340,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                     child: const Text(
                       '수정',
                       style: TextStyle(
-                        fontSize: bodyMedium,
+                        fontSize: goskiFontMedium,
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w400,
                       ),
@@ -355,7 +356,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                 children: <Widget>[
                   GoskiText(
                     text: tr('pricePerLesson'),
-                    size: bodyMedium,
+                    size: goskiFontMedium,
                     isExpanded: true,
                   ),
                   const SizedBox(width: 20), // 텍스트 사이의 간격 추가
@@ -375,7 +376,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                     child: const Text(
                       '수정',
                       style: TextStyle(
-                        fontSize: bodyMedium,
+                        fontSize: goskiFontMedium,
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w400,
                       ),
@@ -397,7 +398,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
           children: [
             GoskiText(
               text: tr('holiday'),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             )
