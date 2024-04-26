@@ -79,19 +79,24 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
           BorderWhiteContainer(
             child: GestureDetector(
               onTap: () async {
-                if (hasImage) {
+                if (hasImage && image != null) {
                   showDialog(
                       context: context,
                       builder: (context) {
                         return GoskiModal(
-                          title: image != null ? image!.name : '이미지 오류',
+                          title: image!.name.split('.')[0].length <= 15
+                              ? image!.name
+                              : '${image!.name.split('.')[0].substring(0, 14)}···.${image!.name.split('.')[1]}',
                           child: Column(
                             children: [
                               Image.file(
                                 File(image!.path),
                                 width: double.infinity,
                               ),
-                              SizedBox(height: screenSizeController.getHeightByRatio(0.025),),
+                              SizedBox(
+                                height: screenSizeController
+                                    .getHeightByRatio(0.025),
+                              ),
                               GoskiSmallsizeButton(
                                 width: screenSizeController.getWidthByRatio(3),
                                 text: tr('confirm'),
@@ -107,7 +112,9 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   // 이미지 추가
                   image = await imagePickerController.getImage();
                   setState(() {
-                    hasImage = !hasImage;
+                    if (image != null) {
+                      hasImage = !hasImage;
+                    }
                   });
                 }
               },
@@ -116,7 +123,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                       children: [
                         Expanded(
                           child: GoskiText(
-                            text: image != null ? image!.name : '이미지 오류',
+                            text: image!.name,
                             size: goskiFontMedium,
                           ),
                         ),
@@ -140,8 +147,8 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                       children: [
                         SvgPicture.asset(
                           'assets/images/add_image.svg',
-                          width: 20,
-                          height: 20,
+                          width: goskiFontLarge,
+                          height: goskiFontLarge,
                           colorFilter: const ColorFilter.mode(
                             goskiDarkGray,
                             BlendMode.srcIn,
