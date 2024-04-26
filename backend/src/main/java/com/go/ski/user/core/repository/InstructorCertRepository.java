@@ -9,5 +9,5 @@ import java.util.List;
 public interface InstructorCertRepository extends JpaRepository<InstructorCert, Integer> {
     List<InstructorCert> findByInstructor(Instructor instructor);
 
-    void deleteByInstructor(Instructor instructor);
+    void deleteByCertificateImageUrl(String certificateImageUrl);
 }

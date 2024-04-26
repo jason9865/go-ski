@@ -117,6 +117,7 @@ public class UserService {
         }
         instructorRepository.save(instructor);
 
+        deleteCertificateImages(instructor, updateInstructorRequestDTO.getDeleteCertificateUrls());
         uploadCertificateImages(instructor, updateInstructorRequestDTO);
     }
 
@@ -161,8 +162,9 @@ public class UserService {
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
-            s3Uploader.deleteFile("", user.getProfileUrl());
-
+            if (user.getProfileUrl() != null) {
+                s3Uploader.deleteFile(user.getProfileUrl());
+            }
             String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
             log.info("profileUrl: {}", profileUrl);
 
@@ -172,13 +174,9 @@ public class UserService {
     }
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
-        instructorCertRepository.deleteByInstructor(instructor);
-
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
-                log.info("{}", certificateImageVO);
-
                 Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateImageVO.getCertificateId());
                 if (optionalCertificate.isPresent()) {
                     String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImageVO.getCertificateImage());
@@ -190,8 +188,35 @@ public class UserService {
                             .certificateImageUrl(certificateImageUrl)
                             .build();
                     instructorCertRepository.save(instructorCert);
+
+                    int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2);
+                    binaryLevel |= convertIdToBinary(certificateImageVO.getCertificateId());
+                    instructor.setIsInstructAvailable(Integer.toBinaryString(binaryLevel));
                 }
             }
         }
+    }
+
+    private void deleteCertificateImages(Instructor instructor, List<CertificateUrlVO> deleteCertificateUrls) {
+        for (CertificateUrlVO certificateUrlVO : deleteCertificateUrls) {
+            s3Uploader.deleteFile(certificateUrlVO.getCertificateImageUrl());
+            instructorCertRepository.deleteByCertificateImageUrl(certificateUrlVO.getCertificateImageUrl());
+
+            int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2);
+            binaryLevel ^= convertIdToBinary(certificateUrlVO.getCertificateId());
+            instructor.setIsInstructAvailable(Integer.toBinaryString(binaryLevel));
+        }
+    }
+
+    private int convertIdToBinary(int certificateId) {
+        return switch (certificateId) {
+            case 1, 4 -> 0b1000001;
+            case 2, 5 -> 0b1000010;
+            case 3, 6, 7 -> 0b1000011;
+            case 8, 11 -> 0b1000100;
+            case 9, 12 -> 0b1001000;
+            case 10, 13, 14 -> 0b1001100;
+            default -> throw new IllegalStateException("Unexpected value: " + certificateId);
+        };
     }
 }
