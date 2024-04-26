@@ -1,5 +1,7 @@
 package com.go.ski.common.util;
 
+import java.util.List;
+
 public class TimeConvertor {
 
     public static String calLessonTimeInfo(String startTime, Integer duration) {
@@ -24,4 +26,9 @@ public class TimeConvertor {
                 endTime.charAt(0) + ":" + endTime.substring(1,3);
     }
 
+    public static Integer dayoffListToInteger(List<Integer> dayoffList) {
+        return dayoffList.stream()
+                .mapToInt(day -> 1 << day)
+                .sum();
+    }
 }

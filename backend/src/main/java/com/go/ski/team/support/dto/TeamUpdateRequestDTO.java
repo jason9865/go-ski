@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.go.ski.team.core.service.TeamService.dayoffListToInteger;
 
 @Getter
 @Setter
