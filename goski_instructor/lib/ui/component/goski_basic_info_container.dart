@@ -25,7 +25,6 @@ class BasicInfoContainer extends StatelessWidget {
         GoskiText(
           text: tr(text),
           size: goskiFontLarge,
-          isBold: true,
           isExpanded: true,
         ),
         GoskiTextField(
