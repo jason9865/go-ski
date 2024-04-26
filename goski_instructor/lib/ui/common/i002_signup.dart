@@ -62,26 +62,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const BuildInterval(),
                           const BuildBasicInfo(),
                           const BuildInterval(),
-                          Row(
-                            children: [
-                              GoskiText(
-                                text: tr("isBoss"),
-                                size: labelLarge,
-                                isBold: true,
-                                isExpanded: true,
-                              ),
-                              Checkbox(
-                                  value: isBoss,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      isBoss = newValue!;
-                                    });
-                                  }),
-                            ],
-                          ),
+                          buildIsBossRow(),
+                          const BuildInterval(),
                           !isBoss
                               ? Column(
                                   children: [
+                                    buildLessonCategory(),
+                                    const BuildInterval(),
                                     Row(
                                       children: [
                                         GoskiText(
@@ -110,6 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                       ],
                                     ),
+                                    const BuildInterval(),
                                     buildCertificatesList(),
                                     Column(
                                       children: [
@@ -183,6 +171,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildIsBossRow() {
+    return Row(
+      children: [
+        GoskiText(
+          text: tr("isBoss"),
+          size: labelLarge,
+          isBold: true,
+          isExpanded: true,
+        ),
+        Checkbox(
+            value: isBoss,
+            onChanged: (newValue) {
+              setState(() {
+                isBoss = newValue!;
+              });
+            }),
+      ],
+    );
+  }
+
+  Widget buildLessonCategory() {
+    return Row(
+      children: [
+        GoskiText(
+          text: tr("강습 종류"),
+          size: labelLarge,
+          isBold: true,
+          isExpanded: true,
+        ),
+        GoskiSwitch(
+          items: [
+            tr('both'),
+            tr('ski'),
+            tr('board'),
+          ],
+          width: screenSizeController.getWidthByRatio(0.5),
         ),
       ],
     );
@@ -323,8 +352,12 @@ class BuildBasicInfo extends StatelessWidget {
               isExpanded: true,
             ),
             GoskiSwitch(
-                items: [tr('male'), tr('female')],
-                width: screenSizeController.getWidthByRatio(0.6)),
+              items: [
+                tr('male'),
+                tr('female'),
+              ],
+              width: screenSizeController.getWidthByRatio(0.6),
+            ),
           ],
         ),
         const BuildInterval(),
