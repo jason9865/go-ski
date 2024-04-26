@@ -195,6 +195,7 @@ public class UserService {
                 }
             }
         }
+        instructorRepository.save(instructor);
     }
 
     private void deleteCertificateImages(Instructor instructor, List<CertificateUrlVO> deleteCertificateUrls) {
