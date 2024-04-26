@@ -104,7 +104,6 @@ public class TeamService {
     @Transactional
     public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request) {
         // Team 테이블에 저장할 SkiResort 생성
-        log.info("flag! - {}", request.toString());
         SkiResort skiResort = getSkiResort(request.getResortId());
 
         log.info("1. 팀 정보 수정");
