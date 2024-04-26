@@ -5,11 +5,8 @@ import static jakarta.persistence.EnumType.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
-import com.go.ski.payment.support.vo.LessonType;
 
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
@@ -28,8 +25,8 @@ public class ReserveLessonPaymentRequestDTO {
 	private String startTime;// 4자리 숫자
 	private Integer duration;
 	private Integer peopleNumber;
-	@Enumerated(STRING)
-	private LessonType lessonType;
+	@JsonProperty("lesson_type")
+	private String lessonType;
 	@JsonProperty("basic_fee")
 	private Integer basicFee;
 	@JsonProperty("designated_fee")

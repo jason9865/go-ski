@@ -5,15 +5,11 @@ import static jakarta.persistence.EnumType.*;
 import java.time.LocalDate;
 
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.vo.LessonType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
@@ -22,7 +18,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @Entity
@@ -43,15 +38,13 @@ public class LessonInfo {
 	private String startTime;
 	@Column
 	private Integer duration;
-	@Enumerated(STRING)
-	private LessonType lessonType;
+	@Column
+	private String lessonType;
 	@Column
 	private Integer studentCount;
 
-	public static LessonInfo toLessonInfoForPayment (Lesson lesson, ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
+	public static LessonInfo toLessonInfoForPayment (ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
 		return LessonInfo.builder()
-			.lessonId(lesson.getLessonId())
-			.lesson(lesson)
 			.lessonDate(reserveLessonPaymentRequestDTO.getLessonDate())
 			.startTime(reserveLessonPaymentRequestDTO.getStartTime())
 			.duration(reserveLessonPaymentRequestDTO.getDuration())

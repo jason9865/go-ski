@@ -28,7 +28,7 @@ public class KakaopayPrepareRequestDTO {
 
 	public static KakaopayPrepareRequestDTO toKakaopayPrepareRequestDTO(Lesson lesson, String itemName, Integer totalFee) {
 		return KakaopayPrepareRequestDTO.builder()
-			.partnerOrderId(String.valueOf(lesson.getLessonId()))
+			.partnerOrderId("partner_order_id")
 			.partnerUserId(String.valueOf(lesson.getUser().getUserId()))
 			.itemName(itemName)
 			.quantity(1)//고정

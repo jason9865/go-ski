@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.go.ski.payment.core.service.PayService;
+import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.payment.support.dto.response.ApprovePaymentResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
@@ -53,15 +55,23 @@ public class PaymentController {
 	//강습 예약 결제 API -> 요청 uri 나중에 페이 연동 많아지면 domain 추가
 
 	//결제의 단계가 준비랑, 승인임
-	@PostMapping("/reserve")
-	public ResponseEntity<KakaopayPrepareResponseDTO> testPreparePayment(
+	@PostMapping("/reserve/prepare")
+	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ReserveLessonPaymentRequestDTO request) {
-		
-		log.info(request.toString());
-		KakaopayPrepareResponseDTO response = payService.getResponse(httpServletRequest, request);
+
+		KakaopayPrepareResponseDTO response = payService.getPrepareResponse(httpServletRequest, request);
 		return ResponseEntity.ok().body(response);
 	}
+	@PostMapping("/reserve/approve")
+	public ResponseEntity<KakaopayApproveResponseDTO> testApprovePayment(
+		HttpServletRequest httpServletRequest,
+		@RequestBody ApprovePaymentRequestDTO request) {
+
+		KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
+		return ResponseEntity.ok().body(response);
+	}
+
 
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음

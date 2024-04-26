@@ -36,10 +36,8 @@ public class LessonPaymentInfo {
 	@Column
 	private Integer duration;
 
-	public static LessonPaymentInfo toLessonPaymentInfoForPayment(Lesson lesson, Integer basicFee, Integer designatedFee, Integer peopleOptionFee, Integer levelOptionFee, Integer duration) {
+	public static LessonPaymentInfo toLessonPaymentInfoForPayment(Integer basicFee, Integer designatedFee, Integer peopleOptionFee, Integer levelOptionFee, Integer duration) {
 		return LessonPaymentInfo.builder()
-			.lessonId(lesson.getLessonId())
-			.lesson(lesson)
 			.basicFee(basicFee)
 			.designatedFee(designatedFee)
 			.peopleOptionFee(peopleOptionFee)
