@@ -1,5 +1,7 @@
 package com.go.ski.payment.support.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public enum Height {
 	HEIGHT_UNDER_140CM("140cm 미만"),
 	HEIGHT_140CM_TO_150CM("140cm~150cm"),
@@ -26,4 +28,6 @@ public enum Height {
 		}
 		throw new IllegalArgumentException("Unsupported value: " + value);
 	}
+
+
 }
