@@ -4,10 +4,9 @@ public enum FileUploadPath {
 
     USER_PROFILE_PATH("user-profile"),
     TEAM_PROFILE_PATH("team-profile"),
-    TEAM_IMAGE_PATH("team-image");
-
-
-
+    TEAM_IMAGE_PATH("team-image"),
+    FEEDBACK_IMAGE_PATH("feedback/images"),
+    FEEDBACK_VIDEO_PATH("feedback/videos");
 
     public String path;
 

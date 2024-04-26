@@ -3,6 +3,8 @@ import com.go.ski.user.core.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import static lombok.AccessLevel.PROTECTED;
 

@@ -1,10 +1,8 @@
 package com.go.ski.payment.core.model;
 
 import com.go.ski.lesson.support.dto.ReserveAdvancedRequestDTO;
-import com.go.ski.lesson.support.dto.ReserveNoviceRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.vo.LessonType;
-import com.go.ski.user.core.model.Instructor;
 import jakarta.persistence.*;
 import lombok.*;
 
