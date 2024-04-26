@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/font_size.dart';
+import 'package:goski_instructor/ui/component/goski_dropdown.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
@@ -32,6 +33,10 @@ class AddExternalScheduleDialog extends StatelessWidget {
               onClicked: () {
                 // TODO. 담당 강사 클릭시 동작 추가 필요
               },
+            ),
+            GoskiDropdown(
+              hint: tr('hintMainInstructor'),
+              list: ['1', '2', '3', '4', '5', '6', '1', '2', '3', '4', '5', '6', '1', '2', '3', '4', '5', '6'],
             ),
             SizedBox(height: contentPadding),
             Row(
