@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
@@ -11,8 +9,8 @@ import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
-class LessonListScreen extends StatelessWidget {
-  const LessonListScreen({super.key});
+class BossLessonListScreen extends StatelessWidget {
+  const BossLessonListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +78,8 @@ class LessonListScreen extends StatelessWidget {
           resortName: "지산스키장",
           startTime: DateTime.now().subtract(const Duration(days: 1)),
           endTime: DateTime.now().subtract(const Duration(hours: 5)),
-          studentList: studentList),
+          studentList: studentList,
+          rating: 3.9),
     ];
 
     return GoskiContainer(
@@ -92,30 +91,28 @@ class LessonListScreen extends StatelessWidget {
               String lessonStatus = 'notStart';
               Color lessonBackgroundColor;
               String buttonString = 'notStart';
-              bool buttonStatus = true;
+              bool buttonStatus = false;
 
               final now = DateTime.now();
               if (lesson.startTime.isBefore(now) &&
                   lesson.endTime.isAfter(now)) {
                 lessonStatus = 'onGoing';
-                lessonBackgroundColor = goskiYellow;
+                lessonBackgroundColor = goskiDarkPink;
                 buttonString = 'sendMessage';
               } else if (lesson.startTime.isAfter(now)) {
                 lessonBackgroundColor = goskiBlue;
-                buttonStatus = false;
                 if (lesson.startTime
                     .isBefore(now.add(const Duration(minutes: 30)))) {
                   buttonString = 'sendMessage';
-                  buttonStatus = true;
                 }
-              } else if (lesson.endTime.isBefore(now)) {
+              } else if (lesson.endTime.isBefore(now) && lesson.rating != -1) {
                 // 피드백 작성여부에 따른 분기 필요
-                lessonStatus = 'noFeedback';
-                lessonBackgroundColor = goskiDarkPink;
-                buttonString = 'createFeedback';
+                lessonStatus = 'lessonFinished';
+                lessonBackgroundColor = goskiGreen;
+                buttonStatus = true;
               } else {
-                lessonStatus = 'yesFeedback';
-                lessonBackgroundColor = goskiBlack;
+                lessonStatus = 'lessonFinished';
+                lessonBackgroundColor = goskiGreen;
                 buttonString = 'updateFeedback';
               }
 
@@ -138,23 +135,18 @@ class LessonListScreen extends StatelessWidget {
                               ),
                             ),
                             if (buttonStatus)
-                              GestureDetector(
-                                onTap: myOnTap,
-                                child: Container(
-                                    child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    GoskiText(
-                                        text: tr(buttonString),
-                                        size: bodyMedium),
-                                    const Icon(
-                                      Icons.keyboard_arrow_right,
-                                      size: bodyMedium,
-                                    ),
-                                  ],
-                                )),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: goskiYellow,
+                                  ),
+                                  GoskiText(
+                                    text: tr(lesson.rating.toString()),
+                                    size: bodySmall,
+                                    color: goskiDarkGray,
+                                  ),
+                                ],
                               )
                           ],
                         ),
@@ -281,12 +273,14 @@ class _Lesson {
   final DateTime startTime;
   final DateTime endTime;
   final List<_StudentInfo> studentList;
+  final double rating;
 
   _Lesson(
       {required this.resortName,
       required this.startTime,
       required this.endTime,
-      required this.studentList});
+      required this.studentList,
+      this.rating = -1});
 }
 
 class _StudentInfo {
