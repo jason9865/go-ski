@@ -64,63 +64,62 @@ class _UpdateInstructorInfoScreenState
                 const BuildBasicInfo(),
                 const BuildInterval(),
                 buildSelfIntroduction(),
+                const BuildInterval(),
+                buildLessonCategory(),
+                const BuildInterval(),
+                Row(
+                  children: [
+                    GoskiText(
+                      text: tr("certificate"),
+                      size: labelLarge,
+                      isBold: true,
+                      isExpanded: true,
+                    ),
+                    IconButton(
+                      onPressed: () => {
+                        showGoskiBottomSheet(
+                          context: context,
+                          child: const SizedBox(
+                            height: 400,
+                            child: SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: Text("자격증 바텀시트"),
+                              ),
+                            ),
+                          ),
+                        ),
+                        addCertificate(tr('certificate')),
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+                buildCertificatesList(),
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GoskiText(
-                          text: tr("certificate"),
+                          text: tr("certificateImage"),
                           size: labelLarge,
                           isBold: true,
                           isExpanded: true,
                         ),
                         IconButton(
-                          onPressed: () => {
-                            showGoskiBottomSheet(
-                              context: context,
-                              child: const SizedBox(
-                                height: 400,
-                                child: SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: Text("자격증 바텀시트"),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            addCertificate(tr('certificate')),
-                          },
+                          onPressed: pickCertificateImage,
                           icon: const Icon(Icons.add),
                         ),
                       ],
                     ),
-                    buildCertificatesList(),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GoskiText(
-                              text: tr("certificateImage"),
-                              size: labelLarge,
-                              isBold: true,
-                              isExpanded: true,
-                            ),
-                            IconButton(
-                              onPressed: pickCertificateImage,
-                              icon: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                        certificateImages.isNotEmpty
-                            ? buildCertificateImageList()
-                            : Container(),
-                      ],
-                    ),
-                    const BuildInterval(),
-                    buildHolidaySetting(),
+                    certificateImages.isNotEmpty
+                        ? buildCertificateImageList()
+                        : Container(),
                   ],
-                )
+                ),
+                const BuildInterval(),
+                buildHolidaySetting()
               ],
             ),
           ),
@@ -185,6 +184,27 @@ class _UpdateInstructorInfoScreenState
           hintText: tr('enterSelfIntroduction'),
           maxLines: 3,
         )
+      ],
+    );
+  }
+
+  Widget buildLessonCategory() {
+    return Row(
+      children: [
+        GoskiText(
+          text: tr("강습 종류"),
+          size: labelLarge,
+          isBold: true,
+          isExpanded: true,
+        ),
+        GoskiSwitch(
+          items: [
+            tr('both'),
+            tr('ski'),
+            tr('board'),
+          ],
+          width: screenSizeController.getWidthByRatio(0.5),
+        ),
       ],
     );
   }
