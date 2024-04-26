@@ -156,5 +156,9 @@
   "guide" : "도움말",
   "askTeamRegistration" : "팀등록 문의",
   "askAdvertisement" : "광고 문의",
-  "image": "이미지"
+  "image": "이미지",
+  "dynamicInstructor" : "{} 강사",
+  "couponBox" : "쿠폰함",
+  "reviewHistory" : "리뷰 내역",
+  "lessonHistory" : "강습 내역"
 }

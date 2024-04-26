@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       theme: ThemeData(
-        fontFamily: 'BMJUA',
+        fontFamily: 'Jua',
         textTheme: AppTextTheme.lightTextTheme,
       ),
       home: Builder(

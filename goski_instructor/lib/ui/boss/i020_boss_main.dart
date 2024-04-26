@@ -20,9 +20,10 @@ class BossMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final imageSize = screenSizeController.getWidthByRatio(0.2);
-    final VoidCallback onTap = () {
+    onTap() {
       print("버튼 클릭");
-    };
+    }
+
     final List<_SkiTeam> skiTeamList = [
       _SkiTeam(
           teamName: "고승민",
@@ -69,11 +70,17 @@ class BossMainScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(
-                                width: imageSize,
-                                height: imageSize,
-                                // 사용자 프로필 사진
-                                'assets/images/logo.png'),
+                            Container(
+                              width: imageSize,
+                              height: imageSize,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('assets/images/logo.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -157,11 +164,17 @@ class BossMainScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.asset(
-                                  width: imageSize,
-                                  height: imageSize,
-                                  // 사용자 프로필 사진
-                                  skiTeam.teamProfileImage),
+                              Container(
+                                width: imageSize,
+                                height: imageSize,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(skiTeam.teamProfileImage),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
                               GoskiText(
                                 text:
                                     tr('skiTeamName', args: [skiTeam.teamName]),
