@@ -10,10 +10,7 @@ import '../../const/util/screen_size_controller.dart';
 class LessonDetailDialog extends StatelessWidget {
   final LessonDetailData data;
 
-  const LessonDetailDialog({
-    super.key,
-    required this.data
-  });
+  const LessonDetailDialog({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +137,10 @@ class BorderWhiteContainer extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          color: goskiWhite,
-          border: Border.all(width: 1, color: goskiDarkGray),
-          borderRadius: BorderRadius.circular(10)),
+        color: goskiWhite,
+        border: Border.all(width: 1, color: goskiDarkGray),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: child,
     );
   }
@@ -193,11 +191,10 @@ class LessonDetailData {
   final String date, location, reservationPerson, requestMessage;
   final List studentInfo;
 
-  LessonDetailData({
-    required this.date,
-    required this.location,
-    required this.reservationPerson,
-    required this.requestMessage,
-    required this.studentInfo
-  });
+  LessonDetailData(
+      {required this.date,
+      required this.location,
+      required this.reservationPerson,
+      required this.requestMessage,
+      required this.studentInfo});
 }
