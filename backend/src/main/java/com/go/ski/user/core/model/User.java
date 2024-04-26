@@ -18,7 +18,6 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table
 public class User {
 
     @Id

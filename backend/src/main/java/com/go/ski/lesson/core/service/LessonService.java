@@ -16,7 +16,6 @@ import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.vo.TeamImageVO;
 import com.go.ski.user.core.model.Instructor;
-import com.go.ski.user.support.vo.IsInstructAvailable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -77,14 +76,14 @@ public class LessonService {
         List<Integer> instructors = new ArrayList<>();
         for (TeamInstructor teamInstructor : teamInstructors) {
             Instructor instructor = teamInstructor.getInstructor();
-            if (assignLessons(instructor, reserveAdvancedRequestDTO, lessonInfos, teamInstructors))
+            if (assignLessonsToInstructor(instructor, reserveAdvancedRequestDTO, lessonInfos, teamInstructors))
                 instructors.add(instructor.getInstructorId());
         }
 
         return !instructors.isEmpty() ? new ReserveNoviceResponseDTO(team, instructors, getTeamImage(team)) : null;
     }
 
-    private boolean assignLessons(Instructor instructor, ReserveAdvancedRequestDTO reserveAdvancedRequestDTO,
+    private boolean assignLessonsToInstructor(Instructor instructor, ReserveAdvancedRequestDTO reserveAdvancedRequestDTO,
                                   List<LessonInfo> lessonInfos, List<TeamInstructor> teamInstructors) {
         // 팀에 소속된 강사들 스케줄 맵 만들기
         Map<Integer, LessonScheduleVO> lessonInfoMap = new HashMap<>();
@@ -100,7 +99,7 @@ public class LessonService {
             // 지정 수업 배정하기
             for (LessonInfo lessonInfo : lessonInfos) {
                 if (lessonInfo.getLesson() != null && lessonInfo.getLesson().getInstructor() != null) {
-                    if (!assignInstructorLesson(lessonInfo.getLesson().getInstructor(), lessonInfo, lessonInfoMap))
+                    if (!assignInstructorLessons(lessonInfo.getLesson().getInstructor(), lessonInfo, lessonInfoMap))
                         return false;
                 }
             }
@@ -112,7 +111,7 @@ public class LessonService {
         }
     }
 
-    private boolean assignInstructorLesson(Instructor instructor, LessonInfo lessonInfo, Map<Integer, LessonScheduleVO> lessonInfoMap) {
+    private boolean assignInstructorLessons(Instructor instructor, LessonInfo lessonInfo, Map<Integer, LessonScheduleVO> lessonInfoMap) {
         LessonScheduleVO lessonScheduleVO = lessonInfoMap.get(instructor.getInstructorId());
         if (lessonScheduleVO == null) return false; // 이 팀에 존재하지 않는 강사
 
@@ -141,10 +140,14 @@ public class LessonService {
 
     private boolean canAssignLesson(LessonScheduleVO lessonScheduleVO, LessonInfo lessonInfo) {
         // 기술 체크
-        if (!lessonScheduleVO.getIsInstructAvailable().equals(IsInstructAvailable.ALL) &&
-                !lessonInfo.getLessonType().equals(LessonType.DAYOFF) &&
+        if (!lessonInfo.getLessonType().equals(LessonType.DAYOFF)
+                 &&
                 !lessonScheduleVO.getIsInstructAvailable().toString().equals(lessonInfo.getLessonType().toString())
         ) return false; // 강의가 불가능한 강사
+        // lessonType이 dayoff면 무조건 가능
+        // 그 외는 강사의 가능 여부와 강의를 비교
+        Integer.toBinaryString(Integer.parseInt(lessonScheduleVO.getIsInstructAvailable()));
+
 
         // 시간 체크
         long lessonTime = calculateLessonTime(Integer.parseInt(lessonInfo.getStartTime()), lessonInfo.getDuration());

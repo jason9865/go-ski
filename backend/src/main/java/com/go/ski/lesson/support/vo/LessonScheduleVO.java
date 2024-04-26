@@ -1,7 +1,6 @@
 package com.go.ski.lesson.support.vo;
 
 import com.go.ski.user.core.model.Instructor;
-import com.go.ski.user.support.vo.IsInstructAvailable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class LessonScheduleVO {
     private Integer instructorId;
-    private IsInstructAvailable isInstructAvailable;
+    private String isInstructAvailable;
     private long timeTable; // 2진수로 비트마스킹
     private int totalTime;
 

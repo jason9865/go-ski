@@ -13,7 +13,6 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table
 public class InstructorCert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

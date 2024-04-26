@@ -83,10 +83,7 @@ public class UserService {
         // 프로필 이미지 업로드 후 save
         uploadProfileImage(user, signupInstructorRequestDTO);
 
-        Instructor instructor = Instructor.builder()
-                .instructorId(user.getUserId())
-                .user(user)
-                .build();
+        Instructor instructor = new Instructor(user, signupInstructorRequestDTO.getLessonType());
         instructorRepository.save(instructor);
 
         // 자격증 사진 업로드 후 save
@@ -112,7 +109,12 @@ public class UserService {
         Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
         instructor.setDescription(updateInstructorRequestDTO.getDescription());
         instructor.setDayoff(updateInstructorRequestDTO.getDayoff());
-        instructor.setIsInstructAvailable(updateInstructorRequestDTO.getIsInstructAvailable());
+        int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2) & 79;
+        switch (updateInstructorRequestDTO.getLessonType()) {
+            case "ALL" -> instructor.setIsInstructAvailable(String.valueOf(0b1110000 | binaryLevel));
+            case "SKI" -> instructor.setIsInstructAvailable(String.valueOf(0b1010000 | binaryLevel));
+            case "BOARD" -> instructor.setIsInstructAvailable(String.valueOf(0b1100000 | binaryLevel));
+        }
         instructorRepository.save(instructor);
 
         uploadCertificateImages(instructor, updateInstructorRequestDTO);
@@ -159,6 +161,8 @@ public class UserService {
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
+            s3Uploader.deleteFile("", user.getProfileUrl());
+
             String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
             log.info("profileUrl: {}", profileUrl);
 
