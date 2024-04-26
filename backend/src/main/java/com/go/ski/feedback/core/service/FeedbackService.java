@@ -58,10 +58,12 @@ public class FeedbackService {
         saveMediaFiles(request,savedFeedback);
     }
 
+    @Transactional
     public void updateFeedback(Integer feedbackId, FeedbackUpdateRequestDTO request) {
         Feedback oldfeedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND));
 
+        List<FeedbackMedia> oldMediaFiles = feedbackMediaRepository.findByFeedback(oldfeedback);
 
         Feedback newFeedback = Feedback.builder()
                 .feedbackId(feedbackId)
@@ -69,8 +71,8 @@ public class FeedbackService {
                 .content(request.getContent())
                 .build();
 
-        deleteMediaFiles(oldfeedback);
         saveMediaFiles(request,newFeedback);
+        deleteMediaFiles(oldMediaFiles);
 
         feedbackRepository.save(newFeedback);
     }
@@ -97,11 +99,8 @@ public class FeedbackService {
         log.info("피드백 미디어 파일 업로드 성공 - 파일 개수 : {}개", tobeSavedFiles.size());
     }
 
-    private void deleteMediaFiles(Feedback feedback) {
+    private void deleteMediaFiles(List<FeedbackMedia> oldMediaFiles) {
 
-        List<FeedbackMedia> oldMediaFiles = feedbackRepository.findById(feedback.getFeedbackId())
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND))
-                .getFeedbackMedia();
         for(FeedbackMedia feedbackMedia : oldMediaFiles) {
             String mediaUrl = feedbackMedia.getMediaUrl();
             if (mediaUrl.split("/")[4].equals("images")) {
