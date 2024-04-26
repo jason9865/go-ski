@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/ui/common/d_i018_add_external_schedule.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/font_size.dart';
@@ -51,7 +50,8 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                     elevation: 5,
                     child: Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.02)),
+                      padding: EdgeInsets.all(
+                          screenSizeController.getWidthByRatio(0.02)),
                       decoration: BoxDecoration(
                         color: goskiWhite,
                         borderRadius: BorderRadius.circular(10),
@@ -68,7 +68,9 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                               });
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: screenSizeController.getHeightByRatio(0.01)),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: screenSizeController
+                                      .getHeightByRatio(0.01)),
                               child: GoskiText(
                                 text: widget.list[index],
                                 size: goskiFontMedium,
@@ -78,7 +80,8 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                         },
                         separatorBuilder: (context, index) {
                           return SizedBox(
-                            height: screenSizeController.getHeightByRatio(0.005),
+                            height:
+                                screenSizeController.getHeightByRatio(0.005),
                           );
                         },
                       ),
@@ -88,10 +91,25 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
           );
         },
         child: BorderWhiteContainer(
-          child: TextWithIconRow(
-            text: _selected == null ? widget.hint : _selected!,
-            icon: _tooltipController.isShowing ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-            onClicked: onShowDropdownButtonClicked,
+          child: GestureDetector(
+            onTap: onShowDropdownButtonClicked,
+            child: Row(
+              children: [
+                Expanded(
+                  child: GoskiText(
+                    text: _selected == null ? widget.hint : _selected!,
+                    size: goskiFontMedium,
+                    color: _selected == null ? goskiDarkGray : goskiBlack,
+                  ),
+                ),
+                Icon(
+                  size: goskiFontLarge,
+                  _tooltipController.isShowing
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                ),
+              ],
+            ),
           ),
         ),
       ),

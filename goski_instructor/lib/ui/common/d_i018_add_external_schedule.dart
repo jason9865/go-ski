@@ -26,17 +26,13 @@ class AddExternalScheduleDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWithInputRow(
+            TitleWithDropdown(
               title: tr('mainInstructor'),
-              text: tr('hintMainInstructor'),
-              icon: Icons.keyboard_arrow_down,
-              onClicked: () {
-                // TODO. 담당 강사 클릭시 동작 추가 필요
-              },
-            ),
-            GoskiDropdown(
               hint: tr('hintMainInstructor'),
-              list: ['1', '2', '3', '4', '5', '6', '1', '2', '3', '4', '5', '6', '1', '2', '3', '4', '5', '6'],
+              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
+              onClicked: () {
+                // TODO. 담당 강사 드롭다운 로직 추가 필요
+              },
             ),
             SizedBox(height: contentPadding),
             Row(
@@ -93,12 +89,12 @@ class AddExternalScheduleDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: contentPadding),
-            TitleWithInputRow(
+            TitleWithDropdown(
               title: tr('studentNumber'),
-              text: tr('hintStudentNumber'),
-              icon: Icons.keyboard_arrow_down,
+              hint: tr('hintStudentNumber'),
+              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
               onClicked: () {
-                // TODO. 인원 선택 클릭시 동작 추가 필요
+                // TODO. 인원 선택 드롭다운 동작 추가 필요
               },
             ),
             SizedBox(height: contentPadding),
@@ -199,6 +195,43 @@ class TitleWithInputRow extends StatelessWidget {
               icon: icon,
               onClicked: onClicked,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TitleWithDropdown extends StatelessWidget {
+  final String title, hint;
+  final List<String> list;
+  final VoidCallback onClicked;
+
+  const TitleWithDropdown({
+    super.key,
+    required this.title,
+    required this.hint,
+    required this.list,
+    required this.onClicked,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 4,
+          child: GoskiText(
+            text: title,
+            size: goskiFontLarge,
+            isBold: true,
+          ),
+        ),
+        Flexible(
+          flex: 6,
+          child: GoskiDropdown(
+            hint: hint,
+            list: list,
           ),
         ),
       ],
