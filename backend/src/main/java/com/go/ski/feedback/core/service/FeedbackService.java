@@ -104,9 +104,9 @@ public class FeedbackService {
         for(FeedbackMedia feedbackMedia : oldMediaFiles) {
             String mediaUrl = feedbackMedia.getMediaUrl();
             if (mediaUrl.split("/")[4].equals("images")) {
-                s3Uploader.deleteFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, mediaUrl);
+                s3Uploader.deleteFile(mediaUrl);
             } else {
-                s3Uploader.deleteFile(FileUploadPath.FEEDBACK_VIDEO_PATH.path, mediaUrl);
+                s3Uploader.deleteFile(mediaUrl);
             }
         }
 
