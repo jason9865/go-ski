@@ -4,11 +4,11 @@ const double goskiFontXXLarge = 28;
 
 const double goskiFontXLarge = 23;
 
-const double goskiFontlarge = 18;
+const double goskiFontLarge = 18;
 
-const double goskiFontmedium = 13;
+const double goskiFontMedium = 13;
 
-const double goskiFontsmall = 10;
+const double goskiFontSmall = 10;
 
 const double goskiFontXSmall = 9;
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
 
 import '../../const/color.dart';
+import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
 import '../common/d_i008_notification_setting.dart';
 import '../common/d_i018_add_external_schedule.dart';
@@ -74,7 +75,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
                           title: tr('name'),
                           child: const GoskiText(
                             text: 'OOO',
-                            size: 15,
+                            size: goskiFontMedium,
                           ),
                         ),
                         SizedBox(height: titlePadding * 1.5),
@@ -82,7 +83,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
                           title: tr('phoneNumber'),
                           child: const GoskiText(
                             text: '010-0000-0000',
-                            size: 15,
+                            size: goskiFontMedium,
                           ),
                         ),
                       ],
@@ -98,7 +99,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
               width: double.infinity,
               child: GoskiText(
                 text: tr('setLessonPrice'),
-                size: 20,
+                size: goskiFontLarge,
                 isBold: true,
               ),
             ),
@@ -171,7 +172,7 @@ class TitleAlignCenterWithInputRow extends StatelessWidget {
     required this.title,
     required this.child,
     this.titleRatio = 4,
-    this.fontSize = 15,
+    this.fontSize = goskiFontMedium,
   });
 
   @override
