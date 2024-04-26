@@ -33,7 +33,7 @@ class GoskiBigsizeButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: labelLarge),
+        style: const TextStyle(fontSize: goskiFontLarge),
       ),
     );
   }

@@ -76,7 +76,7 @@ class _UpdateBossInfoScreenState extends State<UpdateBossInfoScreen> {
               const Icon(Icons.photo_outlined),
               GoskiText(
                 text: tr("updateProfilePhoto"),
-                size: bodySmall,
+                size: goskiFontSmall,
                 isBold: true,
               ),
             ],
@@ -116,7 +116,7 @@ class BuildBasicInfo extends StatelessWidget {
           children: [
             GoskiText(
               text: tr("gender"),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             ),

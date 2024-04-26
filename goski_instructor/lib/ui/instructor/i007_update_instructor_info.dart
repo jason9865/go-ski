@@ -71,7 +71,7 @@ class _UpdateInstructorInfoScreenState
                   children: [
                     GoskiText(
                       text: tr("certificate"),
-                      size: labelLarge,
+                      size: goskiFontLarge,
                       isBold: true,
                       isExpanded: true,
                     ),
@@ -103,7 +103,7 @@ class _UpdateInstructorInfoScreenState
                       children: [
                         GoskiText(
                           text: tr("certificateImage"),
-                          size: labelLarge,
+                          size: goskiFontLarge,
                           isBold: true,
                           isExpanded: true,
                         ),
@@ -156,7 +156,7 @@ class _UpdateInstructorInfoScreenState
               const Icon(Icons.photo_outlined),
               GoskiText(
                 text: tr("updateProfileImage"),
-                size: bodySmall,
+                size: goskiFontSmall,
                 isBold: true,
               ),
             ],
@@ -173,7 +173,7 @@ class _UpdateInstructorInfoScreenState
           children: [
             GoskiText(
               text: tr('selfIntroduction'),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             )
@@ -193,7 +193,7 @@ class _UpdateInstructorInfoScreenState
       children: [
         GoskiText(
           text: tr("강습 종류"),
-          size: labelLarge,
+          size: goskiFontLarge,
           isBold: true,
           isExpanded: true,
         ),
@@ -285,7 +285,7 @@ class _UpdateInstructorInfoScreenState
           children: [
             GoskiText(
               text: tr('holiday'),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             )
@@ -365,7 +365,7 @@ class BuildBasicInfo extends StatelessWidget {
           children: [
             GoskiText(
               text: tr("gender"),
-              size: labelLarge,
+              size: goskiFontLarge,
               isBold: true,
               isExpanded: true,
             ),

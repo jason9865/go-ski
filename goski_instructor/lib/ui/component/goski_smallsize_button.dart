@@ -13,7 +13,7 @@ class GoskiSmallsizeButton extends StatelessWidget {
     required this.width,
     required this.text,
     required this.onTap,
-    this.textSize = labelLarge,
+    this.textSize = goskiFontLarge,
   });
 
   @override

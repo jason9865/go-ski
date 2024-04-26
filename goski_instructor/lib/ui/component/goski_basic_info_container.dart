@@ -11,6 +11,7 @@ final screenSizeController = Get.find<ScreenSizeController>();
 class BasicInfoContainer extends StatelessWidget {
   final String text;
   final String textField;
+
   const BasicInfoContainer({
     required this.text,
     required this.textField,
@@ -23,7 +24,7 @@ class BasicInfoContainer extends StatelessWidget {
       children: [
         GoskiText(
           text: tr(text),
-          size: labelLarge,
+          size: goskiFontLarge,
           isBold: true,
           isExpanded: true,
         ),
