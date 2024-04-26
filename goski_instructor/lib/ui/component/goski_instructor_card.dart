@@ -57,9 +57,9 @@ class GoskiInstructorCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                          width: 60,
+                          width: 80,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               GoskiText(
                                   text: tr('position'),
@@ -77,9 +77,9 @@ class GoskiInstructorCard extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 60,
+                        width: 80,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GoskiText(
                               text: tr('name'),
@@ -98,7 +98,7 @@ class GoskiInstructorCard extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 60,
+                        width: 80,
                         child: GoskiText(
                           text: tr('phoneNumber'),
                           size: bodyMedium,
