@@ -151,105 +151,122 @@ class LessonListScreen extends StatelessWidget {
                                         size: bodyMedium),
                                     const Icon(
                                       Icons.keyboard_arrow_right,
-                                      size: titleMedium,
+                                      size: bodyMedium,
                                     ),
                                   ],
                                 )),
                               )
                           ],
                         ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GoskiText(
-                                    text: tr('location'),
-                                    size: bodyMedium,
-                                    isBold: true,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GoskiText(
-                                text: tr(lesson.resortName), size: bodyMedium),
-                          ],
-                        ),
-                        SizedBox(
-                          height: screenSizeController.getHeightByRatio(0.005),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GoskiText(
-                                    text: tr('date'),
-                                    size: bodyMedium,
-                                    isBold: true,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
                               children: [
-                                GoskiText(
-                                  text: tr(DateFormat('yyyy.MM.dd (E)')
-                                      .format(lesson.startTime)
-                                      .toString()),
-                                  size: bodySmall,
-                                  color: goskiDarkGray,
-                                ),
                                 Row(
                                   children: [
-                                    GoskiText(
-                                      text: tr(DateFormat('HH:mm')
-                                          .format(lesson.startTime)
-                                          .toString()),
-                                      size: bodySmall,
-                                      color: goskiDarkGray,
+                                    SizedBox(
+                                      width: 80,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          GoskiText(
+                                            text: tr('location'),
+                                            size: bodyMedium,
+                                            isBold: true,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     GoskiText(
-                                      text: tr(DateFormat('~HH:mm')
-                                          .format(lesson.endTime)
-                                          .toString()),
-                                      size: bodySmall,
-                                      color: goskiDarkGray,
+                                        text: tr(lesson.resortName),
+                                        size: bodySmall),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: screenSizeController
+                                      .getHeightByRatio(0.005),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 80,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          GoskiText(
+                                            text: tr('date'),
+                                            size: bodyMedium,
+                                            isBold: true,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GoskiText(
+                                          text: tr(DateFormat('yyyy.MM.dd (E)')
+                                              .format(lesson.startTime)
+                                              .toString()),
+                                          size: bodySmall,
+                                          color: goskiDarkGray,
+                                        ),
+                                        Row(
+                                          children: [
+                                            GoskiText(
+                                              text: tr(DateFormat('HH:mm')
+                                                  .format(lesson.startTime)
+                                                  .toString()),
+                                              size: bodySmall,
+                                              color: goskiDarkGray,
+                                            ),
+                                            GoskiText(
+                                              text: tr(DateFormat('~HH:mm')
+                                                  .format(lesson.endTime)
+                                                  .toString()),
+                                              size: bodySmall,
+                                              color: goskiDarkGray,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
+                                SizedBox(
+                                  height: screenSizeController
+                                      .getHeightByRatio(0.005),
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 80,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          GoskiText(
+                                            text: tr('reservationPerson'),
+                                            size: bodyMedium,
+                                            isBold: true,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    GoskiText(
+                                        text: tr('extraPerson', args: [
+                                          lesson.studentList[0].studentName,
+                                          lesson.studentList.length.toString()
+                                        ]),
+                                        size: bodySmall),
+                                  ],
+                                )
                               ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: screenSizeController.getHeightByRatio(0.005),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GoskiText(
-                                    text: tr('location'),
-                                    size: bodyMedium,
-                                    isBold: true,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GoskiText(
-                                text: tr(lesson.resortName), size: bodyMedium),
-                          ],
-                        )
+                            ))
                       ],
                     ),
                   ),
