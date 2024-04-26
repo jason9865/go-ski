@@ -6,12 +6,14 @@ class GoskiSmallsizeButton extends StatelessWidget {
   final double width;
   final String text;
   final VoidCallback onTap;
+  final double textSize;
 
   const GoskiSmallsizeButton({
     super.key,
     required this.width,
     required this.text,
     required this.onTap,
+    this.textSize = labelLarge,
   });
 
   @override
@@ -33,8 +35,8 @@ class GoskiSmallsizeButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: labelLarge,
+        style: TextStyle(
+          fontSize: textSize,
         ),
       ),
     );
