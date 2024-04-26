@@ -20,7 +20,8 @@ public class TeamUpdateRequestDTO {
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
-    private List<MultipartFile> teamImages;
+    private List<Integer> deleteTeamImageIds;
+    private List<MultipartFile> newTeamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;

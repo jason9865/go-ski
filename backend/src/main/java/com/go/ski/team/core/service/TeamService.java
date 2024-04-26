@@ -126,13 +126,18 @@ public class TeamService {
         log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
         // 예전 팀 소개 사진들
-        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
+        List<TeamImage> teamImages = teamImageRepository.findByTeamId(teamId);
 
         // 2-1. 새로운 이미지 s3에 저장
-        saveTeamImages(request.getTeamImages(),savedTeam);
+        if(request.getNewTeamImages() != null) {
+            saveTeamImages(request.getNewTeamImages(),savedTeam);
+        }
 
         // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
-        deleteTeamImages(oldTeamImages);
+        if (request.getDeleteTeamImageIds() != null) {
+            List<TeamImage> oldTeamImages = teamImageRepository.findAllById(request.getDeleteTeamImageIds());
+            deleteTeamImages(oldTeamImages);
+        }
 
         // 3. 중고급 옵션 수정
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
@@ -190,6 +195,7 @@ public class TeamService {
         }
 
         teamImageRepository.deleteAllInBatch(oldTeamImages);
+        log.info("팀 소개 이미지 삭제 성공 - 삭제된 소개 이미지 개수 : {}장", oldTeamImages.size());
     }
 
     public SkiResort getSkiResort(Integer resortId) {
