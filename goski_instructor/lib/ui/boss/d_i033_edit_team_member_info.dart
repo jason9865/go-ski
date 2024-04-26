@@ -1,13 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/ui/component/goski_dropdown.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
 
-import '../../const/color.dart';
 import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
 import '../common/d_i008_notification_setting.dart';
-import '../common/d_i018_add_external_schedule.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
 
@@ -44,9 +43,9 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.red, // TODO. 사진 크기가 잘 보이도록 배경 추가 실제 사용시 배경 제거 필요
-                    borderRadius: BorderRadius.circular(10)
-                  ),
+                      color: Colors.red,
+                      // TODO. 사진 크기가 잘 보이도록 배경 추가 실제 사용시 배경 제거 필요
+                      borderRadius: BorderRadius.circular(10)),
                   clipBehavior: Clip.hardEdge,
                   child: Image.asset(
                     'assets/images/penguin.png',
@@ -62,12 +61,9 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
                       children: [
                         TitleAlignCenterWithInputRow(
                           title: tr('position'),
-                          child: _TightPaddingBorderWhiteContainer(
-                            child: TextWithIconRow(
-                              text: tr('hintPosition'),
-                              icon: Icons.keyboard_arrow_down,
-                              onClicked: () {},
-                            ),
+                          child: GoskiDropdown(
+                            hint: tr('hintPosition'),
+                            list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
                           ),
                         ),
                         SizedBox(height: titlePadding),
@@ -197,32 +193,6 @@ class TitleAlignCenterWithInputRow extends StatelessWidget {
           child: child,
         ),
       ],
-    );
-  }
-}
-
-class _TightPaddingBorderWhiteContainer extends StatelessWidget {
-  final Widget? child;
-
-  const _TightPaddingBorderWhiteContainer({
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
-    final horizontalPadding = screenSizeController.getWidthByRatio(0.015);
-    final verticalPadding = screenSizeController.getWidthByRatio(0.005);
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding, vertical: verticalPadding),
-      decoration: BoxDecoration(
-          color: goskiWhite,
-          border: Border.all(width: 1, color: goskiDarkGray),
-          borderRadius: BorderRadius.circular(10)),
-      child: child,
     );
   }
 }
