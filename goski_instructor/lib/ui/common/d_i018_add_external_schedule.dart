@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
@@ -39,7 +40,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
                   flex: 4,
                   child: GoskiText(
                     text: tr('type'),
-                    size: 20,
+                    size: goskiFontLarge,
                     isBold: true,
                   ),
                 ),
@@ -62,7 +63,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               width: double.infinity,
               child: GoskiText(
                 text: tr('selectDateTime'),
-                size: 20,
+                size: goskiFontLarge,
                 isBold: true,
               ),
             ),
@@ -102,7 +103,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
                   flex: 4,
                   child: GoskiText(
                     text: tr('reservationPerson'),
-                    size: 20,
+                    size: goskiFontLarge,
                     isBold: true,
                   ),
                 ),
@@ -120,7 +121,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               width: double.infinity,
               child: GoskiText(
                 text: tr('specialNote'),
-                size: 20,
+                size: goskiFontLarge,
                 isBold: true,
               ),
             ),
@@ -181,7 +182,7 @@ class TitleWithInputRow extends StatelessWidget {
           flex: 4,
           child: GoskiText(
             text: title,
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
         ),
@@ -221,11 +222,11 @@ class TextWithIconRow extends StatelessWidget {
           Expanded(
             child: GoskiText(
               text: text,
-              size: 15,
+              size: goskiFontMedium,
             ),
           ),
           Icon(
-            size: 20,
+            size: goskiFontLarge,
             icon,
           ),
         ],

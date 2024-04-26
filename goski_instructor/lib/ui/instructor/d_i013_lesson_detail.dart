@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/util/screen_size_controller.dart';
@@ -25,46 +26,46 @@ class LessonDetailDialog extends StatelessWidget {
       children: [
         GoskiText(
           text: tr('date'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.date,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('location'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.location,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('reservationPerson'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.reservationPerson,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('studentInfo'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
@@ -82,12 +83,12 @@ class LessonDetailDialog extends StatelessWidget {
                     return BackgroundContainer(
                       title: GoskiText(
                         text: data.studentInfo[index][0],
-                        size: 15,
+                        size: goskiFontMedium,
                       ),
                       children: [
                         GoskiText(
                           text: data.studentInfo[index][1],
-                          size: 15,
+                          size: goskiFontMedium,
                         )
                       ],
                     );
@@ -105,14 +106,14 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('requestMessage'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.requestMessage,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),

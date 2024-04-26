@@ -6,6 +6,7 @@ import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
+import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
 
 class CertificateBottomSheet extends StatelessWidget {
@@ -40,10 +41,11 @@ class CertificateBottomSheet extends StatelessWidget {
         GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: padding,
-                crossAxisSpacing: padding,
-                childAspectRatio: 1.0),
+              crossAxisCount: 3,
+              mainAxisSpacing: padding,
+              crossAxisSpacing: padding,
+              childAspectRatio: 1.0,
+            ),
             itemCount: certificateList.length,
             itemBuilder: (context, index) {
               return GoskiCard(
@@ -53,7 +55,7 @@ class CertificateBottomSheet extends StatelessWidget {
                     alignment: Alignment.center,
                     child: GoskiText(
                       text: certificateList[index],
-                      size: 15,
+                      size: goskiFontMedium,
                       isBold: true,
                     ),
                   ),

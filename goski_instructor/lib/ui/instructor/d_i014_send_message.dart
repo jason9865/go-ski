@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
+import 'package:goski_instructor/const/util/image_picker_controller.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
 import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../const/util/screen_size_controller.dart';
+import '../component/goski_modal.dart';
 import '../component/goski_smallsize_button.dart';
 
 class SendMessageDialog extends StatefulWidget {
@@ -19,9 +26,11 @@ class SendMessageDialog extends StatefulWidget {
 
 class _SendMessageDialogState extends State<SendMessageDialog> {
   bool hasImage = false;
+  XFile? image;
 
   @override
   Widget build(BuildContext context) {
+    final imagePickerController = Get.put(ImagePickerController());
     final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.005);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
@@ -34,7 +43,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
         children: [
           GoskiText(
             text: tr('title'),
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
           SizedBox(height: titlePadding),
@@ -44,7 +53,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
           SizedBox(height: contentPadding),
           GoskiText(
             text: tr('content'),
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
           SizedBox(height: titlePadding),
@@ -64,35 +73,55 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
           SizedBox(height: contentPadding),
           GoskiText(
             text: tr('image'),
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
           SizedBox(height: titlePadding),
           BorderWhiteContainer(
             child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (hasImage) {
-                      // TODO. 이미지 삭제 기능 추가 필요
-                  } else {
-                      // TODO. 이미지 선택 기능 추가 필요
-                  };
-
-                  hasImage = !hasImage;
-                });
+              onTap: () async {
+                if (hasImage) {
+                  // TODO. 이미지 삭제 기능 추가 필요
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return GoskiModal(
+                          title: image != null ? image!.name : '이미지 오류',
+                          child: Image.file(
+                            File(image!.path)
+                          ),
+                        );
+                      });
+                } else {
+                  // 이미지 추가
+                  image = await imagePickerController.getImage();
+                  setState(() {
+                    hasImage = !hasImage;
+                  });
+                };
               },
               child: hasImage
                   ? Row(
                       children: [
                         Expanded(
                           child: GoskiText(
-                            text: 'Goski_IMG_123412312.png', // TODO. 파일명으로 변경 필요
-                            size: 15,
+                            text:
+                                image != null ? image!.name : '이미지 오류', // TODO. 파일명으로 변경 필요
+                            size: goskiFontMedium,
                           ),
                         ),
-                        Icon(
-                          size: 20,
-                          Icons.cancel,
+                        GestureDetector(
+                          onTap: () {
+                            // 이미지 삭제
+                            image = null;
+                            setState(() {
+                              hasImage = !hasImage;
+                            });
+                          },
+                          child: const Icon(
+                            size: goskiFontLarge,
+                            Icons.cancel,
+                          ),
                         ),
                       ],
                     )
@@ -114,7 +143,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                         Expanded(
                           child: GoskiText(
                             text: tr('addImage'),
-                            size: 15,
+                            size: goskiFontMedium,
                             color: goskiDarkGray,
                           ),
                         ),

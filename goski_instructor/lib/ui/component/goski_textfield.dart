@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 
+import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
 
 /// width를 0으로 입력시 expanded된 textField 생성 가능
@@ -61,13 +62,13 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: const TextStyle(
-              color: goskiDarkGray, fontSize: 15, fontWeight: FontWeight.w400),
+              color: goskiDarkGray, fontSize: goskiFontMedium, fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
           contentPadding: EdgeInsets.all(widget.hasInnerPadding ? 5 :0),
         ),
         style: const TextStyle(
-            color: goskiBlack, fontSize: 15, fontWeight: FontWeight.w400),
+            color: goskiBlack, fontSize: goskiFontMedium, fontWeight: FontWeight.w400),
         cursorColor: goskiBlack,
         maxLines: widget.maxLines,
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 
@@ -23,7 +24,7 @@ class GoskiBadge extends StatelessWidget {
     return Chip(
       label: GoskiText(
         text: text,
-        size: 12,
+        size: goskiFontSmall,
         color: textColor,
       ),
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),

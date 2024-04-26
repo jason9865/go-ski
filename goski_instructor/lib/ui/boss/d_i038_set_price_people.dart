@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
 
 import '../../const/util/screen_size_controller.dart';
@@ -16,7 +17,7 @@ class SetPricePeopleDialog extends StatelessWidget {
     final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getHeightByRatio(0.015);
     const titleRatio = 4;
-    const double titleFontSize = 20;
+    const double titleFontSize = goskiFontLarge;
 
     return Flexible(
       flex: 1,
@@ -88,7 +89,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                           ),
                           GoskiText(
                             text: tr('(${tr('price_per_people')})'),
-                            size: 15,
+                            size: goskiFontMedium,
                             isBold: true,
                           ),
                         ],

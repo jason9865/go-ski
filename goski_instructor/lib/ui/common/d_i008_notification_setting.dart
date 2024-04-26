@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
@@ -117,7 +118,7 @@ class NotificationSettingRow extends StatelessWidget {
           flex: 1,
           child: GoskiText(
             text: title,
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
         ),

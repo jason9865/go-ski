@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/util/screen_size_controller.dart';
@@ -30,7 +31,7 @@ class DeleteAccountDialog extends StatelessWidget {
             ),
             GoskiText(
               text: tr('deleteAccountContent', args: [dummyAccount.bankName, dummyAccount.accountNumber]),
-              size: 20,
+              size: goskiFontLarge,
               isBold: true,
               textAlign: TextAlign.center,
             ),
