@@ -1,8 +1,8 @@
 package com.go.ski.payment.core.model;
 
-import com.go.ski.lesson.support.dto.ReserveAdvancedRequestDTO;
+import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.vo.LessonType;
+import com.go.ski.user.core.model.Instructor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +28,7 @@ public class LessonInfo {
     @Column
     private Integer duration;
     @Column
-    @Enumerated(EnumType.STRING)
-    private LessonType lessonType;
+    private String lessonType;
     @Column
     private Integer studentCount;
 
@@ -45,12 +44,12 @@ public class LessonInfo {
                 .build();
     }
 
-    public LessonInfo(Instructor instructor, ReserveAdvancedRequestDTO reserveAdvancedRequestDTO) {
+    public LessonInfo(Instructor instructor, ReserveInfoVO reserveInfoVO) {
         lesson = Lesson.builder().instructor(instructor).build();
-        lessonType = reserveAdvancedRequestDTO.getLessonType();
-        lessonDate = reserveAdvancedRequestDTO.getLessonDate();
-        startTime = reserveAdvancedRequestDTO.getStartTime();
-        studentCount = reserveAdvancedRequestDTO.getStudentCount();
-        duration = reserveAdvancedRequestDTO.getDuration();
+        lessonDate = reserveInfoVO.getLessonDate();
+        startTime = reserveInfoVO.getStartTime();
+        duration = reserveInfoVO.getDuration();
+        studentCount = reserveInfoVO.getStudentCount();
+        lessonType = reserveInfoVO.getLessonType();
     }
 }

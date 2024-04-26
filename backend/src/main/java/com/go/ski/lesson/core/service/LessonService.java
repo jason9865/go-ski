@@ -1,16 +1,14 @@
 package com.go.ski.lesson.core.service;
 
-import com.go.ski.lesson.support.dto.ReserveAdvancedRequestDTO;
-import com.go.ski.lesson.support.dto.ReserveNoviceRequestDTO;
 import com.go.ski.lesson.support.dto.ReserveNoviceResponseDTO;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
+import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
-import com.go.ski.payment.support.vo.LessonType;
-import com.go.ski.team.core.model.SkiResort;
-import com.go.ski.team.core.model.Team;
-import com.go.ski.team.core.model.TeamImage;
-import com.go.ski.team.core.model.TeamInstructor;
+import com.go.ski.review.core.model.Review;
+import com.go.ski.review.core.repository.ReviewRepository;
+import com.go.ski.team.core.model.*;
+import com.go.ski.team.core.repository.OneToNOptionRepository;
 import com.go.ski.team.core.repository.TeamImageRepository;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
@@ -30,17 +28,33 @@ public class LessonService {
     private final LessonInfoRepository lessonInfoRepository;
     private final TeamInstructorRepository teamInstructorRepository;
     private final TeamImageRepository teamImageRepository;
+    private final OneToNOptionRepository oneToNOptionRepository;
+    private final ReviewRepository reviewRepository;
 
-    public List<ReserveNoviceResponseDTO> reserveNovice(ReserveAdvancedRequestDTO reserveAdvancedRequestDTO) {
+    public List<ReserveNoviceResponseDTO> reserveNovice(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
-        List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveAdvancedRequestDTO.getResortId()).build());
+        List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
         List<ReserveNoviceResponseDTO> reserveNoviceResponseDTOs = new ArrayList<>();
 
         for (Team team : teams) {
-            ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveAdvancedRequestDTO);
+            ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
-                reserveNoviceResponseDTOs.add(reserveNoviceResponseDTO);
+                // 팀 가격 설정
+                if (reserveInfoVO.getStudentCount() > 1) {
+                    Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
+                    calculateTeamCost(reserveNoviceResponseDTO, oneToNOption, reserveInfoVO.getStudentCount());
+                }
+                // 별점 설정
+                List<Review> reviews = reviewRepository.findByLessonTeam(team);
+                if (!reviews.isEmpty()) {
+                    double rating = 0;
+                    for (Review review : reviews)
+                        rating += review.getRating();
+                    reserveNoviceResponseDTO.setRating(rating / reviews.size());
+                    reserveNoviceResponseDTO.setRatingCount(reviews.size());
+                }
                 log.info("성공! {}", reserveNoviceResponseDTO);
+                reserveNoviceResponseDTOs.add(reserveNoviceResponseDTO);
             } else {
                 log.info("해당 팀에 가능한 강사 없음: {}", team);
             }
@@ -49,13 +63,13 @@ public class LessonService {
         return reserveNoviceResponseDTOs;
     }
 
-    public List<Integer> reserveAdvanced(ReserveAdvancedRequestDTO reserveAdvancedRequestDTO) {
+    public List<Integer> reserveAdvanced(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
-        List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveAdvancedRequestDTO.getResortId()).build());
+        List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
         List<Integer> instructorsList = new ArrayList<>();
 
         for (Team team : teams) {
-            ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveAdvancedRequestDTO);
+            ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
                 instructorsList.addAll(reserveNoviceResponseDTO.getInstructors());
                 log.info("성공! {}", instructorsList);
@@ -67,24 +81,24 @@ public class LessonService {
         return instructorsList;
     }
 
-    private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveAdvancedRequestDTO reserveAdvancedRequestDTO) {
+    private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
         // 강습 일자, 팀으로 이미 예약된 강습 리스트
-        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(reserveAdvancedRequestDTO.getLessonDate(), team);
+        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(reserveInfoVO.getLessonDate(), team);
         // 해당 팀에 소속된 강사 리스트
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeamAndIsInviteAccepted(team, true);
 
         List<Integer> instructors = new ArrayList<>();
         for (TeamInstructor teamInstructor : teamInstructors) {
             Instructor instructor = teamInstructor.getInstructor();
-            if (assignLessonsToInstructor(instructor, reserveAdvancedRequestDTO, lessonInfos, teamInstructors))
+            if (assignLessonsToInstructor(instructor, reserveInfoVO, lessonInfos, teamInstructors))
                 instructors.add(instructor.getInstructorId());
         }
 
         return !instructors.isEmpty() ? new ReserveNoviceResponseDTO(team, instructors, getTeamImage(team)) : null;
     }
 
-    private boolean assignLessonsToInstructor(Instructor instructor, ReserveAdvancedRequestDTO reserveAdvancedRequestDTO,
-                                  List<LessonInfo> lessonInfos, List<TeamInstructor> teamInstructors) {
+    private boolean assignLessonsToInstructor(Instructor instructor, ReserveInfoVO reserveInfoVO,
+                                              List<LessonInfo> lessonInfos, List<TeamInstructor> teamInstructors) {
         // 팀에 소속된 강사들 스케줄 맵 만들기
         Map<Integer, LessonScheduleVO> lessonInfoMap = new HashMap<>();
         for (TeamInstructor teamInstructor : teamInstructors) {
@@ -92,7 +106,7 @@ public class LessonService {
             lessonInfoMap.put(getInstructor.getInstructorId(), new LessonScheduleVO(getInstructor));
         }
         // 리스트에 새로운 강습 추가하기
-        LessonInfo newLessonInfo = new LessonInfo(instructor, reserveAdvancedRequestDTO);
+        LessonInfo newLessonInfo = new LessonInfo(instructor, reserveInfoVO);
         lessonInfos.add(newLessonInfo);
 
         try {
@@ -140,14 +154,11 @@ public class LessonService {
 
     private boolean canAssignLesson(LessonScheduleVO lessonScheduleVO, LessonInfo lessonInfo) {
         // 기술 체크
-        if (!lessonInfo.getLessonType().equals(LessonType.DAYOFF)
-                 &&
-                !lessonScheduleVO.getIsInstructAvailable().toString().equals(lessonInfo.getLessonType().toString())
+        if (!lessonInfo.getLessonType().equals("1000000")
+                && !((Integer.parseInt(lessonInfo.getLessonType(), 2)
+                & Integer.parseInt(lessonScheduleVO.getIsInstructAvailable(), 2))
+                == Integer.parseInt(lessonInfo.getLessonType(), 2))
         ) return false; // 강의가 불가능한 강사
-        // lessonType이 dayoff면 무조건 가능
-        // 그 외는 강사의 가능 여부와 강의를 비교
-        Integer.toBinaryString(Integer.parseInt(lessonScheduleVO.getIsInstructAvailable()));
-
 
         // 시간 체크
         long lessonTime = calculateLessonTime(Integer.parseInt(lessonInfo.getStartTime()), lessonInfo.getDuration());
@@ -179,4 +190,16 @@ public class LessonService {
         return teamImageVOs;
     }
 
+    private void calculateTeamCost(ReserveNoviceResponseDTO reserveNoviceResponseDTO, Optional<OneToNOption> oneToNOption, int studentCount) {
+        oneToNOption.ifPresent(option -> {
+            int teamCost = reserveNoviceResponseDTO.getTeamCost();
+            teamCost += switch (studentCount) {
+                case 2 -> option.getOneTwoFee();
+                case 3 -> option.getOneThreeFee();
+                case 4 -> option.getOneFourFee();
+                default -> option.getOneNFee();
+            };
+            reserveNoviceResponseDTO.setTeamCost(teamCost);
+        });
+    }
 }
