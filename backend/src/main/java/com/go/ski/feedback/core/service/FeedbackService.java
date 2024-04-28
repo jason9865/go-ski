@@ -60,21 +60,17 @@ public class FeedbackService {
 
     @Transactional
     public void updateFeedback(Integer feedbackId, FeedbackUpdateRequestDTO request) {
-        Feedback oldfeedback = feedbackRepository.findById(feedbackId)
+        Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND));
 
-        List<FeedbackMedia> oldMediaFiles = feedbackMediaRepository.findByFeedback(oldfeedback);
+        List<FeedbackMedia> oldMediaFiles = feedbackMediaRepository.findByFeedback(feedback);
 
-        Feedback newFeedback = Feedback.builder()
-                .feedbackId(feedbackId)
-                .lesson(oldfeedback.getLesson())
-                .content(request.getContent())
-                .build();
+        feedback.updateContent(request);
 
-        saveMediaFiles(request,newFeedback);
+        saveMediaFiles(request,feedback);
         deleteMediaFiles(oldMediaFiles);
 
-        feedbackRepository.save(newFeedback);
+        feedbackRepository.save(feedback);
     }
 
     public Lesson getLesson(Integer lessonId) {

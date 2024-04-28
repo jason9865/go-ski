@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Sinks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,13 +141,13 @@ public class TeamService {
         }
 
         // 3. 중고급 옵션 수정
-        LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
-        levelOptionRepository.save(levelOption);
+        LevelOption levelOption = levelOptionRepository.findByTeam(team);
+        levelOption.update(request);
         log.info("중 고급 옵션 저장 성공");
 
         // 4. 1:N 옵션 수정
-        OneToNOption oneToNOption = OneToNOption.createOneToNOption(savedTeam, request);
-        oneToNOptionRepository.save(oneToNOption);
+        OneToNOption oneToNOption = oneToNOptionRepository.findByTeam(team);
+        oneToNOption.update(request);
         log.info("1:N 옵션 저장 성공");
 
     }

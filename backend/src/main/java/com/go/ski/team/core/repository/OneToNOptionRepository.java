@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 public interface OneToNOptionRepository extends JpaRepository<OneToNOption, Integer> {
+    OneToNOption findByTeam(Team team);
 }

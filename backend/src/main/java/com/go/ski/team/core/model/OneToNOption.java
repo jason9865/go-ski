@@ -42,15 +42,11 @@ public class OneToNOption {
         return oneToNOption;
     }
 
-    public static OneToNOption createOneToNOption(Team team, TeamUpdateRequestDTO requestDTO) {
-        OneToNOption oneToNOption = new OneToNOption();
-        oneToNOption.teamId = team.getTeamId();
-        oneToNOption.team = team;
-        oneToNOption.oneTwoFee = requestDTO.getOneTwoFee();
-        oneToNOption.oneThreeFee = requestDTO.getOneThreeFee();
-        oneToNOption.oneFourFee = requestDTO.getOneFourFee();
-        oneToNOption.oneNFee = requestDTO.getOneNFee();
-        return oneToNOption;
+    public void update(TeamUpdateRequestDTO requestDTO) {
+        this.oneTwoFee = requestDTO.getOneTwoFee();
+        this.oneThreeFee = requestDTO.getOneThreeFee();
+        this.oneFourFee = requestDTO.getOneFourFee();
+        this.oneNFee = requestDTO.getOneNFee();
     }
 
 

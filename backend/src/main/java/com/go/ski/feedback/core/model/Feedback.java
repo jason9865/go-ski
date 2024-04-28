@@ -1,6 +1,7 @@
 package com.go.ski.feedback.core.model;
 
 import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
+import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
 import com.go.ski.payment.core.model.Lesson;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,5 +29,7 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback",cascade = CascadeType.ALL)
     private List<FeedbackMedia> feedbackMedia;
 
-
+    public void updateContent(FeedbackUpdateRequestDTO dto) {
+        this.content = dto.getContent();
+    }
 }
