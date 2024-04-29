@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
@@ -36,11 +37,18 @@ public class KakaoPayService {
 	public String secretKey;
 	@Value("${pay.secret_key_dev}")
 	public String secretKeyDev;
+	@Value("${pay.approval_url}")
+	public String approvalUrl;
+	@Value("${pay.cancel_url}")
+	public String cancelUrl;
+	@Value("${pay.fail_url}")
+	public String failUrl;
 	private String HOST = "https://open-api.kakaopay.com/online/v1/payment";
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	//결제 준비
 	//클라이언트의 결제 준비 요청을 kakao 서버로 던지기 위해 변환
+	@Transactional
 	public KakaopayPrepareResponseDTO getPrepareResponse(KakaopayPrepareRequestDTO request) {
 		//헤더 설정 추후에 서비스 모드로 변경
 		HttpHeaders headers = getHeader("test");
@@ -53,9 +61,9 @@ public class KakaoPayService {
 		params.put("quantity", Integer.toString(request.getQuantity()));// 무조건 1
 		params.put("total_amount", Integer.toString(request.getTotalAmount()));// 계산한 값 보내줌
 		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));// 부가가치세가 면제
-		params.put("approval_url", request.getApprovalUrl());//url 보내줌
-		params.put("cancel_url", request.getCancelUrl());//url 보내줌
-		params.put("fail_url", request.getFailUrl());//url 보내줌
+		params.put("approval_url", approvalUrl);//url 보내줌
+		params.put("cancel_url", cancelUrl);//url 보내줌
+		params.put("fail_url", failUrl);//url 보내줌
 
 		log.info("data : {}", params);
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);

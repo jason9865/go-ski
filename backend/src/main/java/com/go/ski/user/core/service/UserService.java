@@ -32,7 +32,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
@@ -47,8 +46,7 @@ public class UserService {
     public User login(OauthServerType oauthServerType, String role, String authCode, String accessToken) {
         try {
             User user = oauthMemberClientComposite.fetch(oauthServerType, role, authCode, accessToken);
-            Optional<User> optionalUser = userRepository.findByDomain(user.getDomain());
-            return optionalUser.orElse(user);
+            return userRepository.findByDomain(user.getDomain()).orElse(user);
         } catch (WebClientException wce) {
             throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.WRONG_CODE);
         }
@@ -85,10 +83,7 @@ public class UserService {
         // 프로필 이미지 업로드 후 save
         uploadProfileImage(user, signupInstructorRequestDTO);
 
-        Instructor instructor = Instructor.builder()
-                .instructorId(user.getUserId())
-                .user(user)
-                .build();
+        Instructor instructor = new Instructor(user, signupInstructorRequestDTO.getLessonType());
         instructorRepository.save(instructor);
 
         // 자격증 사진 업로드 후 save
@@ -114,9 +109,15 @@ public class UserService {
         Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
         instructor.setDescription(updateInstructorRequestDTO.getDescription());
         instructor.setDayoff(updateInstructorRequestDTO.getDayoff());
-        instructor.setIsInstructAvailable(updateInstructorRequestDTO.getIsInstructAvailable());
+        int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2) & 79;
+        switch (updateInstructorRequestDTO.getLessonType()) {
+            case "ALL" -> instructor.setIsInstructAvailable(String.valueOf(0b1110000 | binaryLevel));
+            case "SKI" -> instructor.setIsInstructAvailable(String.valueOf(0b1010000 | binaryLevel));
+            case "BOARD" -> instructor.setIsInstructAvailable(String.valueOf(0b1100000 | binaryLevel));
+        }
         instructorRepository.save(instructor);
 
+        deleteCertificateImages(instructor, updateInstructorRequestDTO.getDeleteCertificateUrls());
         uploadCertificateImages(instructor, updateInstructorRequestDTO);
     }
 
@@ -138,7 +139,7 @@ public class UserService {
 
     public ProfileInstructorResponseDTO getInstructor(User user, ProfileUserResponseDTO profileUserResponseDTO) {
         Instructor instructor = Instructor.builder().instructorId(user.getUserId()).build();
-        List<InstructorCert> instructorCerts = instructorCertRepository.findAllByInstructor(instructor);
+        List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
 
         List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
         for (InstructorCert instructorCert : instructorCerts) {
@@ -161,6 +162,9 @@ public class UserService {
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
+            if (user.getProfileUrl() != null) {
+                s3Uploader.deleteFile(user.getProfileUrl());
+            }
             String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
             log.info("profileUrl: {}", profileUrl);
 
@@ -173,8 +177,6 @@ public class UserService {
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
-                log.info("{}", certificateImageVO);
-
                 Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateImageVO.getCertificateId());
                 if (optionalCertificate.isPresent()) {
                     String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImageVO.getCertificateImage());
@@ -186,8 +188,36 @@ public class UserService {
                             .certificateImageUrl(certificateImageUrl)
                             .build();
                     instructorCertRepository.save(instructorCert);
+
+                    int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2);
+                    binaryLevel |= convertIdToBinary(certificateImageVO.getCertificateId());
+                    instructor.setIsInstructAvailable(Integer.toBinaryString(binaryLevel));
                 }
             }
         }
+        instructorRepository.save(instructor);
+    }
+
+    private void deleteCertificateImages(Instructor instructor, List<CertificateUrlVO> deleteCertificateUrls) {
+        for (CertificateUrlVO certificateUrlVO : deleteCertificateUrls) {
+            s3Uploader.deleteFile(certificateUrlVO.getCertificateImageUrl());
+            instructorCertRepository.deleteByCertificateImageUrl(certificateUrlVO.getCertificateImageUrl());
+
+            int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2);
+            binaryLevel ^= convertIdToBinary(certificateUrlVO.getCertificateId());
+            instructor.setIsInstructAvailable(Integer.toBinaryString(binaryLevel));
+        }
+    }
+
+    private int convertIdToBinary(int certificateId) {
+        return switch (certificateId) {
+            case 1, 4 -> 0b1000001;
+            case 2, 5 -> 0b1000010;
+            case 3, 6, 7 -> 0b1000011;
+            case 8, 11 -> 0b1000100;
+            case 9, 12 -> 0b1001000;
+            case 10, 13, 14 -> 0b1001100;
+            default -> throw new IllegalStateException("Unexpected value: " + certificateId);
+        };
     }
 }

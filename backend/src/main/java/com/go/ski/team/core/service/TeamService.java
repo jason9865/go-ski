@@ -18,11 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Sinks;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.go.ski.common.util.TimeConvertor.dayoffListToInteger;
 import static com.go.ski.team.support.dto.TeamInfoResponseDTO.toDayOfWeek;
 
 @Slf4j
@@ -103,50 +105,49 @@ public class TeamService {
 
     @Transactional
     public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request) {
+        Team team = getTeam(teamId);
+
         // Team 테이블에 저장할 SkiResort 생성
-        log.info("flag! - {}", request.toString());
         SkiResort skiResort = getSkiResort(request.getResortId());
 
         log.info("1. 팀 정보 수정");
         // 1. 팀 정보 수정
-        // 1-1. 팀 프로필 사진 수정
-        String originalFileUrl = getTeamProfileUrl(teamId);
-        String newTeamProfileUrl = s3Uploader.updateFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage(), originalFileUrl);
+        team.updateTeam(request, skiResort);
 
-        // 1-2. 팀 테이블 수정
-        Team newTeam = Team.builder()
-                .teamId(teamId)
-                .user(user)
-                .skiResort(skiResort)
-                .teamName(request.getTeamName())
-                .teamProfileUrl(newTeamProfileUrl)
-                .description(request.getDescription())
-                .teamCost(request.getTeamCost())
-                .dayoff(dayoffListToInteger(request.getDayoff()))
-                .build();
+        // s3에서 프로필 이미지 변경
+        if(request.getTeamProfileImage() != null) {
+            String originalFileUrl = team.getTeamProfileUrl();
+            String newTeamProfileUrl = s3Uploader.updateFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage(), originalFileUrl);
+            team.updateTeamProfile(newTeamProfileUrl);
+        }
 
-        Team savedTeam = teamRepository.save(newTeam);
+        Team savedTeam = teamRepository.save(team);
         log.info("팀 정보 수정 성공 - teamId : {}", savedTeam.getTeamId());
 
         log.info("2. 팀 소개 이미지 변경");
         // 2. 팀 소개 이미지 변경
         // 예전 팀 소개 사진들
-        List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
+        List<TeamImage> teamImages = teamImageRepository.findByTeamId(teamId);
 
         // 2-1. 새로운 이미지 s3에 저장
-        saveTeamImages(request.getTeamImages(),savedTeam);
+        if(request.getNewTeamImages() != null) {
+            saveTeamImages(request.getNewTeamImages(),savedTeam);
+        }
 
         // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제
-        deleteTeamImages(oldTeamImages);
+        if (request.getDeleteTeamImageIds() != null) {
+            List<TeamImage> oldTeamImages = teamImageRepository.findAllById(request.getDeleteTeamImageIds());
+            deleteTeamImages(oldTeamImages);
+        }
 
         // 3. 중고급 옵션 수정
-        LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
-        levelOptionRepository.save(levelOption);
+        LevelOption levelOption = levelOptionRepository.findByTeam(team);
+        levelOption.update(request);
         log.info("중 고급 옵션 저장 성공");
 
         // 4. 1:N 옵션 수정
-        OneToNOption oneToNOption = OneToNOption.createOneToNOption(savedTeam, request);
-        oneToNOptionRepository.save(oneToNOption);
+        OneToNOption oneToNOption = oneToNOptionRepository.findByTeam(team);
+        oneToNOption.update(request);
         log.info("1:N 옵션 저장 성공");
 
     }
@@ -158,12 +159,8 @@ public class TeamService {
 
     @Transactional
     public void deleteTeam(Integer teamId) {
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
-
-        List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeam(team)
-                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
-
+        Team team = getTeam(teamId);
+        List<TeamInstructor> teamInstructors = getTeamInstructor(team);
 
         // s3에서 팀 소개 사진 삭제
         List<TeamImage> oldTeamImages = teamImageRepository.findByTeamId(teamId);
@@ -199,6 +196,7 @@ public class TeamService {
         }
 
         teamImageRepository.deleteAllInBatch(oldTeamImages);
+        log.info("팀 소개 이미지 삭제 성공 - 삭제된 소개 이미지 개수 : {}장", oldTeamImages.size());
     }
 
     public SkiResort getSkiResort(Integer resortId) {
@@ -206,17 +204,16 @@ public class TeamService {
                 .orElseThrow(() -> new RuntimeException("해당 리조트가 존재하지 않습니다!"));
     }
 
-    public String getTeamProfileUrl(Integer teamId) {
+    public Team getTeam(Integer teamId) {
         return teamRepository.findById(teamId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND))
-                .getTeamProfileUrl()
                 ;
     }
 
-    public static Integer dayoffListToInteger(List<Integer> dayoffList) {
-        return dayoffList.stream()
-                .mapToInt(day -> 1 << day)
-                .sum();
+    public List<TeamInstructor> getTeamInstructor(Team team) {
+        return teamInstructorRepository.findByTeam(team)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND));
     }
+
 
 }
