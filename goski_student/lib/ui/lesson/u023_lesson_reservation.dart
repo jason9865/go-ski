@@ -13,13 +13,12 @@ import '../../const/util/screen_size_controller.dart';
 import '../component/goski_border_white_container.dart';
 import '../component/goski_payment_button.dart';
 
-class ReLessonReservationScreen extends StatefulWidget {
+class LessonReservationScreen extends StatefulWidget {
   final List<_DummyStudentInfo> studentInfoList = [];
   bool isCouponSelected = false;
   final List<_DummyAmountOfPayment> amountOfPaymentList = [
     _DummyAmountOfPayment(name: '강습료', price: 120000),
     _DummyAmountOfPayment(name: '강사 지정료', price: 40000),
-    _DummyAmountOfPayment(name: '재강습 할인', price: -20000),
   ];
   final List<_DummyPolicy> policyList = [
     _DummyPolicy(title: '필수 약관 전체 동의', isChecked: false),
@@ -28,16 +27,16 @@ class ReLessonReservationScreen extends StatefulWidget {
     _DummyPolicy(title: '[선택] 마케팅 수신 동의', isChecked: false),
   ];
 
-  ReLessonReservationScreen({
+  LessonReservationScreen({
     super.key,
   });
 
   @override
-  State<ReLessonReservationScreen> createState() =>
-      _ReLessonReservationScreenState();
+  State<LessonReservationScreen> createState() =>
+      _LessonReservationScreenState();
 }
 
-class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
+class _LessonReservationScreenState extends State<LessonReservationScreen> {
   final formatter = NumberFormat.simpleCurrency(locale: 'ko');
 
   int sum() {
@@ -116,41 +115,36 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                       text: 'XX스키장 - 승민 스키교실\n지정강사 : 고승민',
                       size: goskiFontMedium,
                     ),
-                  ],
-                ),
-              ),
-            ),
-            // 일정 선택
-            GoskiCard(
-              child: Padding(
-                padding: EdgeInsets.all(cardPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                    SizedBox(height: contentPadding),
                     GoskiText(
-                      text: tr('selectDateTime'),
-                      size: goskiFontLarge,
-                      isBold: true,
+                      text: tr('date'),
+                      size: goskiFontSmall,
+                      color: goskiDarkGray,
                     ),
-                    SizedBox(height: titlePadding),
-                    GoskiBorderWhiteContainer(
-                      child: TextWithIconRow(
-                        text: tr('hintDate'),
-                        icon: Icons.calendar_month,
-                        onClicked: () {
-                          // TODO. 날짜 선택 버튼을 눌렀을 때 동작 추가 필요
-                        },
-                      ),
+                    GoskiText(
+                      text: '2024.00.00 (월)\n15:00 ~ 17:00',
+                      size: goskiFontMedium,
                     ),
-                    SizedBox(height: titlePadding),
-                    GoskiBorderWhiteContainer(
-                      child: TextWithIconRow(
-                        text: tr('hintTime'),
-                        icon: Icons.access_time_rounded,
-                        onClicked: () {
-                          // TODO. 시간 선택 버튼을 눌렀을 때 동작 추가 필요
-                        },
-                      ),
+                    SizedBox(height: contentPadding),
+                    GoskiText(
+                      text: tr('studentNumber'),
+                      size: goskiFontSmall,
+                      color: goskiDarkGray,
+                    ),
+                    GoskiText(
+                      text: '3명',
+                      size: goskiFontMedium,
+                    ),
+                    SizedBox(height: contentPadding),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GoskiText(
+                          text: tr('price', args: [formatter.format(sum())]),
+                          size: goskiFontMedium,
+                          isBold: true,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -192,7 +186,7 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                               children: [
                                 GoskiText(
                                   text:
-                                  '${item.age} / ${item.gender}\n${item.height} / ${item.weight} / ${item.feetSize}',
+                                      '${item.age} / ${item.gender}\n${item.height} / ${item.weight} / ${item.feetSize}',
                                   size: goskiFontMedium,
                                 ),
                               ],
