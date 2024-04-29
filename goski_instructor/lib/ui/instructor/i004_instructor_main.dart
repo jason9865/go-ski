@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
@@ -28,6 +29,17 @@ class InstructorMainScreen extends StatelessWidget {
         teamImage: 'assets/images/penguin.png',
         teamIntroduction: '3팀소개입니다.'),
   ];
+  final List<String> tiemList = [
+    '8시',
+    '9시',
+    '10시',
+    '11시',
+    '12시',
+    '13시',
+    '14시',
+    '15시',
+    '16시',
+  ];
   InstructorMainScreen({super.key});
 
   @override
@@ -37,13 +49,70 @@ class InstructorMainScreen extends StatelessWidget {
         child: Column(
           children: [
             buildProfile(),
+            const BuildInterval(),
             buildPageView(),
-            const SizedBox(
-              height: 1000,
-              child: Center(
-                child: Text('달력'),
+            const BuildInterval(),
+            GoskiCard(
+              child: Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: goskiDarkGray,
+                    ),
+                    height: 1000,
+                    width: screenSizeController.getWidthByRatio(0.13),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: screenSizeController.getHeightByRatio(0.05),
+                          width: double.infinity,
+                        ),
+                        const BuildTimeContainer(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: goskiDarkGray,
+                    ),
+                    height: 1000,
+                    width: screenSizeController.getWidthByRatio(0.25),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: goskiWhite,
+                          ),
+                          height: screenSizeController.getHeightByRatio(0.1),
+                          width: screenSizeController.getWidthByRatio(0.25),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image:
+                                        AssetImage("assets/images/person1.png"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              GoskiText(
+                                text: tr('임종율'),
+                                size: goskiFontLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -160,6 +229,26 @@ class InstructorMainScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class BuildTimeContainer extends StatelessWidget {
+  const BuildTimeContainer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: screenSizeController.getHeightByRatio(0.1),
+      width: double.infinity,
+      child: const Center(
+        child: GoskiText(
+          text: '8시',
+          size: goskiFontLarge,
+        ),
       ),
     );
   }
