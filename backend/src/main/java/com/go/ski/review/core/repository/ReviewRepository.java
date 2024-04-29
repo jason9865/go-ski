@@ -26,5 +26,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<InstructorReviewVO> findByInstructor(Instructor instructor);
 
     List<Review> findByLessonTeam(Team team);
+    List<Review> findByLessonInstructor(Instructor instructor);
 
 }

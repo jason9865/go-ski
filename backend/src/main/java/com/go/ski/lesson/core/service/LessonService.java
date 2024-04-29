@@ -1,6 +1,9 @@
 package com.go.ski.lesson.core.service;
 
+import com.go.ski.lesson.support.dto.ReserveAdvancedResponseDTO;
 import com.go.ski.lesson.support.dto.ReserveNoviceResponseDTO;
+import com.go.ski.lesson.support.dto.ReserveNoviceTeamRequestDTO;
+import com.go.ski.lesson.support.vo.CertificateInfoVO;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.payment.core.model.LessonInfo;
@@ -8,17 +11,21 @@ import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.team.core.model.*;
-import com.go.ski.team.core.repository.OneToNOptionRepository;
-import com.go.ski.team.core.repository.TeamImageRepository;
-import com.go.ski.team.core.repository.TeamInstructorRepository;
-import com.go.ski.team.core.repository.TeamRepository;
+import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.vo.TeamImageVO;
+import com.go.ski.user.core.model.Certificate;
 import com.go.ski.user.core.model.Instructor;
+import com.go.ski.user.core.model.InstructorCert;
+import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.InstructorCertRepository;
+import com.go.ski.user.core.repository.InstructorRepository;
+import com.go.ski.user.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,9 +36,14 @@ public class LessonService {
     private final TeamInstructorRepository teamInstructorRepository;
     private final TeamImageRepository teamImageRepository;
     private final OneToNOptionRepository oneToNOptionRepository;
+    private final LevelOptionRepository levelOptionRepository;
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final PermissionRepository permissionRepository;
+    private final InstructorRepository instructorRepository;
+    private final InstructorCertRepository instructorCertRepository;
 
-    public List<ReserveNoviceResponseDTO> reserveNovice(ReserveInfoVO reserveInfoVO) {
+    public List<ReserveNoviceResponseDTO> getTeamsForNovice(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
         List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
         List<ReserveNoviceResponseDTO> reserveNoviceResponseDTOs = new ArrayList<>();
@@ -40,9 +52,10 @@ public class LessonService {
             ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
                 // 팀 가격 설정
-                if (reserveInfoVO.getStudentCount() > 1) {
+                if (reserveInfoVO.getStudentCount() > 0) {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
-                    calculateTeamCost(reserveNoviceResponseDTO, oneToNOption, reserveInfoVO.getStudentCount());
+                    int teamCost = calculateTeamCost(team.getTeamCost(), oneToNOption, reserveInfoVO.getStudentCount());
+                    reserveNoviceResponseDTO.setTeamCost(teamCost * reserveInfoVO.getDuration());
                 }
                 // 별점 설정
                 List<Review> reviews = reviewRepository.findByLessonTeam(team);
@@ -63,22 +76,70 @@ public class LessonService {
         return reserveNoviceResponseDTOs;
     }
 
-    public List<Integer> reserveAdvanced(ReserveInfoVO reserveInfoVO) {
+    public Map<Integer, List<Integer>> getInstructorsForAdvanced(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
         List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
-        List<Integer> instructorsList = new ArrayList<>();
+        Map<Integer, List<Integer>> teamInstructorMap = new HashMap<>();
 
         for (Team team : teams) {
             ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
-                instructorsList.addAll(reserveNoviceResponseDTO.getInstructors());
-                log.info("성공! {}", instructorsList);
+                log.info("성공! {}", reserveNoviceResponseDTO);
+                teamInstructorMap.put(reserveNoviceResponseDTO.getTeamId(), reserveNoviceResponseDTO.getInstructors());
             } else {
                 log.info("해당 팀에 가능한 강사 없음: {}", team);
             }
         }
 
-        return instructorsList;
+        return teamInstructorMap;
+    }
+
+    public List<ReserveAdvancedResponseDTO> getInstructorsInTeam(int teamId, ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO) {
+        List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = new ArrayList<>();
+        List<Integer> instructorsList = reserveNoviceTeamRequestDTO.getInstructorsList();
+        for (int instructorId : instructorsList) {
+            try {
+                User user = userRepository.findById(instructorId).orElseThrow();
+                Instructor instructor = instructorRepository.findById(instructorId).orElseThrow();
+                Team team = teamRepository.findById(teamId).orElseThrow();
+                TeamInstructor teamInstructor = teamInstructorRepository.findByTeamAndInstructor(team, instructor).orElseThrow();
+                Permission permission = permissionRepository.findById(teamInstructor.getTeamInstructorId()).orElseThrow();
+                List<CertificateInfoVO> certificateInfoVOs = instructorCertRepository.findByInstructor(instructor)
+                        .stream().map(this::getCertificateInfoVO).collect(Collectors.toList());
+
+                ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(user, instructor, permission, certificateInfoVOs);
+                // 가격 설정
+                if (reserveNoviceTeamRequestDTO.getStudentCount() > 0) {
+                    Optional<OneToNOption> optionalOneToNOption = oneToNOptionRepository.findById(teamId);
+                    int teamCost = calculateTeamCost(team.getTeamCost(), optionalOneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
+                    Optional<LevelOption> optionalLevelOption = levelOptionRepository.findById(teamId);
+                    int levelCost = calculateLevelCost(optionalLevelOption, reserveNoviceTeamRequestDTO.getLevel());
+                    reserveAdvancedResponseDTO.setCost((teamCost + levelCost + permission.getDesignatedCost()) * reserveNoviceTeamRequestDTO.getDuration());
+                }
+                // 별점 설정
+                List<Review> reviews = reviewRepository.findByLessonInstructor(instructor);
+                if (!reviews.isEmpty()) {
+                    double rating = 0;
+                    for (Review review : reviews)
+                        rating += review.getRating();
+                    reserveAdvancedResponseDTO.setRating(rating / reviews.size());
+                    reserveAdvancedResponseDTO.setRatingCount(reviews.size());
+                }
+                reserveAdvancedResponseDTOs.add(reserveAdvancedResponseDTO);
+            } catch (NoSuchElementException ignored) {
+            }
+        }
+        return reserveAdvancedResponseDTOs;
+    }
+
+    private CertificateInfoVO getCertificateInfoVO(InstructorCert instructorCert) {
+        CertificateInfoVO certificateInfoVO = new CertificateInfoVO();
+        Certificate certificate = instructorCert.getCertificate();
+        certificateInfoVO.setCertificateId(certificate.getCertificateId());
+        certificateInfoVO.setCertificateName(certificate.getCertificateName());
+        certificateInfoVO.setCertificateType(certificate.getCertificateType());
+        certificateInfoVO.setCertificateImageUrl(instructorCert.getCertificateImageUrl());
+        return certificateInfoVO;
     }
 
     private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
@@ -190,16 +251,21 @@ public class LessonService {
         return teamImageVOs;
     }
 
-    private void calculateTeamCost(ReserveNoviceResponseDTO reserveNoviceResponseDTO, Optional<OneToNOption> oneToNOption, int studentCount) {
-        oneToNOption.ifPresent(option -> {
-            int teamCost = reserveNoviceResponseDTO.getTeamCost();
-            teamCost += switch (studentCount) {
-                case 2 -> option.getOneTwoFee();
-                case 3 -> option.getOneThreeFee();
-                case 4 -> option.getOneFourFee();
-                default -> option.getOneNFee();
-            };
-            reserveNoviceResponseDTO.setTeamCost(teamCost);
-        });
+    private int calculateTeamCost(int teamCost, Optional<OneToNOption> optionalOneToNOption, int studentCount) {
+        return optionalOneToNOption.map(option -> switch (studentCount) {
+            case 1 -> teamCost;
+            case 2 -> teamCost + option.getOneTwoFee();
+            case 3 -> teamCost + option.getOneThreeFee();
+            case 4 -> teamCost + option.getOneFourFee();
+            default -> teamCost + option.getOneNFee();
+        }).orElse(teamCost);
+    }
+
+    private int calculateLevelCost(Optional<LevelOption> optionalLevelOption, String level) {
+        return optionalLevelOption.map(option -> switch (level) {
+            case "중급" -> option.getIntermediateFee();
+            case "고급" -> option.getAdvancedFee();
+            default -> 0;
+        }).orElse(0);
     }
 }
