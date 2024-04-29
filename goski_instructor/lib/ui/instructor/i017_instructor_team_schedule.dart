@@ -10,20 +10,23 @@ import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_dropdown.dart';
+import 'package:goski_instructor/ui/component/goski_floating_button.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-class TeamScheduleScreen extends StatefulWidget {
-  const TeamScheduleScreen({super.key});
+class InstructorTeamScheduleScreen extends StatefulWidget {
+  const InstructorTeamScheduleScreen({super.key});
 
   @override
-  State<TeamScheduleScreen> createState() => _TeamScheduleScreenState();
+  State<InstructorTeamScheduleScreen> createState() =>
+      _InstructorTeamScheduleScreen();
 }
 
-class _TeamScheduleScreenState extends State<TeamScheduleScreen> {
+class _InstructorTeamScheduleScreen
+    extends State<InstructorTeamScheduleScreen> {
   final List<String> timeList = List.generate(17, (index) => '${8 + index}시');
   List<Schedule> scheduleList = [];
   List<DateTime> dateList = [];
@@ -37,24 +40,29 @@ class _TeamScheduleScreenState extends State<TeamScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildTeamCard(),
-            const BuildInterval(),
-            buildSelectDateDropdown(),
-            const BuildInterval(),
-            GoskiCard(
-              child: Row(
-                children: [
-                  buildTimeLine(),
-                  buildScheduleView(),
-                ],
-              ),
-            )
-          ],
+    return Scaffold(
+      body: GoskiContainer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildTeamCard(),
+              const BuildInterval(),
+              buildSelectDateDropdown(),
+              const BuildInterval(),
+              GoskiCard(
+                child: Row(
+                  children: [
+                    buildTimeLine(),
+                    buildScheduleView(),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: GoskiFloatingButton(
+        onTap: () => logger.d("일정 추가"),
       ),
     );
   }

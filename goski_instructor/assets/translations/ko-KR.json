@@ -168,5 +168,7 @@
   "lessonHistory" : "강습 내역",
   "dynamicTeam" : "{} 팀",
   "reject": "거절",
-  "accept": "수락"
+  "accept": "수락",
+  "teamMemberList" : "팀원 목록",
+  "lessonList" : "강습 목록"
 }
