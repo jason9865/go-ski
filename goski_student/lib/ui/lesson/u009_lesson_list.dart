@@ -9,6 +9,7 @@ import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_middlesize_button.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 
 class LessonListScreen extends StatelessWidget {
@@ -133,7 +134,12 @@ class LessonListScreen extends StatelessWidget {
       print(debugMessage);
     };
 
-    if (textId == 'feedback') {
+    if (textId =='cancelLesson'){
+      myOnTap = (){
+        Get.to(()=> CancelLessonScreen());
+      };
+    }
+    else if (textId == 'feedback') {
       myOnTap =
       () {
         Get.to(() => FeedbackScreen(
