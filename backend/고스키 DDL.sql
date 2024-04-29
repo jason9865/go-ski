@@ -196,6 +196,17 @@ CREATE TABLE `student_info` (
     `name`    VARCHAR(10)    NOT NULL
 );
 
+-- 2024-04-29 추가
+CREATE TABLE `notification` (
+    `notification_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `type`	ENUM("INVITE","LESSON","MESSAGE")	NOT NULL,
+    `title`	VARCHAR(50)	NOT NULL,
+    `content`	VARCHAR(255)	NULL,
+    `image_url`	VARCHAR(255)	NULL,
+    `is_read`	BIT(1)	NOT NULL,
+    `receiver_id` int(11) NOT NULL,
+    `sender_id` int(11) NOT NULL
+);
 
 
 ALTER TABLE `instructor`
