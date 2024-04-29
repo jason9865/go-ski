@@ -70,10 +70,13 @@ class CouponScreen extends StatelessWidget {
                     children: [
                       GoskiText(
                         text: coupon.discountAmount != null
-                            ? tr('moneyUnit', args: [
-                          NumberFormat('#,###')
-                              .format(coupon.discountAmount)
-                        ])
+                            ? coupon.discountAmount != 1
+                                ? tr('moneyUnit', args: [
+                                    NumberFormat('#,###')
+                                        .format(coupon.discountAmount)
+                                  ])
+                                : tr('countUnit',
+                                    args: [coupon.discountAmount.toString()])
                             : '${coupon.discountRate}%',
                         size: goskiFontXXLarge,
                         color: goskiLightPink,
@@ -127,10 +130,10 @@ class CouponScreen extends StatelessWidget {
                         color: goskiLightGray,
                         border: Border(
                             left: BorderSide(
-                              color: goskiDashGray,
-                              width: 1.0, // 경계선 두께
-                              style: BorderStyle.solid,
-                            ))),
+                          color: goskiDashGray,
+                          width: 1.0, // 경계선 두께
+                          style: BorderStyle.solid,
+                        ))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -167,7 +170,7 @@ class Coupon {
     required this.expirationDate,
     required this.couponCount,
   }) : assert(
-  (discountAmount == null) != (discountRate == null),
-  'discountAmount or discountRate 중 하나는 반드시 필요합니다.',
-  );
+          (discountAmount == null) != (discountRate == null),
+          'discountAmount or discountRate 중 하나는 반드시 필요합니다.',
+        );
 }

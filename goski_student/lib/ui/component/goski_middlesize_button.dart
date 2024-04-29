@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/ui/component/goski_text.dart';
 
 class GoskiMiddlesizeButton extends StatelessWidget {
   final double width;
+  final double height;
   final String text;
+  final double size;
   final VoidCallback onTap;
 
   const GoskiMiddlesizeButton({
@@ -12,6 +15,8 @@ class GoskiMiddlesizeButton extends StatelessWidget {
     required this.width,
     required this.text,
     required this.onTap,
+    this.height=67,
+    this.size=goskiFontMedium,
   });
 
   @override
@@ -20,11 +25,8 @@ class GoskiMiddlesizeButton extends StatelessWidget {
       onPressed: onTap,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(goskiWhite),
-        // 배경색 설정
         foregroundColor: MaterialStateProperty.all(goskiBlack),
-        // 텍스트 색상 설정
-        minimumSize: MaterialStateProperty.all(Size(width * 0.26, 67)),
-        // 최소 크기 설정
+        minimumSize: MaterialStateProperty.all(Size(width * 0.26, height)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -32,21 +34,7 @@ class GoskiMiddlesizeButton extends StatelessWidget {
                 )),
         padding: MaterialStateProperty.all(const EdgeInsets.all(0)), // 패딩 설정
       ),
-      child: Row(
-        children: [
-          // const Icon(
-          //   Icons.account_balance_wallet,
-          // ),
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            text,
-            style: const TextStyle(fontSize: goskiFontMedium),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+      child: GoskiText(text: text, size: size, textAlign: TextAlign.center,),
     );
   }
 }
