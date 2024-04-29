@@ -10,11 +10,13 @@ import 'goski_border_white_container.dart';
 class GoskiDropdown extends StatefulWidget {
   final String hint;
   final List<String> list;
+  final ValueChanged<dynamic>? onChanged;
 
   const GoskiDropdown({
     super.key,
     required this.hint,
     required this.list,
+    this.onChanged,
   });
 
   @override
@@ -65,6 +67,7 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                               setState(() {
                                 _selected = widget.list[index];
                                 _tooltipController.toggle();
+                                widget.onChanged?.call(index);
                               });
                             },
                             child: Container(
