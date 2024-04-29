@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
@@ -10,6 +8,7 @@ import 'package:goski_instructor/ui/component/goski_badge.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
+import 'package:goski_instructor/ui/instructor/i015_feedback.dart';
 
 class LessonListScreen extends StatelessWidget {
   const LessonListScreen({super.key});
@@ -18,7 +17,7 @@ class LessonListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     cardOnTap() => {print("강습 세부정보")};
-    myOnTap() => {print("쪽지보내기 ? 피드백 작성? 피드백 수정")};
+    VoidCallback myOnTap;
 
     final List<_StudentInfo> studentList = [
       _StudentInfo(
@@ -53,31 +52,37 @@ class LessonListScreen extends StatelessWidget {
     final List<_Lesson> lessonList = [
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now().add(const Duration(minutes: 30)),
           endTime: DateTime.now(),
           studentList: studentList),
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now().add(const Duration(days: 1)),
           endTime: DateTime.now(),
           studentList: studentList),
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now(),
           endTime: DateTime.now().add(const Duration(hours: 3)),
           studentList: studentList),
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now().subtract(const Duration(days: 1)),
           endTime: DateTime.now().subtract(const Duration(hours: 5)),
           studentList: studentList),
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now().subtract(const Duration(days: 1)),
           endTime: DateTime.now().subtract(const Duration(hours: 5)),
           studentList: studentList),
       _Lesson(
           resortName: "지산스키장",
+          teamName: "승민 스키교실",
           startTime: DateTime.now().subtract(const Duration(days: 1)),
           endTime: DateTime.now().subtract(const Duration(hours: 5)),
           studentList: studentList),
@@ -100,9 +105,15 @@ class LessonListScreen extends StatelessWidget {
                 lessonStatus = 'onGoing';
                 lessonBackgroundColor = goskiYellow;
                 buttonString = 'sendMessage';
+                myOnTap = () {
+                  print("쪽지보내기 ? 피드백 작성? 피드백 수정");
+                };
               } else if (lesson.startTime.isAfter(now)) {
                 lessonBackgroundColor = goskiBlue;
                 buttonStatus = false;
+                myOnTap = () {
+                  print("쪽지보내기 ? 피드백 작성? 피드백 수정");
+                };
                 if (lesson.startTime
                     .isBefore(now.add(const Duration(minutes: 30)))) {
                   buttonString = 'sendMessage';
@@ -113,10 +124,27 @@ class LessonListScreen extends StatelessWidget {
                 lessonStatus = 'noFeedback';
                 lessonBackgroundColor = goskiDarkPink;
                 buttonString = 'createFeedback';
+                myOnTap = () {
+                  Get.to(() => FeedbackScreen(
+                        resortName: lesson.resortName,
+                        teamName: lesson.teamName,
+                        startTime: lesson.startTime,
+                        endTime: lesson.endTime,
+                      ));
+                };
               } else {
                 lessonStatus = 'yesFeedback';
                 lessonBackgroundColor = goskiBlack;
                 buttonString = 'updateFeedback';
+                myOnTap = () {
+                  Get.to(() => FeedbackScreen(
+                        resortName: lesson.resortName,
+                        teamName: lesson.teamName,
+                        startTime: lesson.startTime,
+                        endTime: lesson.endTime,
+                        // 기존에 저장되어있는 피드백 정보들도 같이
+                      ));
+                };
               }
 
               return GestureDetector(
@@ -278,12 +306,14 @@ class LessonListScreen extends StatelessWidget {
 
 class _Lesson {
   final String resortName;
+  final String teamName;
   final DateTime startTime;
   final DateTime endTime;
   final List<_StudentInfo> studentList;
 
   _Lesson(
       {required this.resortName,
+      required this.teamName,
       required this.startTime,
       required this.endTime,
       required this.studentList});
