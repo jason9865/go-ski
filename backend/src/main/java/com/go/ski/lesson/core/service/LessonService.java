@@ -133,9 +133,28 @@ public class LessonService {
     }
 
     public List<InstructorLessonResponseDTO> getInstructorLessonList(User user) {
-        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = new ArrayList<>();
         Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
-        for (Lesson lesson : lessonRepository.findByInstructor(instructor)) {
+        List<Lesson> lessons = lessonRepository.findByInstructor(instructor);
+        return getInstructorLessonResponseDTOs(lessons);
+    }
+
+    public boolean isNotTeamBoss(User user, int teamId) {
+        return !user.equals(teamRepository.findById(teamId).orElse(Team.builder().build()).getUser());
+    }
+
+    public List<InstructorLessonResponseDTO> getBossLessonList(int teamId) {
+        List<Lesson> lessons = lessonRepository.findByTeamTeamId(teamId);
+        return getInstructorLessonResponseDTOs(lessons);
+    }
+
+    public List<InstructorLessonResponseDTO> getBossInstructorLessonList(int teamId, int instructorId) {
+        List<Lesson> lessons = lessonRepository.findByTeamTeamIdAndInstructorInstructorId(teamId, instructorId);
+        return getInstructorLessonResponseDTOs(lessons);
+    }
+
+    private List<InstructorLessonResponseDTO> getInstructorLessonResponseDTOs(List<Lesson> lessons) {
+        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = new ArrayList<>();
+        for (Lesson lesson : lessons) {
             try {
                 LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
                 List<StudentInfo> studentInfos = studentInfoRepository.findByLessonInfo(lessonInfo);
@@ -145,7 +164,6 @@ public class LessonService {
         }
         return instructorLessonResponseDTOs;
     }
-
 
     private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
         // 강습 일자, 팀으로 이미 예약된 강습 리스트

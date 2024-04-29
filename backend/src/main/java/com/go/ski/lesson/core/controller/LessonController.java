@@ -1,8 +1,10 @@
 package com.go.ski.lesson.core.controller;
 
+import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.lesson.core.service.LessonService;
 import com.go.ski.lesson.support.dto.*;
+import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.user.core.model.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,6 +63,26 @@ public class LessonController {
         log.info("강습 내역 리스트 조회(강사)");
         User user = (User) request.getAttribute("user");
         List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = lessonService.getInstructorLessonList(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(instructorLessonResponseDTOs));
+    }
+
+    @GetMapping("/list/head/{teamId}")
+    public ResponseEntity<ApiResponse<?>> getHeadLessonList(HttpServletRequest request, @PathVariable Integer teamId) {
+        log.info("강습 내역 리스트 조회(사장)");
+        if (lessonService.isNotTeamBoss((User) request.getAttribute("user"), teamId)) {
+            throw ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.WRONG_REQUEST);
+        }
+        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = lessonService.getBossLessonList(teamId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(instructorLessonResponseDTOs));
+    }
+
+    @GetMapping("/list/head")
+    public ResponseEntity<ApiResponse<?>> getHeadLessonList(HttpServletRequest request, @RequestParam("teamId") Integer teamId, @RequestParam("instId") Integer instructorId) {
+        log.info("강사 강습 내역 리스트 조회(사장)");
+        if (lessonService.isNotTeamBoss((User) request.getAttribute("user"), teamId)) {
+            throw ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.WRONG_REQUEST);
+        }
+        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = lessonService.getBossInstructorLessonList(teamId, instructorId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(instructorLessonResponseDTOs));
     }
 }

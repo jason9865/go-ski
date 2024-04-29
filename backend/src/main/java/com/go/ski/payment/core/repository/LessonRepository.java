@@ -9,5 +9,10 @@ import java.util.List;
 
 public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     List<Lesson> findByUser(User user);
+
     List<Lesson> findByInstructor(Instructor instructor);
+
+    List<Lesson> findByTeamTeamId(int teamId);
+
+    List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
 }
