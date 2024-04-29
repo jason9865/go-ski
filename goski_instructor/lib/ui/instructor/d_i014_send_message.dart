@@ -9,10 +9,10 @@ import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/image_picker_controller.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
-import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../const/util/screen_size_controller.dart';
+import '../component/goski_border_white_container.dart';
 import '../component/goski_modal.dart';
 import '../component/goski_smallsize_button.dart';
 
@@ -74,7 +74,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
               isBold: true,
             ),
             SizedBox(height: titlePadding),
-            BorderWhiteContainer(
+            GoskiBorderWhiteContainer(
               child: GestureDetector(
                 onTap: () async {
                   if (hasImage && image != null) {

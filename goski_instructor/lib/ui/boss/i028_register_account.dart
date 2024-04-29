@@ -11,8 +11,9 @@ import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
-import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
 import 'package:logger/logger.dart';
+
+import '../component/goski_border_white_container.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
@@ -55,7 +56,7 @@ class RegisterAccountScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     width: screenSizeController.getWidthByRatio(0.8),
-                    child: BorderWhiteContainer(
+                    child: GoskiBorderWhiteContainer(
                       child: TextWithIconRow(
                         text: tr('selectBank'),
                         icon: Icons.keyboard_arrow_down,

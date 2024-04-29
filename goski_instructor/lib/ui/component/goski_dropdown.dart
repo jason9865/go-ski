@@ -5,7 +5,7 @@ import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
-import '../instructor/d_i013_lesson_detail.dart';
+import 'goski_border_white_container.dart';
 
 class GoskiDropdown extends StatefulWidget {
   final String hint;
@@ -92,7 +92,7 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
         },
         child: GestureDetector(
           onTap: onShowDropdownButtonClicked,
-          child: BorderWhiteContainer(
+          child: GoskiBorderWhiteContainer(
             child: Row(
               children: [
                 Expanded(
