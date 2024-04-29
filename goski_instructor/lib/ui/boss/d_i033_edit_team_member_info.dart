@@ -104,6 +104,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
             ),
             GoskiTextField(
               hintText: tr('hintSetLessonPrice'),
+              isDigitOnly: true,
             ),
             SizedBox(
               height: contentPadding,

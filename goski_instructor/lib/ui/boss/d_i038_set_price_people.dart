@@ -32,6 +32,7 @@ class SetPricePeopleDialog extends StatelessWidget {
               child: GoskiTextField(
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
+                isDigitOnly: true,
               ),
             ),
             SizedBox(
@@ -44,6 +45,7 @@ class SetPricePeopleDialog extends StatelessWidget {
               child: GoskiTextField(
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
+                isDigitOnly: true,
               ),
             ),
             SizedBox(
@@ -56,6 +58,7 @@ class SetPricePeopleDialog extends StatelessWidget {
               child: GoskiTextField(
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
+                isDigitOnly: true,
               ),
             ),
             SizedBox(
@@ -68,6 +71,7 @@ class SetPricePeopleDialog extends StatelessWidget {
               child: GoskiTextField(
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
+                isDigitOnly: true,
               ),
             ),
             SizedBox(
@@ -102,6 +106,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                   child: GoskiTextField(
                     hintText: tr('enterAdditionalPrice'),
                     textAlign: TextAlign.center,
+                    isDigitOnly: true,
                   ),
                 ),
               ],
