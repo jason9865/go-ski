@@ -13,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/lessson")
+@RequestMapping("/api/v1/lesson")
 @RestController
 public class LessonController {
     private final LessonService lessonService;
@@ -35,11 +37,12 @@ public class LessonController {
     @PostMapping("/reserve/advanced")
     public ResponseEntity<ApiResponse<?>> getInstructorsForAdvanced(@RequestBody ReserveRequestDTO reserveRequestDTO) {
         log.info("강습조회 - 중/상급(강사리스트): {}", reserveRequestDTO);
-        ReserveInfoVO reserveInfoVO = new ReserveInfoVO(reserveRequestDTO);
-        Map<Integer, List<Integer>> instructorsList = lessonService.getInstructorsForAdvanced(reserveInfoVO);
-        // 강사 id로 강사 정보를 가져오는 메서드를 호출해야함
+        Map<Integer, ReserveNoviceTeamRequestDTO> instructorsList = lessonService.getInstructorsForAdvanced(new ReserveInfoVO(reserveRequestDTO));
+        List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = instructorsList.entrySet().stream()
+                .flatMap(entry -> lessonService.getInstructorsInTeam(entry.getKey(), entry.getValue()).stream())
+                .collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(instructorsList));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(reserveAdvancedResponseDTOs));
     }
 
     @PostMapping("/reserve/novice/{teamId}")

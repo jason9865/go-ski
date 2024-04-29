@@ -76,16 +76,18 @@ public class LessonService {
         return reserveNoviceResponseDTOs;
     }
 
-    public Map<Integer, List<Integer>> getInstructorsForAdvanced(ReserveInfoVO reserveInfoVO) {
+    public Map<Integer, ReserveNoviceTeamRequestDTO> getInstructorsForAdvanced(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
         List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
-        Map<Integer, List<Integer>> teamInstructorMap = new HashMap<>();
+        Map<Integer,ReserveNoviceTeamRequestDTO> teamInstructorMap = new HashMap<>();
 
         for (Team team : teams) {
             ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
                 log.info("성공! {}", reserveNoviceResponseDTO);
-                teamInstructorMap.put(reserveNoviceResponseDTO.getTeamId(), reserveNoviceResponseDTO.getInstructors());
+                ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO = new ReserveNoviceTeamRequestDTO(reserveInfoVO);
+                reserveNoviceTeamRequestDTO.setInstructorsList(reserveNoviceResponseDTO.getInstructors());
+                teamInstructorMap.put(reserveNoviceResponseDTO.getTeamId(), reserveNoviceTeamRequestDTO);
             } else {
                 log.info("해당 팀에 가능한 강사 없음: {}", team);
             }

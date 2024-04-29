@@ -33,8 +33,8 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
                     lessonType = "1100000";
                 } else {
                     switch (reserveRequestDTO.getLevel()) {
-                        case "중급" -> lessonType = "1100010";
-                        case "고급" -> lessonType = "1100011";
+                        case "중급" -> lessonType = "1101000";
+                        case "고급" -> lessonType = "1101100";
                         default -> throw new IllegalArgumentException("Invalid lesson type");
                     }
                 }
