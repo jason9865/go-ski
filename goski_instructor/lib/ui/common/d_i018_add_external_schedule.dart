@@ -6,9 +6,9 @@ import 'package:goski_instructor/ui/component/goski_dropdown.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
-import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
 
 import '../../const/util/screen_size_controller.dart';
+import '../component/goski_border_white_container.dart';
 import '../component/goski_smallsize_button.dart';
 
 class AddExternalScheduleDialog extends StatelessWidget {
@@ -69,7 +69,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: titlePadding),
-            BorderWhiteContainer(
+            GoskiBorderWhiteContainer(
               child: TextWithIconRow(
                 text: tr('hintDate'),
                 icon: Icons.calendar_month,
@@ -79,7 +79,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: titlePadding),
-            BorderWhiteContainer(
+            GoskiBorderWhiteContainer(
               child: TextWithIconRow(
                 text: tr('hintTime'),
                 icon: Icons.access_time_rounded,
@@ -189,7 +189,7 @@ class TitleWithInputRow extends StatelessWidget {
         ),
         Flexible(
           flex: 6,
-          child: BorderWhiteContainer(
+          child: GoskiBorderWhiteContainer(
             child: TextWithIconRow(
               text: text,
               icon: icon,

@@ -6,6 +6,7 @@ import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/util/screen_size_controller.dart';
+import '../component/goski_border_white_container.dart';
 
 class LessonDetailDialog extends StatelessWidget {
   final LessonDetailData data;
@@ -27,7 +28,7 @@ class LessonDetailDialog extends StatelessWidget {
           isBold: true,
         ),
         SizedBox(height: titlePadding),
-        BorderWhiteContainer(
+        GoskiBorderWhiteContainer(
           child: GoskiText(
             text: data.date,
             size: goskiFontMedium,
@@ -40,7 +41,7 @@ class LessonDetailDialog extends StatelessWidget {
           isBold: true,
         ),
         SizedBox(height: titlePadding),
-        BorderWhiteContainer(
+        GoskiBorderWhiteContainer(
           child: GoskiText(
             text: data.location,
             size: goskiFontMedium,
@@ -53,7 +54,7 @@ class LessonDetailDialog extends StatelessWidget {
           isBold: true,
         ),
         SizedBox(height: titlePadding),
-        BorderWhiteContainer(
+        GoskiBorderWhiteContainer(
           child: GoskiText(
             text: data.reservationPerson,
             size: goskiFontMedium,
@@ -66,7 +67,7 @@ class LessonDetailDialog extends StatelessWidget {
           isBold: true,
         ),
         SizedBox(height: titlePadding),
-        BorderWhiteContainer(
+        GoskiBorderWhiteContainer(
           child: Column(
             children: [
               Container(
@@ -107,7 +108,7 @@ class LessonDetailDialog extends StatelessWidget {
           isBold: true,
         ),
         SizedBox(height: titlePadding),
-        BorderWhiteContainer(
+        GoskiBorderWhiteContainer(
           child: GoskiText(
             text: data.requestMessage,
             size: goskiFontMedium,
@@ -115,33 +116,6 @@ class LessonDetailDialog extends StatelessWidget {
         ),
         SizedBox(height: contentPadding),
       ],
-    );
-  }
-}
-
-// TODO. 추후에 컴포넌트 폴더로 이동해도 될 것 같음
-class BorderWhiteContainer extends StatelessWidget {
-  final Widget? child;
-
-  const BorderWhiteContainer({
-    super.key,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
-    final padding = screenSizeController.getWidthByRatio(0.02);
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(padding),
-      decoration: BoxDecoration(
-        color: goskiWhite,
-        border: Border.all(width: 1, color: goskiDarkGray),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: child,
     );
   }
 }
