@@ -1,14 +1,13 @@
-package com.go.ski.Notification.core.service;
+package com.go.ski.notification.core.service;
 
-import com.go.ski.Notification.core.domain.Notification;
-import com.go.ski.Notification.core.repository.NotificationRepository;
-import com.go.ski.Notification.support.dto.FcmTokenRequestDTO;
-import com.go.ski.Notification.support.dto.NotificationResponseDTO;
-import com.go.ski.Notification.support.exception.NotificationExceptionEnum;
+import com.go.ski.notification.core.domain.Notification;
+import com.go.ski.notification.core.repository.NotificationRepository;
+import com.go.ski.notification.support.dto.FcmTokenRequestDTO;
+import com.go.ski.notification.support.dto.NotificationResponseDTO;
+import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
-import com.go.ski.user.support.exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

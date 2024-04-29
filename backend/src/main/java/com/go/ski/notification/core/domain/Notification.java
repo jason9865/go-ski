@@ -1,6 +1,5 @@
-package com.go.ski.Notification.core.domain;
+package com.go.ski.notification.core.domain;
 
-import com.go.ski.user.core.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

@@ -1,4 +1,4 @@
-package com.go.ski.Notification.support.dto;
+package com.go.ski.notification.support.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

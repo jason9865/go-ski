@@ -1,7 +1,6 @@
-package com.go.ski.Notification.support.dto;
+package com.go.ski.notification.support.dto;
 
-import com.go.ski.Notification.core.domain.Notification;
-import com.go.ski.Notification.core.domain.NotificationType;
+import com.go.ski.notification.core.domain.NotificationType;
 import lombok.*;
 
 @Getter
