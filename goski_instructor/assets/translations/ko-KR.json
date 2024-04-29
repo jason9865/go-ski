@@ -166,6 +166,7 @@
   "couponBox" : "쿠폰함",
   "reviewHistory" : "리뷰 내역",
   "lessonHistory" : "강습 내역",
+  "dynamicTeam" : "{} 팀",
   "reject": "거절",
   "accept": "수락"
 }

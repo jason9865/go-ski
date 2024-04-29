@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
@@ -9,38 +9,26 @@ import 'package:goski_instructor/const/util/week_day_parser.dart';
 import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
+import 'package:goski_instructor/ui/component/goski_dropdown.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-class InstructorMainScreen extends StatefulWidget {
-  const InstructorMainScreen({super.key});
+class TeamScheduleScreen extends StatefulWidget {
+  const TeamScheduleScreen({super.key});
 
   @override
-  State<InstructorMainScreen> createState() => _InstructorMainScreenState();
+  State<TeamScheduleScreen> createState() => _TeamScheduleScreenState();
 }
 
-class _InstructorMainScreenState extends State<InstructorMainScreen> {
-  final List<TeamInfo> teamList = [
-    TeamInfo(
-        teamName: '팀이름1',
-        teamImage: 'assets/images/penguin.png',
-        teamIntroduction: '1팀소개입니다.'),
-    TeamInfo(
-        teamName: '팀이름2',
-        teamImage: 'assets/images/penguin.png',
-        teamIntroduction: '2팀소개입니다.'),
-    TeamInfo(
-        teamName: '팀이름3',
-        teamImage: 'assets/images/penguin.png',
-        teamIntroduction: '3팀소개입니다.'),
-  ];
-  // 좌측 타임라인 생성을 위한 리스트
+class _TeamScheduleScreenState extends State<TeamScheduleScreen> {
   final List<String> timeList = List.generate(17, (index) => '${8 + index}시');
   List<Schedule> scheduleList = [];
-
+  List<DateTime> dateList = [];
+  String selectedDate = '';
+  final imageSize = screenSizeController.getWidthByRatio(0.25);
   @override
   void initState() {
     super.initState();
@@ -53,9 +41,9 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            buildProfileCard(),
+            buildTeamCard(),
             const BuildInterval(),
-            buildTeamPageView(),
+            buildSelectDateDropdown(),
             const BuildInterval(),
             GoskiCard(
               child: Row(
@@ -71,80 +59,13 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
     );
   }
 
-  Widget buildProfileCard() {
-    final profileSize = screenSizeController.getWidthByRatio(0.25);
-    return GoskiCard(
-      child: Container(
-        color: goskiWhite,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: screenSizeController.getHeightByRatio(0.02),
-            horizontal: screenSizeController.getWidthByRatio(0.07),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: profileSize,
-                    height: profileSize,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/person1.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      GoskiText(
-                        text: tr('임종율'),
-                        size: goskiFontXXLarge,
-                      ),
-                      GoskiText(
-                        text: tr('dynamicInstructor', args: ['']),
-                        size: goskiFontXLarge,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: screenSizeController.getHeightByRatio(0.03),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  UserMenu(
-                    iconName: 'couponBox',
-                    iconImage: 'assets/images/couponBox.svg',
-                    onClick: () => logger.d("쿠폰함"),
-                  ),
-                  UserMenu(
-                    iconName: 'reviewHistory',
-                    iconImage: 'assets/images/reviewHistory.svg',
-                    onClick: () => logger.d("리뷰 내역"),
-                  ),
-                  UserMenu(
-                    iconName: 'lessonHistory',
-                    iconImage: 'assets/images/lessonHistory.svg',
-                    onClick: () => logger.d("강습"),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void updateScheduleList(List<Map<String, dynamic>> dummy) {
+  void updateScheduleList(List<Map<String, dynamic>> dummy) async {
     scheduleList.clear();
+    dateList.clear();
     final DateTime now = DateTime.now();
+    if (selectedDate.isEmpty) {
+      selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    }
 
     for (int i = 0; i < dummy.length; i++) {
       if (DateTime.parse(dummy[i]['lesson_date']).month == now.month &&
@@ -164,14 +85,38 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
     int length = firstLessonToLastLesson.inDays + 1;
 
     Map<String, int> dateTimeIndex = {};
+    int index = 0;
     for (int i = 0; i < length; i++) {
       DateTime indexDate = firstLessonDate.add(Duration(days: i));
-      dateTimeIndex[indexDate.toString().substring(0, 10)] = i;
-      scheduleList.add(Schedule(indexDate));
+      dateList.add(indexDate);
+
+      for (int j = 0; j < dummy.length; j++) {
+        DateTime dummyDateIndex = DateTime.parse(dummy[j]['lesson_date']);
+        if (dummyDateIndex.isAfter(indexDate)) {
+          break;
+        }
+        if (dummyDateIndex == indexDate) {
+          scheduleList.add(
+            Schedule(
+              indexDate,
+              Instructor(
+                name: dummy[j]['instructor_name'],
+                profileUrl: dummy[j]['instructor_profile_url'],
+              ),
+            ),
+          );
+          dateTimeIndex[
+                  '${dummy[j]['lesson_date']}-${dummy[j]['instructor_name']}'] =
+              index++;
+          // dummy.remove(dummy[j]);
+        }
+      }
     }
     for (int i = 0; i < dummy.length; i++) {
-      int index = dateTimeIndex[dummy[i][
-          'lesson_date']]!; // dateTimeIndex로 dummy에 해당하는 Schedule 객체를 scheduleList에서 search
+      if (dummy[i]['lesson_date'] != selectedDate) continue;
+      logger.e("checkPoint");
+      int index = dateTimeIndex[
+          '${dummy[i]['lesson_date']}-${dummy[i]['instructor_name']}']!; // dateTimeIndex로 dummy에 해당하는 Schedule 객체를 scheduleList에서 search
       List<ScheduleItem> target =
           scheduleList[index].items; // 바꿀 Schedule Column
       int startTimeIndex = parseTimeToIndex(dummy[i][
@@ -200,52 +145,77 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
     return totalMinutes ~/ 30 - 16;
   }
 
-  Widget buildTeamPageView() {
-    return SizedBox(
-      height: screenSizeController.getHeightByRatio(0.18),
-      child: PageView.builder(
-        itemCount: teamList.length,
-        itemBuilder: (context, index) {
-          return GoskiCard(
-            child: Container(
-              color: goskiWhite,
-              child: Row(
-                children: [
-                  Container(
-                    width: screenSizeController.getWidthByRatio(0.3),
-                    height: screenSizeController.getHeightByRatio(0.13),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(teamList[index].teamImage),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+  Widget buildTeamCard() {
+    return GoskiCard(
+      child: Container(
+        color: goskiWhite,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: screenSizeController.getHeightByRatio(0.02),
+            horizontal: screenSizeController.getWidthByRatio(0.02),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: imageSize,
+                height: imageSize,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/penguin.png"),
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(width: screenSizeController.getWidthByRatio(0.02)),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GoskiText(
-                            text: teamList[index].teamName,
-                            size: goskiFontXLarge),
-                        SizedBox(
-                          height: screenSizeController.getHeightByRatio(0.02),
-                        ),
-                        GoskiText(
-                            text: teamList[index].teamIntroduction,
-                            size: goskiFontLarge),
-                      ],
-                    ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GoskiText(
+                    text: tr('dynamicTeam', args: ['Goski']),
+                    size: goskiFontXXLarge,
+                  ),
+                  const GoskiText(
+                    text: 'OO리조트',
+                    size: goskiFontLarge,
                   ),
                 ],
               ),
-            ),
-          );
-        },
+              GestureDetector(
+                onTap: () => logger.d("팀 정보 페이지 이동"),
+                child: const Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Icon(Icons.arrow_forward_ios),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget buildSelectDateDropdown() {
+    List<String> formattedDateList = dateList.map((date) {
+      return '${date.month}월 ${date.day}일 (${weekdayToString(date.weekday)})';
+    }).toList();
+    return Row(
+      children: [
+        SizedBox(
+          width: screenSizeController.getWidthByRatio(0.4),
+          child: GoskiDropdown(
+            hint: tr('hintDate'),
+            list: formattedDateList,
+            onChanged: (dynamic newValue) {
+              setState(() {
+                selectedDate =
+                    DateFormat('yyyy-MM-dd').format(dateList[newValue]);
+                updateScheduleList(dummy);
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -279,17 +249,20 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
         scrollDirection: Axis.horizontal,
         itemCount: scheduleList.length,
         itemBuilder: (context, index) {
-          return SizedBox(
-            width: screenSizeController.getWidthByRatio(0.25),
-            child: buildSchedule(scheduleList[index]),
-          );
+          if (DateFormat('yyyy-MM-dd').format(scheduleList[index].lessonDate) ==
+              selectedDate) {
+            return SizedBox(
+              width: screenSizeController.getWidthByRatio(0.25),
+              child: buildSchedule(scheduleList[index]),
+            );
+          }
+          return null;
         },
       ),
     );
   }
 
   Widget buildSchedule(Schedule schedule) {
-    String weekday = weekdayToString(schedule.lessonDate.weekday);
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -314,13 +287,25 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
             ),
             height: screenSizeController.getHeightByRatio(0.1),
             width: screenSizeController.getWidthByRatio(0.25),
-            child: Center(
-              child: GoskiText(
-                text:
-                    '$weekday\n${schedule.lessonDate.month}/${schedule.lessonDate.day}',
-                size: goskiFontLarge,
-                textAlign: TextAlign.center,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: imageSize / 2,
+                  height: imageSize / 2,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(schedule.instructor.profileUrl),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                GoskiText(
+                  text: schedule.instructor.name,
+                  size: goskiFontMedium,
+                ),
+              ],
             ),
           ),
           ...schedule.items.map(
@@ -403,53 +388,6 @@ class BuildScheduleContainer extends StatelessWidget {
   }
 }
 
-class UserMenu extends StatelessWidget {
-  final String iconName;
-  final String iconImage;
-  final VoidCallback onClick;
-
-  const UserMenu({
-    required this.iconName,
-    required this.iconImage,
-    required this.onClick,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          iconImage,
-          width: 45,
-          height: 45,
-          colorFilter: const ColorFilter.mode(
-            goskiBlack,
-            BlendMode.srcIn,
-          ),
-        ),
-        GoskiText(
-          text: tr(
-            iconName,
-          ),
-          size: goskiFontLarge,
-        )
-      ],
-    );
-  }
-}
-
-class TeamInfo {
-  final String teamName;
-  final String teamImage;
-  final String teamIntroduction;
-
-  TeamInfo(
-      {required this.teamName,
-      required this.teamImage,
-      required this.teamIntroduction});
-}
-
 class ScheduleItem {
   double duration;
   int studentCount;
@@ -466,17 +404,31 @@ class ScheduleItem {
   });
 }
 
+class Instructor {
+  String name;
+  String profileUrl;
+  Instructor({
+    required this.name,
+    required this.profileUrl,
+  });
+}
+
 class Schedule {
   List<ScheduleItem> items;
   DateTime lessonDate;
+  Instructor instructor;
 
-  Schedule(this.lessonDate)
-      : items = List.generate(32, (index) => ScheduleItem());
+  Schedule(
+    this.lessonDate,
+    this.instructor,
+  ) : items = List.generate(32, (index) => ScheduleItem());
 }
 
 List<Map<String, dynamic>> dummy = [
   {
-    'lesson_date': "2024-04-28",
+    "instructor_name": "송준석",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-28",
     "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
@@ -485,70 +437,9 @@ List<Map<String, dynamic>> dummy = [
     "is_designated": "0"
   },
   {
-    'lesson_date': "2024-04-29",
-    "start_time": "0830",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "1"
-  },
-  {
-    'lesson_date': "2024-04-29",
-    "start_time": "1300",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
-  },
-  {
-    'lesson_date': "2024-04-29",
-    "start_time": "1600",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
-  },
-  {
-    'lesson_date': "2024-04-30",
-    "start_time": "0900",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "1"
-  },
-  {
-    'lesson_date': "2024-04-30",
-    "start_time": "1500",
-    "duration": "3",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
-  },
-  {
-    'lesson_date': "2024-05-01",
-    "start_time": "0930",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
-  },
-  {
-    'lesson_date': "2024-05-02",
-    "start_time": "1000",
-    "duration": "2",
-    "name": "송준석", //예약자 이름
-    "studentCount": "2",
-    "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
-  },
-  {
-    'lesson_date': "2024-05-04",
+    "instructor_name": "송준석",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-29",
     "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
@@ -557,7 +448,9 @@ List<Map<String, dynamic>> dummy = [
     "is_designated": "0"
   },
   {
-    'lesson_date': "2024-05-05",
+    "instructor_name": "최지찬",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-29",
     "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
@@ -566,7 +459,9 @@ List<Map<String, dynamic>> dummy = [
     "is_designated": "0"
   },
   {
-    'lesson_date': "2024-05-06",
+    "instructor_name": "장승호",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-29",
     "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
@@ -575,7 +470,9 @@ List<Map<String, dynamic>> dummy = [
     "is_designated": "0"
   },
   {
-    'lesson_date': "2024-05-07",
+    "instructor_name": "임종율",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-29",
     "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
@@ -584,8 +481,43 @@ List<Map<String, dynamic>> dummy = [
     "is_designated": "0"
   },
   {
-    'lesson_date': "2024-05-08",
-    "start_time": "1000",
+    "instructor_name": "송준석",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-30",
+    "start_time": "0800",
+    "duration": "2",
+    "name": "송준석", //예약자 이름
+    "studentCount": "2",
+    "lessonType": "ski", //스키, 보드 여부
+    "is_designated": "0"
+  },
+  {
+    "instructor_name": "임종율",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-30",
+    "start_time": "0800",
+    "duration": "2",
+    "name": "송준석", //예약자 이름
+    "studentCount": "2",
+    "lessonType": "ski", //스키, 보드 여부
+    "is_designated": "0"
+  },
+  {
+    "instructor_name": "고승민",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-30",
+    "start_time": "0800",
+    "duration": "2",
+    "name": "송준석", //예약자 이름
+    "studentCount": "2",
+    "lessonType": "ski", //스키, 보드 여부
+    "is_designated": "0"
+  },
+  {
+    "instructor_name": "송준석",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-05-02",
+    "start_time": "0800",
     "duration": "2",
     "name": "송준석", //예약자 이름
     "studentCount": "2",
