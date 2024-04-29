@@ -146,22 +146,15 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
     scheduleList.clear();
     final DateTime now = DateTime.now();
 
-    for (int i = 0; i < dummy.length; i++) {
-      if (DateTime.parse(dummy[i]['lesson_date']).month == now.month &&
-          DateTime.parse(dummy[i]['lesson_date']).day == now.day) continue;
-      if (DateTime.parse(dummy[i]['lesson_date']).isBefore(now)) {
-        dummy.remove(dummy[i]);
-      }
-    }
+    // 오늘 이전까지 데이터 제거
+    dummy.removeWhere((entry) {
+      DateTime lessonDate = DateTime.parse(entry['lesson_date']);
+      return lessonDate.isBefore(DateTime(now.year, now.month, now.day));
+    });
 
-    Map<String, dynamic> firstLesson = dummy[0];
-    DateTime firstLessonDate = DateTime.parse(firstLesson['lesson_date']);
-    Map<String, dynamic> lastLesson = dummy[dummy.length - 1];
-    DateTime lastLessonDate = DateTime.parse(lastLesson['lesson_date']);
-    Duration firstLessonToLastLesson =
-        lastLessonDate.difference(firstLessonDate);
-
-    int length = firstLessonToLastLesson.inDays + 1;
+    DateTime firstLessonDate = DateTime.parse(dummy.first['lesson_date']);
+    DateTime lastLessonDate = DateTime.parse(dummy.last['lesson_date']);
+    int length = lastLessonDate.difference(firstLessonDate).inDays + 1;
 
     Map<String, int> dateTimeIndex = {};
     for (int i = 0; i < length; i++) {

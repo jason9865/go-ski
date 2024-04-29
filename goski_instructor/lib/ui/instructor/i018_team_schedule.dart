@@ -63,74 +63,79 @@ class _TeamScheduleScreenState extends State<TeamScheduleScreen> {
     scheduleList.clear();
     dateList.clear();
     final DateTime now = DateTime.now();
+
     if (selectedDate.isEmpty) {
-      selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      selectedDate = DateFormat('yyyy-MM-dd').format(now);
     }
 
-    for (int i = 0; i < dummy.length; i++) {
-      if (DateTime.parse(dummy[i]['lesson_date']).month == now.month &&
-          DateTime.parse(dummy[i]['lesson_date']).day == now.day) continue;
-      if (DateTime.parse(dummy[i]['lesson_date']).isBefore(now)) {
-        dummy.remove(dummy[i]);
+    // 오늘 이전까지 데이터 제거
+    dummy.removeWhere((entry) {
+      DateTime lessonDate = DateTime.parse(entry['lesson_date']);
+      return lessonDate.isBefore(DateTime(now.year, now.month, now.day));
+    });
+
+    // 최소 및 최대 날짜 계산 for dateList
+    if (dummy.isNotEmpty) {
+      DateTime firstLessonDate = DateTime.parse(dummy.first['lesson_date']);
+      DateTime lastLessonDate = DateTime.parse(dummy.last['lesson_date']);
+      int length = lastLessonDate.difference(firstLessonDate).inDays + 1;
+
+      for (int i = 0; i < length; i++) {
+        dateList.add(firstLessonDate.add(Duration(days: i)));
       }
     }
-
-    Map<String, dynamic> firstLesson = dummy[0];
-    DateTime firstLessonDate = DateTime.parse(firstLesson['lesson_date']);
-    Map<String, dynamic> lastLesson = dummy[dummy.length - 1];
-    DateTime lastLessonDate = DateTime.parse(lastLesson['lesson_date']);
-    Duration firstLessonToLastLesson =
-        lastLessonDate.difference(firstLessonDate);
-
-    int length = firstLessonToLastLesson.inDays + 1;
 
     Map<String, int> dateTimeIndex = {};
     int index = 0;
-    for (int i = 0; i < length; i++) {
-      DateTime indexDate = firstLessonDate.add(Duration(days: i));
-      dateList.add(indexDate);
 
-      for (int j = 0; j < dummy.length; j++) {
-        DateTime dummyDateIndex = DateTime.parse(dummy[j]['lesson_date']);
-        if (dummyDateIndex.isAfter(indexDate)) {
-          break;
-        }
-        if (dummyDateIndex == indexDate) {
-          scheduleList.add(
-            Schedule(
-              indexDate,
-              Instructor(
-                name: dummy[j]['instructor_name'],
-                profileUrl: dummy[j]['instructor_profile_url'],
-              ),
-            ),
-          );
-          dateTimeIndex[
-                  '${dummy[j]['lesson_date']}-${dummy[j]['instructor_name']}'] =
-              index++;
-          // dummy.remove(dummy[j]);
-        }
+    // lesson_date && instructor_name를 기준으로 Schedule instance 생성 및 추가
+    for (var entry in dummy) {
+      if (entry['lesson_date'] != selectedDate) continue;
+
+      String key = '${entry['lesson_date']}-${entry['instructor_name']}';
+      if (!dateTimeIndex.containsKey(key)) {
+        dateTimeIndex[key] = index++;
+
+        DateTime lessonDate = DateTime.parse(entry['lesson_date']);
+        Instructor instructor = Instructor(
+          name: entry['instructor_name'],
+          profileUrl: entry['instructor_profile_url'],
+        );
+
+        scheduleList.add(Schedule(lessonDate, instructor));
       }
     }
-    for (int i = 0; i < dummy.length; i++) {
-      if (dummy[i]['lesson_date'] != selectedDate) continue;
-      logger.e("checkPoint");
-      int index = dateTimeIndex[
-          '${dummy[i]['lesson_date']}-${dummy[i]['instructor_name']}']!; // dateTimeIndex로 dummy에 해당하는 Schedule 객체를 scheduleList에서 search
-      List<ScheduleItem> target =
-          scheduleList[index].items; // 바꿀 Schedule Column
-      int startTimeIndex = parseTimeToIndex(dummy[i][
-          "start_time"]); // dummy["start_time"]를 Schedule.items의 index로 parsing
-      target[startTimeIndex].duration = double.parse(dummy[i]["duration"]);
-      target[startTimeIndex].studentCount = int.parse(dummy[i]["studentCount"]);
-      target[startTimeIndex].name = dummy[i]["name"];
-      target[startTimeIndex].lessonType = dummy[i]["lessonType"];
-      target[startTimeIndex].isDesignated =
-          int.parse(dummy[i]["is_designated"]);
-      for (int i = 1; i <= (target[startTimeIndex].duration / 0.5) - 1; i++) {
-        if (startTimeIndex + i < target.length) {
-          target[startTimeIndex + i].duration = 0.0;
-        }
+
+    // Schedule 업데이트
+    for (Schedule schedule in scheduleList) {
+      String key =
+          '${schedule.lessonDate.toString().substring(0, 10)}-${schedule.instructor.name}';
+      int scheduleIndex = dateTimeIndex[key]!;
+
+      dummy
+          .where((entry) =>
+              entry['lesson_date'] ==
+                  schedule.lessonDate.toString().substring(0, 10) &&
+              entry['instructor_name'] == schedule.instructor.name)
+          .forEach((entry) {
+        updateScheduleItem(schedule, entry, scheduleIndex);
+      });
+    }
+  }
+
+  void updateScheduleItem(
+      Schedule schedule, Map<String, dynamic> entry, int index) {
+    List<ScheduleItem> target = scheduleList[index].items;
+    int startTimeIndex = parseTimeToIndex(entry["start_time"]);
+    target[startTimeIndex].duration = double.parse(entry["duration"]);
+    target[startTimeIndex].studentCount = int.parse(entry["studentCount"]);
+    target[startTimeIndex].name = entry["name"];
+    target[startTimeIndex].lessonType = entry["lessonType"];
+    target[startTimeIndex].isDesignated = int.parse(entry["is_designated"]);
+
+    for (int i = 1; i <= (target[startTimeIndex].duration / 0.5) - 1; i++) {
+      if (startTimeIndex + i < target.length) {
+        target[startTimeIndex + i].duration = 0.0;
       }
     }
   }
@@ -445,7 +450,7 @@ List<Map<String, dynamic>> dummy = [
     "name": "송준석", //예약자 이름
     "studentCount": "2",
     "lessonType": "ski", //스키, 보드 여부
-    "is_designated": "0"
+    "is_designated": "1"
   },
   {
     "instructor_name": "최지찬",
@@ -485,6 +490,17 @@ List<Map<String, dynamic>> dummy = [
     "instructor_profile_url": "assets/images/person1.png",
     "lesson_date": "2024-04-30",
     "start_time": "0800",
+    "duration": "2",
+    "name": "송준석", //예약자 이름
+    "studentCount": "2",
+    "lessonType": "ski", //스키, 보드 여부
+    "is_designated": "0"
+  },
+  {
+    "instructor_name": "송준석",
+    "instructor_profile_url": "assets/images/person1.png",
+    "lesson_date": "2024-04-30",
+    "start_time": "1400",
     "duration": "2",
     "name": "송준석", //예약자 이름
     "studentCount": "2",
