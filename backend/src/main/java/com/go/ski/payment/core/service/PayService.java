@@ -1,8 +1,11 @@
 package com.go.ski.payment.core.service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -28,11 +31,14 @@ import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.redis.repository.PaymentCacheRepository;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamRepository;
+import com.go.ski.team.support.dto.TeamResponseDTO;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
@@ -233,4 +239,38 @@ public class PayService {
 		return responseEntity.getBody();
 	}
 
+	@Transactional
+	public List<UserPaymentHistoryResponseDTO> getUserPaymentHistories(HttpServletRequest httpServletRequest) {
+		User user = (User)httpServletRequest.getAttribute("user");
+
+		return lessonRepository.findStudentPaymentHistories(user.getUserId());
+	}
+
+	@Transactional
+	public List<OwnerPaymentHistoryResponseDTO> getOwnerPaymentHistories(HttpServletRequest httpServletRequest) {
+		User user = (User)httpServletRequest.getAttribute("user");
+		//사장인지 확인
+		//내 아래로 팀이 있는지 확인
+		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		//exception 만들기
+		if(dummy.isEmpty()) throw new IllegalArgumentException("조회할 수 없습니다.");
+		return lessonRepository.findOwnerPaymentHistories(user.getUserId());
+	}
+
+	public List<OwnerPaymentHistoryResponseDTO> getTeamPaymentHistories(HttpServletRequest httpServletRequest, Integer teamId) {
+		User user = (User)httpServletRequest.getAttribute("user");
+		boolean b = false;
+		//사장인지 확인
+		//내 아래로 팀이 있는지 확인
+		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		for(int id = 0; id < dummy.size(); id++) {
+			if(Objects.equals(dummy.get(id).getTeamId(), teamId)) b = true;
+		}
+		log.info(user.getUserName());
+		log.info(String.valueOf(dummy.size()));
+		//exception 만들기
+		if(!b) throw new IllegalArgumentException("조회할 수 없습니다.");
+
+		return lessonRepository.findTeamPaymentHistories(teamId);
+	}
 }

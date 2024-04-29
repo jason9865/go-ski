@@ -18,5 +18,4 @@ public interface TeamInstructorRepository extends JpaRepository<TeamInstructor, 
             "WHERE ti.instructor.user.userId = :instructorId")
     Optional<TeamInstructor> findTeamInstructorByInstructorId(Integer instructorId);
 
-	Optional<TeamInstructor> findByTeamAndInstructor(Team team, Instructor instructor);
 }
