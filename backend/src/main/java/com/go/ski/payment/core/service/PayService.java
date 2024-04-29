@@ -2,6 +2,7 @@ package com.go.ski.payment.core.service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.redis.repository.PaymentCacheRepository;
@@ -233,4 +235,10 @@ public class PayService {
 		return responseEntity.getBody();
 	}
 
+	@Transactional
+	public List<UserPaymentHistoryResponseDTO> getPaymentHistory(HttpServletRequest httpServletRequest) {
+		User user = (User)httpServletRequest.getAttribute("user");
+
+		return lessonRepository.findStudentPaymentHistories(user.getUserId());
+	}
 }

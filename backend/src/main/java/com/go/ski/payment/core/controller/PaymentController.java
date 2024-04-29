@@ -1,6 +1,9 @@
 package com.go.ski.payment.core.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +14,12 @@ import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.dto.response.ApprovePaymentResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.core.service.KakaoPayService;
-import com.go.ski.payment.support.dto.response.ReserveLessonPaymentResponseDTO;
+import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +66,7 @@ public class PaymentController {
 		return ResponseEntity.ok().body(response);
 	}
 	@PostMapping("/reserve/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> testApprovePayment(
+	public ResponseEntity<KakaopayApproveResponseDTO> ApprovePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ApprovePaymentRequestDTO request) {
 
@@ -72,7 +74,11 @@ public class PaymentController {
 		return ResponseEntity.ok().body(response);
 	}
 
-
+	@GetMapping("reserve/history")
+	public ResponseEntity<List<UserPaymentHistoryResponseDTO>> getPaymentHistory(HttpServletRequest httpServletRequest) {
+		List<UserPaymentHistoryResponseDTO> response = payService.getPaymentHistory(httpServletRequest);
+		return ResponseEntity.ok().body(response);
+	}
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음
 	// @GetMapping("/getPg/{pg_token}")
