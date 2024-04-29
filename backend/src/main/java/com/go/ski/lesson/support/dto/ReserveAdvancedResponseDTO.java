@@ -12,18 +12,14 @@ import lombok.ToString;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @ToString
-public class ReserveAdvancedResponseDTO {
+public class ReserveAdvancedResponseDTO extends ReserveResponseDTO {
     private Integer instructorId;
     private String userName;
     private Integer position;
     private String description;
     private List<CertificateInfoVO> certificateInfoVOs;
-    private Integer cost;
-    private Double rating;
-    private Integer ratingCount;
 
     public ReserveAdvancedResponseDTO(User user, Instructor instructor, Permission permission, List<CertificateInfoVO> certificateInfoVOs) {
         instructorId = instructor.getInstructorId();

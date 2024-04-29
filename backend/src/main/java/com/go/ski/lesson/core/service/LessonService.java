@@ -3,6 +3,7 @@ package com.go.ski.lesson.core.service;
 import com.go.ski.lesson.support.dto.ReserveAdvancedResponseDTO;
 import com.go.ski.lesson.support.dto.ReserveNoviceResponseDTO;
 import com.go.ski.lesson.support.dto.ReserveNoviceTeamRequestDTO;
+import com.go.ski.lesson.support.dto.ReserveResponseDTO;
 import com.go.ski.lesson.support.vo.CertificateInfoVO;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
@@ -55,18 +56,12 @@ public class LessonService {
                 if (reserveInfoVO.getStudentCount() > 0) {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
                     int teamCost = calculateTeamCost(team.getTeamCost(), oneToNOption, reserveInfoVO.getStudentCount());
-                    reserveNoviceResponseDTO.setTeamCost(teamCost * reserveInfoVO.getDuration());
+                    reserveNoviceResponseDTO.setCost(teamCost * reserveInfoVO.getDuration());
                 }
                 // 별점 설정
                 List<Review> reviews = reviewRepository.findByLessonTeam(team);
-                if (!reviews.isEmpty()) {
-                    double rating = 0;
-                    for (Review review : reviews)
-                        rating += review.getRating();
-                    reserveNoviceResponseDTO.setRating(rating / reviews.size());
-                    reserveNoviceResponseDTO.setRatingCount(reviews.size());
-                }
-                log.info("성공! {}", reserveNoviceResponseDTO);
+                setReviewRating(reviews, reserveNoviceResponseDTO);
+
                 reserveNoviceResponseDTOs.add(reserveNoviceResponseDTO);
             } else {
                 log.info("해당 팀에 가능한 강사 없음: {}", team);
@@ -79,12 +74,11 @@ public class LessonService {
     public Map<Integer, ReserveNoviceTeamRequestDTO> getInstructorsForAdvanced(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
         List<Team> teams = teamRepository.findBySkiResort(SkiResort.builder().resortId(reserveInfoVO.getResortId()).build());
-        Map<Integer,ReserveNoviceTeamRequestDTO> teamInstructorMap = new HashMap<>();
+        Map<Integer, ReserveNoviceTeamRequestDTO> teamInstructorMap = new HashMap<>();
 
         for (Team team : teams) {
             ReserveNoviceResponseDTO reserveNoviceResponseDTO = assignLessonsToTeam(team, reserveInfoVO);
             if (reserveNoviceResponseDTO != null) {
-                log.info("성공! {}", reserveNoviceResponseDTO);
                 ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO = new ReserveNoviceTeamRequestDTO(reserveInfoVO);
                 reserveNoviceTeamRequestDTO.setInstructorsList(reserveNoviceResponseDTO.getInstructors());
                 teamInstructorMap.put(reserveNoviceResponseDTO.getTeamId(), reserveNoviceTeamRequestDTO);
@@ -120,13 +114,8 @@ public class LessonService {
                 }
                 // 별점 설정
                 List<Review> reviews = reviewRepository.findByLessonInstructor(instructor);
-                if (!reviews.isEmpty()) {
-                    double rating = 0;
-                    for (Review review : reviews)
-                        rating += review.getRating();
-                    reserveAdvancedResponseDTO.setRating(rating / reviews.size());
-                    reserveAdvancedResponseDTO.setRatingCount(reviews.size());
-                }
+                setReviewRating(reviews, reserveAdvancedResponseDTO);
+
                 reserveAdvancedResponseDTOs.add(reserveAdvancedResponseDTO);
             } catch (NoSuchElementException ignored) {
             }
@@ -269,5 +258,15 @@ public class LessonService {
             case "고급" -> option.getAdvancedFee();
             default -> 0;
         }).orElse(0);
+    }
+
+    private void setReviewRating(List<Review> reviews, ReserveResponseDTO reserveResponseDTO) {
+        if (!reviews.isEmpty()) {
+            double rating = 0;
+            for (Review review : reviews)
+                rating += review.getRating();
+            reserveResponseDTO.setRating(rating / reviews.size());
+            reserveResponseDTO.setRatingCount(reviews.size());
+        }
     }
 }

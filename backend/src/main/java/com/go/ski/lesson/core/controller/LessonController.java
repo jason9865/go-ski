@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,6 +46,14 @@ public class LessonController {
 
     @PostMapping("/reserve/novice/{teamId}")
     public ResponseEntity<ApiResponse<?>> getInstructorsInTeam(@PathVariable int teamId, @RequestBody ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO) {
+        log.info("강습조회 - 초급(팀원리스트): {}, {}", teamId, reserveNoviceTeamRequestDTO);
+        List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = lessonService.getInstructorsInTeam(teamId, reserveNoviceTeamRequestDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(reserveAdvancedResponseDTOs));
+    }
+
+    @GetMapping("/list/user")
+    public ResponseEntity<ApiResponse<?>> getUserLessonList(@PathVariable int teamId, @RequestBody ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO) {
         log.info("강습조회 - 초급(팀원리스트): {}, {}", teamId, reserveNoviceTeamRequestDTO);
         List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = lessonService.getInstructorsInTeam(teamId, reserveNoviceTeamRequestDTO);
 
