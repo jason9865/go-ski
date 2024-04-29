@@ -17,5 +17,4 @@ public interface TeamRepository extends JpaRepository<Team,Integer>,TeamReposito
             "LEFT OUTER JOIN SkiResort skiResort ON team.skiResort.resortId = skiResort.resortId " +
             "WHERE team.user.userId = :userId")
     List<TeamResponseDTO> findTeamList(Integer userId);
-
 }

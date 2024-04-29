@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserPaymentHistoryResponseDTO {
-	private String userName;//필요한가?
+public class OwnerPaymentHistoryResponseDTO {
 	private String teamName;
+	private String studentName;
+	// private String instructorName; // 굳이 필요한가?
 	private LocalDate paymentDate;
 	private Integer paymentStatus;
 	private String chargeName;
