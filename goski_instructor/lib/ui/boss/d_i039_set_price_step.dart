@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
 
 import '../../const/util/screen_size_controller.dart';
 import '../component/goski_smallsize_button.dart';
@@ -14,8 +15,8 @@ class SetPriceStepDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getHeightByRatio(0.015);
-    const titleRatio = 5;
-    const double titleFontSize = 20;
+    const titleRatio = 4;
+    const double titleFontSize = goskiFontLarge;
 
     return Flexible(
       flex: 1,
@@ -38,8 +39,8 @@ class SetPriceStepDialog extends StatelessWidget {
                             isBold: true,
                           ),
                           GoskiText(
-                            text: tr('${tr('level2')}, ${tr('teaching2')}'),
-                            size: 15,
+                            text: tr('level2'),
+                            size: goskiFontMedium,
                             isBold: true,
                           ),
                         ],
@@ -74,8 +75,8 @@ class SetPriceStepDialog extends StatelessWidget {
                             isBold: true,
                           ),
                           GoskiText(
-                            text: tr('${tr('level3')}, ${tr('teaching3')}'),
-                            size: 15,
+                            text: tr('level3'),
+                            size: goskiFontMedium,
                             isBold: true,
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
 
 import '../../const/util/screen_size_controller.dart';
 import '../component/goski_smallsize_button.dart';
@@ -29,7 +30,7 @@ class DeleteMemberDialog extends StatelessWidget {
             ),
             GoskiText(
               text: tr('deleteMemberContent', args: [dummyInstructorInfo.name, dummyInstructorInfo.teamName]),
-              size: 20,
+              size: goskiFontLarge,
               isBold: true,
               textAlign: TextAlign.center,
             ),

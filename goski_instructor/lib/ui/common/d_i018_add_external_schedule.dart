@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/font_size.dart';
+import 'package:goski_instructor/ui/component/goski_dropdown.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
@@ -24,12 +26,12 @@ class AddExternalScheduleDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWithInputRow(
+            TitleWithDropdown(
               title: tr('mainInstructor'),
-              text: tr('hintMainInstructor'),
-              icon: Icons.keyboard_arrow_down,
+              hint: tr('hintMainInstructor'),
+              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
               onClicked: () {
-                // TODO. 담당 강사 클릭시 동작 추가 필요
+                // TODO. 담당 강사 드롭다운 로직 추가 필요
               },
             ),
             SizedBox(height: contentPadding),
@@ -39,7 +41,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
                   flex: 4,
                   child: GoskiText(
                     text: tr('type'),
-                    size: 20,
+                    size: goskiFontLarge,
                     isBold: true,
                   ),
                 ),
@@ -62,7 +64,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               width: double.infinity,
               child: GoskiText(
                 text: tr('selectDateTime'),
-                size: 20,
+                size: goskiFontLarge,
                 isBold: true,
               ),
             ),
@@ -87,12 +89,12 @@ class AddExternalScheduleDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: contentPadding),
-            TitleWithInputRow(
+            TitleWithDropdown(
               title: tr('studentNumber'),
-              text: tr('hintStudentNumber'),
-              icon: Icons.keyboard_arrow_down,
+              hint: tr('hintStudentNumber'),
+              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
               onClicked: () {
-                // TODO. 인원 선택 클릭시 동작 추가 필요
+                // TODO. 인원 선택 드롭다운 동작 추가 필요
               },
             ),
             SizedBox(height: contentPadding),
@@ -102,7 +104,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
                   flex: 4,
                   child: GoskiText(
                     text: tr('reservationPerson'),
-                    size: 20,
+                    size: goskiFontLarge,
                     isBold: true,
                   ),
                 ),
@@ -120,7 +122,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               width: double.infinity,
               child: GoskiText(
                 text: tr('specialNote'),
-                size: 20,
+                size: goskiFontLarge,
                 isBold: true,
               ),
             ),
@@ -181,7 +183,7 @@ class TitleWithInputRow extends StatelessWidget {
           flex: 4,
           child: GoskiText(
             text: title,
-            size: 20,
+            size: goskiFontLarge,
             isBold: true,
           ),
         ),
@@ -193,6 +195,43 @@ class TitleWithInputRow extends StatelessWidget {
               icon: icon,
               onClicked: onClicked,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TitleWithDropdown extends StatelessWidget {
+  final String title, hint;
+  final List<String> list;
+  final VoidCallback onClicked;
+
+  const TitleWithDropdown({
+    super.key,
+    required this.title,
+    required this.hint,
+    required this.list,
+    required this.onClicked,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 4,
+          child: GoskiText(
+            text: title,
+            size: goskiFontLarge,
+            isBold: true,
+          ),
+        ),
+        Flexible(
+          flex: 6,
+          child: GoskiDropdown(
+            hint: hint,
+            list: list,
           ),
         ),
       ],
@@ -221,11 +260,11 @@ class TextWithIconRow extends StatelessWidget {
           Expanded(
             child: GoskiText(
               text: text,
-              size: 15,
+              size: goskiFontMedium,
             ),
           ),
           Icon(
-            size: 20,
+            size: goskiFontLarge,
             icon,
           ),
         ],

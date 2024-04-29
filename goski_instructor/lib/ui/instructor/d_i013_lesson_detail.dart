@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../../const/util/screen_size_controller.dart';
@@ -9,10 +10,7 @@ import '../../const/util/screen_size_controller.dart';
 class LessonDetailDialog extends StatelessWidget {
   final LessonDetailData data;
 
-  const LessonDetailDialog({
-    super.key,
-    required this.data
-  });
+  const LessonDetailDialog({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -25,46 +23,46 @@ class LessonDetailDialog extends StatelessWidget {
       children: [
         GoskiText(
           text: tr('date'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.date,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('location'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.location,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('reservationPerson'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.reservationPerson,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('studentInfo'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
@@ -82,12 +80,12 @@ class LessonDetailDialog extends StatelessWidget {
                     return BackgroundContainer(
                       title: GoskiText(
                         text: data.studentInfo[index][0],
-                        size: 15,
+                        size: goskiFontMedium,
                       ),
                       children: [
                         GoskiText(
                           text: data.studentInfo[index][1],
-                          size: 15,
+                          size: goskiFontMedium,
                         )
                       ],
                     );
@@ -105,14 +103,14 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: contentPadding),
         GoskiText(
           text: tr('requestMessage'),
-          size: 20,
+          size: goskiFontLarge,
           isBold: true,
         ),
         SizedBox(height: titlePadding),
         BorderWhiteContainer(
           child: GoskiText(
             text: data.requestMessage,
-            size: 15,
+            size: goskiFontMedium,
           ),
         ),
         SizedBox(height: contentPadding),
@@ -139,9 +137,10 @@ class BorderWhiteContainer extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          color: goskiWhite,
-          border: Border.all(width: 1, color: goskiDarkGray),
-          borderRadius: BorderRadius.circular(10)),
+        color: goskiWhite,
+        border: Border.all(width: 1, color: goskiDarkGray),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: child,
     );
   }
@@ -192,11 +191,10 @@ class LessonDetailData {
   final String date, location, reservationPerson, requestMessage;
   final List studentInfo;
 
-  LessonDetailData({
-    required this.date,
-    required this.location,
-    required this.reservationPerson,
-    required this.requestMessage,
-    required this.studentInfo
-  });
+  LessonDetailData(
+      {required this.date,
+      required this.location,
+      required this.reservationPerson,
+      required this.requestMessage,
+      required this.studentInfo});
 }

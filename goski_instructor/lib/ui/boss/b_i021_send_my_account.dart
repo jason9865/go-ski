@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_bigsize_button.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
@@ -76,7 +77,7 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                               children: [
                                 GoskiText(
                                   text: dummyData[index].depositorName,
-                                  size: 15,
+                                  size: goskiFontMedium,
                                   isBold: true,
                                 ),
                                 SizedBox(
@@ -84,7 +85,7 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                                 ),
                                 GoskiText(
                                   text: dummyData[index].bankName,
-                                  size: 15,
+                                  size: goskiFontMedium,
                                   isBold: false,
                                 ),
                                 SizedBox(
@@ -92,7 +93,7 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
                                 ),
                                 GoskiText(
                                   text: dummyData[index].accountNumber,
-                                  size: 15,
+                                  size: goskiFontMedium,
                                   isBold: false,
                                 ),
                               ],

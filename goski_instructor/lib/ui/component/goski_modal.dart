@@ -4,6 +4,8 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:logger/logger.dart';
 
+import '../../const/font_size.dart';
+
 /*
   ## 사용법
   ### title && content는 필수 parameter
@@ -70,7 +72,7 @@ class GoskiModal extends StatelessWidget {
                 title,
                 style: const TextStyle(
                     color: goskiBlack,
-                    fontSize: 25,
+                    fontSize: goskiFontXLarge,
                     fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ),
