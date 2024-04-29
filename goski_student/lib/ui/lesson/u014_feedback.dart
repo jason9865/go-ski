@@ -121,11 +121,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GoskiText(
-                text: tr('feedbackImage'),
-                size: goskiFontLarge,
-                isExpanded: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GoskiText(
+                    text: tr('feedbackImage'),
+                    size: goskiFontLarge,
+                    isExpanded: true,
+                  ),
+                  IconButton(onPressed: (){
+                    // TODO. 이미지 전체 다운로드 기능
+                    print("이미지 전체 다운로드");
+                  }, icon: Icon(Icons.file_download)),
+                ],
               ),
             ),
             SizedBox(
@@ -163,11 +172,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GoskiText(
-                text: tr('feedbackVideo'),
-                size: goskiFontLarge,
-                isExpanded: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GoskiText(
+                    text: tr('feedbackVideo'),
+                    size: goskiFontLarge,
+                    isExpanded: true,
+                  ),
+                  IconButton(onPressed: (){
+                    // TODO. 동영상 전체 다운로드 기능
+                    print("동영상 전체 다운로드");
+                  }, icon: Icon(Icons.file_download)),
+                ],
               ),
             ),
             SizedBox(
