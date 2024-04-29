@@ -6,20 +6,19 @@ import com.go.ski.lesson.support.vo.LessonScheduleVO;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.model.StudentInfo;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
+import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.vo.TeamImageVO;
-import com.go.ski.user.core.model.Certificate;
 import com.go.ski.user.core.model.Instructor;
-import com.go.ski.user.core.model.InstructorCert;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorCertRepository;
 import com.go.ski.user.core.repository.InstructorRepository;
-import com.go.ski.user.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,11 +37,11 @@ public class LessonService {
     private final OneToNOptionRepository oneToNOptionRepository;
     private final LevelOptionRepository levelOptionRepository;
     private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
     private final InstructorRepository instructorRepository;
     private final InstructorCertRepository instructorCertRepository;
     private final LessonRepository lessonRepository;
+    private final StudentInfoRepository studentInfoRepository;
 
     public List<ReserveNoviceResponseDTO> getTeamsForNovice(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
@@ -92,15 +91,14 @@ public class LessonService {
 
     public List<ReserveAdvancedResponseDTO> getInstructorsInTeam(int teamId, ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO) {
         List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = new ArrayList<>();
-        List<Integer> instructorsList = reserveNoviceTeamRequestDTO.getInstructorsList();
-        for (int instructorId : instructorsList) {
+        for (int instructorId : reserveNoviceTeamRequestDTO.getInstructorsList()) {
             try {
                 Instructor instructor = instructorRepository.findById(instructorId).orElseThrow();
                 Team team = teamRepository.findById(teamId).orElseThrow();
                 TeamInstructor teamInstructor = teamInstructorRepository.findByTeamAndInstructor(team, instructor).orElseThrow();
                 Permission permission = permissionRepository.findById(teamInstructor.getTeamInstructorId()).orElseThrow();
                 List<CertificateInfoVO> certificateInfoVOs = instructorCertRepository.findByInstructor(instructor)
-                        .stream().map(this::getCertificateInfoVO).collect(Collectors.toList());
+                        .stream().map(CertificateInfoVO::new).collect(Collectors.toList());
 
                 ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(instructor, permission, certificateInfoVOs);
                 // 가격 설정
@@ -134,15 +132,20 @@ public class LessonService {
         return userLessonResponseDTOs;
     }
 
-    private CertificateInfoVO getCertificateInfoVO(InstructorCert instructorCert) {
-        CertificateInfoVO certificateInfoVO = new CertificateInfoVO();
-        Certificate certificate = instructorCert.getCertificate();
-        certificateInfoVO.setCertificateId(certificate.getCertificateId());
-        certificateInfoVO.setCertificateName(certificate.getCertificateName());
-        certificateInfoVO.setCertificateType(certificate.getCertificateType());
-        certificateInfoVO.setCertificateImageUrl(instructorCert.getCertificateImageUrl());
-        return certificateInfoVO;
+    public List<InstructorLessonResponseDTO> getInstructorLessonList(User user) {
+        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = new ArrayList<>();
+        Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
+        for (Lesson lesson : lessonRepository.findByInstructor(instructor)) {
+            try {
+                LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
+                List<StudentInfo> studentInfos = studentInfoRepository.findByLessonInfo(lessonInfo);
+                instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfos));
+            } catch (NoSuchElementException ignored) {
+            }
+        }
+        return instructorLessonResponseDTOs;
     }
+
 
     private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
         // 강습 일자, 팀으로 이미 예약된 강습 리스트

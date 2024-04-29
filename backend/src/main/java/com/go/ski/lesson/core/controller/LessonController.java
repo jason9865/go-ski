@@ -55,4 +55,12 @@ public class LessonController {
         List<UserLessonResponseDTO> userLessonResponseDTOs = lessonService.getUserLessonList(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(userLessonResponseDTOs));
     }
+
+    @GetMapping("/list/instructor")
+    public ResponseEntity<ApiResponse<?>> getInstructorLessonList(HttpServletRequest request) {
+        log.info("강습 내역 리스트 조회(강사)");
+        User user = (User) request.getAttribute("user");
+        List<InstructorLessonResponseDTO> instructorLessonResponseDTOs = lessonService.getInstructorLessonList(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(instructorLessonResponseDTOs));
+    }
 }
