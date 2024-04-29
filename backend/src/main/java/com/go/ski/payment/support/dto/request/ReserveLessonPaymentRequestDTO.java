@@ -1,6 +1,8 @@
 package com.go.ski.payment.support.dto.request;
 
-import static jakarta.persistence.EnumType.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.go.ski.payment.support.dto.util.StudentInfoDTO;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,9 +37,13 @@ public class ReserveLessonPaymentRequestDTO {
 	private Integer peopleOptionFee;
 	@JsonProperty("level_option_fee")
 	private Integer levelOptionFee;
+	@JsonProperty("has_instruct")
+    private Boolean hasInstruct;
+	private Integer level;
 	// 쿠폰 활성화되면 합류
 	// @JsonProperty("team_id")
 	// private Integer	couponId;
 	@JsonProperty("student_info")
-	private List<StudentInfoDTO> studentInfo;
+	private List<StudentInfoDTO> studentInfo;    
+    
 }

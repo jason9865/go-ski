@@ -22,6 +22,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Uploader {
 
+
+    private final String DOMAIN = "https://go-ski.s3.ap-northeast-2.amazonaws.com";
+
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -48,10 +51,12 @@ public class S3Uploader {
 
     }
 
-    public void deleteFile(String filePath, String imageUrl){
+    public void deleteFile(String imageUrl){
         try {
-            amazonS3.deleteObject(bucket, filePath + "/" + imageUrl.split("/")[4]);
-            log.info("Delete file - {}", imageUrl.split("/")[4]);
+            String target = imageUrl.replace(DOMAIN,"");
+            Integer length = imageUrl.split("/").length;
+            amazonS3.deleteObject(bucket, target);
+            log.info("Delete file - {}", imageUrl.split("/")[length - 1]);
         } catch (AmazonServiceException e){
             log.error(e.getErrorMessage());
             throw ApiExceptionFactory.fromExceptionEnum(CommonExceptionEnum.IMAGE_DELETE_ERROR);
@@ -61,7 +66,7 @@ public class S3Uploader {
     public String updateFile(String filePath, MultipartFile multipartFile, String originalFileUrl) {
 
         // 기존 파일 삭제
-        deleteFile(filePath, originalFileUrl);
+        deleteFile(originalFileUrl);
 
         // 새로운 파일 추가
         return uploadFile(filePath, multipartFile);

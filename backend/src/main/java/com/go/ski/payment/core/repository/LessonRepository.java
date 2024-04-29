@@ -2,10 +2,11 @@ package com.go.ski.payment.core.repository;
 
 import java.util.List;
 
+import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.user.core.model.Instructor;
+import com.go.ski.user.core.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 
@@ -43,7 +44,15 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);
-}
+
+    List<Lesson> findByUser(User user);
+
+    List<Lesson> findByInstructor(Instructor instructor);
+
+    List<Lesson> findByTeamTeamId(int teamId);
+
+    List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
+
 // 나중에 추가 될 요소들 c.chargeName, c.serviceCharge, i.instructorName,
 // join할 테이블
 /*

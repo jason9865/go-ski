@@ -2,7 +2,6 @@ package com.go.ski.user.support.dto;
 
 import com.go.ski.user.support.vo.CertificateUrlVO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

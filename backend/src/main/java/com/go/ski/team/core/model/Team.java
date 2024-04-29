@@ -1,9 +1,15 @@
 package com.go.ski.team.core.model;
+import com.go.ski.common.util.TimeConvertor;
+import com.go.ski.team.core.service.TeamService;
+import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import com.go.ski.user.core.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import static com.go.ski.common.util.TimeConvertor.dayoffListToInteger;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -26,25 +32,33 @@ public class Team {
     @JoinColumn(name = "resort_id",nullable = false)
     private SkiResort skiResort;
 
-    @Setter
     @Column(nullable = false)
     private String teamName;
 
-    @Setter
     @Column(nullable = false)
     private String teamProfileUrl;
 
-    @Setter
-    @Column(nullable = false)
     private String description;
 
-    @Setter
     @Column(nullable = false)
     private Integer teamCost;
 
-    @Setter
     @Column(nullable = false)
     private Integer dayoff;
+
+    public void updateTeam(TeamUpdateRequestDTO dto, SkiResort skiResort) {
+        this.skiResort = skiResort;
+        this.teamName = dto.getTeamName();
+        this.description = dto.getDescription();
+        this.teamCost = dto.getTeamCost();
+        this.dayoff = dayoffListToInteger(dto.getDayoff());
+    }
+
+    public void updateTeamProfile(String teamProfileUrl) {
+        this.teamProfileUrl = teamProfileUrl;
+    }
+
+
 
 
 }

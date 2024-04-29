@@ -34,7 +34,8 @@ public class SecurityConfig {
     };
 
     private static final String[] STUDENT_ROUTES = {
-            "/api/v1/user/update/user", "/api/v1/user/profile/user"
+            "/api/v1/user/update/user", "/api/v1/user/profile/user",
+//            "/api/v1/lesson/reserve/novice", "/api/v1/lesson/reserve/advanced"
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
