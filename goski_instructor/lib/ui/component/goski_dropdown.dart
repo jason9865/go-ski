@@ -90,9 +90,9 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                 )),
           );
         },
-        child: BorderWhiteContainer(
-          child: GestureDetector(
-            onTap: onShowDropdownButtonClicked,
+        child: GestureDetector(
+          onTap: onShowDropdownButtonClicked,
+          child: BorderWhiteContainer(
             child: Row(
               children: [
                 Expanded(

@@ -53,6 +53,7 @@ class SetPriceStepDialog extends StatelessWidget {
                   child: GoskiTextField(
                     hintText: tr('enterAdditionalPrice'),
                     textAlign: TextAlign.center,
+                    isDigitOnly: true,
                   ),
                 ),
               ],
@@ -89,6 +90,7 @@ class SetPriceStepDialog extends StatelessWidget {
                   child: GoskiTextField(
                     hintText: tr('enterAdditionalPrice'),
                     textAlign: TextAlign.center,
+                    isDigitOnly: true,
                   ),
                 ),
               ],
