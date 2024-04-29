@@ -38,7 +38,7 @@ public class Notification {
     private byte isRead;
 
     public void read(){
-        this.isRead = 1;
+        isRead = 1;
     }
 
 }

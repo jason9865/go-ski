@@ -42,6 +42,12 @@ public class NotificationController {
 
 
     // 알림 읽기
+    @PatchMapping("/{notificationId}/read")
+    public ResponseEntity<ApiResponse<?>> readNotifications(@PathVariable Integer notificationId ){
+        log.info("NotificationController.readNotifications");
+        notificationService.read(notificationId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
 
 
     // 팀 초대 요청 수락

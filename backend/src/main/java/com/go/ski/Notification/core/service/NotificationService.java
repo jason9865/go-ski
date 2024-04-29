@@ -4,6 +4,7 @@ import com.go.ski.Notification.core.domain.Notification;
 import com.go.ski.Notification.core.repository.NotificationRepository;
 import com.go.ski.Notification.support.dto.FcmTokenRequestDTO;
 import com.go.ski.Notification.support.dto.NotificationResponseDTO;
+import com.go.ski.Notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
@@ -11,6 +12,7 @@ import com.go.ski.user.support.exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,5 +41,14 @@ public class NotificationService {
     public List<NotificationResponseDTO> findAllNotifications(User user) {
         return notificationRepository.findByReceiverId(user.getUserId());
 
+    }
+
+    @Transactional
+    public void read(Integer notificationId) {
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
+
+        notification.read();
     }
 }
