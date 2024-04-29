@@ -24,4 +24,8 @@ public class TeamImage {
     @Column(nullable = false)
     private String imageUrl;
 
+    public void updateTeamImage(String teamImageUrl) {
+        this.imageUrl = teamImageUrl;
+    }
+
 }

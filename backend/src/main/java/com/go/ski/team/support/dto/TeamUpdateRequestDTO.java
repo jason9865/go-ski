@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.go.ski.team.core.service.TeamService.dayoffListToInteger;
 
 @Getter
 @Setter
@@ -21,7 +20,8 @@ public class TeamUpdateRequestDTO {
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
-    private List<MultipartFile> teamImages;
+    private List<Integer> deleteTeamImageIds;
+    private List<MultipartFile> newTeamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;
