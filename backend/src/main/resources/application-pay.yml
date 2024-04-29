@@ -4,3 +4,6 @@ pay:
   client_secret: ${PAY_CLIENT_SECRET}
   secret_key: ${PAY_SECRET_KEY}
   secret_key_dev: ${PAY_SECRET_KEY_DEV}
+  approval_url: ${APPROVAL_URL}
+  fail_url: ${FAIL_URL}
+  cancel_url: ${CANCEL_URL}

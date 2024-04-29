@@ -41,10 +41,10 @@ public class Lesson {
 	private Integer isOwn;//자체 강의 or 외부 강의
 	@Column
 	private String representativeName;// 대표자 이름
-	@OneToOne(mappedBy = "lesson")
-	private LessonInfo lessonInfo;
-	@OneToOne(mappedBy = "lesson")
-	private LessonPaymentInfo lessonPaymentInfo;
+	// @OneToOne(mappedBy = "lesson")
+	// private LessonInfo lessonInfo;
+	// @OneToOne(mappedBy = "lesson")
+	// private LessonPaymentInfo lessonPaymentInfo;
 	//payload에 들어갈 내용
 	//lesson id, 대표자 이름,
 	public static Lesson toLessonForPayment(User user, Team team, Instructor instructor, Integer isOwn) {
