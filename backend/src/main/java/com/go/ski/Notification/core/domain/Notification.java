@@ -17,9 +17,11 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer notificationId;
 
-    @ManyToOne
-    @JoinColumn(name="receiver_id", referencedColumnName = "userId")
-    private User user;
+    @Column(nullable = false)
+    private Integer receiverId;
+
+    @Column(nullable = false)
+    private Integer senderId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

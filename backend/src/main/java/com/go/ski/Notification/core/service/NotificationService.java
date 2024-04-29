@@ -37,9 +37,7 @@ public class NotificationService {
     }
 
     public List<NotificationResponseDTO> findAllNotifications(User user) {
-        return notificationRepository.findByUser(user).stream()
-                .map(NotificationResponseDTO::from)
-                .toList();
+        return notificationRepository.findByReceiverId(user.getUserId());
 
     }
 }

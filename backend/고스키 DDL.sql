@@ -204,7 +204,8 @@ CREATE TABLE `notification` (
     `content`	VARCHAR(255)	NULL,
     `image_url`	VARCHAR(255)	NULL,
     `is_read`	BIT(1)	NOT NULL,
-    `receiver_id` int(11) NOT NULL
+    `receiver_id` int(11) NOT NULL,
+    `sender_id` int(11) NOT NULL
 );
 
 
@@ -305,7 +306,3 @@ ALTER TABLE `permission`
 ADD CONSTRAINT `pk_permission_team_id` PRIMARY KEY (`team_instructor_id`),
 ADD CONSTRAINT `fk_permission_team_id` FOREIGN KEY (`team_instructor_id`) REFERENCES `team_instructor` (`team_instructor_id`) ON DELETE CASCADE
 ;
-
--- 알림
-ALTER TABLE `notification`
-ADD CONSTRAINT `fk_notification_receiver_id` FOREIGN KEY(`receiver_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE;
