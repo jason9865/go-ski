@@ -17,4 +17,5 @@ public class SignupInstructorRequestDTO extends InstructorImagesDTO {
     private LocalDateTime birthDate;
     private String phoneNumber;
     private Role role;
+    private String lessonType;
 }

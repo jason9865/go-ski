@@ -9,6 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @ToString
 public class CertificateImageVO {
-    private int certificateId;
+    private Integer certificateId;
     private MultipartFile certificateImage;
 }

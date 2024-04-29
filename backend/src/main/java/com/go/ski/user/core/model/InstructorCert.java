@@ -13,11 +13,10 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table
 public class InstructorCert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int instCertId;
+    private Integer instCertId;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
