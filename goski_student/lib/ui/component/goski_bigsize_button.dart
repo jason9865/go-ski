@@ -6,12 +6,15 @@ class GoskiBigsizeButton extends StatelessWidget {
   final double width;
   final String text;
   final VoidCallback onTap;
+  final Color backgroundColor, foregroundColor;
 
   const GoskiBigsizeButton({
     super.key,
     required this.width,
     required this.text,
     required this.onTap,
+    this.backgroundColor = goskiButtonBlack,
+    this.foregroundColor = goskiWhite,
   });
 
   @override
@@ -19,9 +22,9 @@ class GoskiBigsizeButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(goskiButtonBlack),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         // 배경색 설정
-        foregroundColor: MaterialStateProperty.all(goskiWhite),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
         // 텍스트 색상 설정
         minimumSize: MaterialStateProperty.all(Size(width * 0.9, 50)),
         // 최소 크기 설정
