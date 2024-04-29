@@ -1,5 +1,6 @@
 package com.go.ski.team.core.repository;
 
+import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.support.dto.TeamInfoResponseDTO;

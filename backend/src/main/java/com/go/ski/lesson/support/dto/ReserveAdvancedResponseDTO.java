@@ -21,9 +21,9 @@ public class ReserveAdvancedResponseDTO extends ReserveResponseDTO {
     private String description;
     private List<CertificateInfoVO> certificateInfoVOs;
 
-    public ReserveAdvancedResponseDTO(User user, Instructor instructor, Permission permission, List<CertificateInfoVO> certificateInfoVOs) {
+    public ReserveAdvancedResponseDTO(Instructor instructor, Permission permission, List<CertificateInfoVO> certificateInfoVOs) {
         instructorId = instructor.getInstructorId();
-        userName = user.getUserName();
+        userName = instructor.getUser().getUserName();
         position = permission.getPosition();
         description = instructor.getDescription();
         this.certificateInfoVOs = certificateInfoVOs;

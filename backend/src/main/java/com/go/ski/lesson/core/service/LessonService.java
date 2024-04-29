@@ -1,14 +1,13 @@
 package com.go.ski.lesson.core.service;
 
-import com.go.ski.lesson.support.dto.ReserveAdvancedResponseDTO;
-import com.go.ski.lesson.support.dto.ReserveNoviceResponseDTO;
-import com.go.ski.lesson.support.dto.ReserveNoviceTeamRequestDTO;
-import com.go.ski.lesson.support.dto.ReserveResponseDTO;
+import com.go.ski.lesson.support.dto.*;
 import com.go.ski.lesson.support.vo.CertificateInfoVO;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
+import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
+import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.team.core.model.*;
@@ -43,6 +42,7 @@ public class LessonService {
     private final PermissionRepository permissionRepository;
     private final InstructorRepository instructorRepository;
     private final InstructorCertRepository instructorCertRepository;
+    private final LessonRepository lessonRepository;
 
     public List<ReserveNoviceResponseDTO> getTeamsForNovice(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
@@ -95,7 +95,6 @@ public class LessonService {
         List<Integer> instructorsList = reserveNoviceTeamRequestDTO.getInstructorsList();
         for (int instructorId : instructorsList) {
             try {
-                User user = userRepository.findById(instructorId).orElseThrow();
                 Instructor instructor = instructorRepository.findById(instructorId).orElseThrow();
                 Team team = teamRepository.findById(teamId).orElseThrow();
                 TeamInstructor teamInstructor = teamInstructorRepository.findByTeamAndInstructor(team, instructor).orElseThrow();
@@ -103,7 +102,7 @@ public class LessonService {
                 List<CertificateInfoVO> certificateInfoVOs = instructorCertRepository.findByInstructor(instructor)
                         .stream().map(this::getCertificateInfoVO).collect(Collectors.toList());
 
-                ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(user, instructor, permission, certificateInfoVOs);
+                ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(instructor, permission, certificateInfoVOs);
                 // 가격 설정
                 if (reserveNoviceTeamRequestDTO.getStudentCount() > 0) {
                     Optional<OneToNOption> optionalOneToNOption = oneToNOptionRepository.findById(teamId);
@@ -121,6 +120,18 @@ public class LessonService {
             }
         }
         return reserveAdvancedResponseDTOs;
+    }
+
+    public List<UserLessonResponseDTO> getUserLessonList(User user) {
+        List<UserLessonResponseDTO> userLessonResponseDTOs = new ArrayList<>();
+        for (Lesson lesson : lessonRepository.findByUser(user)) {
+            try {
+                LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
+                userLessonResponseDTOs.add(new UserLessonResponseDTO(lesson, lessonInfo));
+            } catch (NoSuchElementException ignored) {
+            }
+        }
+        return userLessonResponseDTOs;
     }
 
     private CertificateInfoVO getCertificateInfoVO(InstructorCert instructorCert) {
