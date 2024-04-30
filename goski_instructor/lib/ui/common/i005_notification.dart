@@ -194,7 +194,7 @@ class InviteNotificationCard extends StatelessWidget {
           Row(
             children: [
               GoskiText(
-                text: '$teamName에서 팀 초대 요청이 왔습니다',
+                text: tr('inviteNotification', args: [teamName]),
                 size: goskiFontMedium,
                 isBold: true,
               ),
@@ -338,7 +338,7 @@ class NotificationDismissible extends StatelessWidget {
           context: context,
           builder: (context) {
             return GoskiModal(
-              title: '알림 삭제',
+              title: tr('deleteNotification'),
               child: DeleteNotificationDialog(
                 onCancel: () => Navigator.pop(context, false),
                 onConfirm: () => Navigator.pop(context, true),
