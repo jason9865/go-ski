@@ -239,11 +239,13 @@ class LessonNotificationCard extends StatelessWidget {
                     text: DateTimeUtil.getDateTime(dateTime),
                     size: goskiFontMedium,
                   ),
-                  Icon(
-                    size: screenSizeController.getWidthByRatio(0.06),
-                    isExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
+                  AnimatedRotation(
+                    duration: const Duration(milliseconds: animationDuration),
+                    turns: isExpanded ? 0.5 : 0,
+                    child: Icon(
+                        size: screenSizeController.getWidthByRatio(0.06),
+                        Icons.keyboard_arrow_down
+                    ),
                   ),
                 ],
               ),
@@ -347,11 +349,13 @@ class MessageNotificationCard extends StatelessWidget {
                     text: DateTimeUtil.getDateTime(dateTime),
                     size: goskiFontMedium,
                   ),
-                  Icon(
-                    size: screenSizeController.getWidthByRatio(0.06),
-                    isExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
+                  AnimatedRotation(
+                    duration: const Duration(milliseconds: animationDuration),
+                    turns: isExpanded ? 0.5 : 0,
+                    child: Icon(
+                      size: screenSizeController.getWidthByRatio(0.06),
+                      Icons.keyboard_arrow_down
+                    ),
                   ),
                 ],
               ),
