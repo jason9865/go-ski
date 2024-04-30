@@ -2,19 +2,19 @@ package com.go.ski.notification.core.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.go.ski.common.constant.FileUploadPath;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
 import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.support.dto.FcmMessageDTO;
+import com.go.ski.notification.support.dto.FcmMessageDTO.Data;
+import com.go.ski.notification.support.dto.FcmMessageDTO.Message;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.exception.UserExceptionEnum;
 import com.google.auth.oauth2.GoogleCredentials;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import reactor.netty.http.server.HttpServerRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,12 +74,6 @@ public class FcmService {
         }
 
 
-        String imageUrl = fcmSendRequestDTO.getImage() != null ?
-                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
-                null;
-
-        Notification notification = Notification.of(fcmSendRequestDTO,imageUrl);
-        notificationRepository.save(notification);
     }
 
     @Transactional
@@ -89,20 +82,25 @@ public class FcmService {
                 .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
 
         String targetToken = getToken(fcmSendRequestDTO.getReceiverId(), fcmSendRequestDTO.getDeviceType());
+        String imageUrl = fcmSendRequestDTO.getImage() != null ?
+                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
+                null;
+
+        Data data = Data.builder()
+                .senderId(fcmSendRequestDTO.getSenderId())
+                .senderName(sender.getUserName())
+                .title(fcmSendRequestDTO.getTitle())
+                .content(fcmSendRequestDTO.getContent())
+                .imageUrl(imageUrl)
+                .notificationType(fcmSendRequestDTO.getNotificationType())
+                .build();
 
         FcmMessageDTO fcmMessageDTO = FcmMessageDTO.builder()
-                .message(FcmMessageDTO.Message.builder()
-                        .token(targetToken)
-                        .data(FcmMessageDTO.Data.builder()
-                                .senderId(fcmSendRequestDTO.getSenderId())
-                                .senderName(sender.getUserName())
-                                .title(fcmSendRequestDTO.getTitle())
-                                .content(fcmSendRequestDTO.getContent())
-                                .imageUrl(null)
-                                .notificationType(fcmSendRequestDTO.getNotificationType())
-                                .build()
-                        ).build())
+                .message(new Message(data,targetToken))
                 .validateOnly(false).build();
+
+        Notification notification = Notification.of(fcmSendRequestDTO, imageUrl);
+        notificationRepository.save(notification);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -130,7 +128,7 @@ public class FcmService {
     public String getToken(Integer userId, String type) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
-        return type.equals("web") ? user.getFcmWeb() : user.getFcmMobile();
+        return type.equals("WEB") ? user.getFcmWeb() : user.getFcmMobile();
     }
 
 }

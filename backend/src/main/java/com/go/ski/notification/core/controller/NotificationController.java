@@ -54,7 +54,7 @@ public class NotificationController {
     }
 
     // 알림 보내기
-    @PostMapping("/dm")
+    @PostMapping("/send")
     public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
         fcmService.sendMessageTo(requestDTO);

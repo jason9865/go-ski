@@ -1,6 +1,7 @@
 package com.go.ski.notification.support.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.notification.core.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.Getter;
 @Builder
 public class FcmMessageDTO {
 
+    @JsonProperty("validate_only")
     private boolean validateOnly;
     private Message message;
 
