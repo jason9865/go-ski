@@ -10,14 +10,17 @@ class GoskiExpansionTile extends StatelessWidget {
   final List<Widget> children;
   final double radius, verticalPadding;
   final Color backgroundColor;
+  final bool hasHorizontalPadding;
 
-  const GoskiExpansionTile(
-      {super.key,
-        required this.title,
-        required this.children,
-        this.radius = 10,
-        this.backgroundColor = goskiLightGray,
-        this.verticalPadding = -4.0});
+  const GoskiExpansionTile({
+    super.key,
+    required this.title,
+    required this.children,
+    this.radius = 10,
+    this.backgroundColor = goskiLightGray,
+    this.verticalPadding = -4.0,
+    this.hasHorizontalPadding = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class GoskiExpansionTile extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      padding: EdgeInsets.symmetric(horizontal: hasHorizontalPadding ? horizontalPadding : 0),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(radius),
@@ -42,8 +45,8 @@ class GoskiExpansionTile extends StatelessWidget {
             vertical: verticalPadding < -4
                 ? -4
                 : verticalPadding > 4
-                ? 4
-                : verticalPadding,
+                    ? 4
+                    : verticalPadding,
           ),
           childrenPadding: EdgeInsets.only(
               bottom: screenSizeController.getWidthByRatio(0.03)),
@@ -59,4 +62,3 @@ class GoskiExpansionTile extends StatelessWidget {
     );
   }
 }
-
