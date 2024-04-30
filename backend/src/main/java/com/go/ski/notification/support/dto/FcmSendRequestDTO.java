@@ -4,6 +4,8 @@ import com.go.ski.notification.core.domain.NotificationType;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -18,4 +20,5 @@ public class FcmSendRequestDTO {
     private MultipartFile image;
     private String deviceType;
     private NotificationType notificationType;
+    private LocalDateTime createdAt;
 }

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Builder
@@ -35,6 +37,7 @@ public class FcmMessageDTO {
         private String content;
         private String imageUrl;
         private NotificationType notificationType;
+        private LocalDateTime createdAt;
     }
 
 }

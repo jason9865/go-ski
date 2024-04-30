@@ -4,6 +4,7 @@ import com.go.ski.notification.core.service.FcmService;
 import com.go.ski.notification.core.service.NotificationService;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.FcmTokenRequestDTO;
+import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.notification.support.dto.NotificationResponseDTO;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.user.core.model.User;
@@ -62,6 +63,9 @@ public class NotificationController {
     }
 
     // 팀 초대 요청 수락
-
-
+    @PostMapping("/invite-accept")
+    public ResponseEntity<ApiResponse<?>> acceptInvite(@RequestBody InviteRequestDTO requestDTO) {
+        log.info("NotificationController.acceptInvite");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
 }

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
@@ -39,6 +40,8 @@ public class FcmService {
     private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
     private static final String FIREBASE_KEY_PATH = "goSkiAccountKey.json";
     private static final String GOOGLE_AUTH_URL ="https://www.googleapids.com/auth/cloud-platform";
+
+    private static final boolean VALIDATE_ONLY = false;
 
     @Value("${firebase.project.id}")
     private String projectId;
@@ -79,9 +82,8 @@ public class FcmService {
     @Transactional
     public String makeMessage(FcmSendRequestDTO fcmSendRequestDTO) {
         User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
-                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
+                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
 
-        String targetToken = getToken(fcmSendRequestDTO.getReceiverId(), fcmSendRequestDTO.getDeviceType());
         String imageUrl = fcmSendRequestDTO.getImage() != null ?
                 s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
                 null;
@@ -93,11 +95,15 @@ public class FcmService {
                 .content(fcmSendRequestDTO.getContent())
                 .imageUrl(imageUrl)
                 .notificationType(fcmSendRequestDTO.getNotificationType())
+                .createdAt(LocalDateTime.now())
                 .build();
+
+        String targetToken = getFcmToken(fcmSendRequestDTO.getReceiverId(), fcmSendRequestDTO.getDeviceType());
+
 
         FcmMessageDTO fcmMessageDTO = FcmMessageDTO.builder()
                 .message(new Message(data,targetToken))
-                .validateOnly(false).build();
+                .validateOnly(VALIDATE_ONLY).build();
 
         Notification notification = Notification.of(fcmSendRequestDTO, imageUrl);
         notificationRepository.save(notification);
@@ -125,9 +131,9 @@ public class FcmService {
 
     }
 
-    public String getToken(Integer userId, String type) {
+    public String getFcmToken(Integer userId, String type) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
         return type.equals("WEB") ? user.getFcmWeb() : user.getFcmMobile();
     }
 
