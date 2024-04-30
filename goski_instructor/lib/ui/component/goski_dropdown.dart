@@ -32,6 +32,8 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    const animationDuration = 200;
+
     return CompositedTransformTarget(
       link: _link,
       child: OverlayPortal(
@@ -105,11 +107,13 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                     color: _selected == null ? goskiDarkGray : goskiBlack,
                   ),
                 ),
-                Icon(
-                  size: goskiFontLarge,
-                  _tooltipController.isShowing
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
+                AnimatedRotation(
+                  duration: const Duration(milliseconds: animationDuration),
+                  turns: _tooltipController.isShowing ? 0.5 : 0,
+                  child: Icon(
+                      size: screenSizeController.getWidthByRatio(0.06),
+                      Icons.keyboard_arrow_down
+                  ),
                 ),
               ],
             ),
