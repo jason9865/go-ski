@@ -75,7 +75,7 @@ class _UpdateBossInfoScreenState extends State<UpdateBossInfoScreen> {
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("updateProfilePhoto"),
+                text: tr("updateProfileImage"),
                 size: goskiFontSmall,
                 isBold: true,
               ),
