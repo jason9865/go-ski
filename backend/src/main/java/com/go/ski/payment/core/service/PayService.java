@@ -1,7 +1,6 @@
 package com.go.ski.payment.core.service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.PaymentRepository;
+import com.go.ski.payment.core.repository.SettlementRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
@@ -33,7 +33,10 @@ import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
+import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
+import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.redis.repository.PaymentCacheRepository;
 import com.go.ski.team.core.model.Team;
@@ -78,6 +81,8 @@ public class PayService {
 	private final StudentInfoRepository studentInfoRepository;
 	private final PaymentRepository paymentRepository;
 	private final PaymentCacheRepository paymentCacheRepository;
+	private final SettlementRepository settlementRepository;
+
 	//카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
 	public HttpHeaders getHeader(String mode) {
 		HttpHeaders headers = new HttpHeaders();
@@ -256,7 +261,7 @@ public class PayService {
 		if(dummy.isEmpty()) throw new IllegalArgumentException("조회할 수 없습니다.");
 		return lessonRepository.findOwnerPaymentHistories(user.getUserId());
 	}
-
+	@Transactional
 	public List<OwnerPaymentHistoryResponseDTO> getTeamPaymentHistories(HttpServletRequest httpServletRequest, Integer teamId) {
 		User user = (User)httpServletRequest.getAttribute("user");
 		boolean b = false;
@@ -266,11 +271,40 @@ public class PayService {
 		for(int id = 0; id < dummy.size(); id++) {
 			if(Objects.equals(dummy.get(id).getTeamId(), teamId)) b = true;
 		}
-		log.info(user.getUserName());
-		log.info(String.valueOf(dummy.size()));
 		//exception 만들기
 		if(!b) throw new IllegalArgumentException("조회할 수 없습니다.");
 
 		return lessonRepository.findTeamPaymentHistories(teamId);
+	}
+	// 그 동안의 출금 내역을 조회
+	@Transactional
+	public List<WithdrawalResponseDTO> getWithdrawalList(HttpServletRequest httpServletRequest) {
+		User user = (User)httpServletRequest.getAttribute("user");
+		return settlementRepository.findWithrawalList(user.getUserId());
+	}
+
+
+	// 가능 금액을 조회
+	// 내 총 핀매금액 - 총 정산 금액
+	// 정산 가능 금액 구했으면 알아서 다시 요청하지마라 프론트
+	// 이거는 뭈쓸모가 맞다
+	@Transactional
+	public Integer getBalance(HttpServletRequest httpServletRequest) {
+		User user = (User)httpServletRequest.getAttribute("user");
+
+		int balance = 0;
+		List<TotalPaymentDTO> totalPayments = paymentRepository.findTotalPayment(user.getUserId());
+		List<TotalSettlementDTO> totalSettlements = settlementRepository.findBySettlements(user.getUserId());
+
+		for(TotalPaymentDTO tmp : totalPayments) {
+			balance += tmp.getChargeRate() * tmp.getTotalAmount() / 100;
+		}
+		for(TotalSettlementDTO tmp : totalSettlements) {
+			balance -= tmp.getSettlementAmount();
+		}
+		// 잔액 total(현재 기준 예약 날짜 지난것들)
+		// minus
+		// 출금 내역 리스트
+		return balance;
 	}
 }

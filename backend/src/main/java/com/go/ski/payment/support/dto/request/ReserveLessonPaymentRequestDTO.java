@@ -1,14 +1,11 @@
 package com.go.ski.payment.support.dto.request;
 
-import static jakarta.persistence.EnumType.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.ToString;
 
