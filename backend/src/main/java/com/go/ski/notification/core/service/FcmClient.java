@@ -33,7 +33,7 @@ import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FcmService {
+public class FcmClient {
 
     private static final String PREFIX_ACCESS_TOKEN = "Bearer ";
     private static final String PREFIX_FCM_REQUEST_URL = "https://fcm.googleapis.com/v1/projects/";

@@ -1,7 +1,10 @@
 package com.go.ski.notification.core.service;
 
+import com.go.ski.common.util.S3Uploader;
 import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
+import com.go.ski.notification.support.EventPublisher;
+import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.FcmTokenRequestDTO;
 import com.go.ski.notification.support.dto.NotificationResponseDTO;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
@@ -14,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EventListener;
 import java.util.List;
+
+import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
 
 @Slf4j
 @Service
@@ -22,7 +28,9 @@ import java.util.List;
 public class NotificationService {
 
     private final UserRepository userRepository;
+    private final EventPublisher eventPublisher;
     private final NotificationRepository notificationRepository;
+    private final S3Uploader s3Uploader;
 
     public void registerFcmToken(User user, FcmTokenRequestDTO requestDTO) {
         String token = requestDTO.getToken();
@@ -51,4 +59,16 @@ public class NotificationService {
 
         notification.read();
     }
+//
+//    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO){
+//        User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
+//                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
+//
+//        String imageUrl = fcmSendRequestDTO.getImage() != null ?
+//                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
+//                null;
+//        Notification notification = Notification.of(fcmSendRequestDTO, imageUrl);
+//        notificationRepository.save(notification);
+//        eventPublisher.publish
+//    }
 }
