@@ -60,13 +60,8 @@ class SettingScreen extends StatelessWidget {
                     ),
                     buildDivider(),
                     SettingContent(
-                      content: tr('askTeamRegistration'),
-                      onConfirm: () => logger.d("팀 등록 문의"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('askAdvertisement'),
-                      onConfirm: () => logger.d("광고 문의"),
+                      content: tr('ask'),
+                      onConfirm: () => logger.d("문의"),
                     ),
                   ],
                 ),
