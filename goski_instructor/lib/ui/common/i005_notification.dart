@@ -5,7 +5,6 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/datetime_util.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/ui/boss/i023_update_boss_info.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
@@ -117,7 +116,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 }
 
-// 알림 카드 위젯
+/// 알림 카드 위젯
 class NotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final Widget? child;
@@ -171,7 +170,7 @@ class NotificationCard extends StatelessWidget {
   }
 }
 
-// 팀 초대 알림
+/// 팀 초대 알림
 class InviteNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final String teamName;
@@ -227,7 +226,7 @@ class InviteNotificationCard extends StatelessWidget {
   }
 }
 
-// 알림 확장 카드 위젯
+/// 알림 확장 카드 위젯
 class NotificationExpansionCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
@@ -300,7 +299,7 @@ class NotificationExpansionCard extends StatelessWidget {
   }
 }
 
-// 스와이프 삭제 위젯
+/// 스와이프 삭제 위젯
 class NotificationDismissible extends StatelessWidget {
   final VoidCallback onItemDeleteClicked;
   final Widget child;
@@ -313,6 +312,8 @@ class NotificationDismissible extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSizeController = Get.find<ScreenSizeController>();
+
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -352,7 +353,7 @@ class NotificationDismissible extends StatelessWidget {
   }
 }
 
-// 강습 추가, 삭제, 변경, 30분 전 알림
+/// 강습 추가, 삭제, 변경, 30분 전 알림
 class LessonNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
@@ -444,7 +445,7 @@ class LessonNotificationCard extends StatelessWidget {
   }
 }
 
-// 쪽지 알림
+/// 쪽지 알림
 class MessageNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
