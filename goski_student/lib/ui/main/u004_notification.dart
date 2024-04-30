@@ -299,60 +299,6 @@ class NotificationExpansionCard extends StatelessWidget {
   }
 }
 
-/// 스와이프 삭제 위젯
-class NotificationDismissible extends StatelessWidget {
-  final VoidCallback onItemDeleteClicked;
-  final Widget child;
-
-  const NotificationDismissible({
-    super.key,
-    required this.onItemDeleteClicked,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
-
-    return Dismissible(
-      key: UniqueKey(),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: goskiRed,
-        ),
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.05)),
-            child: const Icon(Icons.delete, color: Colors.white),
-          ),
-        ),
-      ),
-      onDismissed: (direction) {
-        onItemDeleteClicked();
-      },
-      confirmDismiss: (direction) async {
-        final confirmed = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return GoskiModal(
-              title: tr('deleteNotification'),
-              child: DeleteNotificationDialog(
-                onCancel: () => Navigator.pop(context, false),
-                onConfirm: () => Navigator.pop(context, true),
-              ),
-            );
-          },
-        );
-        return confirmed;
-      },
-      child: child,
-    );
-  }
-}
-
 /// 강습 추가, 삭제, 변경, 30분 전 알림
 class LessonNotificationCard extends StatelessWidget {
   final DateTime dateTime;
@@ -376,8 +322,24 @@ class LessonNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
 
-    return NotificationDismissible(
-      onItemDeleteClicked: onItemDeleteClicked,
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: tr('deleteNotification'),
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context),
+                onConfirm: () {
+                  onItemDeleteClicked();
+                  Navigator.pop(context);
+                },
+              ),
+            );
+          },
+        );
+      },
       child: NotificationExpansionCard(
         dateTime: dateTime,
         isExpanded: isExpanded,
@@ -414,26 +376,7 @@ class LessonNotificationCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: onItemDeleteClicked,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: titlePadding,
-                                bottom: titlePadding,
-                                left: titlePadding),
-                            child: GoskiText(
-                              text: tr('delete'),
-                              size: goskiFontMedium,
-                              color: goskiDarkGray,
-                              textDecoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: titlePadding),
                   ],
                 ),
               ),
@@ -471,8 +414,24 @@ class MessageNotificationCard extends StatelessWidget {
     const animationDuration = 200;
     final imageSize = screenSizeController.getHeightByRatio(0.2);
 
-    return NotificationDismissible(
-      onItemDeleteClicked: onItemDeleteClicked,
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: tr('deleteNotification'),
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context),
+                onConfirm: () {
+                  onItemDeleteClicked();
+                  Navigator.pop(context);
+                },
+              ),
+            );
+          },
+        );
+      },
       child: NotificationExpansionCard(
         dateTime: dateTime,
         isExpanded: isExpanded,
@@ -509,7 +468,7 @@ class MessageNotificationCard extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return GoskiModal(
-                                title: '사진',
+                                title: tr('feedbackImage'),
                                 child: Column(
                                   children: [
                                     Image.network(
@@ -549,26 +508,7 @@ class MessageNotificationCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: onItemDeleteClicked,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: titlePadding,
-                                bottom: titlePadding,
-                                left: titlePadding),
-                            child: GoskiText(
-                              text: tr('delete'),
-                              size: goskiFontMedium,
-                              color: goskiDarkGray,
-                              textDecoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: titlePadding),
                   ],
                 ),
               ),
