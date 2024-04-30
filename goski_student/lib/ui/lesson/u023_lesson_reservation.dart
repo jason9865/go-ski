@@ -164,7 +164,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                     ),
                     SizedBox(height: titlePadding),
                     GoskiText(
-                      text: tr('reservationPeopleCount', args: ['3']),
+                      text: tr('reservationPeopleCount', args: [widget.studentInfoList.length.toString()]),
                       size: goskiFontMedium,
                       isBold: true,
                     ),
