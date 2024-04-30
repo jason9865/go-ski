@@ -4,8 +4,14 @@ import 'package:goski_student/const/color.dart';
 class GoskiSwitch extends StatefulWidget {
   final List<String> items;
   final double width;
+  final Function(int)? onToggle;
 
-  const GoskiSwitch({super.key, required this.items, required this.width});
+  const GoskiSwitch({
+    super.key,
+    required this.items,
+    required this.width,
+    this.onToggle,
+  });
 
   @override
   _GoskiSwitchState createState() => _GoskiSwitchState();
@@ -28,7 +34,8 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
           return ChoiceChip(
             padding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
-            backgroundColor: selectedIndex == index ? goskiButtonBlack : goskiWhite,
+            backgroundColor:
+                selectedIndex == index ? goskiButtonBlack : goskiWhite,
             label: Container(
               width: chipWidth,
               height: 40,
@@ -47,6 +54,9 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
             onSelected: (bool selected) {
               setState(() {
                 selectedIndex = selected ? index : selectedIndex;
+                if (widget.onToggle != null) {
+                  widget.onToggle!(selectedIndex);
+                }
               });
             },
             selectedColor: goskiButtonBlack,
