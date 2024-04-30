@@ -13,7 +13,7 @@ class GoskiInstructorCard extends StatelessWidget {
   final String position;
   final Color badgeColor;
   final String name;
-  final String phoneNumber;
+  final String description;
   final String imagePath;
 
   const GoskiInstructorCard(
@@ -22,7 +22,7 @@ class GoskiInstructorCard extends StatelessWidget {
       required this.position,
       required this.badgeColor,
       required this.name,
-      required this.phoneNumber});
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +62,9 @@ class GoskiInstructorCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               GoskiText(
-                                  text: tr('position'),
-                                  size: goskiFontMedium,
-                                  isBold: true),
+                                text: tr('position'),
+                                size: goskiFontSmall,
+                              ),
                             ],
                           )),
                       GoskiBadge(
@@ -83,29 +83,29 @@ class GoskiInstructorCard extends StatelessWidget {
                           children: [
                             GoskiText(
                               text: tr('name'),
-                              size: goskiFontMedium,
-                              isBold: true,
+                              size: goskiFontSmall,
                             ),
                           ],
                         ),
                       ),
-                      GoskiText(text: tr(name), size: goskiFontMedium),
+                      GoskiText(text: tr(name), size: goskiFontSmall),
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: 30,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         width: 80,
                         child: GoskiText(
-                          text: tr('phoneNumber'),
-                          size: goskiFontMedium,
-                          isBold: true,
+                          text: tr('selfIntroduction'),
+                          size: goskiFontSmall,
                         ),
                       ),
-                      GoskiText(text: tr(phoneNumber), size: goskiFontMedium),
+                      Expanded(
+                          child: GoskiText(
+                              text: tr(description), size: goskiFontSmall)),
                     ],
                   ),
                 ),
