@@ -71,6 +71,23 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
     }
   }
 
+  /// 특정 날짜 선택 가능한지 확인 하는 함수
+  /// showDatePicker의 selectableDayPredicate: _isDateSelectable 처럼 사용하면 됨
+  bool _isDateSelectable(DateTime day) {
+    List<DateTime> availableDateList = [
+      DateTime(2024, 4, 30),
+      DateTime(2024, 5, 1),
+      DateTime(2024, 5, 3),
+      DateTime(2024, 5, 6),
+    ];
+
+    for (int i = 0; i < availableDateList.length; i++) {
+      if (day.isAtSameMomentAs(availableDateList[i])) return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
@@ -149,11 +166,12 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate: DateTime(DateTime.now().year + 1),
+                            selectableDayPredicate: _isDateSelectable,
                           ).then((selectedDate) {
-                                return setState(() {
-                                  _selectedDate = selectedDate;
-                                });
-                              });
+                            return setState(() {
+                              _selectedDate = selectedDate;
+                            });
+                          });
                         },
                       ),
                     ),
