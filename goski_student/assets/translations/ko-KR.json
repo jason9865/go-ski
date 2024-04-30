@@ -224,5 +224,7 @@
   "orderByLowerPrice" : "낮은 가격순",
   "orderByHigherPrice" : "높은 가격순"
   "reject": "거절",
-  "accept": "수락"
+  "accept": "수락",
+  "deleteNotification": "알림 삭제",
+  "deleteNotificationConfirm": "알림을 삭제하시겠습니까?"
 }
