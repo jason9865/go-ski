@@ -1,5 +1,6 @@
 package com.go.ski.notification.core.domain;
 
+import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -35,6 +36,18 @@ public class Notification {
 
     @ColumnDefault("0")
     private byte isRead;
+
+    public static Notification of(FcmSendRequestDTO dto,String imageUrl) {
+        return Notification.builder()
+                .receiverId(dto.getReceiverId())
+                .senderId(dto.getSenderId())
+                .type(dto.getNotificationType())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .imageUrl(imageUrl)
+                .build()
+                ;
+    }
 
     public void read(){
         isRead = 1;

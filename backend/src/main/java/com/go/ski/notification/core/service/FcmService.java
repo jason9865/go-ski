@@ -2,22 +2,33 @@ package com.go.ski.notification.core.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.go.ski.common.constant.FileUploadPath;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
+import com.go.ski.notification.core.domain.Notification;
+import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.support.dto.FcmMessageDTO;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
+import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.UserRepository;
+import com.go.ski.user.support.exception.UserExceptionEnum;
 import com.google.auth.oauth2.GoogleCredentials;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import reactor.netty.http.server.HttpServerRequest;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,8 +45,11 @@ public class FcmService {
     private String projectId;
 
     private final S3Uploader s3Uploader;
+    private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
-    public Integer sendMessageTo(FcmSendRequestDTO fcmSendRequestDTO) {
+    @Transactional
+    public void sendMessageTo(FcmSendRequestDTO fcmSendRequestDTO) {
         String message = makeMessage(fcmSendRequestDTO);
         RestTemplate restTemplate = new RestTemplate();
 
@@ -56,22 +70,41 @@ public class FcmService {
 
         log.info("FcmService - response : {}",response.getStatusCode());
 
-        return response.getStatusCode() == HttpStatus.OK ? 1 : 0;
+        if(response.getStatusCode().isError()){
+            throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.FIREBASE_CONNECTION_ERROR);
+        }
+
+
+        String imageUrl = fcmSendRequestDTO.getImage() != null ?
+                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
+                null;
+
+        Notification notification = Notification.of(fcmSendRequestDTO,imageUrl);
+        notificationRepository.save(notification);
     }
 
-    private String makeMessage(FcmSendRequestDTO fcmSendRequestDTO) {
+    @Transactional
+    public String makeMessage(FcmSendRequestDTO fcmSendRequestDTO) {
+        User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
+                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        String targetToken = getToken(fcmSendRequestDTO.getReceiverId(), fcmSendRequestDTO.getDeviceType());
 
         FcmMessageDTO fcmMessageDTO = FcmMessageDTO.builder()
                 .message(FcmMessageDTO.Message.builder()
-                        .token(fcmSendRequestDTO.getRecipientToken())
+                        .token(targetToken)
                         .data(FcmMessageDTO.Data.builder()
+                                .senderId(fcmSendRequestDTO.getSenderId())
+                                .senderName(sender.getUserName())
                                 .title(fcmSendRequestDTO.getTitle())
                                 .content(fcmSendRequestDTO.getContent())
                                 .imageUrl(null)
+                                .notificationType(fcmSendRequestDTO.getNotificationType())
                                 .build()
-                            ).build()).validateOnly(false).build();
+                        ).build())
+                .validateOnly(false).build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             return objectMapper.writeValueAsString(fcmMessageDTO);
@@ -92,6 +125,12 @@ public class FcmService {
             throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.GOOGLE_REQUEST_TOKEN_ERROR);
         }
 
+    }
+
+    public String getToken(Integer userId, String type) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST));
+        return type.equals("web") ? user.getFcmWeb() : user.getFcmMobile();
     }
 
 }

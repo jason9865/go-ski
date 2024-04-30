@@ -57,8 +57,8 @@ public class NotificationController {
     @PostMapping("/dm")
     public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
-        int result = fcmService.sendMessageTo(requestDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("성공!"));
+        fcmService.sendMessageTo(requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
     // 팀 초대 요청 수락

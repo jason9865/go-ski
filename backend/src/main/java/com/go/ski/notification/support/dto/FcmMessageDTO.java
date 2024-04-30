@@ -1,6 +1,7 @@
 package com.go.ski.notification.support.dto;
 
 
+import com.go.ski.notification.core.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,9 +27,12 @@ public class FcmMessageDTO {
     @AllArgsConstructor
     @Getter
     public static class Data{
+        private Integer senderId;
+        private String senderName;
         private String title;
         private String content;
         private String imageUrl;
+        private NotificationType notificationType;
     }
 
 }

@@ -8,6 +8,7 @@ import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
+import com.go.ski.user.support.exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
