@@ -7,6 +7,7 @@ class GoskiText extends StatelessWidget {
   final Color color;
   final bool isBold, isExpanded;
   final TextAlign textAlign;
+  final TextDecoration textDecoration;
 
   const GoskiText({
     super.key,
@@ -16,6 +17,7 @@ class GoskiText extends StatelessWidget {
     this.isBold = false,
     this.isExpanded = false,
     this.textAlign = TextAlign.start,
+    this.textDecoration = TextDecoration.none,
   });
 
   @override
@@ -28,6 +30,7 @@ class GoskiText extends StatelessWidget {
         isBold: isBold,
         text: text,
         textAlign: textAlign,
+        textDecoration: textDecoration,
       ));
     } else {
       return GoskiTextBody(
@@ -36,6 +39,7 @@ class GoskiText extends StatelessWidget {
         isBold: isBold,
         text: text,
         textAlign: textAlign,
+        textDecoration: textDecoration,
       );
     }
   }
@@ -47,14 +51,17 @@ class GoskiTextBody extends StatelessWidget {
   final bool isBold;
   final String text;
   final TextAlign textAlign;
+  final TextDecoration textDecoration;
 
-  const GoskiTextBody(
-      {super.key,
-      required this.color,
-      required this.size,
-      required this.isBold,
-      required this.text,
-      required this.textAlign});
+  const GoskiTextBody({
+    super.key,
+    required this.color,
+    required this.size,
+    required this.isBold,
+    required this.text,
+    required this.textAlign,
+    required this.textDecoration,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +71,7 @@ class GoskiTextBody extends StatelessWidget {
         color: color,
         fontSize: size,
         fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
+        decoration: textDecoration,
       ),
       text,
     );
