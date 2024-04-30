@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface InstructorCertRepository extends JpaRepository<InstructorCert, Integer> {
-    List<InstructorCert> findAllByInstructor(Instructor instructor);
+    List<InstructorCert> findByInstructor(Instructor instructor);
+
+    void deleteByCertificateImageUrl(String certificateImageUrl);
 }

@@ -6,24 +6,20 @@ import java.time.LocalDate;
 
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.go.ski.lesson.support.vo.ReserveInfoVO;
+import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.user.core.model.Instructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class LessonInfo {
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,4 +48,25 @@ public class LessonInfo {
 			.studentCount(reserveLessonPaymentRequestDTO.getStudentInfo().size())
 			.build();
 	}
+    
+    public static LessonInfo toLessonForPayment(Lesson lesson, ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
+        return LessonInfo.builder()
+                .lessonId(lesson.getLessonId())
+                .lesson(lesson)
+                .lessonDate(reserveLessonPaymentRequestDTO.getLessonDate())
+                .startTime(reserveLessonPaymentRequestDTO.getStartTime())
+                .duration(reserveLessonPaymentRequestDTO.getDuration())
+                .lessonType(reserveLessonPaymentRequestDTO.getLessonType())
+                .studentCount(reserveLessonPaymentRequestDTO.getStudentInfo().size())
+                .build();
+    }
+
+    public LessonInfo(Instructor instructor, ReserveInfoVO reserveInfoVO) {
+        lesson = Lesson.builder().instructor(instructor).build();
+        lessonDate = reserveInfoVO.getLessonDate();
+        startTime = reserveInfoVO.getStartTime();
+        duration = reserveInfoVO.getDuration();
+        studentCount = reserveInfoVO.getStudentCount();
+        lessonType = reserveInfoVO.getLessonType();
+    }
 }

@@ -6,8 +6,6 @@ import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.logging.Level;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -36,13 +34,9 @@ public class LevelOption {
         return levelOption;
     }
 
-    public static LevelOption createLevelOption(Team team, TeamUpdateRequestDTO requestDTO) {
-        LevelOption levelOption = new LevelOption();
-        levelOption.teamId = team.getTeamId();
-        levelOption.team = team;
-        levelOption.intermediateFee = requestDTO.getIntermediateFee();
-        levelOption.advancedFee = requestDTO.getAdvancedFee();
-        return levelOption;
+    public  void update(TeamUpdateRequestDTO requestDTO) {
+        this.intermediateFee = requestDTO.getIntermediateFee();
+        this.advancedFee = requestDTO.getAdvancedFee();
     }
 
 }

@@ -1,10 +1,8 @@
 package com.go.ski.user.core.model;
 
-import com.go.ski.user.support.vo.IsInstructAvailable;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -12,10 +10,10 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table
+@ToString
 public class Instructor {
     @Id
-    private int instructorId; // User의 PK를 여기서도 PK로 사용
+    private Integer instructorId; // User의 PK를 여기서도 PK로 사용
 
     @MapsId // User의 userId를 Instructor의 PK로 매핑
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -26,9 +24,18 @@ public class Instructor {
     private String description;
 
     @Setter
-    @Enumerated(STRING)
-    private IsInstructAvailable isInstructAvailable;
+    private String isInstructAvailable;
 
     @Setter
-    private int dayoff;
+    private Integer dayoff;
+
+    public Instructor(User user, String lessonType) {
+        instructorId = user.getUserId();
+        this.user = user;
+        switch (lessonType) {
+            case "ALL" -> isInstructAvailable = "1110000";
+            case "SKI" -> isInstructAvailable = "1010000";
+            case "BOARD" -> isInstructAvailable = "110000";
+        }
+    }
 }
