@@ -207,5 +207,6 @@
   "reservationConfirm": "{}원 / 예약하기",
   "price": "{}원",
   "kakaoPay": "카카오페이",
-  "naverPay": "네이버페이"
+  "naverPay": "네이버페이",
+  "ask" : "문의"
 }
