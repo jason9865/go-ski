@@ -170,5 +170,8 @@
   "reject": "거절",
   "accept": "수락",
   "teamMemberList" : "팀원 목록",
-  "lessonList" : "강습 목록"
+  "lessonList" : "강습 목록",
+  "deleteNotification": "알림 삭제",
+  "deleteNotificationConfirm": "알림을 삭제하시겠습니까?",
+  "inviteNotification": "{}에서 팀 초대 요청이 왔습니다"
 }
