@@ -11,6 +11,7 @@ import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 
 import '../component/goski_modal.dart';
+import 'd_i042_delete_notification.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -321,67 +322,102 @@ class LessonNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
 
-    return NotificationExpansionCard(
-      dateTime: dateTime,
-      isExpanded: isExpanded,
-      onExpandBtnClicked: onExpandBtnClicked,
-      title: title,
-      content: content,
-      child: Column(
-        children: [
-          SizedBox(height: titlePadding),
-          Row(
-            children: [
-              GoskiText(
-                text: title,
-                size: goskiFontMedium,
-                isBold: true,
-              ),
-            ],
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: goskiRed,
+        ),
+        child: const Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Icon(Icons.delete, color: Colors.white),
           ),
-          SizedBox(height: titlePadding),
-          AnimatedSize(
-            duration: const Duration(milliseconds: animationDuration),
-            child: Visibility(
-              visible: isExpanded,
-              replacement: SizedBox(
-                width: screenSizeController.getWidthByRatio(1),
+        ),
+      ),
+      onDismissed: (direction) {
+        onItemDeleteClicked();
+      },
+      confirmDismiss: (direction) async {
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: '알림 삭제',
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context, false),
+                onConfirm: () => Navigator.pop(context, true),
               ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      GoskiText(
-                        text: content,
-                        size: goskiFontMedium,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: onItemDeleteClicked,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: titlePadding,
-                              bottom: titlePadding,
-                              left: titlePadding),
-                          child: GoskiText(
-                            text: tr('delete'),
-                            size: goskiFontMedium,
-                            color: goskiDarkGray,
-                            textDecoration: TextDecoration.underline,
+            );
+          },
+        );
+        return confirmed;
+      },
+      child: NotificationExpansionCard(
+        dateTime: dateTime,
+        isExpanded: isExpanded,
+        onExpandBtnClicked: onExpandBtnClicked,
+        title: title,
+        content: content,
+        child: Column(
+          children: [
+            SizedBox(height: titlePadding),
+            Row(
+              children: [
+                GoskiText(
+                  text: title,
+                  size: goskiFontMedium,
+                  isBold: true,
+                ),
+              ],
+            ),
+            SizedBox(height: titlePadding),
+            AnimatedSize(
+              duration: const Duration(milliseconds: animationDuration),
+              child: Visibility(
+                visible: isExpanded,
+                replacement: SizedBox(
+                  width: screenSizeController.getWidthByRatio(1),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        GoskiText(
+                          text: content,
+                          size: goskiFontMedium,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: onItemDeleteClicked,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: titlePadding,
+                                bottom: titlePadding,
+                                left: titlePadding),
+                            child: GoskiText(
+                              text: tr('delete'),
+                              size: goskiFontMedium,
+                              color: goskiDarkGray,
+                              textDecoration: TextDecoration.underline,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -413,107 +449,142 @@ class MessageNotificationCard extends StatelessWidget {
     const animationDuration = 200;
     final imageSize = screenSizeController.getHeightByRatio(0.2);
 
-    return NotificationExpansionCard(
-      dateTime: dateTime,
-      isExpanded: isExpanded,
-      onExpandBtnClicked: onExpandBtnClicked,
-      title: title,
-      content: content,
-      child: Column(
-        children: [
-          SizedBox(height: titlePadding),
-          Row(
-            children: [
-              GoskiText(
-                text: title,
-                size: goskiFontMedium,
-                isBold: true,
-              ),
-            ],
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: goskiRed,
+        ),
+        child: const Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Icon(Icons.delete, color: Colors.white),
           ),
-          SizedBox(height: titlePadding),
-          AnimatedSize(
-            duration: const Duration(milliseconds: animationDuration),
-            child: Visibility(
-              visible: isExpanded,
-              replacement: SizedBox(
-                width: screenSizeController.getWidthByRatio(1),
+        ),
+      ),
+      onDismissed: (direction) {
+        onItemDeleteClicked();
+      },
+      confirmDismiss: (direction) async {
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: '알림 삭제',
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context, false),
+                onConfirm: () => Navigator.pop(context, true),
               ),
-              child: Column(
-                children: [
-                  Visibility(
-                    visible: imageUrl != null,
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return GoskiModal(
-                              title: '사진',
-                              child: Column(
-                                children: [
-                                  Image.network(
-                                      width: double.infinity, imageUrl!),
-                                  SizedBox(
-                                    height: screenSizeController
-                                        .getHeightByRatio(0.025),
-                                  ),
-                                  GoskiSmallsizeButton(
-                                    width:
-                                        screenSizeController.getWidthByRatio(3),
-                                    text: tr('confirm'),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Image.network(
-                        width: imageSize,
-                        height: imageSize,
-                        fit: BoxFit.contain,
-                        imageUrl != null ? imageUrl! : '',
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: titlePadding),
-                  Row(
-                    children: [
-                      GoskiText(
-                        text: content,
-                        size: goskiFontMedium,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: onItemDeleteClicked,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: titlePadding,
-                              bottom: titlePadding,
-                              left: titlePadding),
-                          child: GoskiText(
-                            text: tr('delete'),
-                            size: goskiFontMedium,
-                            color: goskiDarkGray,
-                            textDecoration: TextDecoration.underline,
-                          ),
+            );
+          },
+        );
+        return confirmed;
+      },
+      child: NotificationExpansionCard(
+        dateTime: dateTime,
+        isExpanded: isExpanded,
+        onExpandBtnClicked: onExpandBtnClicked,
+        title: title,
+        content: content,
+        child: Column(
+          children: [
+            SizedBox(height: titlePadding),
+            Row(
+              children: [
+                GoskiText(
+                  text: title,
+                  size: goskiFontMedium,
+                  isBold: true,
+                ),
+              ],
+            ),
+            SizedBox(height: titlePadding),
+            AnimatedSize(
+              duration: const Duration(milliseconds: animationDuration),
+              child: Visibility(
+                visible: isExpanded,
+                replacement: SizedBox(
+                  width: screenSizeController.getWidthByRatio(1),
+                ),
+                child: Column(
+                  children: [
+                    Visibility(
+                      visible: imageUrl != null,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GoskiModal(
+                                title: '사진',
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                        width: double.infinity, imageUrl!),
+                                    SizedBox(
+                                      height: screenSizeController
+                                          .getHeightByRatio(0.025),
+                                    ),
+                                    GoskiSmallsizeButton(
+                                      width:
+                                          screenSizeController.getWidthByRatio(3),
+                                      text: tr('confirm'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Image.network(
+                          width: imageSize,
+                          height: imageSize,
+                          fit: BoxFit.contain,
+                          imageUrl != null ? imageUrl! : '',
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(height: titlePadding),
+                    Row(
+                      children: [
+                        GoskiText(
+                          text: content,
+                          size: goskiFontMedium,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: onItemDeleteClicked,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: titlePadding,
+                                bottom: titlePadding,
+                                left: titlePadding),
+                            child: GoskiText(
+                              text: tr('delete'),
+                              size: goskiFontMedium,
+                              color: goskiDarkGray,
+                              textDecoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
