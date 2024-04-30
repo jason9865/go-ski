@@ -5,6 +5,7 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/datetime_util.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/boss/i023_update_boss_info.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
@@ -299,6 +300,58 @@ class NotificationExpansionCard extends StatelessWidget {
   }
 }
 
+// 스와이프 삭제 위젯
+class NotificationDismissible extends StatelessWidget {
+  final VoidCallback onItemDeleteClicked;
+  final Widget child;
+
+  const NotificationDismissible({
+    super.key,
+    required this.onItemDeleteClicked,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: goskiRed,
+        ),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.05)),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+        ),
+      ),
+      onDismissed: (direction) {
+        onItemDeleteClicked();
+      },
+      confirmDismiss: (direction) async {
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: '알림 삭제',
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context, false),
+                onConfirm: () => Navigator.pop(context, true),
+              ),
+            );
+          },
+        );
+        return confirmed;
+      },
+      child: child,
+    );
+  }
+}
+
 // 강습 추가, 삭제, 변경, 30분 전 알림
 class LessonNotificationCard extends StatelessWidget {
   final DateTime dateTime;
@@ -322,40 +375,8 @@ class LessonNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
 
-    return Dismissible(
-      key: UniqueKey(),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: goskiRed,
-        ),
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Icon(Icons.delete, color: Colors.white),
-          ),
-        ),
-      ),
-      onDismissed: (direction) {
-        onItemDeleteClicked();
-      },
-      confirmDismiss: (direction) async {
-        final confirmed = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return GoskiModal(
-              title: '알림 삭제',
-              child: DeleteNotificationDialog(
-                onCancel: () => Navigator.pop(context, false),
-                onConfirm: () => Navigator.pop(context, true),
-              ),
-            );
-          },
-        );
-        return confirmed;
-      },
+    return NotificationDismissible(
+      onItemDeleteClicked: onItemDeleteClicked,
       child: NotificationExpansionCard(
         dateTime: dateTime,
         isExpanded: isExpanded,
@@ -449,40 +470,8 @@ class MessageNotificationCard extends StatelessWidget {
     const animationDuration = 200;
     final imageSize = screenSizeController.getHeightByRatio(0.2);
 
-    return Dismissible(
-      key: UniqueKey(),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: goskiRed,
-        ),
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Icon(Icons.delete, color: Colors.white),
-          ),
-        ),
-      ),
-      onDismissed: (direction) {
-        onItemDeleteClicked();
-      },
-      confirmDismiss: (direction) async {
-        final confirmed = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return GoskiModal(
-              title: '알림 삭제',
-              child: DeleteNotificationDialog(
-                onCancel: () => Navigator.pop(context, false),
-                onConfirm: () => Navigator.pop(context, true),
-              ),
-            );
-          },
-        );
-        return confirmed;
-      },
+    return NotificationDismissible(
+      onItemDeleteClicked: onItemDeleteClicked,
       child: NotificationExpansionCard(
         dateTime: dateTime,
         isExpanded: isExpanded,
@@ -529,8 +518,8 @@ class MessageNotificationCard extends StatelessWidget {
                                           .getHeightByRatio(0.025),
                                     ),
                                     GoskiSmallsizeButton(
-                                      width:
-                                          screenSizeController.getWidthByRatio(3),
+                                      width: screenSizeController
+                                          .getWidthByRatio(3),
                                       text: tr('confirm'),
                                       onTap: () {
                                         Navigator.pop(context);
