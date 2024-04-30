@@ -220,5 +220,7 @@
   "copyright": "Copyright GOSKI. All Rights Reserved.",
   "goskiBusinessInfo": "고스키 사업자 정보",
   "reject": "거절",
-  "accept": "수락"
+  "accept": "수락",
+  "deleteNotification": "알림 삭제",
+  "deleteNotificationConfirm": "알림을 삭제하시겠습니까?"
 }
