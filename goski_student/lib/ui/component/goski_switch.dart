@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/font_size.dart';
 
 class GoskiSwitch extends StatefulWidget {
   final List<String> items;
   final double width;
+  final Function(int)? onChanged;
+  final double size;
 
-  const GoskiSwitch({super.key, required this.items, required this.width});
+  const GoskiSwitch({
+    super.key,
+    required this.items,
+    required this.width,
+    this.onChanged,
+    this.size = goskiFontMedium,
+  });
 
   @override
   _GoskiSwitchState createState() => _GoskiSwitchState();
@@ -14,6 +23,16 @@ class GoskiSwitch extends StatefulWidget {
 class _GoskiSwitchState extends State<GoskiSwitch> {
   int selectedIndex = 0;
 
+  void _handleSelection(int index) {
+    if (selectedIndex != index) {
+      setState(() {
+        selectedIndex = index;
+      });
+      // Only call the callback if it is not null
+      widget.onChanged?.call(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double chipWidth = widget.width / widget.items.length - 2;
@@ -21,53 +40,33 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
     return SizedBox(
       width: widget.width,
       height: 40,
-      // decoration: BoxDecoration(
-      //     border: Border.all(), borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: List.generate(widget.items.length, (index) {
           return ChoiceChip(
             padding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
-            backgroundColor: selectedIndex == index ? goskiButtonBlack : goskiWhite,
+            backgroundColor: selectedIndex == index ? goskiBlack : goskiWhite,
             label: Container(
               width: chipWidth,
-              height: 40,
-              alignment: AlignmentDirectional.center,
+              alignment: Alignment.center,
               child: Text(
                 widget.items[index],
-                style: selectedIndex == index
-                    ? Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: goskiWhite)
-                    : Theme.of(context).textTheme.bodyLarge,
+                style: TextStyle(
+                    fontSize: widget.size,
+                    color: selectedIndex == index ? goskiWhite : goskiBlack),
               ),
             ),
             selected: selectedIndex == index,
-            onSelected: (bool selected) {
-              setState(() {
-                selectedIndex = selected ? index : selectedIndex;
-              });
-            },
-            selectedColor: goskiButtonBlack,
-            showCheckmark: false, // 선택시 체크 표시 비활성화
-            shape: index == 0
-                ? const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                    ),
-                  )
-                : index == widget.items.length - 1
-                    ? const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                      )
-                    : const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
+            onSelected: (_) => _handleSelection(index),
+            selectedColor: goskiBlack,
+            showCheckmark: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(index == 0 ? 8 : 0),
+                right:
+                    Radius.circular(index == widget.items.length - 1 ? 8 : 0),
+              ),
+            ),
           );
         }),
       ),
