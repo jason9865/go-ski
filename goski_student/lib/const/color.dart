@@ -29,4 +29,4 @@ const goskiGreen = Color(0xFF44AB67);
 // 카카오 노란색
 const kakaoYellow = Color(0xFFFEE500);
 // 네이버 페이 녹색
-const naverPayGreen = Color(0xFF01D757);
+const naverPayGreen = Color(0xFF00DE5A);

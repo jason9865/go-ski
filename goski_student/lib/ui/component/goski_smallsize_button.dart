@@ -3,17 +3,21 @@ import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 
 class GoskiSmallsizeButton extends StatelessWidget {
-  final double width;
+  final double width, height;
   final String text;
   final VoidCallback onTap;
   final double textSize;
+  final Color backgroundColor, foregroundColor;
 
   const GoskiSmallsizeButton({
     super.key,
     required this.width,
+    this.height = 40,
     required this.text,
     required this.onTap,
     this.textSize = goskiFontLarge,
+    this.backgroundColor = goskiButtonBlack,
+    this.foregroundColor = goskiWhite,
   });
 
   @override
@@ -21,11 +25,11 @@ class GoskiSmallsizeButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(goskiButtonBlack),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         // 배경색 설정
-        foregroundColor: MaterialStateProperty.all(goskiWhite),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
         // 텍스트 색상 설정
-        minimumSize: MaterialStateProperty.all(Size(width * 0.33, 40)),
+        minimumSize: MaterialStateProperty.all(Size(width * 0.33, height)),
         // 최소 크기 설정
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
