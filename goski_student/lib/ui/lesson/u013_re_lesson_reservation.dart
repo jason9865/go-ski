@@ -39,6 +39,7 @@ class ReLessonReservationScreen extends StatefulWidget {
 
 class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
   final formatter = NumberFormat.simpleCurrency(locale: 'ko');
+  DateTime? _selectedDate;
 
   int sum() {
     int sum = 0;
@@ -68,6 +69,23 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
 
       widget.policyList[0].isChecked = checkedAll;
     }
+  }
+
+  /// 특정 날짜 선택 가능한지 확인 하는 함수
+  /// showDatePicker의 selectableDayPredicate: _isDateSelectable 처럼 사용하면 됨
+  bool _isDateSelectable(DateTime day) {
+    List<DateTime> availableDateList = [
+      DateTime(2024, 4, 30),
+      DateTime(2024, 5, 1),
+      DateTime(2024, 5, 3),
+      DateTime(2024, 5, 6),
+    ];
+
+    for (int i = 0; i < availableDateList.length; i++) {
+      if (day.isAtSameMomentAs(availableDateList[i])) return true;
+    }
+
+    return false;
   }
 
   @override
@@ -135,10 +153,25 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                     SizedBox(height: titlePadding),
                     GoskiBorderWhiteContainer(
                       child: TextWithIconRow(
-                        text: tr('hintDate'),
+                        text: _selectedDate != null
+                            ? '${_selectedDate!.year}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.day.toString().padLeft(2, '0')}'
+                            : tr('hintDate'),
+                        textColor:
+                            _selectedDate != null ? goskiBlack : goskiDarkGray,
                         icon: Icons.calendar_month,
                         onClicked: () {
                           // TODO. 날짜 선택 버튼을 눌렀을 때 동작 추가 필요
+                          showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(DateTime.now().year + 1),
+                            selectableDayPredicate: _isDateSelectable,
+                          ).then((selectedDate) {
+                            return setState(() {
+                              _selectedDate = selectedDate;
+                            });
+                          });
                         },
                       ),
                     ),
@@ -146,6 +179,7 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                     GoskiBorderWhiteContainer(
                       child: TextWithIconRow(
                         text: tr('hintTime'),
+                        textColor: goskiDarkGray,
                         icon: Icons.access_time_rounded,
                         onClicked: () {
                           // TODO. 시간 선택 버튼을 눌렀을 때 동작 추가 필요
@@ -170,7 +204,8 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                     ),
                     SizedBox(height: titlePadding),
                     GoskiText(
-                      text: tr('reservationPeopleCount', args: ['3']),
+                      text: tr('reservationPeopleCount',
+                          args: [widget.studentInfoList.length.toString()]),
                       size: goskiFontMedium,
                       isBold: true,
                     ),
@@ -192,7 +227,7 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                               children: [
                                 GoskiText(
                                   text:
-                                  '${item.age} / ${item.gender}\n${item.height} / ${item.weight} / ${item.feetSize}',
+                                      '${item.age} / ${item.gender}\n${item.height} / ${item.weight} / ${item.feetSize}',
                                   size: goskiFontMedium,
                                 ),
                               ],
@@ -204,7 +239,9 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                                 });
                               },
                               child: Padding(
-                                padding: EdgeInsets.only(right: screenSizeController.getWidthByRatio(0.01)),
+                                padding: EdgeInsets.only(
+                                    right: screenSizeController
+                                        .getWidthByRatio(0.01)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -417,7 +454,8 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                     GoskiPaymentButton(
                       width: screenSizeController.getWidthByRatio(1),
                       text: tr('kakaoPay'),
-                      imagePath: 'assets/images/person1.png', // TODO. 카카오페이 버튼으로 변경 필요
+                      imagePath: 'assets/images/person1.png',
+                      // TODO. 카카오페이 버튼으로 변경 필요
                       backgroundColor: kakaoYellow,
                       foregroundColor: goskiBlack,
                       onTap: () {},
@@ -426,7 +464,8 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                     GoskiPaymentButton(
                       width: screenSizeController.getWidthByRatio(1),
                       text: tr('naverPay'),
-                      imagePath: 'assets/images/person2.png', // TODO. 네이버페이 버튼으로 변경 필요
+                      imagePath: 'assets/images/person2.png',
+                      // TODO. 네이버페이 버튼으로 변경 필요
                       backgroundColor: naverPayGreen,
                       foregroundColor: goskiWhite,
                       onTap: () {},
@@ -494,15 +533,16 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
 
 class TextWithIconRow extends StatelessWidget {
   final String text;
+  final Color textColor;
   final IconData icon;
   final VoidCallback onClicked;
 
-  const TextWithIconRow({
-    super.key,
-    required this.text,
-    required this.icon,
-    required this.onClicked,
-  });
+  const TextWithIconRow(
+      {super.key,
+      required this.text,
+      required this.icon,
+      required this.onClicked,
+      this.textColor = goskiBlack});
 
   @override
   Widget build(BuildContext context) {
@@ -514,6 +554,7 @@ class TextWithIconRow extends StatelessWidget {
             child: GoskiText(
               text: text,
               size: goskiFontMedium,
+              color: textColor,
             ),
           ),
           Icon(
