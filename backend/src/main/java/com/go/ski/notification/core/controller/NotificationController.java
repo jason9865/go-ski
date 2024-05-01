@@ -59,7 +59,7 @@ public class NotificationController {
     @PostMapping("/send")
     public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
-        fcmClient.sendMessageTo(requestDTO);
+        notificationService.sendMessage(requestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

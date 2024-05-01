@@ -1,5 +1,6 @@
 package com.go.ski.notification.core.domain;
 
+import com.go.ski.notification.support.NotificationEvent;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,12 +23,15 @@ public class Notification {
     @Column(nullable = false)
     private Integer receiverId;
 
-    @Column(nullable = false)
     private Integer senderId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private NotificationType type;
+    private NotificationType notificationType;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DeviceType deviceType;
 
     @Column(nullable = false)
     private String title;
@@ -41,17 +45,15 @@ public class Notification {
 
     private LocalDateTime createdAt;
 
-    public static Notification of(FcmSendRequestDTO dto,String imageUrl) {
+    public static Notification from(NotificationEvent notificationEvent) {
         return Notification.builder()
-                .receiverId(dto.getReceiverId())
-                .senderId(dto.getSenderId())
-                .type(dto.getNotificationType())
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .imageUrl(imageUrl)
-                .createdAt(dto.getCreatedAt())
-                .build()
-                ;
+                .receiverId(notificationEvent.getReceiverId())
+                .notificationType(notificationEvent.getNotificationType())
+                .deviceType(notificationEvent.getDeviceType())
+                .title(notificationEvent.getTitle())
+                .content(notificationEvent.getContent())
+                .createdAt(notificationEvent.getCreatedAt())
+                .build();
     }
 
     public void read(){

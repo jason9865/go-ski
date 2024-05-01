@@ -14,7 +14,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
 //    List<Notification> findByReceiverId(Integer receiverId);
 
     @Query("SELECT new com.go.ski.notification.support.dto.NotificationResponseDTO(" +
-            "n.notificationId, n.senderId, u.userName, n.type, n.title, n.content, n.imageUrl, n.isRead) " +
+            "n.notificationId, n.senderId, u.userName, n.notificationType, n.title, n.content, n.imageUrl, n.isRead) " +
             "FROM Notification n " +
             "LEFT OUTER JOIN User u " +
             "ON n.senderId = u.userId " +

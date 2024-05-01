@@ -1,5 +1,6 @@
 package com.go.ski.notification.support.dto;
 
+import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.core.domain.NotificationType;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.Instructor;
@@ -21,8 +22,10 @@ public class InviteRequestDTO extends FcmSendRequestDTO{
 
     public static InviteRequestDTO of(Integer receiverId, Team team, Instructor instructor){
         InviteRequestDTO inviteRequestDTO = new InviteRequestDTO();
+        inviteRequestDTO.setSenderId(instructor.getInstructorId());
         inviteRequestDTO.setReceiverId(receiverId);
         inviteRequestDTO.setTitle(instructor.getUser().getUserName() + INVITE_COMPLETE_COMMENT);
+        inviteRequestDTO.setDeviceType(DeviceType.MOBILE);
         inviteRequestDTO.setNotificationType(notificationType);
         inviteRequestDTO.teamId = team.getTeamId();
         inviteRequestDTO.instructorName = team.getTeamName();

@@ -59,16 +59,17 @@ public class NotificationService {
 
         notification.read();
     }
-//
-//    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO){
-//        User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
-//                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
-//
-//        String imageUrl = fcmSendRequestDTO.getImage() != null ?
-//                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
-//                null;
+
+    @Transactional
+    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO){
+        User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
+                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
+
+        String imageUrl = fcmSendRequestDTO.getImage() != null ?
+                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
+                null;
 //        Notification notification = Notification.of(fcmSendRequestDTO, imageUrl);
 //        notificationRepository.save(notification);
-//        eventPublisher.publish
-//    }
+        eventPublisher.publish(fcmSendRequestDTO, imageUrl);
+    }
 }

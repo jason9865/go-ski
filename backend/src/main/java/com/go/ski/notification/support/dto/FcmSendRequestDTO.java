@@ -1,5 +1,6 @@
 package com.go.ski.notification.support.dto;
 
+import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.core.domain.NotificationType;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,6 @@ public class FcmSendRequestDTO {
     private String title;
     private String content;
     private MultipartFile image;
-    private String deviceType;
+    private DeviceType deviceType;
     private NotificationType notificationType;
-    private LocalDateTime createdAt;
 }

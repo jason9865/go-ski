@@ -1,5 +1,7 @@
 package com.go.ski.notification.support;
 
+import com.go.ski.notification.core.domain.Notification;
+import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.service.FcmClient;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,30 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class CustomEventListener {
 
     private final FcmClient fcmClient;
+    private final NotificationRepository notificationRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
-    public void createNotification(InviteRequestDTO inviteRequestDTO) {
-        fcmClient.sendMessageTo(inviteRequestDTO);
-        log.warn("이벤트 리스너가 잘 작동합니다. - {}",inviteRequestDTO.getTitle());
+    public void createInviteNotification(InviteRequestDTO inviteRequestDTO) {
+        Notification notification = Notification.builder()
+                        .receiverId(inviteRequestDTO.getReceiverId())
+                        .senderId(inviteRequestDTO.getSenderId())
+                        .title(inviteRequestDTO.getTitle())
+                        .content(inviteRequestDTO.getContent())
+                        .notificationType(inviteRequestDTO.getNotificationType())
+                        .deviceType(inviteRequestDTO.getDeviceType())
+                        .build();
+        log.warn("강사 초대 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
+        fcmClient.sendMessageTo(notification);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
+    public void createNotification(NotificationEvent notificationEvent){
+        log.info("NotificationEvent -> createNotification");
+        Notification notification = Notification.from(notificationEvent);
+        log.warn("알림 보내기 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
+        fcmClient.sendMessageTo(notification);
     }
 
 }

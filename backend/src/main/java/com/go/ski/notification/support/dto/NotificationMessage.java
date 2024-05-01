@@ -2,17 +2,14 @@ package com.go.ski.notification.support.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.go.ski.notification.core.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 
 @Getter
 @Builder
-public class FcmMessageDTO {
+public class NotificationMessage {
 
     @JsonProperty("validate_only")
     private boolean validateOnly;
@@ -31,13 +28,11 @@ public class FcmMessageDTO {
     @AllArgsConstructor
     @Getter
     public static class Data{
-        private Integer senderId;
-        private String senderName;
         private String title;
         private String content;
         private String imageUrl;
-        private NotificationType notificationType;
-        private LocalDateTime createdAt;
+        private String notificationType;
+        private String createdAt;
     }
 
 }
