@@ -44,7 +44,7 @@ public class FcmClient {
 
     private static final boolean VALIDATE_ONLY = false;
 
-    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss");
 
     @Value("${firebase.project.id}")
     private String projectId;
@@ -85,15 +85,20 @@ public class FcmClient {
 
     @Transactional
     public String makeMessage(Notification notification) {
-//        User sender = userRepository.findById(notification.getSenderId())
-//                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
+        User sender = notification.getSenderId() != null ? userRepository.findById(notification.getSenderId())
+                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM)) : null;
+
+        String senderId = sender != null ? sender.getUserId().toString() : null;
+        String senderName = sender != null ? sender.getUserName() : null;
 
         Data data = Data.builder()
+                .senderId(senderId)
+                .senderName(senderName)
                 .title(notification.getTitle())
                 .content(notification.getContent())
                 .imageUrl(notification.getImageUrl())
-                .notificationType(notification.getNotificationType().toString()) // 바꿔야함
-                .createdAt(LocalDateTime.now().format(DATE_TIME_FORMATTER)) // 바꿔야함
+                .notificationType(notification.getNotificationType().toString())
+                .createdAt(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
 
         String targetToken = getFcmToken(notification.getReceiverId(), notification.getDeviceType());
@@ -102,9 +107,6 @@ public class FcmClient {
         NotificationMessage notificationMessage = NotificationMessage.builder()
                 .message(new Message(data,targetToken))
                 .validateOnly(VALIDATE_ONLY).build();
-
-//        Notification notification = Notification.of(fcmSendRequestDTO, imageUrl);
-//        notificationRepository.save(notification);
 
         ObjectMapper objectMapper = new ObjectMapper();
 

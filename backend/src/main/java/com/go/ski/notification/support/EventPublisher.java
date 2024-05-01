@@ -11,9 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -29,12 +32,13 @@ public class EventPublisher {
     }
 
     public void publish(InviteRequestDTO inviteRequestDTO, Team team, Instructor instructor) {
-        List<Integer> userIds = teamInstructorRepository.findByTeam(team)
+        List<Integer> userIds = new ArrayList<>(teamInstructorRepository.findByTeam(team)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND))
                 .stream()
                 .map(ti -> ti.getInstructor().getInstructorId())
-                .toList();
-//        userIds.add(team.getUser().getUserId()); // 사장 Id 추가
+                .filter(id -> !Objects.equals(id, instructor.getInstructorId()))
+                .toList());
+        userIds.add(team.getUser().getUserId()); // 사장 Id 추가
         publishEvent(userIds,instructor,inviteRequestDTO);
     }
 

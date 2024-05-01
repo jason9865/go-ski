@@ -28,6 +28,8 @@ public class NotificationMessage {
     @AllArgsConstructor
     @Getter
     public static class Data{
+        private String senderId;
+        private String senderName;
         private String title;
         private String content;
         private String imageUrl;

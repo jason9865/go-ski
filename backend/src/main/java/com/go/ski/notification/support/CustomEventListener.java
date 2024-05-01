@@ -3,7 +3,6 @@ package com.go.ski.notification.support;
 import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.service.FcmClient;
-import com.go.ski.notification.support.dto.InviteRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
