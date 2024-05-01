@@ -66,7 +66,7 @@ public class TeamInstructorService {
                 .build();
         teamInstructorRepository.save(teamInstructor);
 
-        eventPublisher.publish(team, instructor);
+        eventPublisher.publish(request, team, instructor);
     }
 
     private void validateIfExists(Team team,Instructor instructor ) {

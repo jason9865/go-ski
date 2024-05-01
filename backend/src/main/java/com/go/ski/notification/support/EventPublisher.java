@@ -28,20 +28,20 @@ public class EventPublisher {
         applicationEventPublisher.publishEvent(NotificationEvent.of(fcmSendRequestDTO,imageUrl));
     }
 
-    public void publish(Team team, Instructor instructor) {
+    public void publish(InviteRequestDTO inviteRequestDTO, Team team, Instructor instructor) {
         List<Integer> userIds = teamInstructorRepository.findByTeam(team)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND))
                 .stream()
                 .map(ti -> ti.getInstructor().getInstructorId())
                 .toList();
 //        userIds.add(team.getUser().getUserId()); // 사장 Id 추가
-        publishEvent(userIds,team, instructor);
+        publishEvent(userIds,instructor,inviteRequestDTO);
     }
 
-    private void publishEvent(List<Integer> userIds, Team team, Instructor instructor) {
+    private void publishEvent(List<Integer> userIds, Instructor instructor,InviteRequestDTO inviteRequestDTO) {
         userIds.forEach(
             userId -> applicationEventPublisher.publishEvent(
-                    InviteRequestDTO.of(userId, team, instructor)
+                    NotificationEvent.of(inviteRequestDTO, userId, instructor)
             )
         );
     }

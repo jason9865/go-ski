@@ -19,26 +19,12 @@ public class CustomEventListener {
     private final FcmClient fcmClient;
     private final NotificationRepository notificationRepository;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
-    public void createInviteNotification(InviteRequestDTO inviteRequestDTO) {
-        Notification notification = Notification.builder()
-                        .receiverId(inviteRequestDTO.getReceiverId())
-                        .senderId(inviteRequestDTO.getSenderId())
-                        .title(inviteRequestDTO.getTitle())
-                        .content(inviteRequestDTO.getContent())
-                        .notificationType(inviteRequestDTO.getNotificationType())
-                        .deviceType(inviteRequestDTO.getDeviceType())
-                        .build();
-        log.warn("강사 초대 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
-        fcmClient.sendMessageTo(notification);
-    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void createNotification(NotificationEvent notificationEvent){
-        log.info("NotificationEvent -> createNotification");
         Notification notification = Notification.from(notificationEvent);
+        notificationRepository.save(notification);
         log.warn("알림 보내기 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
         fcmClient.sendMessageTo(notification);
     }
