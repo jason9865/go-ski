@@ -26,7 +26,7 @@ public class NotificationEvent {
     private String imageUrl;
 
 
-    public static  NotificationEvent of(FcmSendRequestDTO requestDTO, String imageUrl) {
+    public static  NotificationEvent of(FcmSendRequestDTO requestDTO, Integer userId, String imageUrl) {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.receiverId = requestDTO.getReceiverId();
         notificationEvent.title = requestDTO.getTitle();

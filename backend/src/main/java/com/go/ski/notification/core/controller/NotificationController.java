@@ -55,9 +55,10 @@ public class NotificationController {
 
     // 알림 보내기
     @PostMapping("/dm")
-    public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request,FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
-        notificationService.sendMessage(requestDTO);
+        User user = (User)request.getAttribute("user");
+        notificationService.sendMessage(requestDTO,user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
     }
 

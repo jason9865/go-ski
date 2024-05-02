@@ -34,7 +34,7 @@ public class UserController {
 
         User user = userService.login(oauthServerType, signinRequestDto.getRole(), signinRequestDto.getCode(), signinRequestDto.getToken());
 
-        if (user.getUserId() == 0) {
+        if (user.getUserId() == null) {
             log.info("회원가입 필요");
             HttpSession session = request.getSession(); // session에 도메인 정보 넣어두고 회원가입 요청에서 사용
             session.setAttribute("user", user);

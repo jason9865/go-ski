@@ -1,11 +1,9 @@
 package com.go.ski.notification.core.domain;
 
 import com.go.ski.notification.support.NotificationEvent;
-import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.relational.core.sql.In;
 
 import java.time.LocalDateTime;
 
