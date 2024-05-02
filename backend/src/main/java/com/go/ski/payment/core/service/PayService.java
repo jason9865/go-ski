@@ -239,14 +239,24 @@ public class PayService {
 				.build();
 
 			//이걸로 결제 취소 시켜줘야함
-			int payback = payment.getTotalAmount() * chargeRepository.findById(1).get().getStudentChargeRate();
+			int payback = payment.getTotalAmount() * chargeRepository.findById(chargeId).get().getStudentChargeRate() / 100;
 
 			KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
-				.tid("tid")
+				//tid 그대로 입력
+				.tid(payment.getTid())
 				.cancelAmount(payback)
 				.cancelTaxFreeAmount(0)
 				.build();
+
+			//강의 상태 강의 취소로 변경
+			lessonInfo = LessonInfo.builder()
+				.lessonStatus(3)
+				.build();
+			//정산 테이블에 추가
+
+
 			// 여기서는 스케줄 없애기
+
 
 			// 여기서 카카오 페이 결제 취소 API 보냄
 			return requestCancelToKakao(kakaopayCancelRequestDTO);
@@ -255,10 +265,8 @@ public class PayService {
 			// 이용일 2일 이전 취소 시 : 환불이 불가
 			// Exception 보내기
 			// 잘못된 변수 or 부적절한 요청
-			payment = Payment.builder()
-				.build();
 			// 알아서 return
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("잘못된 변수 or 부적절한 요청");
 		}
 	}
 
