@@ -24,16 +24,17 @@ public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer paymentId;
+	@Column
+	private String tid;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lesson_id")
 	private LessonPaymentInfo LessonPaymentInfo;// 1대 다 lesson_payment_info
 	@Column
 	private Integer totalAmount;
 	@Column
-	private Integer paymentStatus;
-	@Column
 	private Integer chargeId;//0은 사용자, 100?
 	@Column
 	private LocalDate paymentDate;
+	@Column
+	private LocalDate paybackDate;
 }
-
