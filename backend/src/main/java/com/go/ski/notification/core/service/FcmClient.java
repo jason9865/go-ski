@@ -7,9 +7,13 @@ import com.go.ski.common.util.S3Uploader;
 import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
-import com.go.ski.notification.support.dto.NotificationMessage;
-import com.go.ski.notification.support.dto.NotificationMessage.Data;
-import com.go.ski.notification.support.dto.NotificationMessage.Message;
+import com.go.ski.notification.support.events.MessageEvent;
+import com.go.ski.notification.support.generators.DmMessageGenerator;
+import com.go.ski.notification.support.generators.MessageGenerator;
+import com.go.ski.notification.support.generators.NotificationMessageGenerator;
+import com.go.ski.notification.support.messages.NotificationMessage;
+import com.go.ski.notification.support.messages.NotificationMessage.Data;
+import com.go.ski.notification.support.messages.NotificationMessage.Message;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
@@ -29,8 +33,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -49,14 +51,21 @@ public class FcmClient {
     @Value("${firebase.project.id}")
     private String projectId;
 
-    private final S3Uploader s3Uploader;
+    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
 
-    @Transactional
+    public void sendMessageTo(MessageEvent messageEvent) {
+        sendMessageTo(messageEvent.getReceiverId(), messageEvent.getDeviceType(), new DmMessageGenerator(messageEvent));
+    }
+
     public void sendMessageTo(Notification notification) {
-        log.info("FcmClient - sendMessageTo");
-        String message = makeMessage(notification);
+        sendMessageTo(notification.getReceiverId(), notification.getDeviceType(), new NotificationMessageGenerator(notification));
+    }
+
+    public void sendMessageTo(Integer receiverId, DeviceType deviceType,MessageGenerator messageGenerator) {
+        String targetToken = getFcmToken(receiverId, deviceType);
+        String message = messageGenerator.makeMessage(targetToken, objectMapper);
+
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -68,52 +77,16 @@ public class FcmClient {
         String fcmRequestUrl = PREFIX_FCM_REQUEST_URL + projectId + POSTFIX_FCM_REQUEST_URL;
 
         ResponseEntity<String> response = restTemplate.exchange(
-            fcmRequestUrl,
-            HttpMethod.POST,
-            httpEntity,
-            String.class
+                fcmRequestUrl,
+                HttpMethod.POST,
+                httpEntity,
+                String.class
         );
 
         log.info("FcmService - response : {}",response.getStatusCode());
 
         if(response.getStatusCode().isError()){
             throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.FIREBASE_CONNECTION_ERROR);
-        }
-
-
-    }
-
-    @Transactional
-    public String makeMessage(Notification notification) {
-        User sender = notification.getSenderId() != null ? userRepository.findById(notification.getSenderId())
-                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM)) : null;
-
-        String senderId = sender != null ? sender.getUserId().toString() : null;
-        String senderName = sender != null ? sender.getUserName() : null;
-
-        Data data = Data.builder()
-                .senderId(senderId)
-                .senderName(senderName)
-                .title(notification.getTitle())
-                .content(notification.getContent())
-                .imageUrl(notification.getImageUrl())
-                .notificationType(notification.getNotificationType().toString())
-                .createdAt(LocalDateTime.now().format(DATE_TIME_FORMATTER))
-                .build();
-
-        String targetToken = getFcmToken(notification.getReceiverId(), notification.getDeviceType());
-
-
-        NotificationMessage notificationMessage = NotificationMessage.builder()
-                .message(new Message(data,targetToken))
-                .validateOnly(VALIDATE_ONLY).build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            return objectMapper.writeValueAsString(notificationMessage);
-        } catch (JsonProcessingException e) {
-            throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.CONVERTING_JSON_ERROR);
         }
     }
 
