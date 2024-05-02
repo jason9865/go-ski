@@ -205,7 +205,8 @@ CREATE TABLE `notification` (
     `image_url`	VARCHAR(255)	NULL,
     `is_read`	BIT(1)	NOT NULL,
     `receiver_id` int(11) NOT NULL,
-    `sender_id` int(11) NOT NULL
+    `sender_id` int(11) NOT NULL,
+    `created_at` datetime(6) NOT NULL
 );
 
 
