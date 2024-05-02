@@ -31,13 +31,11 @@ public class Settlement {
 	@Column
 	private Integer settlementAmount;
 	@Column
-	private String bank;
-	@Column
-	private String depositorName;
-	@Column
-	private String accountNumber;
-	@Column
 	private Integer balance;
 	@Column
 	private LocalDate settlementDate;
+	@Column
+	private String payload;
+	@Column
+	private Integer depositStatus;
 }
