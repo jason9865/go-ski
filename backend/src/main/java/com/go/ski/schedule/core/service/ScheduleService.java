@@ -2,27 +2,34 @@ package com.go.ski.schedule.core.service;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
+import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.model.LessonPaymentInfo;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
+import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.ScheduleCacheDto;
 import com.go.ski.redis.repository.ScheduleCacheRepository;
-import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
-import com.go.ski.schedule.support.vo.CreateScheduleVO;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
+import com.go.ski.team.core.model.Permission;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
+import com.go.ski.team.core.repository.PermissionRepository;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
+import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.InstructorRepository;
+import com.go.ski.user.core.repository.UserRepository;
+import com.go.ski.user.support.vo.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -31,10 +38,15 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
+    private final LessonRepository lessonRepository;
     private final LessonInfoRepository lessonInfoRepository;
+    private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
+    private final InstructorRepository instructorRepository;
     private final TeamInstructorRepository teamInstructorRepository;
     private final StudentInfoRepository studentInfoRepository;
     private final LessonPaymentInfoRepository lessonPaymentInfoRepository;
+    private final PermissionRepository permissionRepository;
     private final ScheduleCacheRepository scheduleCacheRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -66,8 +78,51 @@ public class ScheduleService {
         return null;
     }
 
-    public void createSchedule(ReserveScheduleVO reserveScheduleVO) {
+    public boolean checkAddPermission(User user, Integer teamId) {
+        if (user.getRole().equals(Role.OWNER)) {
+            Team team = teamRepository.findById(teamId).orElseThrow();
+            return user.equals(team.getUser());
+        } else {
+            Permission permission = permissionRepository.findByTeamInstructorInstructorInstructorIdAndTeamInstructorTeamTeamId(user.getUserId(), teamId).orElseThrow();
+            return permission.isAddPermission();
+        }
+    }
 
+    public boolean checkPermission(User user, Integer lessonId, int type) {
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
+        if (user.getRole().equals(Role.OWNER)) {
+            return user.equals(lesson.getTeam().getUser());
+        } else {
+            Permission permission = permissionRepository.findByTeamInstructorInstructorInstructorIdAndTeamInstructorTeamTeamId(user.getUserId(), lesson.getTeam().getTeamId()).orElseThrow();
+            if (type == 1) {
+                return permission.isDeletePermission();
+            } else {
+                return permission.isModifyPermission();
+            }
+        }
+    }
+
+    @Transactional
+    public void createSchedule(ReserveScheduleVO reserveScheduleVO) {
+        User user = userRepository.findById(1).orElseThrow();
+        Team team = teamRepository.findById(reserveScheduleVO.getTeamId()).orElseThrow();
+        Instructor instructor = null;
+        if (reserveScheduleVO.getInstructorId() != null) {
+            instructor = instructorRepository.findById(reserveScheduleVO.getInstructorId()).orElseThrow();
+        }
+        Lesson lesson = lessonRepository.save(new Lesson(user, team, instructor, reserveScheduleVO.getRepresentativeName()));
+        lessonInfoRepository.save(new LessonInfo(lesson, reserveScheduleVO));
+
+        if (!scheduleCaching(team, reserveScheduleVO)) {
+            throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
+        }
+    }
+
+    public void deleteSchedule(Integer lessonId) {
+
+    }
+
+    public void updateSchedule(Integer lessonId) {
 
     }
 
@@ -81,10 +136,11 @@ public class ScheduleService {
         for (LessonInfo lessonInfo : lessonInfos) {
             List<StudentInfoDTO> studentInfoDTOs = studentInfoRepository.findByLessonInfo(lessonInfo).stream()
                     .map(StudentInfoDTO::new).toList();
-            LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElseThrow();
-            reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
+            LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElse(null);
+            if (!studentInfoDTOs.isEmpty() && lessonPaymentInfo != null) {
+                reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
+            }
         }
-        reserveScheduleVOs.add(reserveScheduleVO);
 
         Map<Integer, List<ReserveScheduleVO>> reserveScheduleMap = assignLessons(reserveScheduleVOs, teamInstructors);
         if (reserveScheduleMap != null) {
