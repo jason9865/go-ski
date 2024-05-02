@@ -22,6 +22,7 @@ import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.core.service.KakaoPayService;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -91,8 +92,19 @@ public class PaymentController {
 	@GetMapping("/history/{team_id}")
 	public ResponseEntity<List<OwnerPaymentHistoryResponseDTO>> getTeamPaymentHistory(HttpServletRequest httpServletRequest
 		, @PathVariable(value = "team_id") Integer teamId) {
-		log.info(String.valueOf(teamId));
 		List<OwnerPaymentHistoryResponseDTO> response = payService.getTeamPaymentHistories(httpServletRequest, teamId);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping("/withdrawal")
+	public ResponseEntity<List<WithdrawalResponseDTO>> getWithdrawalList(HttpServletRequest httpServletRequest) {
+		List<WithdrawalResponseDTO> response = payService.getWithdrawalList(httpServletRequest);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping("/balance")
+	public ResponseEntity<Integer> getBalance(HttpServletRequest httpServletRequest) {
+		Integer response = payService.getBalance(httpServletRequest);
 		return ResponseEntity.ok().body(response);
 	}
 	//pgTokenTest
