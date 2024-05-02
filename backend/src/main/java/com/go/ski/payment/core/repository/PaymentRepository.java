@@ -21,4 +21,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 		+ "WHERE t.user.userId = :userId AND li.lessonDate < CURRENT_DATE AND p.paymentStatus != 1 "
 		+ "ORDER BY l.lessonId DESC ")
 	List<TotalPaymentDTO> findTotalPayment(Integer userId);
+
+	Payment findByLessonPaymentInfoLessonId(Integer lessonId);
 }

@@ -1,6 +1,7 @@
 package com.go.ski.payment.core.service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.model.LessonPaymentInfo;
 import com.go.ski.payment.core.model.Payment;
 import com.go.ski.payment.core.model.StudentInfo;
+import com.go.ski.payment.core.repository.ChargeRepository;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
@@ -26,10 +28,13 @@ import com.go.ski.payment.core.repository.PaymentRepository;
 import com.go.ski.payment.core.repository.SettlementRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
@@ -82,6 +87,7 @@ public class PayService {
 	private final PaymentRepository paymentRepository;
 	private final PaymentCacheRepository paymentCacheRepository;
 	private final SettlementRepository settlementRepository;
+	private final ChargeRepository chargeRepository;
 
 	//카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
 	public HttpHeaders getHeader(String mode) {
@@ -201,6 +207,66 @@ public class PayService {
 
 		return requestApproveToKakao(kakaopayApproveRequestDTO);
 	}
+
+	@Transactional
+	public KakaopayCancelResponseDTO getCancelResponse(
+		HttpServletRequest httpServletRequest,
+		CancelPaymentRequestDTO request) {
+		//예약자
+		User user = (User)httpServletRequest.getAttribute("user");
+		//lessonId를 받았음
+		//lesson이 없으면 에러 반환
+		LessonInfo lessonInfo = lessonInfoRepository.findById(request.getLessonId()).orElseThrow();
+
+		Payment payment = paymentRepository.findByLessonPaymentInfoLessonId(request.getLessonId());
+		LocalDate reservationDate = lessonInfo.getLessonDate();
+
+		int compareResult = reservationDate.compareTo(LocalDate.now());
+		// 예약일이 지금보다 뒤에 있으면 취소 가능
+		// 반환 금액과 chargeId 변경해주기
+		long dayDiff = ChronoUnit.DAYS.between(reservationDate, LocalDate.now());
+		int chargeId;
+
+		if(compareResult > 0 && dayDiff > 1) {
+			// 돈을 바로 송금 해야함
+			// 날짜  확인
+			// 예약 후 취소시 : 예약금의 90 % 환불
+			if(dayDiff > 7) chargeId = 1;
+			// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
+			else if (dayDiff > 3) chargeId = 2;
+			// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
+			else chargeId = 3;
+
+			payment = Payment.builder()
+				.paymentStatus(1)
+				.chargeId(chargeId)
+				.build();
+
+			//이걸로 결제 취소 시켜줘야함
+			int payback = payment.getTotalAmount() * chargeRepository.findById(1).get().getStudentChargeRate();
+
+			KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
+				.tid("tid")
+				.cancelAmount(payback)
+				.cancelTaxFreeAmount(0)
+				.build();
+			// 여기서는 스케줄 없애기
+
+			// 여기서 카카오 페이 결제 취소 API 보냄
+			return requestCancelToKakao(kakaopayCancelRequestDTO);
+		}
+		else {
+			// 이용일 2일 이전 취소 시 : 환불이 불가
+			// Exception 보내기
+			// 잘못된 변수 or 부적절한 요청
+			payment = Payment.builder()
+				.paymentStatus(1)
+				.build();
+			// 알아서 return
+			throw new IllegalArgumentException();
+		}
+	}
+
 	//카카오 페이에 보내는 준비 요청 메소드
 	@Transactional
 	public KakaopayPrepareResponseDTO requestPrepareToKakao(KakaopayPrepareRequestDTO request) {
@@ -241,6 +307,23 @@ public class PayService {
 		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve", requestEntity, KakaopayApproveResponseDTO.class);
 
 		// 여기서 결제 정보를 db에 저장
+		return responseEntity.getBody();
+	}
+
+	@Transactional
+	public KakaopayCancelResponseDTO requestCancelToKakao(KakaopayCancelRequestDTO request) {
+		//헤더 설정 추후에 서비스 모드로 변경
+		HttpHeaders headers = getHeader("test");
+
+		Map<String, String> params = new HashMap<>();
+		params.put("cid", testId);
+		params.put("tid", request.getTid());
+		params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
+		params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
+
+		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
+		ResponseEntity<KakaopayCancelResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/cancel", requestEntity, KakaopayCancelResponseDTO.class);
+
 		return responseEntity.getBody();
 	}
 

@@ -45,37 +45,12 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);
 
-    List<Lesson> findByUser(User user);
+	List<Lesson> findByUser(User user);
 
-    List<Lesson> findByInstructor(Instructor instructor);
+	List<Lesson> findByInstructor(Instructor instructor);
 
-    List<Lesson> findByTeamTeamId(int teamId);
+	List<Lesson> findByTeamTeamId(int teamId);
 
-    List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
+	List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
 
-// 나중에 추가 될 요소들 c.chargeName, c.serviceCharge, i.instructorName,
-// join할 테이블
-/*
-* 	team -> teamName
-*   paymnet -> 결제 일자, 결제 상태, 수수료 id, 수수료 명, 수수료
-* 	lesson_payment_info -> 결제 정보들
-*
-		 "teamId" : team,
-		 "teamName" : team,
-		 "studentName" : 예약자,
-		 "instructorName" : 강사 이름 Null 가능, -> 나중에 바껴야할 수도
-		 	"paymentInfo" : {
-				 "totalAmount" : Integer,
-				 "paymentDate" : String,
-				 "paymentStatus" : Integer,
-			 },
-		"chargeName" : String,
-		"charge" : Integer
-		"lessonPaymentInfo" : {
-		 "basicFee" : Integer,
-		"designatedFee" : Integer,
-					 "peopleOptionFee" : Integer,
-					 "levelOptionFee" : Integer
-				 }
-			 },
-* */
+}
