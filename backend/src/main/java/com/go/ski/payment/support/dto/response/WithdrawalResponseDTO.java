@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WithdrawalResponseDTO {
 	private Integer settlementAmount;
-	private String bank;
-	private String depositorName;
-	private String accountNumber;
 	private Integer balance;
 	private LocalDate settlementDate;
 }
