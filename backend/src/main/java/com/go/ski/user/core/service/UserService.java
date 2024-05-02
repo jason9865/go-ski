@@ -3,6 +3,7 @@ package com.go.ski.user.core.service;
 import com.go.ski.auth.exception.AuthExceptionEnum;
 import com.go.ski.auth.jwt.util.JwtUtil;
 import com.go.ski.auth.oauth.client.OauthMemberClientComposite;
+import com.go.ski.auth.oauth.dto.Domain;
 import com.go.ski.auth.oauth.type.OauthServerType;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
@@ -52,15 +53,15 @@ public class UserService {
         }
     }
 
-    public User signupUser(User domainUser, SignupUserRequestDTO signupUserRequestDTO) {
-        User user = User.builder()
-                .domain(domainUser.getDomain())
+    public User signupUser(SignupUserRequestDTO signupUserRequestDTO) {
+        User user=  User.builder()
+                .domain(new Domain(signupUserRequestDTO.getDomainUserKey(), OauthServerType.kakao))
                 .userName(signupUserRequestDTO.getUserName())
                 .birthDate(signupUserRequestDTO.getBirthDate())
                 .phoneNumber(signupUserRequestDTO.getPhoneNumber())
                 .gender(signupUserRequestDTO.getGender())
                 .role(signupUserRequestDTO.getRole())
-                .profileUrl(domainUser.getProfileUrl())
+                .profileUrl(signupUserRequestDTO.getProfileUrl())
                 .build();
 
         // 프로필 이미지 업로드 후 save

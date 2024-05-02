@@ -17,4 +17,6 @@ public class SignupUserRequestDTO extends ProfileImageDTO {
     private LocalDate birthDate;
     private String phoneNumber;
     private Role role;
+    private String domainUserKey;
+    private String profileUrl;
 }
