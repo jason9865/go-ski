@@ -2,13 +2,11 @@ package com.go.ski.notification.core.controller;
 
 import com.go.ski.notification.core.service.FcmClient;
 import com.go.ski.notification.core.service.NotificationService;
-import com.go.ski.notification.support.dto.FcmSendRequestDTO;
-import com.go.ski.notification.support.dto.FcmTokenRequestDTO;
-import com.go.ski.notification.support.dto.InviteRequestDTO;
-import com.go.ski.notification.support.dto.NotificationResponseDTO;
+import com.go.ski.notification.support.dto.*;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.team.core.service.TeamInstructorService;
 import com.go.ski.user.core.model.User;
+import com.google.protobuf.Api;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,9 +61,16 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
+    //팀 초대 요청
+    @PostMapping("/invite")
+    public ResponseEntity<ApiResponse<?>> requestInvite(@RequestBody InviteRequestDTO requestDTO){
+        log.info("NotificationController.requestInvite");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
     // 팀 초대 요청 수락
     @PostMapping("/invite-accept")
-    public ResponseEntity<ApiResponse<?>> acceptInvite(HttpServletRequest request,@RequestBody InviteRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> acceptInvite(HttpServletRequest request,@RequestBody InviteAcceptRequestDTO requestDTO) {
         log.info("NotificationController.acceptInvite");
         User user = (User)request.getAttribute("user");
         teamInstructorService.addNewInstructor(requestDTO,user);

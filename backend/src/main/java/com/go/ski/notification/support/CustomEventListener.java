@@ -25,7 +25,7 @@ public class CustomEventListener {
         Notification notification = Notification.from(notificationEvent);
         notificationRepository.save(notification);
         log.warn("알림 보내기 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
-        fcmClient.sendMessageTo(notification);
+//        fcmClient.sendMessageTo(notification);
     }
 
 }

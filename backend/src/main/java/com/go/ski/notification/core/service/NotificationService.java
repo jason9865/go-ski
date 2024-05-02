@@ -32,6 +32,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final S3Uploader s3Uploader;
 
+    @Transactional
     public void registerFcmToken(User user, FcmTokenRequestDTO requestDTO) {
         String token = requestDTO.getToken();
         String tokenType = requestDTO.getTokenType();
@@ -62,9 +63,6 @@ public class NotificationService {
 
     @Transactional
     public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO){
-        User sender = userRepository.findById(fcmSendRequestDTO.getSenderId())
-                .orElseThrow(()->ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
-
         String imageUrl = fcmSendRequestDTO.getImage() != null ?
                 s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
                 null;

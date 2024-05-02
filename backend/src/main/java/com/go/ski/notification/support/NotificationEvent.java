@@ -3,8 +3,7 @@ package com.go.ski.notification.support;
 import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.core.domain.NotificationType;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
-import com.go.ski.notification.support.dto.InviteRequestDTO;
-import com.go.ski.team.core.model.Team;
+import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.user.core.model.Instructor;
 import lombok.*;
 
@@ -38,7 +37,7 @@ public class NotificationEvent {
     }
 
 
-    public static NotificationEvent of(InviteRequestDTO requestDTO, Integer userId, Instructor instructor) {
+    public static NotificationEvent of(InviteAcceptRequestDTO requestDTO, Integer userId, Instructor instructor) {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.receiverId = userId;
         notificationEvent.title = instructor.getUser().getUserName() + "강사가 팀에 초대되었습니다";

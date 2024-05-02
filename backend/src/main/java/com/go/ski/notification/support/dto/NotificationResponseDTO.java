@@ -17,18 +17,4 @@ public class NotificationResponseDTO {
     private String imageUrl;
     private byte isRead;
 
-//    public static NotificationResponseDTO from (Notification notification) {
-//        NotificationResponseDTO dto = new NotificationResponseDTO();
-//        dto.notificationId = notification.getNotificationId();
-//        dto.senderId = notification.getSenderId();
-//        dto.type = notification.getType();
-//        dto.title = notification.getTitle();
-//        dto.content = notification.getContent();
-//        if(notification.getImageUrl() != null){
-//            dto.imageUrl = notification.getImageUrl();
-//        }
-//        dto.isRead = notification.getIsRead();
-//        return dto;
-//    }
-
 }

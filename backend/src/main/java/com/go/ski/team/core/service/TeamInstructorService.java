@@ -2,7 +2,7 @@ package com.go.ski.team.core.service;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.notification.support.EventPublisher;
-import com.go.ski.notification.support.dto.InviteRequestDTO;
+import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.team.core.model.Permission;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
@@ -50,7 +50,7 @@ public class TeamInstructorService {
     }
 
     @Transactional
-    public void addNewInstructor(InviteRequestDTO request, User user) {
+    public void addNewInstructor(InviteAcceptRequestDTO request, User user) {
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TEAM_NOT_FOUND));
 
