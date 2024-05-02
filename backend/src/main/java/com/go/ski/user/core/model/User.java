@@ -58,4 +58,13 @@ public class User {
     protected void onCreate() {
         createdDate = LocalDateTime.now();
     }
+
+    public void updateFcmWeb(String fcmWeb){
+        this.fcmWeb = fcmWeb;
+    }
+
+    public void updateFcmMobile(String fcmMobile){
+        this.fcmMobile = fcmMobile;
+    }
+
 }

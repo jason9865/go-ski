@@ -11,14 +11,14 @@ import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 	@Query("SELECT NEW com.go.ski.payment.support.dto.util.TotalPaymentDTO ( "
-		+ "p.totalAmount, p.paymentStatus, c.ownerChargeRate) "
+		+ "p.totalAmount, c.ownerChargeRate) "
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON t.teamId = l.team.teamId "
 		+ "JOIN LessonInfo li ON l.lessonId = li.lessonId "
 		+ "JOIN LessonPaymentInfo lp ON l.lessonId = lp.lessonId "
 		+ "JOIN Payment p ON lp.lessonId = p.LessonPaymentInfo.lessonId "
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
-		+ "WHERE t.user.userId = :userId AND li.lessonDate < CURRENT_DATE AND p.paymentStatus != 1 "
+		+ "WHERE t.user.userId = :userId AND li.lessonDate < CURRENT_DATE "
 		+ "ORDER BY l.lessonId DESC ")
 	List<TotalPaymentDTO> findTotalPayment(Integer userId);
 

@@ -12,7 +12,7 @@ import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 
 public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO ( "
-		+ "l.user.userName, t.teamName, p.paymentDate, p.paymentStatus, c.chargeName, c.studentChargeRate, p.totalAmount, "
+		+ "l.user.userName, t.teamName, p.paymentDate, c.chargeName, c.studentChargeRate, p.totalAmount, "
 		+ "lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Lesson l "
 		+ "JOIN Team t  ON t.teamId = l.team.teamId "
@@ -24,7 +24,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	List<UserPaymentHistoryResponseDTO> findStudentPaymentHistories(Integer userId);
 
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO ( "
-		+ "t.teamName, l.user.userName, p.paymentDate, p.paymentStatus, c.chargeName, c.ownerChargeRate, "
+		+ "t.teamName, l.user.userName, p.paymentDate, c.chargeName, c.ownerChargeRate, "
 		+ "p.totalAmount, lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
@@ -35,7 +35,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	List<OwnerPaymentHistoryResponseDTO> findOwnerPaymentHistories(Integer userId);
 
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO ( "
-		+ "t.teamName, l.user.userName, p.paymentDate, p.paymentStatus, c.chargeName, c.ownerChargeRate, "
+		+ "t.teamName, l.user.userName, p.paymentDate, c.chargeName, c.ownerChargeRate, "
 		+ "p.totalAmount, lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
@@ -52,5 +52,4 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	List<Lesson> findByTeamTeamId(int teamId);
 
 	List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
-
 }

@@ -14,7 +14,6 @@ public class OwnerPaymentHistoryResponseDTO {
 	private String studentName;
 	// private String instructorName; // 굳이 필요한가?
 	private LocalDate paymentDate;
-	private Integer paymentStatus;
 	private String chargeName;
 	private Integer charge;
 	private Integer totalAmount;

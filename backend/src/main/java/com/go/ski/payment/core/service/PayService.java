@@ -187,7 +187,6 @@ public class PayService {
 
 		Payment tmpPayment = Payment.builder()
 			.LessonPaymentInfo(tmpLessonPaymentInfo)
-			.paymentStatus(0)
 			.totalAmount(tmpLessonPaymentInfo.getBasicFee()
 				+ tmpLessonPaymentInfo.getDesignatedFee()
 				+ tmpLessonPaymentInfo.getLevelOptionFee()
@@ -227,18 +226,15 @@ public class PayService {
 		long dayDiff = ChronoUnit.DAYS.between(reservationDate, LocalDate.now());
 		int chargeId;
 
-		if(compareResult > 0 && dayDiff > 1) {
+		if(compareResult > 0 && dayDiff > 2) {
 			// 돈을 바로 송금 해야함
 			// 날짜  확인
-			// 예약 후 취소시 : 예약금의 90 % 환불
+			// 예약 후 취소시 : 전액 환불
 			if(dayDiff > 7) chargeId = 1;
 			// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
-			else if (dayDiff > 3) chargeId = 2;
+			else  chargeId = 2;
 			// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
-			else chargeId = 3;
-
 			payment = Payment.builder()
-				.paymentStatus(1)
 				.chargeId(chargeId)
 				.build();
 
@@ -260,7 +256,6 @@ public class PayService {
 			// Exception 보내기
 			// 잘못된 변수 or 부적절한 요청
 			payment = Payment.builder()
-				.paymentStatus(1)
 				.build();
 			// 알아서 return
 			throw new IllegalArgumentException();

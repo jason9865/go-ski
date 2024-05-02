@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TotalPaymentDTO {
 	private Integer totalAmount;
-	private Integer paymentStatus;
 	private Integer chargeRate;
 }
