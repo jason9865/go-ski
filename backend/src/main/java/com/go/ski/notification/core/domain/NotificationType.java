@@ -1,12 +1,17 @@
 package com.go.ski.notification.core.domain;
 
-public enum
-NotificationType {
+import jakarta.persistence.*;
 
-    INVITE_REQUEST,
-    INVITE_ACCEPT,
-    LESSON,
-    MESSAGE;
+@Entity
+public class NotificationType{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="notification_type_id")
+    private Integer id;
+
+    private String notificationTypeName;
+
 
 
 }

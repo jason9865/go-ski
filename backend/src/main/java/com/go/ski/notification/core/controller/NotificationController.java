@@ -54,18 +54,19 @@ public class NotificationController {
     }
 
     // 알림 보내기
-    @PostMapping("/send")
+    @PostMapping("/dm")
     public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
         notificationService.sendMessage(requestDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
     }
 
     //팀 초대 요청
     @PostMapping("/invite")
     public ResponseEntity<ApiResponse<?>> requestInvite(@RequestBody InviteRequestDTO requestDTO){
         log.info("NotificationController.requestInvite");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+        notificationService.sendInvite(requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("초대 요청을 전송하였습니다."));
     }
 
     // 팀 초대 요청 수락

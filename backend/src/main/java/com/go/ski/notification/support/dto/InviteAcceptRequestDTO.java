@@ -11,5 +11,5 @@ import lombok.*;
 public class InviteAcceptRequestDTO{
     private Integer teamId;
     private DeviceType deviceType;
-    private NotificationType notificationType;
+    private Integer notificationType;
 }

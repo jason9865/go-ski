@@ -11,7 +11,7 @@ public class NotificationResponseDTO {
     private Integer notificationId;
     private Integer senderId;
     private String senderName;
-    private NotificationType notificationType;
+    private Integer notificationType;
     private String title;
     private String content;
     private String imageUrl;

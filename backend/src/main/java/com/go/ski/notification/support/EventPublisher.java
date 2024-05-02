@@ -3,6 +3,7 @@ package com.go.ski.notification.support;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
+import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -49,4 +50,7 @@ public class EventPublisher {
     }
 
 
+    public void publish(InviteRequestDTO inviteRequestDTO, Team team) {
+        applicationEventPublisher.publishEvent(NotificationEvent.of(inviteRequestDTO, team));
+    }
 }
