@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.go.ski.payment.core.service.PayService;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
@@ -69,11 +70,20 @@ public class PaymentController {
 		return ResponseEntity.ok().body(response);
 	}
 	@PostMapping("/reserve/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> ApprovePayment(
+	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ApprovePaymentRequestDTO request) {
 
 		KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@PostMapping("/reserve/cancel")
+	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(
+		HttpServletRequest httpServletRequest,
+		@RequestBody CancelPaymentRequestDTO request) {
+
+		KakaopayCancelResponseDTO response = payService.getCancelResponse(httpServletRequest, request);
 		return ResponseEntity.ok().body(response);
 	}
 

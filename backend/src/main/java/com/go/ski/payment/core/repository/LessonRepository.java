@@ -17,7 +17,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "FROM Lesson l "
 		+ "JOIN Team t  ON t.teamId = l.team.teamId "
 		+ "JOIN LessonPaymentInfo lp ON lp.lessonId = l.lessonId "
-		+ "JOIN Payment p ON p.LessonPaymentInfo.lessonId = lp.lessonId "
+		+ "JOIN Payment p ON p.lessonPaymentInfo.lessonId = lp.lessonId "
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		// + "JOIN t.instructor i "
 		+ "WHERE l.user.userId = :userId")
@@ -29,7 +29,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
 		+ "JOIN LessonPaymentInfo lp ON lp.lessonId = l.lessonId "
-		+ "JOIN Payment p ON p.LessonPaymentInfo.lessonId = lp.lessonId  "
+		+ "JOIN Payment p ON p.lessonPaymentInfo.lessonId = lp.lessonId  "
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		+ "WHERE t.user.userId = :userId")
 	List<OwnerPaymentHistoryResponseDTO> findOwnerPaymentHistories(Integer userId);
@@ -40,7 +40,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
 		+ "JOIN LessonPaymentInfo lp ON lp.lessonId = l.lessonId "
-		+ "JOIN Payment p ON p.LessonPaymentInfo.lessonId = lp.lessonId  "
+		+ "JOIN Payment p ON p.lessonPaymentInfo.lessonId = lp.lessonId  "
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);

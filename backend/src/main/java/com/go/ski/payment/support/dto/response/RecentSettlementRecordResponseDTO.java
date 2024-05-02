@@ -1,7 +1,5 @@
 package com.go.ski.payment.support.dto.response;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WithdrawalResponseDTO {
-	private Integer settlementAmount;
+public class RecentSettlementRecordResponseDTO {
 	private Integer balance;
-	private LocalDateTime settlementDate;
 }
