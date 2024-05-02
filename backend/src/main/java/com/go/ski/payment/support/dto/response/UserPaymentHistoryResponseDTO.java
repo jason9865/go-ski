@@ -13,7 +13,6 @@ public class UserPaymentHistoryResponseDTO {
 	private String userName;//필요한가?
 	private String teamName;
 	private LocalDate paymentDate;
-	private Integer paymentStatus;
 	private String chargeName;
 	private Integer charge;
 	private Integer totalAmount;

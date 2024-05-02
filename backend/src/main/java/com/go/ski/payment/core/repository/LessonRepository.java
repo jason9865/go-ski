@@ -12,7 +12,7 @@ import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 
 public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO ( "
-		+ "l.user.userName, t.teamName, p.paymentDate, p.paymentStatus, c.chargeName, c.studentChargeRate, p.totalAmount, "
+		+ "l.user.userName, t.teamName, p.paymentDate, c.chargeName, c.studentChargeRate, p.totalAmount, "
 		+ "lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Lesson l "
 		+ "JOIN Team t  ON t.teamId = l.team.teamId "
@@ -24,7 +24,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	List<UserPaymentHistoryResponseDTO> findStudentPaymentHistories(Integer userId);
 
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO ( "
-		+ "t.teamName, l.user.userName, p.paymentDate, p.paymentStatus, c.chargeName, c.ownerChargeRate, "
+		+ "t.teamName, l.user.userName, p.paymentDate, c.chargeName, c.ownerChargeRate, "
 		+ "p.totalAmount, lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
@@ -35,7 +35,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	List<OwnerPaymentHistoryResponseDTO> findOwnerPaymentHistories(Integer userId);
 
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO ( "
-		+ "t.teamName, l.user.userName, p.paymentDate, p.paymentStatus, c.chargeName, c.ownerChargeRate, "
+		+ "t.teamName, l.user.userName, p.paymentDate, c.chargeName, c.ownerChargeRate, "
 		+ "p.totalAmount, lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Team t "
 		+ "JOIN Lesson l ON l.team.teamId = t.teamId "
@@ -45,37 +45,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);
 
-    List<Lesson> findByUser(User user);
+	List<Lesson> findByUser(User user);
 
-    List<Lesson> findByInstructor(Instructor instructor);
+	List<Lesson> findByInstructor(Instructor instructor);
 
-    List<Lesson> findByTeamTeamId(int teamId);
+	List<Lesson> findByTeamTeamId(int teamId);
 
-    List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
-
-// 나중에 추가 될 요소들 c.chargeName, c.serviceCharge, i.instructorName,
-// join할 테이블
-/*
-* 	team -> teamName
-*   paymnet -> 결제 일자, 결제 상태, 수수료 id, 수수료 명, 수수료
-* 	lesson_payment_info -> 결제 정보들
-*
-		 "teamId" : team,
-		 "teamName" : team,
-		 "studentName" : 예약자,
-		 "instructorName" : 강사 이름 Null 가능, -> 나중에 바껴야할 수도
-		 	"paymentInfo" : {
-				 "totalAmount" : Integer,
-				 "paymentDate" : String,
-				 "paymentStatus" : Integer,
-			 },
-		"chargeName" : String,
-		"charge" : Integer
-		"lessonPaymentInfo" : {
-		 "basicFee" : Integer,
-		"designatedFee" : Integer,
-					 "peopleOptionFee" : Integer,
-					 "levelOptionFee" : Integer
-				 }
-			 },
-* */
+	List<Lesson> findByTeamTeamIdAndInstructorInstructorId(int teamId, int instructorId);
+}

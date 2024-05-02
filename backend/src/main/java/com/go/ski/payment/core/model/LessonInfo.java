@@ -38,6 +38,10 @@ public class LessonInfo {
 	private String lessonType;
 	@Column
 	private Integer studentCount;
+	@Column
+	private String requestComplain;
+	@Column
+	private Integer lessonStatus;
 
 	public static LessonInfo toLessonInfoForPayment (ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
 		return LessonInfo.builder()

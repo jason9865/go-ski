@@ -181,7 +181,6 @@ public class PayService {
 
 		Payment tmpPayment = Payment.builder()
 			.LessonPaymentInfo(tmpLessonPaymentInfo)
-			.paymentStatus(0)
 			.totalAmount(tmpLessonPaymentInfo.getBasicFee()
 				+ tmpLessonPaymentInfo.getDesignatedFee()
 				+ tmpLessonPaymentInfo.getLevelOptionFee()
