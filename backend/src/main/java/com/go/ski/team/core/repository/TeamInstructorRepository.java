@@ -21,6 +21,8 @@ public interface TeamInstructorRepository extends JpaRepository<TeamInstructor, 
 
     List<TeamInstructor> findByTeamAndIsInviteAccepted(Team team, boolean isInviteAccepted);
 
+    Optional<TeamInstructor> findByTeamTeamIdAndInstructorInstructorIdAndIsInviteAccepted(Integer teamId, Integer instructorId, boolean isInviteAccepted);
+
     Optional<List<TeamInstructor>> findByTeam(Team team);
 
 }

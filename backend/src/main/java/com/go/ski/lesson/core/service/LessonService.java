@@ -226,7 +226,10 @@ public class LessonService {
     // 팀 수업 배정하기
     private boolean assignTeamLessons(List<LessonInfo> lessonInfos, Map<Integer, LessonScheduleVO> lessonInfoMap) {
         // 시간이 제일 적은 사람 순, 강의 끝나는 시간이 빠른 긴 순으로
-        TreeSet<LessonScheduleVO> lessonInfoTreeSet = new TreeSet<>(Comparator.comparingInt(LessonScheduleVO::getTotalTime));
+        TreeSet<LessonScheduleVO> lessonInfoTreeSet = new TreeSet<>(
+                Comparator.comparingInt(LessonScheduleVO::getTotalTime)
+                        .thenComparing(LessonScheduleVO::getInstructorId)
+        );
         lessonInfoTreeSet.addAll(lessonInfoMap.values());
         lessonInfos.sort((Comparator.comparingInt(o -> Integer.parseInt(o.getStartTime()) + o.getDuration() * 100)));
 

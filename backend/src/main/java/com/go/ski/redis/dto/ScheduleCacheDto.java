@@ -4,6 +4,7 @@ import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 @RedisHash(value = "scheduleCache")
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class ScheduleCacheDto {
 

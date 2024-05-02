@@ -11,6 +11,7 @@ import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.Instructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class ReserveScheduleVO extends ReserveInfoVO {
     private List<StudentInfoDTO> studentInfoDTOs;
     private String representativeName;
     private Boolean isDesignated;
-    private Instructor instructor;
+    @Setter
+    private Integer instructorId;
 
     public ReserveScheduleVO(PaymentCacheDto paymentCacheDto) {
         super(paymentCacheDto);
@@ -40,7 +42,7 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         studentInfoDTOs = paymentCacheDto.getStudentInfos();
         representativeName = lesson.getRepresentativeName();
         isDesignated = paymentCacheDto.getLessonPaymentInfo().getDesignatedFee() != null;
-        instructor = lesson.getInstructor();
+        instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
     }
 
     public ReserveScheduleVO(LessonInfo lessonInfo, List<StudentInfoDTO> studentInfoDTOs, LessonPaymentInfo lessonPaymentInfo) {
@@ -55,6 +57,6 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         this.studentInfoDTOs = studentInfoDTOs;
         representativeName = lesson.getRepresentativeName();
         isDesignated = lessonPaymentInfo.getDesignatedFee() != null;
-        instructor = lesson.getInstructor();
+        instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
     }
 }
