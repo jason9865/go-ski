@@ -7,10 +7,7 @@ import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
-import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
-import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
-import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.*;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
 import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
@@ -181,6 +178,7 @@ public class PayService {
                         + tmpLessonPaymentInfo.getPeopleOptionFee()
                 )
                 .chargeId(0)// 사용자 0? 100?
+                .tid(paymentCache.getTid())
                 .paymentDate(LocalDate.now()).build();
         paymentRepository.save(tmpPayment);
 
