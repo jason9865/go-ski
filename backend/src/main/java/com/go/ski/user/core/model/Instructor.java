@@ -35,7 +35,7 @@ public class Instructor {
         switch (lessonType) {
             case "ALL" -> isInstructAvailable = "1110000";
             case "SKI" -> isInstructAvailable = "1010000";
-            case "BOARD" -> isInstructAvailable = "110000";
+            case "BOARD" -> isInstructAvailable = "1100000";
         }
     }
 }

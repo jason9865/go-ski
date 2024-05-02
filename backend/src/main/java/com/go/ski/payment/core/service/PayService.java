@@ -44,6 +44,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -87,7 +100,7 @@ public class PayService {
 		if (mode.equals("test")) headers.add("Authorization", "SECRET_KEY " + secretKeyDev);
 		else headers.add("Authorization", "SECRET_KEY " + secretKey);
 
-		headers.add("Content-type", "application/json");
+        headers.add("Content-type", "application/json");
 
 		return headers;
 	}
@@ -104,78 +117,78 @@ public class PayService {
 		if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).get();
 		else instructor = null;
 
-		int size = request.getStudentInfo().size();
-		// 레슨 생성
-		Lesson lesson = Lesson.toLessonForPayment(user, team, instructor, 0);
-		LessonInfo lessonInfo = LessonInfo.toLessonInfoForPayment(request);
+        int size = request.getStudentInfo().size();
+        // 레슨 생성
+        Lesson lesson = Lesson.toLessonForPayment(user, team, instructor, 0);
+        LessonInfo lessonInfo = LessonInfo.toLessonInfoForPayment(request);
 
-		// 2번 생성된 예약정보를 바탕으로 kakaoPayService에 필요한 변수를 넣기
-		Integer basicFee = request.getBasicFee();
-		Integer designatedFee = request.getDesignatedFee();
-		Integer peopleOptionFee = request.getPeopleOptionFee();
-		Integer levelOptionFee = request.getLevelOptionFee();
+        // 2번 생성된 예약정보를 바탕으로 kakaoPayService에 필요한 변수를 넣기
+        Integer basicFee = request.getBasicFee();
+        Integer designatedFee = request.getDesignatedFee();
+        Integer peopleOptionFee = request.getPeopleOptionFee();
+        Integer levelOptionFee = request.getLevelOptionFee();
 
 		LessonPaymentInfo lessonPaymentInfo = LessonPaymentInfo
 			.toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee);
 		Integer totalFee = basicFee + designatedFee + peopleOptionFee + levelOptionFee;
 		String itemName = team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 외 " + size + "명";
 
-		//만들어서 KAKAO랑 소통하기
-		KakaopayPrepareRequestDTO kakaopayPrepareRequestDTO = KakaopayPrepareRequestDTO.toKakaopayPrepareRequestDTO(lesson, itemName, totalFee);
-		KakaopayPrepareResponseDTO kakaopayPrepareResponseDTO = requestPrepareToKakao(kakaopayPrepareRequestDTO);
+        //만들어서 KAKAO랑 소통하기
+        KakaopayPrepareRequestDTO kakaopayPrepareRequestDTO = KakaopayPrepareRequestDTO.toKakaopayPrepareRequestDTO(lesson, itemName, totalFee);
+        KakaopayPrepareResponseDTO kakaopayPrepareResponseDTO = requestPrepareToKakao(kakaopayPrepareRequestDTO);
 
-		String tid = kakaopayPrepareResponseDTO.getTid();
-		PaymentCacheDto paymentCache = PaymentCacheDto.builder()
-			.tid(tid)
-			.lesson(lesson)
-			.lessonInfo(lessonInfo)
-			.lessonPaymentInfo(lessonPaymentInfo)
-			.studentInfos(request.getStudentInfo())
-			.build();
+        String tid = kakaopayPrepareResponseDTO.getTid();
+        PaymentCacheDto paymentCache = PaymentCacheDto.builder()
+                .tid(tid)
+                .lesson(lesson)
+                .lessonInfo(lessonInfo)
+                .lessonPaymentInfo(lessonPaymentInfo)
+                .studentInfos(request.getStudentInfo())
+                .build();
 
-		paymentCacheRepository.save(paymentCache);
-		return kakaopayPrepareResponseDTO;
-	}
+        paymentCacheRepository.save(paymentCache);
+        return kakaopayPrepareResponseDTO;
+    }
 
-	// 결제 승인
-	// 결제 테이블 생성해야함
-	@Transactional
-	public KakaopayApproveResponseDTO getApproveResponse(
-		HttpServletRequest httpServletRequest,
-		ApprovePaymentRequestDTO request) {
+    // 결제 승인
+    // 결제 테이블 생성해야함
+    @Transactional
+    public KakaopayApproveResponseDTO getApproveResponse(
+            HttpServletRequest httpServletRequest,
+            ApprovePaymentRequestDTO request) {
 
 		User user = (User) httpServletRequest.getAttribute("user");
 
-		PaymentCacheDto paymentCache = paymentCacheRepository
-			.findById(request.getTid())
-			.orElseThrow();
+        PaymentCacheDto paymentCache = paymentCacheRepository
+                .findById(request.getTid())
+                .orElseThrow();
 
-		Lesson tmpLesson = lessonRepository.save(paymentCache.getLesson());
-		LessonInfo tmpLessonInfo = LessonInfo.builder()
-			.lessonId(tmpLesson.getLessonId())
-			.lesson(tmpLesson)
-			.lessonDate(paymentCache.getLessonInfo().getLessonDate())
-			.startTime(paymentCache.getLessonInfo().getStartTime())
-			.duration(paymentCache.getLessonInfo().getDuration())
-			.lessonType(paymentCache.getLessonInfo().getLessonType())
-			.studentCount(paymentCache.getLessonInfo().getStudentCount())
-			.build();
+        Lesson tmpLesson = lessonRepository.save(paymentCache.getLesson());
+        LessonInfo tmpLessonInfo = LessonInfo.builder()
+                .lessonId(tmpLesson.getLessonId())
+                .lesson(tmpLesson)
+                .lessonDate(paymentCache.getLessonInfo().getLessonDate())
+                .startTime(paymentCache.getLessonInfo().getStartTime())
+                .duration(paymentCache.getLessonInfo().getDuration())
+                .lessonType(paymentCache.getLessonInfo().getLessonType())
+                .studentCount(paymentCache.getLessonInfo().getStudentCount())
+                .build();
 
-		lessonInfoRepository.save(tmpLessonInfo);
-		for (StudentInfoDTO studentInfoDTO : paymentCache.getStudentInfos()) {
-			StudentInfo tmpStudentInfo = StudentInfo.toStudentInfoForPayment(tmpLessonInfo, studentInfoDTO);
-			studentInfoRepository.save(tmpStudentInfo);
-		}
+        lessonInfoRepository.save(tmpLessonInfo);
+        for (StudentInfoDTO studentInfoDTO : paymentCache.getStudentInfos()) {
+            StudentInfo tmpStudentInfo = StudentInfo.toStudentInfoForPayment(tmpLessonInfo, studentInfoDTO);
+            studentInfoRepository.save(tmpStudentInfo);
+        }
 
-		LessonPaymentInfo tmpLessonPaymentInfo = LessonPaymentInfo.builder()
-			.lessonId(tmpLesson.getLessonId())
-			.lesson(tmpLesson)
-			.basicFee(paymentCache.getLessonPaymentInfo().getBasicFee())
-			.designatedFee(paymentCache.getLessonPaymentInfo().getDesignatedFee())
-			.levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee())
-			.peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee())
-			.build();
-		lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
+        LessonPaymentInfo tmpLessonPaymentInfo = LessonPaymentInfo.builder()
+                .lessonId(tmpLesson.getLessonId())
+                .lesson(tmpLesson)
+                .basicFee(paymentCache.getLessonPaymentInfo().getBasicFee())
+                .designatedFee(paymentCache.getLessonPaymentInfo().getDesignatedFee())
+                .levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee())
+                .peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee())
+                .build();
+        lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
 
 		Payment tmpPayment = Payment.builder()
 			.lessonPaymentInfo(tmpLessonPaymentInfo)
@@ -189,13 +202,13 @@ public class PayService {
 			.paymentDate(LocalDate.now()).build();
 		paymentRepository.save(tmpPayment);
 
-		// 이 정보는 굳이 내보내야하나?
-		KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
-			.tid(request.getTid())
-			.partnerOrderId("partner_order_id")//레슨 id
-			.partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
-			.pgToken(request.getPgToken())//pg_token
-			.build();
+        // 이 정보는 굳이 내보내야하나?
+        KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
+                .tid(request.getTid())
+                .partnerOrderId("partner_order_id")//레슨 id
+                .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
+                .pgToken(request.getPgToken())//pg_token
+                .build();
 
 		// 강습 가능여부 판단 후 캐싱하는 메서드
 		if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), new ReserveScheduleVO(paymentCache))) {
@@ -290,17 +303,17 @@ public class PayService {
 		//헤더 설정 추후에 서비스 모드로 변경
 		HttpHeaders headers = getHeader("test");
 
-		Map<String, String> params = new HashMap<>();
-		params.put("cid", testId);
-		params.put("partner_order_id", request.getPartnerOrderId());
-		params.put("partner_user_id", request.getPartnerUserId());//실제로는 무슨 값이 들어가야하는지?
-		params.put("item_name", request.getItemName());//팀 이름, 레벨, 명 수 이렇게 묶을 생각임
-		params.put("quantity", Integer.toString(request.getQuantity()));// 무조건 1
-		params.put("total_amount", Integer.toString(request.getTotalAmount()));// 계산한 값 보내줌
-		params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));// 부가가치세가 면제
-		params.put("approval_url", approvalUrl);//url 보내줌
-		params.put("cancel_url", cancelUrl);//url 보내줌
-		params.put("fail_url", failUrl);//url 보내줌
+        Map<String, String> params = new HashMap<>();
+        params.put("cid", testId);
+        params.put("partner_order_id", request.getPartnerOrderId());
+        params.put("partner_user_id", request.getPartnerUserId());//실제로는 무슨 값이 들어가야하는지?
+        params.put("item_name", request.getItemName());//팀 이름, 레벨, 명 수 이렇게 묶을 생각임
+        params.put("quantity", Integer.toString(request.getQuantity()));// 무조건 1
+        params.put("total_amount", Integer.toString(request.getTotalAmount()));// 계산한 값 보내줌
+        params.put("tax_free_amount", Integer.toString(request.getTaxFreeAmount()));// 부가가치세가 면제
+        params.put("approval_url", approvalUrl);//url 보내줌
+        params.put("cancel_url", cancelUrl);//url 보내줌
+        params.put("fail_url", failUrl);//url 보내줌
 
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
 		ResponseEntity<KakaopayPrepareResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/ready", requestEntity, KakaopayPrepareResponseDTO.class);

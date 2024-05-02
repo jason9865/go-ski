@@ -35,15 +35,19 @@ public class SecurityConfig {
 
     private static final String[] STUDENT_ROUTES = {
             "/api/v1/user/update/user", "/api/v1/user/profile/user",
-//            "/api/v1/lesson/reserve/novice", "/api/v1/lesson/reserve/advanced"
+            "/api/v1/lesson/reserve/novice/*", "/api/v1/lesson/reserve/advanced", "/api/v1/lesson/list/user"
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
-            "/api/v1/user/update/inst", "/api/v1/user/profile/inst"
+            "/api/v1/user/update/inst", "/api/v1/user/profile/inst",
+            "/api/v1/lesson/list/instructor",
+            "/api/v1/schedule/mine", "/api/v1/schedule/*/*"
     };
 
     private static final String[] OWNER_ROUTES = {
-            "/api/v1/user/update/user", "/api/v1/user/profile/user"
+            "/api/v1/user/update/user", "/api/v1/user/profile/user",
+            "/api/v1/lesson/list/head/*",
+            "/api/v1/schedule/*/*"
     };
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
