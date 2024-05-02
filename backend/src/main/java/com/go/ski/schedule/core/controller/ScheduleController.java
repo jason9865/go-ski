@@ -1,8 +1,11 @@
 package com.go.ski.schedule.core.controller;
 
+import com.go.ski.auth.exception.AuthExceptionEnum;
+import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.schedule.core.service.ScheduleService;
 import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
+import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.User;
@@ -37,13 +40,13 @@ public class ScheduleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createSchedule(@RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> createSchedule(HttpServletRequest request,@RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
         log.info("스케줄 등록: {}", createScheduleRequestDTO);
-        Team team = Team.builder().teamId(createScheduleRequestDTO.getTeamId()).build();
-        ReserveScheduleVO reserveScheduleVO = new ReserveScheduleVO(createScheduleRequestDTO);
-        if (scheduleService.scheduleCaching(team, reserveScheduleVO)) {
-            scheduleService.createSchedule(reserveScheduleVO);
+        User user = (User) request.getAttribute("user");
+        if(!scheduleService.checkPermission(user, createScheduleRequestDTO.getTeamId())){
+            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
         }
+        scheduleService.createSchedule(new ReserveScheduleVO(createScheduleRequestDTO));
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
