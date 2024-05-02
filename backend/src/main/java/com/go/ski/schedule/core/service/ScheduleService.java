@@ -78,13 +78,27 @@ public class ScheduleService {
         return null;
     }
 
-    public boolean checkPermission(User user, Integer teamId) {
+    public boolean checkAddPermission(User user, Integer teamId) {
         if (user.getRole().equals(Role.OWNER)) {
             Team team = teamRepository.findById(teamId).orElseThrow();
             return user.equals(team.getUser());
         } else {
             Permission permission = permissionRepository.findByTeamInstructorInstructorInstructorIdAndTeamInstructorTeamTeamId(user.getUserId(), teamId).orElseThrow();
             return permission.isAddPermission();
+        }
+    }
+
+    public boolean checkPermission(User user, Integer lessonId, int type) {
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
+        if (user.getRole().equals(Role.OWNER)) {
+            return user.equals(lesson.getTeam().getUser());
+        } else {
+            Permission permission = permissionRepository.findByTeamInstructorInstructorInstructorIdAndTeamInstructorTeamTeamId(user.getUserId(), lesson.getTeam().getTeamId()).orElseThrow();
+            if (type == 1) {
+                return permission.isDeletePermission();
+            } else {
+                return permission.isModifyPermission();
+            }
         }
     }
 
@@ -102,6 +116,14 @@ public class ScheduleService {
         if (!scheduleCaching(team, reserveScheduleVO)) {
             throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
         }
+    }
+
+    public void deleteSchedule(Integer lessonId) {
+
+    }
+
+    public void updateSchedule(Integer lessonId) {
+
     }
 
     public boolean scheduleCaching(Team team, ReserveScheduleVO reserveScheduleVO) {

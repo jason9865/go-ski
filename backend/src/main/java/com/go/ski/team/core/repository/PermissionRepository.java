@@ -1,5 +1,6 @@
 package com.go.ski.team.core.repository;
 
+import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,5 +20,4 @@ public interface PermissionRepository extends JpaRepository<Permission, Integer>
     void deleteAllByTeamInstructor(List<TeamInstructor> teamInstructors);
 
     Optional<Permission> findByTeamInstructorInstructorInstructorIdAndTeamInstructorTeamTeamId(Integer instructorId, Integer teamId);
-
 }

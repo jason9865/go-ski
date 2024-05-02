@@ -5,9 +5,7 @@ import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.schedule.core.service.ScheduleService;
 import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
-import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
-import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +38,35 @@ public class ScheduleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createSchedule(HttpServletRequest request,@RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> createSchedule(HttpServletRequest request, @RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
         log.info("스케줄 등록: {}", createScheduleRequestDTO);
         User user = (User) request.getAttribute("user");
-        if(!scheduleService.checkPermission(user, createScheduleRequestDTO.getTeamId())){
+        if (!scheduleService.checkAddPermission(user, createScheduleRequestDTO.getTeamId())) {
             throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
         }
         scheduleService.createSchedule(new ReserveScheduleVO(createScheduleRequestDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @DeleteMapping("/{lessonId}")
+    public ResponseEntity<ApiResponse<?>> deleteSchedule(HttpServletRequest request, @PathVariable Integer lessonId) {
+        log.info("스케줄 삭제: {}", lessonId);
+        User user = (User) request.getAttribute("user");
+        if (!scheduleService.checkPermission(user, lessonId, 1)) {
+            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
+        }
+        scheduleService.deleteSchedule(lessonId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @PatchMapping("/{lessonId}")
+    public ResponseEntity<ApiResponse<?>> updateSchedule(HttpServletRequest request, @PathVariable Integer lessonId) {
+        log.info("스케줄 수정: {}", lessonId);
+        User user = (User) request.getAttribute("user");
+        if (!scheduleService.checkPermission(user, lessonId, 2)) {
+            throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
+        }
+        scheduleService.updateSchedule(lessonId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
