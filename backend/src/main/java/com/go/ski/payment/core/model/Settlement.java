@@ -2,9 +2,10 @@ package com.go.ski.payment.core.model;
 
 import java.time.LocalDate;
 
+import com.go.ski.user.core.model.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,24 +18,26 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+@NoArgsConstructor
+@Entity
+public class Settlement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer paymentId;
+	private Integer settlementId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 	@Column
-	private String tid;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lesson_id")
-	private LessonPaymentInfo LessonPaymentInfo;// 1대 다 lesson_payment_info
+	private Integer settlementAmount;
 	@Column
-	private Integer totalAmount;
+	private String bank;
 	@Column
-	private Integer chargeId;//0은 사용자, 100?
+	private String depositorName;
 	@Column
-	private LocalDate paymentDate;
+	private String accountNumber;
 	@Column
-	private LocalDate paybackDate;
+	private Integer balance;
+	@Column
+	private LocalDate settlementDate;
 }

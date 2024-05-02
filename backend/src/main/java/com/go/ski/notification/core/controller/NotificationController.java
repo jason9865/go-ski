@@ -1,10 +1,12 @@
-package com.go.ski.Notification.core.controller;
+package com.go.ski.notification.core.controller;
 
-import com.go.ski.Notification.core.service.NotificationService;
-import com.go.ski.Notification.support.dto.FcmTokenRequestDTO;
-import com.go.ski.Notification.support.dto.NotificationResponseDTO;
+import com.go.ski.notification.core.service.FcmClient;
+import com.go.ski.notification.core.service.NotificationService;
+import com.go.ski.notification.support.dto.*;
 import com.go.ski.common.response.ApiResponse;
+import com.go.ski.team.core.service.TeamInstructorService;
 import com.go.ski.user.core.model.User;
+import com.google.protobuf.Api;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final TeamInstructorService teamInstructorService;
+    private final FcmClient fcmClient;
 
     // 토큰 발급 요청
     @PostMapping("/token")
@@ -49,9 +53,28 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
+    // 알림 보내기
+    @PostMapping("/dm")
+    public ResponseEntity<ApiResponse<?>> sendMessage(FcmSendRequestDTO requestDTO) {
+        log.info("NotificationController.sendMessage");
+        notificationService.sendMessage(requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
+    }
+
+    //팀 초대 요청
+    @PostMapping("/invite")
+    public ResponseEntity<ApiResponse<?>> requestInvite(@RequestBody InviteRequestDTO requestDTO){
+        log.info("NotificationController.requestInvite");
+        notificationService.sendInvite(requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("초대 요청을 전송하였습니다."));
+    }
 
     // 팀 초대 요청 수락
-
-    //
-
+    @PostMapping("/invite-accept")
+    public ResponseEntity<ApiResponse<?>> acceptInvite(HttpServletRequest request,@RequestBody InviteAcceptRequestDTO requestDTO) {
+        log.info("NotificationController.acceptInvite");
+        User user = (User)request.getAttribute("user");
+        teamInstructorService.addNewInstructor(requestDTO,user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
 }
