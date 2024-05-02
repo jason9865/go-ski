@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Check;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -31,7 +32,7 @@ public class User {
     private String userName;
 
     @Setter
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @Setter
     private String phoneNumber;

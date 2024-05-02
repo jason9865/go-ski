@@ -169,8 +169,8 @@ public class UserService {
             log.info("profileUrl: {}", profileUrl);
 
             user.setProfileUrl(profileUrl);
-            userRepository.save(user);
         }
+        userRepository.save(user);
     }
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {

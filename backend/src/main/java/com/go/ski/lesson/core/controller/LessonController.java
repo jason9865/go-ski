@@ -28,8 +28,7 @@ public class LessonController {
     @PostMapping("/reserve/novice")
     public ResponseEntity<ApiResponse<?>> getTeamsForNovice(@RequestBody ReserveRequestDTO reserveRequestDTO) {
         log.info("강습조회 - 초급(팀리스트): {}", reserveRequestDTO);
-        ReserveInfoVO reserveInfoVO = new ReserveInfoVO(reserveRequestDTO);
-        List<ReserveNoviceResponseDTO> reserveNoviceResponseDTOs = lessonService.getTeamsForNovice(reserveInfoVO);
+        List<ReserveNoviceResponseDTO> reserveNoviceResponseDTOs = lessonService.getTeamsForNovice(new ReserveInfoVO(reserveRequestDTO));
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(reserveNoviceResponseDTOs));
     }
 
