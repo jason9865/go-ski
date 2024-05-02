@@ -1,15 +1,13 @@
-package com.go.ski.notification.support.dto;
-
+package com.go.ski.notification.support.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Getter
 @Builder
-public class NotificationMessage {
+public class DMMessage {
 
     @JsonProperty("validate_only")
     private boolean validateOnly;
@@ -23,7 +21,6 @@ public class NotificationMessage {
         private String token;
     }
 
-
     @Builder
     @AllArgsConstructor
     @Getter
@@ -36,5 +33,6 @@ public class NotificationMessage {
         private String notificationType;
         private String createdAt;
     }
+
 
 }

@@ -1,6 +1,7 @@
 package com.go.ski.notification.core.domain;
 
-import com.go.ski.notification.support.NotificationEvent;
+import com.go.ski.notification.support.events.MessageEvent;
+import com.go.ski.notification.support.events.NotificationEvent;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -43,6 +44,10 @@ public class Notification {
 
     private LocalDateTime createdAt;
 
+    public void read(){
+        isRead = 1;
+    }
+
     public static Notification from(NotificationEvent notificationEvent) {
         return Notification.builder()
                 .receiverId(notificationEvent.getReceiverId())
@@ -54,8 +59,17 @@ public class Notification {
                 .build();
     }
 
-    public void read(){
-        isRead = 1;
+    public static Notification from(MessageEvent messageEvent) {
+        return Notification.builder()
+                .senderId(messageEvent.getSenderId())
+                .receiverId(messageEvent.getReceiverId())
+                .notificationType(messageEvent.getNotificationType())
+                .deviceType(messageEvent.getDeviceType())
+                .title(messageEvent.getTitle())
+                .content(messageEvent.getContent())
+                .createdAt(messageEvent.getCreatedAt())
+                .build();
     }
+
 
 }

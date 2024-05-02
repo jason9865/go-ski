@@ -28,6 +28,6 @@ public class NotificationSetting {
     private User user;
 
     @ColumnDefault("1")
-    private byte notificationStatus;
+    private boolean notificationStatus;
 
 }

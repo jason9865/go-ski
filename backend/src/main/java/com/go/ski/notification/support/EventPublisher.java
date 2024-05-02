@@ -1,12 +1,12 @@
 package com.go.ski.notification.support;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
-import com.go.ski.notification.core.domain.NotificationSetting;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
+import com.go.ski.notification.support.events.MessageEvent;
+import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
-import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -15,7 +15,6 @@ import com.go.ski.user.core.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,9 +32,7 @@ public class EventPublisher {
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl) {
         log.info("알림 보내기 EventPublisher");
-        if (isSendAvailable(fcmSendRequestDTO.getReceiverId(), fcmSendRequestDTO.getNotificationType())){
-            applicationEventPublisher.publishEvent(NotificationEvent.of(fcmSendRequestDTO,user.getUserId(), imageUrl));
-        }
+        applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl));
     }
 
     public void publish(InviteAcceptRequestDTO inviteAcceptRequestDTO, Team team, Instructor instructor) {
@@ -59,15 +56,10 @@ public class EventPublisher {
 
 
     public void publish(InviteRequestDTO inviteRequestDTO, Team team) {
-        if (isSendAvailable(inviteRequestDTO.getReceiverId(), inviteRequestDTO.getNotificationType())){
-            applicationEventPublisher.publishEvent(NotificationEvent.of(inviteRequestDTO, team));
-        }
+        applicationEventPublisher.publishEvent(NotificationEvent.of(inviteRequestDTO, team));
+
     }
 
-    public boolean isSendAvailable(Integer userId, Integer notificationType) {
-        return notificationSettingRepository.findByUserIdAndNotificationType(userId,notificationType)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_SETTING_NOT_FOUND))
-                .getNotificationStatus() == 1;
-    }
+
 
 }
