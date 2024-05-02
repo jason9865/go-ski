@@ -74,4 +74,13 @@ public class LessonInfo {
         studentCount = reserveInfoVO.getStudentCount();
         lessonType = reserveInfoVO.getLessonType();
     }
+
+	public LessonInfo(Lesson lesson, ReserveInfoVO reserveInfoVO) {
+		this.lesson = lesson;
+		lessonDate = reserveInfoVO.getLessonDate();
+		startTime = reserveInfoVO.getStartTime();
+		duration = reserveInfoVO.getDuration();
+		studentCount = reserveInfoVO.getStudentCount();
+		lessonType = reserveInfoVO.getLessonType();
+	}
 }

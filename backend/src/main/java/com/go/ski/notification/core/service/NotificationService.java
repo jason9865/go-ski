@@ -15,7 +15,6 @@ import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
-import com.go.ski.user.support.exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -67,12 +66,12 @@ public class NotificationService {
     }
 
     @Transactional
-    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO){
+    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO,User user){
         String imageUrl = fcmSendRequestDTO.getImage() != null ?
                 s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
                 null;
 
-        eventPublisher.publish(fcmSendRequestDTO, imageUrl);
+        eventPublisher.publish(fcmSendRequestDTO, user, imageUrl);
     }
 
     @Transactional

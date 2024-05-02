@@ -1,8 +1,6 @@
-package com.go.ski.notification.support;
+package com.go.ski.notification.support.events;
 
 import com.go.ski.notification.core.domain.DeviceType;
-import com.go.ski.notification.core.domain.NotificationType;
-import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.team.core.model.Team;
@@ -23,20 +21,6 @@ public class NotificationEvent {
     private LocalDateTime createdAt;
     private Integer notificationType;
     private DeviceType deviceType;
-    private String imageUrl;
-
-
-    public static  NotificationEvent of(FcmSendRequestDTO requestDTO, String imageUrl) {
-        NotificationEvent notificationEvent = new NotificationEvent();
-        notificationEvent.receiverId = requestDTO.getReceiverId();
-        notificationEvent.title = requestDTO.getTitle();
-        notificationEvent.content = requestDTO.getContent();
-        notificationEvent.createdAt = LocalDateTime.now();
-        notificationEvent.notificationType = requestDTO.getNotificationType();
-        notificationEvent.deviceType = requestDTO.getDeviceType();
-        notificationEvent.imageUrl = imageUrl;
-        return notificationEvent;
-    }
 
 
     public static NotificationEvent of(InviteAcceptRequestDTO requestDTO, Integer userId, Instructor instructor) {

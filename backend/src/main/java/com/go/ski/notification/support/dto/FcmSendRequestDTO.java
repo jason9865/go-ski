@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FcmSendRequestDTO {
-    private Integer senderId;
     private Integer receiverId;
     private String title;
     private String content;
