@@ -27,7 +27,7 @@ class _ReservationInstructorListScreenState
           '안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.',
       certificateName: 'Level3',
       rating: 4.0,
-      imagePath: 'assets/images/person3.png',
+      imagePath: 'assets/images/adv.jpg',
       reviewCount: 30,
       cost: 300000,
     ),
@@ -120,15 +120,18 @@ class _ReservationInstructorListScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              GoskiSwitch(
-                items: [
-                  tr('sortByLowPrice'),
-                  tr('sortByHighPrice'),
-                  tr('sortByRating')
-                ],
-                width: screenSizeController.getWidthByRatio(0.5),
-                onChanged: sortInstructors,
-                size: goskiFontSmall,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GoskiSwitch(
+                  items: [
+                    tr('sortByLowPrice'),
+                    tr('sortByHighPrice'),
+                    tr('sortByRating')
+                  ],
+                  width: screenSizeController.getWidthByRatio(0.5),
+                  onChanged: sortInstructors,
+                  size: goskiFontSmall,
+                ),
               ),
             ],
           ),
@@ -159,8 +162,8 @@ class _ReservationInstructorListScreenState
               child: Image.asset(
                 instructor.imagePath,
                 width: 90,
-                height: 90,
-                fit: BoxFit.fill,
+                height: 120,
+                fit: BoxFit.fitHeight,
               ),
             ),
             SizedBox(width: screenSizeController.getWidthByRatio(0.03)),
