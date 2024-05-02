@@ -34,10 +34,8 @@ public class UserController {
 
         User user = userService.login(oauthServerType, signinRequestDto.getRole(), signinRequestDto.getCode(), signinRequestDto.getToken());
 
-        if (user.getUserId() == 0) {
+        if (user.getUserId() == null) {
             log.info("회원가입 필요");
-            HttpSession session = request.getSession(); // session에 도메인 정보 넣어두고 회원가입 요청에서 사용
-            session.setAttribute("user", user);
         } else {
             if (user.getExpiredDate() != null) {
                 log.info("탈퇴한 유저: {}", user.getExpiredDate());
@@ -56,13 +54,7 @@ public class UserController {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_LOGIN);
-        }
-
-        User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
-        User user = userService.signupUser(domainUser, signupUserRequestDTO);
+        User user = userService.signupUser(signupUserRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);

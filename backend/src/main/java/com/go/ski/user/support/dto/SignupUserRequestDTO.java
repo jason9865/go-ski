@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 public class SignupUserRequestDTO extends ProfileImageDTO {
     private String userName;
     private Gender gender;
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
     private String phoneNumber;
     private Role role;
+    private String domainUserKey;
+    private String profileUrl;
 }

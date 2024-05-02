@@ -27,4 +27,9 @@ public class ReviewResponseDTO {
                 .build();
     }
 
+    public ReviewResponseDTO(Review review) {
+        reviewId = review.getReviewId();
+        rating = review.getRating();
+        content = review.getContents();
+    }
 }

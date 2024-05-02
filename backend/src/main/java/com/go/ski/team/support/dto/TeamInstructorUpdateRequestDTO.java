@@ -13,11 +13,11 @@ public class TeamInstructorUpdateRequestDTO {
 
     private Integer teamId;
     private Integer instructorId;
-    private Byte invitePermission;
-    private Byte addPermission;
-    private Byte modifyPermission;
-    private Byte deletePermission;
-    private Byte costPermission;
+    private boolean invitePermission;
+    private boolean addPermission;
+    private boolean modifyPermission;
+    private boolean deletePermission;
+    private boolean costPermission;
     private Integer position;
     private Integer designatedCost;
 

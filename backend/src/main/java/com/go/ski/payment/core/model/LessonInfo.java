@@ -38,6 +38,10 @@ public class LessonInfo {
 	private String lessonType;
 	@Column
 	private Integer studentCount;
+	@Column
+	private String requestComplain;
+	@Column
+	private Integer lessonStatus;
 
 	public static LessonInfo toLessonInfoForPayment (ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
 		return LessonInfo.builder()
@@ -69,4 +73,13 @@ public class LessonInfo {
         studentCount = reserveInfoVO.getStudentCount();
         lessonType = reserveInfoVO.getLessonType();
     }
+
+	public LessonInfo(Lesson lesson, ReserveInfoVO reserveInfoVO) {
+		this.lesson = lesson;
+		lessonDate = reserveInfoVO.getLessonDate();
+		startTime = reserveInfoVO.getStartTime();
+		duration = reserveInfoVO.getDuration();
+		studentCount = reserveInfoVO.getStudentCount();
+		lessonType = reserveInfoVO.getLessonType();
+	}
 }

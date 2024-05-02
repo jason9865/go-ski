@@ -41,7 +41,7 @@ spring:
       ddl-auto: none
 
   profiles:
-    include: jwt, oauth, s3, pay
+    include: jwt, oauth, s3, pay, fcm
 
 # Swagger
 springdoc:

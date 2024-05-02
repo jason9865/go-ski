@@ -6,12 +6,15 @@ import com.go.ski.lesson.support.vo.LessonScheduleVO;
 import com.go.ski.lesson.support.vo.ReserveInfoVO;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.model.LessonPaymentInfo;
 import com.go.ski.payment.core.model.StudentInfo;
 import com.go.ski.payment.core.repository.LessonInfoRepository;
+import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
+import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.vo.TeamImageVO;
@@ -42,6 +45,7 @@ public class LessonService {
     private final InstructorCertRepository instructorCertRepository;
     private final LessonRepository lessonRepository;
     private final StudentInfoRepository studentInfoRepository;
+    private final LessonPaymentInfoRepository lessonPaymentInfoRepository;
 
     public List<ReserveNoviceResponseDTO> getTeamsForNovice(ReserveInfoVO reserveInfoVO) {
         log.info("resortId로 해당 리조트에 속한 team 리스트 가져오기");
@@ -58,7 +62,7 @@ public class LessonService {
                     reserveNoviceResponseDTO.setCost(teamCost * reserveInfoVO.getDuration());
                 }
                 // 별점 설정
-                List<Review> reviews = reviewRepository.findByLessonTeam(team);
+                List<ReviewResponseDTO> reviews = reviewRepository.findByLessonTeam(team).stream().map(ReviewResponseDTO::new).toList();
                 setReviewRating(reviews, reserveNoviceResponseDTO);
 
                 reserveNoviceResponseDTOs.add(reserveNoviceResponseDTO);
@@ -110,7 +114,7 @@ public class LessonService {
                     reserveAdvancedResponseDTO.setCost((teamCost + levelCost + permission.getDesignatedCost()) * reserveNoviceTeamRequestDTO.getDuration());
                 }
                 // 별점 설정
-                List<Review> reviews = reviewRepository.findByLessonInstructor(instructor);
+                List<ReviewResponseDTO> reviews = reviewRepository.findByLessonInstructor(instructor).stream().map(ReviewResponseDTO::new).toList();
                 setReviewRating(reviews, reserveAdvancedResponseDTO);
 
                 reserveAdvancedResponseDTOs.add(reserveAdvancedResponseDTO);
@@ -158,14 +162,17 @@ public class LessonService {
             try {
                 LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
                 List<StudentInfo> studentInfos = studentInfoRepository.findByLessonInfo(lessonInfo);
-                instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfos));
+                boolean isDesignated = lessonPaymentInfoRepository.findById(lesson.getLessonId())
+                        .map(LessonPaymentInfo::getDesignatedFee).isPresent();
+                instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfos, isDesignated));
             } catch (NoSuchElementException ignored) {
             }
         }
         return instructorLessonResponseDTOs;
     }
 
-    private ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
+    // 특정 팀에 예약을 배정할 수 있는 지 판단하는 메서드
+    public ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
         // 강습 일자, 팀으로 이미 예약된 강습 리스트
         List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(reserveInfoVO.getLessonDate(), team);
         // 해당 팀에 소속된 강사 리스트
@@ -181,6 +188,7 @@ public class LessonService {
         return !instructors.isEmpty() ? new ReserveNoviceResponseDTO(team, instructors, getTeamImage(team)) : null;
     }
 
+    // 특정 강사에게 예약을 배정할 수 있는 지 판단하는 메서드
     private boolean assignLessonsToInstructor(Instructor instructor, ReserveInfoVO reserveInfoVO,
                                               List<LessonInfo> lessonInfos, List<TeamInstructor> teamInstructors) {
         // 팀에 소속된 강사들 스케줄 맵 만들기
@@ -194,14 +202,12 @@ public class LessonService {
         lessonInfos.add(newLessonInfo);
 
         try {
-            // 지정 수업 배정하기
             for (LessonInfo lessonInfo : lessonInfos) {
                 if (lessonInfo.getLesson() != null && lessonInfo.getLesson().getInstructor() != null) {
                     if (!assignInstructorLessons(lessonInfo.getLesson().getInstructor(), lessonInfo, lessonInfoMap))
                         return false;
                 }
             }
-            // 팀 수업 배정하기
             return assignTeamLessons(lessonInfos, lessonInfoMap);
         } finally {
             // 마지막에 추가했던 강습을 제거해야함
@@ -209,6 +215,7 @@ public class LessonService {
         }
     }
 
+    // 강사 지정수업 배정하기
     private boolean assignInstructorLessons(Instructor instructor, LessonInfo lessonInfo, Map<Integer, LessonScheduleVO> lessonInfoMap) {
         LessonScheduleVO lessonScheduleVO = lessonInfoMap.get(instructor.getInstructorId());
         if (lessonScheduleVO == null) return false; // 이 팀에 존재하지 않는 강사
@@ -216,9 +223,13 @@ public class LessonService {
         return canAssignLesson(lessonScheduleVO, lessonInfo);
     }
 
+    // 팀 수업 배정하기
     private boolean assignTeamLessons(List<LessonInfo> lessonInfos, Map<Integer, LessonScheduleVO> lessonInfoMap) {
         // 시간이 제일 적은 사람 순, 강의 끝나는 시간이 빠른 긴 순으로
-        TreeSet<LessonScheduleVO> lessonInfoTreeSet = new TreeSet<>(Comparator.comparingInt(LessonScheduleVO::getTotalTime));
+        TreeSet<LessonScheduleVO> lessonInfoTreeSet = new TreeSet<>(
+                Comparator.comparingInt(LessonScheduleVO::getTotalTime)
+                        .thenComparing(LessonScheduleVO::getInstructorId)
+        );
         lessonInfoTreeSet.addAll(lessonInfoMap.values());
         lessonInfos.sort((Comparator.comparingInt(o -> Integer.parseInt(o.getStartTime()) + o.getDuration() * 100)));
 
@@ -292,13 +303,14 @@ public class LessonService {
         }).orElse(0);
     }
 
-    private void setReviewRating(List<Review> reviews, ReserveResponseDTO reserveResponseDTO) {
+    private void setReviewRating(List<ReviewResponseDTO> reviews, ReserveResponseDTO reserveResponseDTO) {
         if (!reviews.isEmpty()) {
             double rating = 0;
-            for (Review review : reviews)
+            for (ReviewResponseDTO review : reviews)
                 rating += review.getRating();
             reserveResponseDTO.setRating(rating / reviews.size());
-            reserveResponseDTO.setRatingCount(reviews.size());
+            reserveResponseDTO.setReviewCount(reviews.size());
+            reserveResponseDTO.setReviews(reviews);
         }
     }
 }

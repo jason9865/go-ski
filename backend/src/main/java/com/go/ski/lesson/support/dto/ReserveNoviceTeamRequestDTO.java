@@ -22,8 +22,8 @@ public class ReserveNoviceTeamRequestDTO {
         studentCount = reserveInfoVO.getStudentCount();
         duration = reserveInfoVO.getDuration();
         level = switch (reserveInfoVO.getLessonType()) {
-            case "1010010", "1101000" -> "중급";
-            case "1010011", "1101100" -> "고급";
+            case "1010010", "1101000" -> "INTERMEDIATE";
+            case "1010011", "1101100" -> "ADVANCED";
             default -> null;
         };
     }

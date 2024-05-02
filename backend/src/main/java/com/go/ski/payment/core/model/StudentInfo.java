@@ -2,11 +2,8 @@ package com.go.ski.payment.core.model;
 
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.payment.support.vo.Age;
-import com.go.ski.payment.support.vo.AgeConverter;
 import com.go.ski.payment.support.vo.Height;
-import com.go.ski.payment.support.vo.HeightConverter;
 import com.go.ski.payment.support.vo.Weight;
-import com.go.ski.payment.support.vo.WeightConverter;
 import com.go.ski.user.support.vo.Gender;
 import com.go.ski.user.support.vo.GenderConvert;
 
@@ -38,19 +35,15 @@ public class StudentInfo {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lesson_id")
 	private LessonInfo lessonInfo;
-	// @Enumerated(EnumType.STRING)
-	@Convert(converter = HeightConverter.class)
+	@Enumerated(EnumType.STRING)
 	private Height height;
-	// @Enumerated(EnumType.STRING)
-	@Convert(converter = WeightConverter.class)
+	@Enumerated(EnumType.STRING)
 	private Weight weight;
 	@Column
 	private Integer footSize;
-	// @Enumerated(EnumType.STRING)
-	@Convert(converter = AgeConverter.class)
+	@Enumerated(EnumType.STRING)
 	private Age age;
-	// @Enumerated(EnumType.STRING)
-	@Convert(converter = GenderConvert.class)
+	@Enumerated(EnumType.STRING)
 	private Gender gender;
 	@Column
 	private String name;
@@ -58,10 +51,10 @@ public class StudentInfo {
 	public static StudentInfo toStudentInfoForPayment(LessonInfo lessonInfo, StudentInfoDTO studentInfoDTO) {
 		return StudentInfo.builder()
 			.lessonInfo(lessonInfo)
-			.height(Height.fromValue(studentInfoDTO.getHeight()))
-			.weight(Weight.fromValue(studentInfoDTO.getWeight()))
+			.height(studentInfoDTO.getHeight())
+			.weight(studentInfoDTO.getWeight())
 			.footSize(studentInfoDTO.getFootSize())
-			.age(Age.fromValue(studentInfoDTO.getAge()))
+			.age(studentInfoDTO.getAge())
 			.gender(studentInfoDTO.getGender())
 			.name(studentInfoDTO.getName())
 			.build();

@@ -1,5 +1,6 @@
 package com.go.ski.user.core.model;
 
+import com.go.ski.notification.core.domain.NotificationSetting;
 import com.go.ski.user.support.vo.Gender;
 import com.go.ski.user.support.vo.Role;
 import com.go.ski.auth.oauth.dto.Domain;
@@ -8,7 +9,9 @@ import lombok.*;
 import org.hibernate.annotations.Check;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
@@ -31,7 +34,7 @@ public class User {
     private String userName;
 
     @Setter
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @Setter
     private String phoneNumber;
@@ -53,6 +56,9 @@ public class User {
     private LocalDateTime createdDate;
     @Setter
     private LocalDateTime expiredDate;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<NotificationSetting> settingList;
 
     @PrePersist
     protected void onCreate() {
