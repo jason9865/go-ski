@@ -2,16 +2,16 @@ package com.go.ski.schedule.core.controller;
 
 import com.go.ski.common.response.ApiResponse;
 import com.go.ski.schedule.core.service.ScheduleService;
+import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
+import com.go.ski.schedule.support.vo.ReserveScheduleVO;
+import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -35,4 +35,16 @@ public class ScheduleController {
         User user = (User) request.getAttribute("user");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(scheduleService.getTeamSchedule(user, teamId, lessonDate)));
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<?>> createSchedule(@RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
+        log.info("스케줄 등록: {}", createScheduleRequestDTO);
+        Team team = Team.builder().teamId(createScheduleRequestDTO.getTeamId()).build();
+        ReserveScheduleVO reserveScheduleVO = new ReserveScheduleVO(createScheduleRequestDTO);
+        if (scheduleService.scheduleCaching(team, reserveScheduleVO)) {
+            scheduleService.createSchedule(reserveScheduleVO);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
 }

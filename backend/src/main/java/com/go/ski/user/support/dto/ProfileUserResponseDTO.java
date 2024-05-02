@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ProfileUserResponseDTO {
     private String userName;
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
     private String phoneNumber;
     private String profileUrl;
     private Gender gender;

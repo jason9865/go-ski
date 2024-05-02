@@ -10,19 +10,19 @@ import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.ScheduleCacheDto;
 import com.go.ski.redis.repository.ScheduleCacheRepository;
+import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
+import com.go.ski.schedule.support.vo.CreateScheduleVO;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
-import com.go.ski.user.support.exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -52,7 +52,7 @@ public class ScheduleService {
 
     public List<ReserveScheduleVO> getTeamSchedule(User user, int teamId, LocalDate lessonDate) {
         Optional<TeamInstructor> optionalTeamInstructor = teamInstructorRepository.findByTeamTeamIdAndInstructorInstructorIdAndIsInviteAccepted(teamId, user.getUserId(), true);
-        if(optionalTeamInstructor.isEmpty()){
+        if (optionalTeamInstructor.isEmpty()) {
             throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.NOT_MEMBER_OF_TEAM);
         }
 
@@ -64,6 +64,11 @@ public class ScheduleService {
                     .flatMap(List::stream).toList();// 각 객체의 List<ReserveScheduleVO>를 하나의 Stream<ReserveScheduleVO>로 펼침
         }
         return null;
+    }
+
+    public void createSchedule(ReserveScheduleVO reserveScheduleVO) {
+
+
     }
 
     public boolean scheduleCaching(Team team, ReserveScheduleVO reserveScheduleVO) {

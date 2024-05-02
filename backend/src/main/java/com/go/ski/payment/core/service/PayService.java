@@ -1,5 +1,6 @@
 package com.go.ski.payment.core.service;
 
+import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.payment.core.model.*;
 import com.go.ski.payment.core.repository.*;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
@@ -14,6 +15,7 @@ import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.redis.repository.PaymentCacheRepository;
 import com.go.ski.schedule.core.service.ScheduleService;
+import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamRepository;
@@ -141,58 +143,58 @@ public class PayService {
                 .findById(request.getTid())
                 .orElseThrow();
 
-        // 강습 가능여부 판단 후 캐싱하는 메서드
-        if (scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), new ReserveScheduleVO(paymentCache))) {
-            Lesson tmpLesson = lessonRepository.save(paymentCache.getLesson());
-            LessonInfo tmpLessonInfo = LessonInfo.builder()
-                    .lessonId(tmpLesson.getLessonId())
-                    .lesson(tmpLesson)
-                    .lessonDate(paymentCache.getLessonInfo().getLessonDate())
-                    .startTime(paymentCache.getLessonInfo().getStartTime())
-                    .duration(paymentCache.getLessonInfo().getDuration())
-                    .lessonType(paymentCache.getLessonInfo().getLessonType())
-                    .studentCount(paymentCache.getLessonInfo().getStudentCount())
-                    .build();
+        Lesson tmpLesson = lessonRepository.save(paymentCache.getLesson());
+        LessonInfo tmpLessonInfo = LessonInfo.builder()
+                .lessonId(tmpLesson.getLessonId())
+                .lesson(tmpLesson)
+                .lessonDate(paymentCache.getLessonInfo().getLessonDate())
+                .startTime(paymentCache.getLessonInfo().getStartTime())
+                .duration(paymentCache.getLessonInfo().getDuration())
+                .lessonType(paymentCache.getLessonInfo().getLessonType())
+                .studentCount(paymentCache.getLessonInfo().getStudentCount())
+                .build();
 
-            lessonInfoRepository.save(tmpLessonInfo);
-            for (StudentInfoDTO studentInfoDTO : paymentCache.getStudentInfos()) {
-                StudentInfo tmpStudentInfo = StudentInfo.toStudentInfoForPayment(tmpLessonInfo, studentInfoDTO);
-                studentInfoRepository.save(tmpStudentInfo);
-            }
-
-            LessonPaymentInfo tmpLessonPaymentInfo = LessonPaymentInfo.builder()
-                    .lessonId(tmpLesson.getLessonId())
-                    .lesson(tmpLesson)
-                    .basicFee(paymentCache.getLessonPaymentInfo().getBasicFee())
-                    .designatedFee(paymentCache.getLessonPaymentInfo().getDesignatedFee())
-                    .levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee())
-                    .peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee())
-                    .build();
-            lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
-
-            Payment tmpPayment = Payment.builder()
-                    .LessonPaymentInfo(tmpLessonPaymentInfo)
-                    .paymentStatus(0)
-                    .totalAmount(tmpLessonPaymentInfo.getBasicFee()
-                            + tmpLessonPaymentInfo.getDesignatedFee()
-                            + tmpLessonPaymentInfo.getLevelOptionFee()
-                            + tmpLessonPaymentInfo.getPeopleOptionFee()
-                    )
-                    .chargeId(0)// 사용자 0? 100?
-                    .paymentDate(LocalDate.now()).build();
-            paymentRepository.save(tmpPayment);
-
-            // 이 정보는 굳이 내보내야하나?
-            KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
-                    .tid(request.getTid())
-                    .partnerOrderId("partner_order_id")//레슨 id
-                    .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
-                    .pgToken(request.getPgToken())//pg_token
-                    .build();
-
-            return requestApproveToKakao(kakaopayApproveRequestDTO);
+        lessonInfoRepository.save(tmpLessonInfo);
+        for (StudentInfoDTO studentInfoDTO : paymentCache.getStudentInfos()) {
+            StudentInfo tmpStudentInfo = StudentInfo.toStudentInfoForPayment(tmpLessonInfo, studentInfoDTO);
+            studentInfoRepository.save(tmpStudentInfo);
         }
-        return null;
+
+        LessonPaymentInfo tmpLessonPaymentInfo = LessonPaymentInfo.builder()
+                .lessonId(tmpLesson.getLessonId())
+                .lesson(tmpLesson)
+                .basicFee(paymentCache.getLessonPaymentInfo().getBasicFee())
+                .designatedFee(paymentCache.getLessonPaymentInfo().getDesignatedFee())
+                .levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee())
+                .peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee())
+                .build();
+        lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
+
+        Payment tmpPayment = Payment.builder()
+                .LessonPaymentInfo(tmpLessonPaymentInfo)
+                .paymentStatus(0)
+                .totalAmount(tmpLessonPaymentInfo.getBasicFee()
+                        + tmpLessonPaymentInfo.getDesignatedFee()
+                        + tmpLessonPaymentInfo.getLevelOptionFee()
+                        + tmpLessonPaymentInfo.getPeopleOptionFee()
+                )
+                .chargeId(0)// 사용자 0? 100?
+                .paymentDate(LocalDate.now()).build();
+        paymentRepository.save(tmpPayment);
+
+        // 이 정보는 굳이 내보내야하나?
+        KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
+                .tid(request.getTid())
+                .partnerOrderId("partner_order_id")//레슨 id
+                .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
+                .pgToken(request.getPgToken())//pg_token
+                .build();
+
+        // 강습 가능여부 판단 후 캐싱하는 메서드
+        if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), new ReserveScheduleVO(paymentCache))) {
+            throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
+        }
+        return requestApproveToKakao(kakaopayApproveRequestDTO);
     }
 
     //카카오 페이에 보내는 준비 요청 메소드

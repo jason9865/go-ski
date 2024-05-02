@@ -7,6 +7,7 @@ import com.go.ski.payment.core.model.LessonPaymentInfo;
 import com.go.ski.payment.core.model.StudentInfo;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
+import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.Instructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class ReserveScheduleVO extends ReserveInfoVO {
     private String resortName;
     private List<StudentInfoDTO> studentInfoDTOs;
     private String representativeName;
+    private String requestComplain;
     private Boolean isDesignated;
     @Setter
     private Integer instructorId;
@@ -58,5 +60,14 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         representativeName = lesson.getRepresentativeName();
         isDesignated = lessonPaymentInfo.getDesignatedFee() != null;
         instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
+    }
+
+    public ReserveScheduleVO(CreateScheduleRequestDTO createScheduleRequestDTO) {
+        super(createScheduleRequestDTO);
+        teamId = createScheduleRequestDTO.getTeamId();
+        instructorId = createScheduleRequestDTO.getInstructorId();
+        isDesignated = instructorId != null;
+        representativeName = createScheduleRequestDTO.getUserName();
+        requestComplain = createScheduleRequestDTO.getContent();
     }
 }
