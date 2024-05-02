@@ -1,12 +1,34 @@
 package com.go.ski.payment.core.service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import com.go.ski.common.exception.ApiExceptionFactory;
+import com.go.ski.payment.core.model.*;
+import com.go.ski.payment.core.repository.*;
+import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
+import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
+import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.payment.support.dto.response.*;
+import com.go.ski.payment.support.dto.util.StudentInfoDTO;
+import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
+import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
+import com.go.ski.redis.dto.PaymentCacheDto;
+import com.go.ski.redis.repository.PaymentCacheRepository;
+import com.go.ski.schedule.core.service.ScheduleService;
+import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
+import com.go.ski.schedule.support.vo.ReserveScheduleVO;
+import com.go.ski.team.core.model.Team;
+import com.go.ski.team.core.repository.TeamRepository;
+import com.go.ski.team.support.dto.TeamResponseDTO;
+import com.go.ski.user.core.model.Instructor;
+import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.InstructorRepository;
+import com.go.ski.user.core.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,45 +37,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.go.ski.payment.core.model.Lesson;
-import com.go.ski.payment.core.model.LessonInfo;
-import com.go.ski.payment.core.model.LessonPaymentInfo;
-import com.go.ski.payment.core.model.Payment;
-import com.go.ski.payment.core.model.StudentInfo;
-import com.go.ski.payment.core.repository.ChargeRepository;
-import com.go.ski.payment.core.repository.LessonInfoRepository;
-import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
-import com.go.ski.payment.core.repository.LessonRepository;
-import com.go.ski.payment.core.repository.PaymentRepository;
-import com.go.ski.payment.core.repository.SettlementRepository;
-import com.go.ski.payment.core.repository.StudentInfoRepository;
-import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
-import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
-import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
-import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
-import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
-import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
-import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
-import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
-import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
-import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
-import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
-import com.go.ski.payment.support.dto.util.StudentInfoDTO;
-import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
-import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
-import com.go.ski.redis.dto.PaymentCacheDto;
-import com.go.ski.redis.repository.PaymentCacheRepository;
-import com.go.ski.team.core.model.Team;
-import com.go.ski.team.core.repository.TeamRepository;
-import com.go.ski.team.support.dto.TeamResponseDTO;
-import com.go.ski.user.core.model.Instructor;
-import com.go.ski.user.core.model.User;
-import com.go.ski.user.core.repository.InstructorRepository;
-
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -77,7 +67,9 @@ public class PayService {
 	public String failUrl;
 	private String HOST = "https://open-api.kakaopay.com/online/v1/payment";
 	private final RestTemplate restTemplate = new RestTemplate();
+	private final ScheduleService scheduleService;
 
+	private final UserRepository userRepository;
 	private final TeamRepository teamRepository;
 	private final InstructorRepository instructorRepository;
 	private final LessonRepository lessonRepository;
@@ -88,28 +80,28 @@ public class PayService {
 	private final PaymentCacheRepository paymentCacheRepository;
 	private final SettlementRepository settlementRepository;
 	private final ChargeRepository chargeRepository;
-
 	//카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
 	public HttpHeaders getHeader(String mode) {
 		HttpHeaders headers = new HttpHeaders();
 
-		if(mode.equals("test")) headers.add("Authorization", "SECRET_KEY " + secretKeyDev);
+		if (mode.equals("test")) headers.add("Authorization", "SECRET_KEY " + secretKeyDev);
 		else headers.add("Authorization", "SECRET_KEY " + secretKey);
 
 		headers.add("Content-type", "application/json");
 
 		return headers;
 	}
+
 	// 사용자의 요청으로 생성되기 때문에 isOwn이 그냥 자체 서비스임 HttpServletRequest
 	@Transactional
 	public KakaopayPrepareResponseDTO getPrepareResponse(
 		HttpServletRequest httpServletRequest,
 		ReserveLessonPaymentRequestDTO request) {
 		//예약자
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 		Team team = teamRepository.findById(request.getTeamId()).orElseThrow();
 		Instructor instructor;
-		if(request.getInstId()!=null) instructor = instructorRepository.findById(request.getInstId()).get();
+		if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).get();
 		else instructor = null;
 
 		int size = request.getStudentInfo().size();
@@ -124,7 +116,7 @@ public class PayService {
 		Integer levelOptionFee = request.getLevelOptionFee();
 
 		LessonPaymentInfo lessonPaymentInfo = LessonPaymentInfo
-			.toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee, request.getDuration());
+			.toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee);
 		Integer totalFee = basicFee + designatedFee + peopleOptionFee + levelOptionFee;
 		String itemName = team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 외 " + size + "명";
 
@@ -152,7 +144,7 @@ public class PayService {
 		HttpServletRequest httpServletRequest,
 		ApprovePaymentRequestDTO request) {
 
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 
 		PaymentCacheDto paymentCache = paymentCacheRepository
 			.findById(request.getTid())
@@ -186,13 +178,14 @@ public class PayService {
 		lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
 
 		Payment tmpPayment = Payment.builder()
-			.LessonPaymentInfo(tmpLessonPaymentInfo)
+			.lessonPaymentInfo(tmpLessonPaymentInfo)
 			.totalAmount(tmpLessonPaymentInfo.getBasicFee()
 				+ tmpLessonPaymentInfo.getDesignatedFee()
 				+ tmpLessonPaymentInfo.getLevelOptionFee()
 				+ tmpLessonPaymentInfo.getPeopleOptionFee()
 			)
 			.chargeId(0)// 사용자 0? 100?
+			.tid(paymentCache.getTid())
 			.paymentDate(LocalDate.now()).build();
 		paymentRepository.save(tmpPayment);
 
@@ -204,6 +197,10 @@ public class PayService {
 			.pgToken(request.getPgToken())//pg_token
 			.build();
 
+		// 강습 가능여부 판단 후 캐싱하는 메서드
+		if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), new ReserveScheduleVO(paymentCache))) {
+			throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
+		}
 		return requestApproveToKakao(kakaopayApproveRequestDTO);
 	}
 
@@ -213,12 +210,13 @@ public class PayService {
 		CancelPaymentRequestDTO request) {
 		//예약자
 		User user = (User)httpServletRequest.getAttribute("user");
+
 		//lessonId를 받았음
 		//lesson이 없으면 에러 반환
+		Lesson lesson = lessonRepository.findById(request.getLessonId()).orElseThrow();
 		LessonInfo lessonInfo = lessonInfoRepository.findById(request.getLessonId()).orElseThrow();
-
-		Payment payment = paymentRepository.findByLessonPaymentInfoLessonId(request.getLessonId());
 		LocalDate reservationDate = lessonInfo.getLessonDate();
+		Payment payment = paymentRepository.findByLessonPaymentInfoLessonId(request.getLessonId());
 
 		int compareResult = reservationDate.compareTo(LocalDate.now());
 		// 예약일이 지금보다 뒤에 있으면 취소 가능
@@ -231,16 +229,24 @@ public class PayService {
 			// 날짜  확인
 			// 예약 후 취소시 : 전액 환불
 			if(dayDiff > 7) chargeId = 1;
-			// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
+				// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
 			else  chargeId = 2;
 			// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
-			payment = Payment.builder()
-				.chargeId(chargeId)
-				.build();
+			payment.setChargeId(chargeId);
+			paymentRepository.save(payment);
+
+			Charge charge = chargeRepository.findById(chargeId).orElseThrow();
+			int studentChargeRate = charge.getStudentChargeRate() / 100;
+			int ownerChargeRate = charge.getOwnerChargeRate() / 100;
 
 			//이걸로 결제 취소 시켜줘야함
-			int payback = payment.getTotalAmount() * chargeRepository.findById(chargeId).get().getStudentChargeRate() / 100;
+			int payback = payment.getTotalAmount() * studentChargeRate;
+			int settlementAmount = payment.getTotalAmount() * ownerChargeRate;
+			//강의 상태 강의 취소로 변경
+			lessonInfo.setLessonStatus(3);
+			lessonInfoRepository.save(lessonInfo);
 
+			// 여기서 카카오 페이 결제 취소 API 보냄
 			KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
 				//tid 그대로 입력
 				.tid(payment.getTid())
@@ -248,17 +254,25 @@ public class PayService {
 				.cancelTaxFreeAmount(0)
 				.build();
 
-			//강의 상태 강의 취소로 변경
-			lessonInfo = LessonInfo.builder()
-				.lessonStatus(3)
-				.build();
 			//정산 테이블에 추가
+			int ownerId = lesson.getTeam().getUser().getUserId();
+			User owner = userRepository.findById(ownerId).orElseThrow();
+			//사장이 없으면 Exception
+			Integer lastBalance = settlementRepository.findRecentBalance(ownerId);
 
+			Settlement settlement = Settlement.builder()
+				.settlementAmount(settlementAmount)
+				.balance(lastBalance + settlementAmount)
+				.depositStatus(0)
+				.settlementDate(LocalDateTime.now())
+				.user(owner)
+				.build();
 
+			settlementRepository.save(settlement);
 			// 여기서는 스케줄 없애기
 
 
-			// 여기서 카카오 페이 결제 취소 API 보냄
+
 			return requestCancelToKakao(kakaopayCancelRequestDTO);
 		}
 		else {
@@ -313,59 +327,61 @@ public class PayService {
 		return responseEntity.getBody();
 	}
 
-	@Transactional
 	public KakaopayCancelResponseDTO requestCancelToKakao(KakaopayCancelRequestDTO request) {
-		//헤더 설정 추후에 서비스 모드로 변경
 		HttpHeaders headers = getHeader("test");
-
 		Map<String, String> params = new HashMap<>();
 		params.put("cid", testId);
 		params.put("tid", request.getTid());
 		params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
 		params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
 
+		log.info("params : {}", params);
+
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
 		ResponseEntity<KakaopayCancelResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/cancel", requestEntity, KakaopayCancelResponseDTO.class);
+		log.info("data : {}", responseEntity);
 
 		return responseEntity.getBody();
 	}
 
 	@Transactional
 	public List<UserPaymentHistoryResponseDTO> getUserPaymentHistories(HttpServletRequest httpServletRequest) {
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 
 		return lessonRepository.findStudentPaymentHistories(user.getUserId());
 	}
 
 	@Transactional
 	public List<OwnerPaymentHistoryResponseDTO> getOwnerPaymentHistories(HttpServletRequest httpServletRequest) {
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
 		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
 		//exception 만들기
-		if(dummy.isEmpty()) throw new IllegalArgumentException("조회할 수 없습니다.");
+		if (dummy.isEmpty()) throw new IllegalArgumentException("조회할 수 없습니다.");
 		return lessonRepository.findOwnerPaymentHistories(user.getUserId());
 	}
+
 	@Transactional
 	public List<OwnerPaymentHistoryResponseDTO> getTeamPaymentHistories(HttpServletRequest httpServletRequest, Integer teamId) {
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 		boolean b = false;
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
 		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
-		for(int id = 0; id < dummy.size(); id++) {
-			if(Objects.equals(dummy.get(id).getTeamId(), teamId)) b = true;
+		for (int id = 0; id < dummy.size(); id++) {
+			if (Objects.equals(dummy.get(id).getTeamId(), teamId)) b = true;
 		}
 		//exception 만들기
-		if(!b) throw new IllegalArgumentException("조회할 수 없습니다.");
+		if (!b) throw new IllegalArgumentException("조회할 수 없습니다.");
 
 		return lessonRepository.findTeamPaymentHistories(teamId);
 	}
+
 	// 그 동안의 출금 내역을 조회
 	@Transactional
 	public List<WithdrawalResponseDTO> getWithdrawalList(HttpServletRequest httpServletRequest) {
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 		return settlementRepository.findWithrawalList(user.getUserId());
 	}
 
@@ -376,16 +392,16 @@ public class PayService {
 	// 이거는 뭈쓸모가 맞다
 	@Transactional
 	public Integer getBalance(HttpServletRequest httpServletRequest) {
-		User user = (User)httpServletRequest.getAttribute("user");
+		User user = (User) httpServletRequest.getAttribute("user");
 
 		int balance = 0;
 		List<TotalPaymentDTO> totalPayments = paymentRepository.findTotalPayment(user.getUserId());
 		List<TotalSettlementDTO> totalSettlements = settlementRepository.findBySettlements(user.getUserId());
 
-		for(TotalPaymentDTO tmp : totalPayments) {
+		for (TotalPaymentDTO tmp : totalPayments) {
 			balance += tmp.getChargeRate() * tmp.getTotalAmount() / 100;
 		}
-		for(TotalSettlementDTO tmp : totalSettlements) {
+		for (TotalSettlementDTO tmp : totalSettlements) {
 			balance -= tmp.getSettlementAmount();
 		}
 		// 잔액 total(현재 기준 예약 날짜 지난것들)

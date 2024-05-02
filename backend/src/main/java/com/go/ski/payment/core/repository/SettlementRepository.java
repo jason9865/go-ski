@@ -12,7 +12,7 @@ import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
 public interface SettlementRepository extends JpaRepository<Settlement, Integer> {
 
 	@Query("SELECT new com.go.ski.payment.support.dto.response.WithdrawalResponseDTO ( "
-		+ "s.settlementAmount, s.bank, s.depositorName, s.accountNumber, s.balance, s.settlementDate "
+		+ "s.settlementAmount, s.balance, s.settlementDate "
 		+ ") "
 		+ "FROM Settlement s "
 		+ "WHERE s.user.userId = :userId ")
@@ -23,4 +23,14 @@ public interface SettlementRepository extends JpaRepository<Settlement, Integer>
 		+ "FROM Settlement s "
 		+ "WHERE s.user.userId = :userId " )
 	List<TotalSettlementDTO> findBySettlements (Integer userId);
+
+	Settlement findByUserUserId(Integer userId);
+
+	@Query("SELECT new com.go.ski.payment.support.dto.response.RecentSettlementRecordResponseDTO ( "
+		+ "s.balance )"
+		+ "FROM Settlement s "
+		+ "WHERE s.user.userId = :userId "
+		+ "ORDER BY s.settlementDate DESC, s.settlementId DESC "
+		+ "LIMIT 1 ")
+	Integer findRecentBalance(Integer userId);
 }
