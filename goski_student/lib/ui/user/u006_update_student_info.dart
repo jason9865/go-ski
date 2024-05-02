@@ -15,73 +15,41 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-// loginController, 추후에 refactoring
-class LoginController extends GetxController {
-  RxBool isLogin = false.obs;
-
-  void login() {
-    isLogin.value = true;
-    // Get.to(() => const Test());
-    logger.d("로그인 ${isLogin.value}");
-  }
-}
-
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class UpdateStudentInfoScreen extends StatefulWidget {
+  const UpdateStudentInfoScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<UpdateStudentInfoScreen> createState() =>
+      _UpdateStudentInfoScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  bool isBoss = false;
-  List<String> certificates = []; // 자격증을 렌더링할 리스트
-  // List<File> certificateImages = []; // 자격증 이미지 파일 리스트, 나중에 진짜 파일 가져올 때 사용
-  List<String> certificateImages = []; // 이미지 경로를 저장하는 리스트
-  String profileImage = "";
+class _UpdateStudentInfoScreenState extends State<UpdateStudentInfoScreen> {
+  String profileImage = "assets/images/person2.png";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: GoskiContainer(
-                onConfirm: () => Get.find<LoginController>().login(),
-                buttonName: "signup",
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: screenSizeController.getHeightByRatio(0.1),
-                    ),
-                    child: GoskiCard(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: screenSizeController.getHeightByRatio(0.05),
-                          horizontal:
-                              screenSizeController.getWidthByRatio(0.03),
-                        ),
-                        child: Column(
-                          children: [
-                            buildRegisterProfileImage(),
-                            const BuildInterval(),
-                            const BuildBasicInfo(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+    return GoskiContainer(
+      onConfirm: () => 0,
+      buttonName: "update",
+      child: SingleChildScrollView(
+        child: GoskiCard(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                buildRegisterProfilePhoto(),
+                const BuildInterval(),
+                const BuildBasicInfo(),
+                const BuildInterval(),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget buildRegisterProfileImage() {
+  Widget buildRegisterProfilePhoto() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -89,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           width: screenSizeController.getWidthByRatio(0.3),
           height: screenSizeController.getHeightByRatio(0.2),
           decoration: BoxDecoration(
-            border: Border.all(color: goskiLightGray, width: 1),
+            border: Border.all(color: goskiDarkGray, width: 1),
             borderRadius: BorderRadius.circular(15),
           ),
           child: ClipRRect(
@@ -108,8 +76,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               const Icon(Icons.photo_outlined),
               GoskiText(
-                text: tr("registerProfileImage"),
+                text: tr("updateProfileImage"),
                 size: goskiFontSmall,
+                isBold: true,
               ),
             ],
           ),
@@ -149,15 +118,12 @@ class BuildBasicInfo extends StatelessWidget {
             GoskiText(
               text: tr("gender"),
               size: goskiFontLarge,
+              isBold: true,
               isExpanded: true,
             ),
             GoskiSwitch(
-              items: [
-                tr('male'),
-                tr('female'),
-              ],
-              width: screenSizeController.getWidthByRatio(0.6),
-            ),
+                items: [tr('male'), tr('female')],
+                width: screenSizeController.getWidthByRatio(0.6)),
           ],
         ),
         const BuildInterval(),

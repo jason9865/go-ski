@@ -7,6 +7,7 @@ class GoskiSwitch extends StatefulWidget {
   final double width;
   final Function(int)? onChanged;
   final double size;
+  final Function(int)? onToggle;
 
   const GoskiSwitch({
     super.key,
@@ -14,6 +15,7 @@ class GoskiSwitch extends StatefulWidget {
     required this.width,
     this.onChanged,
     this.size = goskiFontMedium,
+    this.onToggle,
   });
 
   @override
@@ -45,7 +47,8 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
           return ChoiceChip(
             padding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
-            backgroundColor: selectedIndex == index ? goskiBlack : goskiWhite,
+            backgroundColor:
+                selectedIndex == index ? goskiButtonBlack : goskiWhite,
             label: Container(
               width: chipWidth,
               alignment: Alignment.center,
@@ -57,16 +60,33 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
               ),
             ),
             selected: selectedIndex == index,
-            onSelected: (_) => _handleSelection(index),
-            selectedColor: goskiBlack,
-            showCheckmark: false,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(index == 0 ? 8 : 0),
-                right:
-                    Radius.circular(index == widget.items.length - 1 ? 8 : 0),
-              ),
-            ),
+            onSelected: (bool selected) {
+              setState(() {
+                selectedIndex = selected ? index : selectedIndex;
+                if (widget.onToggle != null) {
+                  widget.onToggle!(selectedIndex);
+                }
+              });
+            },
+            selectedColor: goskiButtonBlack,
+            showCheckmark: false, // 선택시 체크 표시 비활성화
+            shape: index == 0
+                ? const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                  )
+                : index == widget.items.length - 1
+                    ? const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      )
+                    : const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
           );
         }),
       ),
