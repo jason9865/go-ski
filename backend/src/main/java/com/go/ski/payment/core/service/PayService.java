@@ -1,12 +1,10 @@
 package com.go.ski.payment.core.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.payment.core.model.*;
 import com.go.ski.payment.core.repository.*;
-import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
-import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
-import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
-import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.*;
 import com.go.ski.payment.support.dto.response.*;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
@@ -15,13 +13,15 @@ import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.redis.repository.PaymentCacheRepository;
 import com.go.ski.schedule.core.service.ScheduleService;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
-import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.dto.TeamResponseDTO;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
+import com.go.ski.user.core.repository.UserRepository;
+import io.codef.api.EasyCodef;
+import io.codef.api.EasyCodefServiceType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +62,17 @@ public class PayService {
     public String cancelUrl;
     @Value("${pay.fail_url}")
     public String failUrl;
+    @Value("${codef.key}")
+    private String codefKey;
+    @Value("${codef.demo.Client.id}")
+    private String codefId;
+    @Value("${codef.demo.Client.Secret}")
+    private String codefSecret;
     private String HOST = "https://open-api.kakaopay.com/online/v1/payment";
     private final RestTemplate restTemplate = new RestTemplate();
     private final ScheduleService scheduleService;
 
+    private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final InstructorRepository instructorRepository;
     private final LessonRepository lessonRepository;
@@ -72,6 +82,7 @@ public class PayService {
     private final PaymentRepository paymentRepository;
     private final PaymentCacheRepository paymentCacheRepository;
     private final SettlementRepository settlementRepository;
+    private final ChargeRepository chargeRepository;
 
     //카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
     public HttpHeaders getHeader(String mode) {
@@ -94,7 +105,7 @@ public class PayService {
         User user = (User) httpServletRequest.getAttribute("user");
         Team team = teamRepository.findById(request.getTeamId()).orElseThrow();
         Instructor instructor;
-        if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).get();
+        if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).orElseThrow();
         else instructor = null;
 
         int size = request.getStudentInfo().size();
@@ -109,7 +120,7 @@ public class PayService {
         Integer levelOptionFee = request.getLevelOptionFee();
 
         LessonPaymentInfo lessonPaymentInfo = LessonPaymentInfo
-                .toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee, request.getDuration());
+                .toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee);
         Integer totalFee = basicFee + designatedFee + peopleOptionFee + levelOptionFee;
         String itemName = team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 외 " + size + "명";
 
@@ -171,7 +182,7 @@ public class PayService {
         lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
 
         Payment tmpPayment = Payment.builder()
-                .LessonPaymentInfo(tmpLessonPaymentInfo)
+                .lessonPaymentInfo(tmpLessonPaymentInfo)
                 .totalAmount(tmpLessonPaymentInfo.getBasicFee()
                         + tmpLessonPaymentInfo.getDesignatedFee()
                         + tmpLessonPaymentInfo.getLevelOptionFee()
@@ -185,7 +196,7 @@ public class PayService {
         // 이 정보는 굳이 내보내야하나?
         KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
                 .tid(request.getTid())
-                .partnerOrderId("partner_order_id")//레슨 id
+                .partnerOrderId("partner_order_id")//뭐 넣을지 고민하기
                 .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
                 .pgToken(request.getPgToken())//pg_token
                 .build();
@@ -195,6 +206,79 @@ public class PayService {
             throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
         }
         return requestApproveToKakao(kakaopayApproveRequestDTO);
+    }
+
+    @Transactional
+    public KakaopayCancelResponseDTO getCancelResponse(
+            CancelPaymentRequestDTO request) {
+
+        //lessonId를 받았음
+        //lesson이 없으면 에러 반환
+        Lesson lesson = lessonRepository.findById(request.getLessonId()).orElseThrow();
+        LessonInfo lessonInfo = lessonInfoRepository.findById(request.getLessonId()).orElseThrow();
+        LocalDate reservationDate = lessonInfo.getLessonDate();
+        Payment payment = paymentRepository.findByLessonPaymentInfoLessonId(request.getLessonId());
+
+        int compareResult = reservationDate.compareTo(LocalDate.now());
+        // 예약일이 지금보다 뒤에 있으면 취소 가능
+        // 반환 금액과 chargeId 변경해주기
+        long dayDiff = ChronoUnit.DAYS.between(reservationDate, LocalDate.now());
+        int chargeId;
+
+        if (compareResult > 0 && dayDiff > 2) {
+            // 돈을 바로 송금 해야함
+            // 날짜  확인
+            // 예약 후 취소시 : 전액 환불
+            if (dayDiff > 7) chargeId = 1;
+                // 이용일 7일 이전 취소 시 : 예약금의 50% 환불
+            else chargeId = 2;
+            // 이용일 3일 이전 취소 시 : 예약금의 30% 환불
+            payment.setChargeId(chargeId);
+            paymentRepository.save(payment);
+
+            Charge charge = chargeRepository.findById(chargeId).orElseThrow();
+            int studentChargeRate = charge.getStudentChargeRate() / 100;
+            int ownerChargeRate = charge.getOwnerChargeRate() / 100;
+
+            //이걸로 결제 취소 시켜줘야함
+            int payback = payment.getTotalAmount() * studentChargeRate;
+            int settlementAmount = payment.getTotalAmount() * ownerChargeRate;
+            //강의 상태 강의 취소(2)로 변경
+            lessonInfo.setLessonStatus(2);
+            lessonInfoRepository.save(lessonInfo);
+
+            // 여기서 카카오 페이 결제 취소 API 보냄
+            KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
+                    //tid 그대로 입력
+                    .tid(payment.getTid())
+                    .cancelAmount(payback)
+                    .cancelTaxFreeAmount(0)
+                    .build();
+
+            //정산 테이블에 추가
+            int ownerId = lesson.getTeam().getUser().getUserId();
+            User owner = userRepository.findById(ownerId).orElseThrow();
+            //사장이 없으면 Exception
+            Integer lastBalance = settlementRepository.findRecentBalance(ownerId);
+
+            Settlement settlement = Settlement.builder()
+                    .settlementAmount(settlementAmount)
+                    .balance(lastBalance + settlementAmount)
+                    .depositStatus(0)
+                    .settlementDate(LocalDateTime.now())
+                    .user(owner)
+                    .build();
+
+            settlementRepository.save(settlement);
+            // 여기서는 스케줄 없애기
+            return requestCancelToKakao(kakaopayCancelRequestDTO);
+        } else {
+            // 이용일 2일 이전 취소 시 : 환불이 불가
+            // Exception 보내기
+            // 잘못된 변수 or 부적절한 요청
+            // 알아서 return
+            throw new IllegalArgumentException("잘못된 변수 or 부적절한 요청");
+        }
     }
 
     //카카오 페이에 보내는 준비 요청 메소드
@@ -240,6 +324,23 @@ public class PayService {
         return responseEntity.getBody();
     }
 
+    public KakaopayCancelResponseDTO requestCancelToKakao(KakaopayCancelRequestDTO request) {
+        HttpHeaders headers = getHeader("test");
+        Map<String, String> params = new HashMap<>();
+        params.put("cid", testId);
+        params.put("tid", request.getTid());
+        params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
+        params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
+
+        log.info("params : {}", params);
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
+        ResponseEntity<KakaopayCancelResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/cancel", requestEntity, KakaopayCancelResponseDTO.class);
+        log.info("data : {}", responseEntity);
+
+        return responseEntity.getBody();
+    }
+
     @Transactional
     public List<UserPaymentHistoryResponseDTO> getUserPaymentHistories(HttpServletRequest httpServletRequest) {
         User user = (User) httpServletRequest.getAttribute("user");
@@ -281,7 +382,6 @@ public class PayService {
         return settlementRepository.findWithrawalList(user.getUserId());
     }
 
-
     // 가능 금액을 조회
     // 내 총 핀매금액 - 총 정산 금액
     // 정산 가능 금액 구했으면 알아서 다시 요청하지마라 프론트
@@ -304,5 +404,27 @@ public class PayService {
         // minus
         // 출금 내역 리스트
         return balance;
+    }
+
+    public VerifyAccountResponseDTO requestToCodeF(VerifyAccountRequestDTO verifyAccountRequestDTO) throws
+            UnsupportedEncodingException,
+            JsonProcessingException,
+            InterruptedException {
+        EasyCodef codef = new EasyCodef();
+        codef.setPublicKey(codefKey);
+        codef.setClientInfoForDemo(codefId, codefSecret);
+
+        // 안되면 codeF 데모버전 만드셈
+        verifyAccountRequestDTO.getBank();
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("bank", verifyAccountRequestDTO.getBank());
+        params.put("account", verifyAccountRequestDTO.getAccount());
+        params.put("identity", verifyAccountRequestDTO.getIdentity());
+
+        //데모버전임
+        //추후 변경 요망
+        String name = codef.requestProduct("https://development.codef.io/v1/kr/bank/a/account/holder-authentication", EasyCodefServiceType.DEMO, params);
+        boolean isValid = name.equals(verifyAccountRequestDTO.getName());
+        return VerifyAccountResponseDTO.builder().isValid(isValid).build();
     }
 }

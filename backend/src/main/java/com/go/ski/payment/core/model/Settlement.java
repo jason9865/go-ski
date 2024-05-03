@@ -1,6 +1,6 @@
 package com.go.ski.payment.core.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.go.ski.user.core.model.User;
 
@@ -33,7 +33,7 @@ public class Settlement {
 	@Column
 	private Integer balance;
 	@Column
-	private LocalDate settlementDate;
+	private LocalDateTime settlementDate;
 	@Column
 	private String payload;
 	@Column

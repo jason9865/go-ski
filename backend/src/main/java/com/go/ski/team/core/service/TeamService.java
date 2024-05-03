@@ -67,7 +67,9 @@ public class TeamService {
         log.info("팀 생성 성공 - teamId : {}", savedTeam.getTeamId());
 
         // 2. 팀 이미지 생성
-        saveTeamImages(request.getTeamImages(),savedTeam);
+        if (request.getTeamImages() != null) {
+            saveTeamImages(request.getTeamImages(),savedTeam);
+        }
 
         // 3. 중고급 옵션 생성
         LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);

@@ -6,6 +6,7 @@ import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
 import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
 import com.go.ski.feedback.support.dto.FeedbackResponseDTO;
 import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,9 +29,9 @@ public class FeedbackController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> writeFeedback(FeedbackCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> writeFeedback(HttpServletRequest request, FeedbackCreateRequestDTO requestDTO) {
         log.info("FeedbackController.writeFeedback");
-        feedbackService.createFeedback(requestDTO);
+        feedbackService.createFeedback(requestDTO,request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
 

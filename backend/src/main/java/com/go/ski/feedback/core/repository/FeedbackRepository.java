@@ -10,4 +10,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer> {
 
     Optional<Feedback> findByLesson(Lesson lesson);
 
+    boolean existsByLesson(Lesson lesson);
+
 }
