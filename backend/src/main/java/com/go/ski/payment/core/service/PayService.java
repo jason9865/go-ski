@@ -191,7 +191,7 @@ public class PayService {
                 .build();
 
         // 강습 가능여부 판단 후 캐싱하는 메서드
-        if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), new ReserveScheduleVO(paymentCache))) {
+        if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), paymentCache.getLessonInfo().getLessonDate())) {
             throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
         }
         return requestApproveToKakao(kakaopayApproveRequestDTO);

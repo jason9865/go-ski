@@ -48,7 +48,8 @@ public class Lesson {
                 .build();
     }
 
-    public Lesson(User user, Team team, Instructor instructor, String representativeName) {
+    public Lesson(Integer lessonId, User user, Team team, Instructor instructor, String representativeName) {
+        this.lessonId = lessonId;
         this.user = user;
         this.team = team;
         this.instructor = instructor;
