@@ -9,5 +9,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface LessonInfoRepository extends JpaRepository<LessonInfo, Integer> {
-    List<LessonInfo> findByLessonDateAndLessonTeam(LocalDate lessonDate, Team team);
+    List<LessonInfo> findByLessonDateAndLessonTeamAndLessonStatus(LocalDate lessonDate, Team team, Integer lessonStatus);
 }

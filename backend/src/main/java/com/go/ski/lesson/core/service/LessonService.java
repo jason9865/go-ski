@@ -12,7 +12,6 @@ import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
-import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.team.core.model.*;
@@ -174,7 +173,7 @@ public class LessonService {
     // 특정 팀에 예약을 배정할 수 있는 지 판단하는 메서드
     public ReserveNoviceResponseDTO assignLessonsToTeam(Team team, ReserveInfoVO reserveInfoVO) {
         // 강습 일자, 팀으로 이미 예약된 강습 리스트
-        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(reserveInfoVO.getLessonDate(), team);
+        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeamAndLessonStatus(reserveInfoVO.getLessonDate(), team, 0);
         // 해당 팀에 소속된 강사 리스트
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeamAndIsInviteAccepted(team, true);
 
@@ -297,8 +296,8 @@ public class LessonService {
 
     private int calculateLevelCost(Optional<LevelOption> optionalLevelOption, String level) {
         return optionalLevelOption.map(option -> switch (level) {
-            case "중급" -> option.getIntermediateFee();
-            case "고급" -> option.getAdvancedFee();
+            case "INTERMEDIATE" -> option.getIntermediateFee();
+            case "ADVANCED" -> option.getAdvancedFee();
             default -> 0;
         }).orElse(0);
     }

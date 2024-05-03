@@ -68,4 +68,14 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         representativeName = createScheduleRequestDTO.getUserName();
         requestComplain = createScheduleRequestDTO.getContent();
     }
+
+    public ReserveScheduleVO(Integer lessonId, CreateScheduleRequestDTO createScheduleRequestDTO) {
+        super(createScheduleRequestDTO);
+        this.lessonId = lessonId;
+        teamId = createScheduleRequestDTO.getTeamId();
+        instructorId = createScheduleRequestDTO.getInstructorId();
+        isDesignated = instructorId != null;
+        representativeName = createScheduleRequestDTO.getUserName();
+        requestComplain = createScheduleRequestDTO.getContent();
+    }
 }
