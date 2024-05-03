@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
@@ -8,6 +9,7 @@ import 'package:goski_student/test.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -15,7 +17,10 @@ Logger logger = Logger();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
+  await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
+  final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
+  KakaoSdk.init(nativeAppKey: kakaoApiKey);
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
@@ -26,8 +31,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  void getKeyHash() async {
+    print('======================================================');
+    print(await KakaoSdk.origin);
+    print('======================================================');
+  }
+
   @override
   Widget build(BuildContext context) {
+    getKeyHash();
+
     final LoginController loginController = Get.put(LoginController());
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,

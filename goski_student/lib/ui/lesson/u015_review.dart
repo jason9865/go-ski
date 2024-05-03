@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
@@ -109,6 +108,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           GoskiTextField(
                             hintText: tr("리뷰 내용을 입력하세요."),
                             maxLines: 2,
+                            onTextChange: (text) {
+                              // TODO: 로직 추가 필요
+                            },
                           ),
                           BuildInterval(),
                           GoskiText(

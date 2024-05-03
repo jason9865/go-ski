@@ -49,6 +49,9 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
             SizedBox(height: titlePadding),
             GoskiTextField(
               hintText: tr('titleHint'),
+              onTextChange: (text) {
+                // TODO: 로직 추가 필요
+              },
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -67,6 +70,9 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
               child: GoskiTextField(
                 hintText: tr('contentHint'),
                 maxLines: 10,
+                onTextChange: (text) {
+                  // TODO: 로직 추가 필요
+                },
               ),
             ),
             SizedBox(height: contentPadding),
