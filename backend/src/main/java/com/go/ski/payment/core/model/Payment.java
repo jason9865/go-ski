@@ -14,8 +14,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @NoArgsConstructor
@@ -28,7 +30,7 @@ public class Payment {
 	private String tid;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lesson_id")
-	private LessonPaymentInfo LessonPaymentInfo;// 1대 다 lesson_payment_info
+	private LessonPaymentInfo lessonPaymentInfo;// 1대 다 lesson_payment_info
 	@Column
 	private Integer totalAmount;
 	@Column
