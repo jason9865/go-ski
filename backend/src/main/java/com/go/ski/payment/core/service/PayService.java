@@ -455,4 +455,10 @@ public class PayService {
 		boolean isValid = name.equals(verifyAccountRequestDTO.getName());
 		return VerifyAccountResponseDTO.builder().isValid(isValid).build();
 	}
+
+	public boolean checkAuthorization(Integer lessonId, HttpServletRequest httpServletRequest) {
+		User user = (User) httpServletRequest.getAttribute("user");
+		Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
+		return user.equals(lesson.getUser());
+	}
 }
