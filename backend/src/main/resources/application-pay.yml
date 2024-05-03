@@ -7,3 +7,33 @@ pay:
   approval_url: ${APPROVAL_URL}
   fail_url: ${FAIL_URL}
   cancel_url: ${CANCEL_URL}
+
+bank-codes:
+  산업은행: 0020
+  기업은행: 0003
+  국민은행: 0004
+  수협은행: 0007
+  농협은행: 0011
+  우리은행: 0020
+  SC은행: 0023
+  씨티은행: 0027
+  대구은행: 0031
+  부산은행: 0032
+  광주은행: 0034
+  제주은행: 0035
+  전북은행: 0037
+  경남은행: 0039
+  새마을금고: 0045
+  신협은행: 0048
+  우체국: 0071
+  KEB하나은행: 0081
+  신한은행: 0088
+  K뱅크: 0089
+  토스뱅크: 0092
+
+codef:
+  key: ${CODEF_KEY}
+  demo:
+    client:
+      id: ${CODEF_CLIENT_ID}
+      secret: ${CODEF_CLIENT_SECRET}

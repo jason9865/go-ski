@@ -1,5 +1,6 @@
 package com.go.ski.payment.core.service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.payment.core.model.Charge;
 import com.go.ski.payment.core.model.Lesson;
@@ -37,11 +39,13 @@ import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.VerifyAccountRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.VerifyAccountResponseDTO;
 import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
@@ -59,6 +63,8 @@ import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
 
+import io.codef.api.EasyCodef;
+import io.codef.api.EasyCodefServiceType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +89,12 @@ public class PayService {
 	public String cancelUrl;
 	@Value("${pay.fail_url}")
 	public String failUrl;
+	@Value("${codef.key}")
+	private String codefKey;
+	@Value("${codef.demo.Client.id}")
+	private String codefId;
+	@Value("${codef.demo.Client.Secret}")
+	private String codefSecret;
 	private String HOST = "https://open-api.kakaopay.com/online/v1/payment";
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ScheduleService scheduleService;
@@ -98,6 +110,7 @@ public class PayService {
 	private final PaymentCacheRepository paymentCacheRepository;
 	private final SettlementRepository settlementRepository;
 	private final ChargeRepository chargeRepository;
+
 	//카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
 	public HttpHeaders getHeader(String mode) {
 		HttpHeaders headers = new HttpHeaders();
@@ -424,5 +437,27 @@ public class PayService {
 		// minus
 		// 출금 내역 리스트
 		return balance;
+	}
+
+	public VerifyAccountResponseDTO requestToCodeF(VerifyAccountRequestDTO verifyAccountRequestDTO) throws
+		UnsupportedEncodingException,
+		JsonProcessingException,
+		InterruptedException {
+		EasyCodef codef = new EasyCodef();
+		codef.setPublicKey(codefKey);
+		codef.setClientInfoForDemo(codefId, codefSecret);
+
+		// 안되면 codeF 데모버전 만드셈
+		verifyAccountRequestDTO.getBank();
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("bank", verifyAccountRequestDTO.getBank());
+		params.put("account", verifyAccountRequestDTO.getAccount());
+		params.put("identity", verifyAccountRequestDTO.getIdentity());
+
+		//데모버전임
+		//추후 변경 요망
+		String name = codef.requestProduct("https://development.codef.io/v1/kr/bank/a/account/holder-authentication", EasyCodefServiceType.DEMO, params);
+		boolean isValid = name.equals(verifyAccountRequestDTO.getName());
+		return VerifyAccountResponseDTO.builder().isValid(isValid).build();
 	}
 }
