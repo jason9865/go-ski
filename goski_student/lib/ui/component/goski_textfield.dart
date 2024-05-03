@@ -8,15 +8,17 @@ import '../../const/util/screen_size_controller.dart';
 import '../../const/util/text_formatter.dart';
 
 /// width를 0으로 입력시 expanded된 textField 생성 가능
-/// TODO. 입력받은 텍스트를 외부에서 가져다 사용할 수 있어야 됨
-class GoskiTextField extends StatefulWidget {
+/// textEditingController에는 TextEditingController() 사용하면 됨
+class GoskiTextField extends StatelessWidget {
   final double width;
   final bool canEdit, hasInnerPadding, isDigitOnly;
   final int? maxLines, minLines;
   final String text, hintText;
   final TextAlign textAlign;
+  final void Function(String) onTextChange;
+  final TextEditingController textEditingController = TextEditingController();
 
-  const GoskiTextField({
+  GoskiTextField({
     super.key,
     this.width = 0,
     this.canEdit = true,
@@ -27,20 +29,8 @@ class GoskiTextField extends StatefulWidget {
     this.hasInnerPadding = true,
     this.isDigitOnly = false,
     this.textAlign = TextAlign.start,
+    required this.onTextChange,
   });
-
-  @override
-  State<GoskiTextField> createState() => _GoskiTextFieldState();
-}
-
-class _GoskiTextFieldState extends State<GoskiTextField> {
-  final TextEditingController _textEditingController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController.text = widget.text;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,43 +38,39 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
     final padding = screenSizeController.getWidthByRatio(0.02);
 
     return Container(
-      width: widget.width == 0 ? double.infinity : widget.width,
+      width: width == 0 ? double.infinity : width,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          color: widget.canEdit ? goskiWhite : goskiLightGray,
+          color: canEdit ? goskiWhite : goskiLightGray,
           border: Border.all(width: 1, color: goskiDarkGray),
           borderRadius: BorderRadius.circular(10)),
       child: TextField(
-        textAlign: widget.textAlign,
-        readOnly: !widget.canEdit,
-        controller: _textEditingController,
-        onChanged: (text) {
-          setState(() {
-            _textEditingController.text = text;
-          });
-        },
+        textAlign: textAlign,
+        readOnly: !canEdit,
+        controller: textEditingController,
+        onChanged: onTextChange,
         decoration: InputDecoration(
-          hintText: widget.hintText,
+          hintText: hintText,
           hintStyle: const TextStyle(
               color: goskiDarkGray,
               fontSize: goskiFontMedium,
               fontWeight: FontWeight.w400),
           border: InputBorder.none,
           isDense: true,
-          contentPadding: EdgeInsets.all(widget.hasInnerPadding ? 5 : 0),
+          contentPadding: EdgeInsets.all(hasInnerPadding ? 5 : 0),
         ),
         style: const TextStyle(
             color: goskiBlack,
             fontSize: goskiFontMedium,
             fontWeight: FontWeight.w400),
         cursorColor: goskiBlack,
-        maxLines: widget.maxLines,
-        inputFormatters: widget.isDigitOnly ? [
+        maxLines: maxLines,
+        inputFormatters: isDigitOnly ? [
           FilteringTextInputFormatter.digitsOnly,
           TextFormatter(),
         ] : [],
-        keyboardType: widget.isDigitOnly ? TextInputType.number : TextInputType.text,
-        minLines: widget.minLines,
+        keyboardType: isDigitOnly ? TextInputType.number : TextInputType.text,
+        minLines: minLines,
       ),
     );
   }

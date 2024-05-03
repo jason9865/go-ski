@@ -30,6 +30,9 @@ class BasicInfoContainer extends StatelessWidget {
         GoskiTextField(
           width: screenSizeController.getWidthByRatio(0.6),
           hintText: tr(textField),
+          onTextChange: (text) {
+              // TODO: 로직 추가 필요
+          },
         ),
       ],
     );

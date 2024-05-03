@@ -309,6 +309,9 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
                       hasInnerPadding: false,
                       maxLines: 5,
                       minLines: 1,
+                      onTextChange: (text) {
+                        // TODO: 로직 추가 필요
+                      },
                     ),
                   ],
                 ),
