@@ -134,7 +134,7 @@ public class ScheduleService {
         // 해당 팀에 소속된 강사 리스트
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeamAndIsInviteAccepted(team, true);
         // 강습 일자, 팀으로 이미 예약된 강습 리스트
-        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(lessonDate, team);
+        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeamAndLessonStatus(lessonDate, team, 0);
         // lessonInfo를 ReserveScheduleVO로 변환
         List<ReserveScheduleVO> reserveScheduleVOs = new ArrayList<>();
         for (LessonInfo lessonInfo : lessonInfos) {
