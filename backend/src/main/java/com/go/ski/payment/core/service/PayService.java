@@ -1,15 +1,48 @@
 package com.go.ski.payment.core.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
 import com.go.ski.common.exception.ApiExceptionFactory;
-import com.go.ski.payment.core.model.*;
-import com.go.ski.payment.core.repository.*;
+import com.go.ski.payment.core.model.Charge;
+import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.model.LessonPaymentInfo;
+import com.go.ski.payment.core.model.Payment;
+import com.go.ski.payment.core.model.Settlement;
+import com.go.ski.payment.core.model.StudentInfo;
+import com.go.ski.payment.core.repository.ChargeRepository;
+import com.go.ski.payment.core.repository.LessonInfoRepository;
+import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
+import com.go.ski.payment.core.repository.LessonRepository;
+import com.go.ski.payment.core.repository.PaymentRepository;
+import com.go.ski.payment.core.repository.SettlementRepository;
+import com.go.ski.payment.core.repository.StudentInfoRepository;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
-import com.go.ski.payment.support.dto.response.*;
+import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
+import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
+import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.payment.support.dto.util.TotalPaymentDTO;
 import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
@@ -29,34 +62,6 @@ import com.go.ski.user.core.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -283,8 +288,6 @@ public class PayService {
 
 			settlementRepository.save(settlement);
 			// 여기서는 스케줄 없애기
-
-
 
 			return requestCancelToKakao(kakaopayCancelRequestDTO);
 		}
