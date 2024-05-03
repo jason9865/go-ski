@@ -91,9 +91,9 @@ public class PayService {
 	public String failUrl;
 	@Value("${codef.key}")
 	private String codefKey;
-	@Value("${codef.demo.Client.id}")
+	@Value("${codef.demo.client.id}")
 	private String codefId;
-	@Value("${codef.demo.Client.Secret}")
+	@Value("${codef.demo.client.secret}")
 	private String codefSecret;
 	private String HOST = "https://open-api.kakaopay.com/online/v1/payment";
 	private final RestTemplate restTemplate = new RestTemplate();
