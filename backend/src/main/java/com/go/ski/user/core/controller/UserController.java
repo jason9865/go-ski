@@ -9,7 +9,6 @@ import com.go.ski.user.support.dto.*;
 import com.go.ski.user.support.exception.UserExceptionEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/signup/user")
-    public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupUserRequestDTO signupUserRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> signupStudent(HttpServletResponse response, @ModelAttribute SignupUserRequestDTO signupUserRequestDTO) {
         log.info("교육생 회원가입 요청: {}", signupUserRequestDTO);
         if (!"STUDENT".equals(signupUserRequestDTO.getRole().toString()) && !"OWNER".equals(signupUserRequestDTO.getRole().toString())) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
@@ -62,19 +61,13 @@ public class UserController {
     }
 
     @PostMapping("/signup/inst")
-    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletRequest request, HttpServletResponse response, @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletResponse response, @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
         log.info("강사 회원가입 요청: {}", signupInstructorRequestDTO);
         if (!"INSTRUCTOR".equals(signupInstructorRequestDTO.getRole().toString())) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_LOGIN);
-        }
-
-        User domainUser = (User) session.getAttribute("user"); // 도메인만 있는 유저 객체
-        User user = userService.signupInstructor(domainUser, signupInstructorRequestDTO);
+        User user = userService.signupInstructor(signupInstructorRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);

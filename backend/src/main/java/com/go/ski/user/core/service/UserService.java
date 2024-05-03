@@ -70,15 +70,15 @@ public class UserService {
     }
 
     @Transactional
-    public User signupInstructor(User domainUser, SignupInstructorRequestDTO signupInstructorRequestDTO) {
+    public User signupInstructor(SignupInstructorRequestDTO signupInstructorRequestDTO) {
         User user = User.builder()
-                .domain(domainUser.getDomain())
+                .domain(new Domain(signupInstructorRequestDTO.getDomainUserKey(), OauthServerType.kakao))
                 .userName(signupInstructorRequestDTO.getUserName())
                 .birthDate(signupInstructorRequestDTO.getBirthDate())
                 .phoneNumber(signupInstructorRequestDTO.getPhoneNumber())
                 .gender(signupInstructorRequestDTO.getGender())
                 .role(signupInstructorRequestDTO.getRole())
-                .profileUrl(domainUser.getProfileUrl())
+                .profileUrl(signupInstructorRequestDTO.getProfileUrl())
                 .build();
 
         // 프로필 이미지 업로드 후 save
