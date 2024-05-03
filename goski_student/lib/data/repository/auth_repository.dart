@@ -10,7 +10,7 @@ class AuthRepository {
     return await authService.loginWithKakao();
   }
 
-  Future<bool> studentSignup(UserRequest user) async {
+  Future<bool> userSignup(UserRequest user) async {
     if (await authService.userSignUp(user)) {
       return true;
     }
