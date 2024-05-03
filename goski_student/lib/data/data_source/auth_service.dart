@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/enum/auth_status.dart';
+import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/parser.dart';
 import 'package:goski_student/data/model/user.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +32,7 @@ class AuthService extends GetxService {
 
       // 로그인 성공 후, 토큰을 안전하게 저장하고 서버에 전송
       await secureStorage.write(key: "isLoggedIn", value: "true");
-      logger.e('kakao accessToken : ${token.accessToken}');
+      logger.d('kakao accessToken : ${token.accessToken}');
       // await sendFCMTokenToServer(); // FCM 토큰 서버에 저장
       saveUserInfo(token.accessToken);
       return sendTokenToServer(token.accessToken); // 로그인 성공 반환
@@ -43,28 +45,44 @@ class AuthService extends GetxService {
   // 서버에 토큰을 전송하는 함수
   Future<AuthStatus> sendTokenToServer(String accessToken) async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/user/signin/kakao'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/user/signin/kakao',
+        options: Options(
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        ),
+        data: jsonEncode(<String, String>{
           'token': accessToken, // Kakao accessToken을 보낼 때만 'Bearer ' 생략
         }),
       );
+      // final response = await http.post(
+      //   Uri.parse('$baseUrl/user/signin/kakao'),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      //   body: jsonEncode(<String, String>{
+      //     'token': accessToken, // Kakao accessToken을 보낼 때만 'Bearer ' 생략
+      //   }),
+      // );
       if (response.statusCode == 200) {
         logger.d('Token successfully sent to the server');
+        logger.d("response: ${response.data["status"]}");
+        if (response.data["status"] == "success") {
+          return AuthStatus.already;
+        }
         if (response.headers['accessToken'] == null) {
           return AuthStatus.first;
         }
-        final String? serverAccessToken = response.headers['accessToken'];
-        final String? serverRefreshToken = response.headers['refreshToken'];
+        final String? serverAccessToken = response.headers.value['accessToken'];
+        final String? serverRefreshToken =
+            response.headers.value['refreshToken'];
 
         if (serverAccessToken != null && serverRefreshToken != null) {
           await secureStorage.write(
-              key: "accessToken", value: serverAccessToken);
+              key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
           await secureStorage.write(
-              key: "refreshToken", value: serverRefreshToken);
+              key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
 
           logger.d('New Tokens from server stored successfully');
           return AuthStatus.already;
@@ -139,7 +157,7 @@ class AuthService extends GetxService {
         logger.d("responseData : $response");
         return true;
       } else {
-        logger.e(response.statusCode);
+        logger.d("response.statusCode : ${response.statusCode}");
         logger.e("Failed to SignUp...");
       }
     } catch (e) {

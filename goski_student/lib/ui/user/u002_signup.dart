@@ -12,6 +12,7 @@ import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -56,7 +57,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   logger.d("로그 ${signupViewModel.user.value}");
                   if (signupViewModel.user.value.isValid()) {
                     logger.d("로그 : 유효한 요청");
-                    signupViewModel.userSignup(signupViewModel.user.value);
+                    signupViewModel
+                        .userSignup(signupViewModel.user.value)
+                        .then((value) => {
+                              if (value)
+                                {Get.offAll(() => StudentMainScreen())}
+                              else
+                                {Get.snackbar("회원 가입 실패", "잠시 후 다시 시도해주세요.")}
+                            });
                   }
                 },
                 buttonName: "signup",
