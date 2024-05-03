@@ -53,7 +53,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       children: [
                         GoskiText(
                             text: widget.resortName, size: goskiFontLarge),
-                        GoskiText(text: " - ", size: goskiFontLarge),
+                        const GoskiText(text: " - ", size: goskiFontLarge),
                         GoskiText(text: widget.teamName, size: goskiFontLarge),
                       ],
                     ),
@@ -91,6 +91,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     GoskiTextField(
                       hintText: tr('feedbackHelp'),
                       maxLines: 10,
+                      onTextChange: (text) => 0,
                     )
                   ],
                 ),

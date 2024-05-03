@@ -11,11 +11,13 @@ final screenSizeController = Get.find<ScreenSizeController>();
 class BasicInfoContainer extends StatelessWidget {
   final String text;
   final String textField;
+  final void Function(String) onTextChange;
 
   const BasicInfoContainer({
+    super.key,
     required this.text,
     required this.textField,
-    super.key,
+    required this.onTextChange,
   });
 
   @override
@@ -30,6 +32,7 @@ class BasicInfoContainer extends StatelessWidget {
         GoskiTextField(
           width: screenSizeController.getWidthByRatio(0.6),
           hintText: tr(textField),
+          onTextChange: onTextChange,
         ),
       ],
     );

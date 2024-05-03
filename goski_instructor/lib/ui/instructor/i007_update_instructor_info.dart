@@ -183,6 +183,7 @@ class _UpdateInstructorInfoScreenState
         GoskiTextField(
           hintText: tr('enterSelfIntroduction'),
           maxLines: 3,
+          onTextChange: (text) => 0,
         )
       ],
     );
@@ -222,6 +223,7 @@ class _UpdateInstructorInfoScreenState
                     width: screenSizeController.getWidthByRatio(0.6),
                     hintText: certificate,
                     canEdit: false,
+                    onTextChange: (text) => 0,
                   ),
                 ),
                 IconButton(
@@ -356,9 +358,10 @@ class BuildBasicInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "name",
           textField: "enterName",
+          onTextChange: (text) => 0,
         ),
         const BuildInterval(),
         Row(
@@ -375,14 +378,16 @@ class BuildBasicInfo extends StatelessWidget {
           ],
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "birthDate",
           textField: "enterBirthDate",
+          onTextChange: (text) => 0,
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "phoneNumber",
           textField: "enterPhoneNumber",
+          onTextChange: (text) => 0,
         ),
       ],
     );

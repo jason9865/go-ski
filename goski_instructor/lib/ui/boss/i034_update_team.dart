@@ -72,6 +72,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
                         width: screenSizeController.getWidthByRatio(0.6),
                         hintText: tr('팀 이름1'),
                         canEdit: false,
+                        onTextChange: (text) => 0,
                       ),
                     ],
                   ),
@@ -250,6 +251,7 @@ class _CreateTeamScreenState extends State<UpdateTeamScreen> {
         GoskiTextField(
           hintText: tr('enterTeamIntroduction'),
           maxLines: 3,
+          onTextChange: (text) => 0,
         )
       ],
     );

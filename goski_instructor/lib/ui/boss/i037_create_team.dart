@@ -54,9 +54,10 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
               children: [
                 buildRegisterTeamImage(),
                 const BuildInterval(),
-                const BasicInfoContainer(
+                BasicInfoContainer(
                   text: "teamName",
                   textField: "enterTeamName",
+                  onTextChange: (text) => 0,
                 ),
                 const BuildInterval(),
                 buildSelectSkiResort(),
@@ -214,6 +215,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
         GoskiTextField(
           hintText: tr('enterTeamIntroduction'),
           maxLines: 3,
+          onTextChange: (text) => 0,
         )
       ],
     );

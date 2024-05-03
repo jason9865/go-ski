@@ -1,20 +1,40 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:goski_instructor/const/text_theme.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/data/data_source/auth_service.dart';
+import 'package:goski_instructor/data/repository/auth_repository.dart';
 import 'package:goski_instructor/test.dart';
 // import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
 import 'package:goski_instructor/ui/common/i002_signup.dart';
 import 'package:goski_instructor/ui/component/goski_main_header.dart';
+import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
+import 'package:goski_instructor/view_model/login_view_model.dart';
+import 'package:goski_instructor/view_model/signup_view_model.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 // import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+
+void initDependencies() {
+  Get.lazyPut(() => AuthService());
+  Get.lazyPut(() => AuthRepository());
+  Get.lazyPut(() => LoginViewModel());
+  Get.lazyPut(() => SignupViewModel());
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
+  final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
+  KakaoSdk.init(nativeAppKey: kakaoApiKey);
+  initDependencies();
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
@@ -26,7 +46,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.put(LoginController());
+    FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+    // secureStorage.write(key: "isLoggedIn", value: "true");
+    secureStorage.delete(key: "isLoggedIn");
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -35,8 +57,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Jua',
         textTheme: AppTextTheme.lightTextTheme,
       ),
-      home: Builder(
-        builder: (context) {
+      home: FutureBuilder(
+        future: secureStorage.read(key: "isLoggedIn"),
+        builder: (context, snapshot) {
           final mediaQueryData = MediaQuery.of(context);
           final screenSizeController = Get.put(ScreenSizeController());
           screenSizeController.setScreenSize(
@@ -46,17 +69,11 @@ class MyApp extends StatelessWidget {
           logger.d(
               "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
 
-          return Obx(() {
-            if (loginController.isLogin.value) {
-              return const Scaffold(
-                appBar: GoskiMainHeader(),
-                // appBar: SubHeader(title: "페이지 이름"),
-                body: Test(),
-              );
-            } else {
-              return const LoginScreen();
-            }
-          });
+          if (snapshot.data == null) {
+            return const LoginScreen();
+          } else {
+            return const InstructorMainScreen();
+          }
         },
       ),
     );

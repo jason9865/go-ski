@@ -63,7 +63,14 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
                           title: tr('position'),
                           child: GoskiDropdown(
                             hint: tr('hintPosition'),
-                            list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
+                            list: const [
+                              '옵션1',
+                              '옵션2',
+                              '옵션3',
+                              '옵션4',
+                              '옵션5',
+                              '옵션6'
+                            ],
                           ),
                         ),
                         SizedBox(height: titlePadding),
@@ -105,6 +112,7 @@ class _EditTeamMemberInfoDialogState extends State<EditTeamMemberInfoDialog> {
             GoskiTextField(
               hintText: tr('hintSetLessonPrice'),
               isDigitOnly: true,
+              onTextChange: (text) => 0,
             ),
             SizedBox(
               height: contentPadding,
