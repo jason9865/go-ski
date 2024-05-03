@@ -2,9 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/enum/auth_status.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/data/data_source/auth_service.dart';
+import 'package:goski_instructor/data/repository/auth_repository.dart';
 import 'package:goski_instructor/ui/common/i002_signup.dart';
+import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
+import 'package:goski_instructor/view_model/login_view_model.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -12,7 +17,6 @@ final screenSizeController = Get.find<ScreenSizeController>();
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return const BackgroundContainer();
@@ -59,7 +63,7 @@ class LoginContent extends StatelessWidget {
             ),
           ).tr(),
           Expanded(child: Container()), // 로고와 버튼 사이에 공간
-          const KakaoLoginButton(),
+          KakaoLoginButton(),
           Expanded(child: Container()), // 버튼과 텍스트 사이에 공간
           const BottomText(),
           Container(
@@ -85,15 +89,27 @@ class LogoImage extends StatelessWidget {
 }
 
 class KakaoLoginButton extends StatelessWidget {
-  const KakaoLoginButton({super.key});
+  final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
+
+  KakaoLoginButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 로그인 로직 구현
-        // Get.find<LoginController>().login();
-        Get.to(() => const SignUpScreen());
+        loginViewModel.loginWithKakao().then((result) {
+          switch (result) {
+            case AuthStatus.already:
+              Get.offAll(() => const InstructorMainScreen());
+              break;
+            case AuthStatus.first:
+              Get.off(() => const SignUpScreen());
+              break;
+            case AuthStatus.error:
+              Get.snackbar("Login Failed", "Please try again.");
+              break;
+          }
+        });
       },
       child: Image.asset(
         "assets/images/kakao_login.png",

@@ -59,7 +59,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
         controller: _textEditingController,
         onChanged: (text) {
           setState(() {
-            _textEditingController.text = text;
+            // _textEditingController.text = text;
           });
         },
         decoration: InputDecoration(
@@ -78,11 +78,14 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
             fontWeight: FontWeight.w400),
         cursorColor: goskiBlack,
         maxLines: widget.maxLines,
-        inputFormatters: widget.isDigitOnly ? [
-          FilteringTextInputFormatter.digitsOnly,
-          TextFormatter(),
-        ] : [],
-        keyboardType: widget.isDigitOnly ? TextInputType.number : TextInputType.text,
+        inputFormatters: widget.isDigitOnly
+            ? [
+                FilteringTextInputFormatter.digitsOnly,
+                TextFormatter(),
+              ]
+            : [],
+        keyboardType:
+            widget.isDigitOnly ? TextInputType.number : TextInputType.text,
       ),
     );
   }

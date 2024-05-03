@@ -17,17 +17,6 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-// loginController, 추후에 refactoring
-class LoginController extends GetxController {
-  RxBool isLogin = false.obs;
-
-  void login() {
-    isLogin.value = true;
-    // Get.to(() => const Test());
-    logger.d("로그인 ${isLogin.value}");
-  }
-}
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -50,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: GoskiContainer(
-                onConfirm: () => Get.find<LoginController>().login(),
+                onConfirm: () => 0,
                 buttonName: "signup",
                 child: SingleChildScrollView(
                   child: GoskiCard(

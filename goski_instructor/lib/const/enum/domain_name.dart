@@ -1,6 +1,6 @@
 enum DomainName {
-  NAVER,
-  KAKAO,
+  naver,
+  kakao,
 }
 
 /*
