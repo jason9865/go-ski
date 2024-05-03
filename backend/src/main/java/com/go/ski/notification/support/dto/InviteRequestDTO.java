@@ -14,6 +14,5 @@ public class InviteRequestDTO {
     private Integer teamId;
     private Integer receiverId;
     private Integer notificationType;
-    private DeviceType deviceType;
 
 }
