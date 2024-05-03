@@ -16,6 +16,7 @@ import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.notification.support.EventPublisher;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.repository.LessonRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,21 +48,22 @@ public class FeedbackService {
     }
 
     @Transactional
-    public void createFeedback(FeedbackCreateRequestDTO request) {
+    public void createFeedback(FeedbackCreateRequestDTO feedbackCreateRequestDTO, HttpServletRequest request) {
+        String deviceType = request.getHeader("DeviceType");
 
-        Lesson lesson = getLesson(request.getLessonId());
+        Lesson lesson = getLesson(feedbackCreateRequestDTO.getLessonId());
 
         validateAlreadyExist(lesson);
 
         Feedback feedback = Feedback.builder()
-                .content(request.getContent())
+                .content(feedbackCreateRequestDTO.getContent())
                 .lesson(lesson)
                 .build()
                 ;
         
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        saveMediaFiles(request,savedFeedback);
-        eventPublisher.publish(request,lesson);
+        saveMediaFiles(feedbackCreateRequestDTO,savedFeedback);
+        eventPublisher.publish(feedbackCreateRequestDTO,lesson, deviceType);
     }
 
     @Transactional

@@ -33,12 +33,12 @@ public class EventPublisher {
     private final TeamInstructorRepository teamInstructorRepository;
     private final NotificationSettingRepository notificationSettingRepository;
 
-    public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl) {
+    public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
         log.info("알림 보내기 EventPublisher");
-        applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl));
+        applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl, deviceType));
     }
 
-    public void publish(InviteAcceptRequestDTO inviteAcceptRequestDTO, Team team, Instructor instructor) {
+    public void publish(InviteAcceptRequestDTO inviteAcceptRequestDTO, Team team, Instructor instructor, String deviceType) {
         List<Integer> userIds = new ArrayList<>(teamInstructorRepository.findByTeam(team)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_NOT_FOUND))
                 .stream()
@@ -46,25 +46,25 @@ public class EventPublisher {
                 .filter(id -> !Objects.equals(id, instructor.getInstructorId()))
                 .toList());
         userIds.add(team.getUser().getUserId()); // 사장 Id 추가
-        publishEvent(inviteAcceptRequestDTO,userIds,instructor);
+        publishEvent(inviteAcceptRequestDTO,userIds, instructor, deviceType);
     }
 
-    private void publishEvent(InviteAcceptRequestDTO inviteAcceptRequestDTO, List<Integer> userIds, Instructor instructor) {
+    private void publishEvent(InviteAcceptRequestDTO inviteAcceptRequestDTO, List<Integer> userIds, Instructor instructor, String deviceType) {
         userIds.forEach(
             userId -> applicationEventPublisher.publishEvent(
-                    NotificationEvent.of(inviteAcceptRequestDTO, userId, instructor)
+                    NotificationEvent.of(inviteAcceptRequestDTO, userId, instructor, deviceType)
             )
         );
     }
 
 
-    public void publish(InviteRequestDTO inviteRequestDTO, Team team) {
-        applicationEventPublisher.publishEvent(NotificationEvent.of(inviteRequestDTO, team));
+    public void publish(InviteRequestDTO inviteRequestDTO, Team team, String deviceType) {
+        applicationEventPublisher.publishEvent(NotificationEvent.of(inviteRequestDTO, team, deviceType));
 
     }
 
 
-    public void publish(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson) {
-        applicationEventPublisher.publishEvent(NotificationEvent.of(feedbackRequestDTO,lesson));
+    public void publish(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
+        applicationEventPublisher.publishEvent(NotificationEvent.of(feedbackRequestDTO,lesson, deviceType));
     }
 }

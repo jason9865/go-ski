@@ -29,34 +29,34 @@ public class NotificationEvent {
     private DeviceType deviceType;
 
 
-    public static NotificationEvent of(InviteAcceptRequestDTO requestDTO, Integer userId, Instructor instructor) {
+    public static NotificationEvent of(InviteAcceptRequestDTO requestDTO, Integer userId, Instructor instructor, String deviceType) {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.receiverId = userId;
         notificationEvent.title = instructor.getUser().getUserName() + " 강사가 팀에 초대되었습니다";
         notificationEvent.createdAt = CREATED_TIME;
         notificationEvent.notificationType = requestDTO.getNotificationType();
-        notificationEvent.deviceType = requestDTO.getDeviceType();
+        notificationEvent.deviceType = DeviceType.valueOf(deviceType);
         return notificationEvent;
     }
 
-    public static NotificationEvent of(InviteRequestDTO inviteRequestDTO, Team team) {
+    public static NotificationEvent of(InviteRequestDTO inviteRequestDTO, Team team, String deviceType) {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.receiverId = inviteRequestDTO.getReceiverId();
         notificationEvent.title = team.getTeamName() + "에서 팀 초대 요청이 왔습니다.";
         notificationEvent.content = team.getTeamId().toString();
         notificationEvent.createdAt = CREATED_TIME;
         notificationEvent.notificationType = inviteRequestDTO.getNotificationType();
-        notificationEvent.deviceType = inviteRequestDTO.getDeviceType();
+        notificationEvent.deviceType = DeviceType.valueOf(deviceType);
         return notificationEvent;
     }
 
-    public static NotificationEvent of(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson) {
+    public static NotificationEvent of(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.receiverId = lesson.getUser().getUserId();
         notificationEvent.title = lesson.getTeam().getTeamName() + " 강습에서 피드백이 등록되었습니다.";
         notificationEvent.createdAt = CREATED_TIME;
         notificationEvent.notificationType = feedbackRequestDTO.getNotificationType();
-        notificationEvent.deviceType = feedbackRequestDTO.getDeviceType();
+        notificationEvent.deviceType = DeviceType.valueOf(deviceType);
         return notificationEvent;
     }
 }
