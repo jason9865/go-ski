@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:goski_student/const/enum/auth_status.dart';
+import 'package:goski_student/data/repository/auth_repository.dart';
 
 class LoginViewModel extends GetxController {
   final AuthRepository authRepository = Get.find();
