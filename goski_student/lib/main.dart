@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
@@ -10,8 +11,10 @@ import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   await EasyLocalization.ensureInitialized();
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
@@ -22,6 +25,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
