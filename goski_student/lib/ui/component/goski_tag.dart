@@ -6,7 +6,7 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'goski_text.dart';
 
 // TODO. 라운드만 가지도록 변경
-class GoskiTag extends StatefulWidget {
+class GoskiTag extends StatelessWidget {
   final String text;
   final Color textColor,
       backgroundColor,
@@ -17,24 +17,18 @@ class GoskiTag extends StatefulWidget {
   final bool isSelected;
   final void Function(bool)? onClicked;
 
-  const GoskiTag(
-      {super.key,
-      required this.text,
-      required this.textColor,
-      required this.backgroundColor,
-      this.borderColor = Colors.transparent,
-      required this.selectedTextColor,
-      required this.selectedBackgroundColor,
-      required this.isSelected,
-      required this.hasBorder,
-      this.onClicked});
-
-  @override
-  State<GoskiTag> createState() => _GoskiTagState();
-}
-
-class _GoskiTagState extends State<GoskiTag> {
-  bool isSelected = false; // TODO. 추후에 삭제 필요, 대신 onClicked 사용
+  const GoskiTag({
+    super.key,
+    required this.text,
+    required this.textColor,
+    required this.backgroundColor,
+    this.borderColor = Colors.transparent,
+    required this.selectedTextColor,
+    required this.selectedBackgroundColor,
+    required this.isSelected,
+    required this.hasBorder,
+    this.onClicked,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +37,14 @@ class _GoskiTagState extends State<GoskiTag> {
 
     return ChoiceChip(
       label: GoskiText(
-        text: widget.text,
+        text: text,
         size: goskiFontSmall,
-        color: isSelected ? widget.selectedTextColor : widget.textColor,
+        color: isSelected ? selectedTextColor : textColor,
       ),
       selected: isSelected,
       onSelected: (selected) {
-        setState(() {
-          isSelected = selected;
-        });
-
-        if (widget.onClicked != null) {
-          setState(() {
-            widget.onClicked!(selected);
-          });
+        if (onClicked != null) {
+            onClicked!(selected);
         }
       },
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -64,10 +52,10 @@ class _GoskiTagState extends State<GoskiTag> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(500)),
       ),
-      backgroundColor: widget.backgroundColor,
-      selectedColor: widget.selectedBackgroundColor,
+      backgroundColor: backgroundColor,
+      selectedColor: selectedBackgroundColor,
       side: BorderSide(
-        color: isSelected ? Colors.transparent : widget.borderColor,
+        color: isSelected ? Colors.transparent : borderColor,
         width: 1,
       ),
       showCheckmark: false,

@@ -8,7 +8,7 @@ import '../../const/util/student_info_list.dart';
 import 'goski_text.dart';
 
 /// items로 name, isSelected 속성을 가진 리스트가 들어와야 됨
-class GoskiSelectGrid extends StatefulWidget {
+class GoskiSelectGrid extends StatelessWidget {
   final List<GridItem> items;
   final int rows;
   final void Function(int) onItemClicked;
@@ -21,52 +21,36 @@ class GoskiSelectGrid extends StatefulWidget {
   });
 
   @override
-  State<GoskiSelectGrid> createState() => _GoskiSelectGridState();
-}
-
-class _GoskiSelectGridState extends State<GoskiSelectGrid> {
-  @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final space = screenSizeController.getWidthByRatio(0.02);
 
-    return LayoutBuilder(
-        builder: (context, constraints) {
-          double itemWidth = (constraints.maxWidth - space) / 2;
-          double itemHeight = goskiFontMedium + screenSizeController.getWidthByRatio(0.03) * 2;
+    return LayoutBuilder(builder: (context, constraints) {
+      double itemWidth = (constraints.maxWidth - space) / 2;
+      double itemHeight =
+          goskiFontMedium + screenSizeController.getWidthByRatio(0.03) * 2;
 
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.rows,
-              mainAxisSpacing: space,
-              crossAxisSpacing: space,
-              childAspectRatio: itemWidth / itemHeight,
-            ),
-            itemCount: widget.items.length,
-            itemBuilder: (context, index) {
-              return GoskiSelectGridItem(
-                title: widget.items[index].name,
-                isSelected: widget.items[index].isSelected,
-                onItemClicked: () {
-                  setState(() {
-                    widget.onItemClicked(index);
-
-                    for (int i = 0; i < widget.items.length; i++) {
-                      if (index == i) {
-                        widget.items[i].isSelected = true;
-                      } else {
-                        widget.items[i].isSelected = false;
-                      }
-                    }
-                  });
-                },
-              );
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: rows,
+          mainAxisSpacing: space,
+          crossAxisSpacing: space,
+          childAspectRatio: itemWidth / itemHeight,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return GoskiSelectGridItem(
+            title: items[index].name,
+            isSelected: items[index].isSelected,
+            onItemClicked: () {
+              onItemClicked(index);
             },
           );
-        }
-    );
+        },
+      );
+    });
   }
 }
 

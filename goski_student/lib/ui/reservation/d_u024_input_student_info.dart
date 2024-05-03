@@ -40,6 +40,9 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             SizedBox(height: titlePadding),
             GoskiTextField(
               hintText: tr('hintName'),
+              onTextChange: (text) {
+                // TODO: 로직 추가 필요
+              },
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -109,6 +112,9 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             GoskiTextField(
               hintText: tr('hintFeetSize'),
               isDigitOnly: true,
+              onTextChange: (text) {
+                // TODO: 로직 추가 필요
+              },
             ),
             SizedBox(height: contentPadding * 2),
             Row(
