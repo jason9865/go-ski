@@ -84,10 +84,9 @@ public class PaymentController {
 
 	@PostMapping("/reserve/cancel")
 	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(
-		HttpServletRequest httpServletRequest,
 		@RequestBody CancelPaymentRequestDTO request) {
 
-		KakaopayCancelResponseDTO response = payService.getCancelResponse(httpServletRequest, request);
+		KakaopayCancelResponseDTO response = payService.getCancelResponse(request);
 		return ResponseEntity.ok().body(response);
 	}
 

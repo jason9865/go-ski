@@ -132,7 +132,7 @@ public class PayService {
 		User user = (User) httpServletRequest.getAttribute("user");
 		Team team = teamRepository.findById(request.getTeamId()).orElseThrow();
 		Instructor instructor;
-		if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).get();
+		if (request.getInstId() != null) instructor = instructorRepository.findById(request.getInstId()).orElseThrow();
 		else instructor = null;
 
         int size = request.getStudentInfo().size();
@@ -223,7 +223,7 @@ public class PayService {
         // 이 정보는 굳이 내보내야하나?
         KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
                 .tid(request.getTid())
-                .partnerOrderId("partner_order_id")//레슨 id
+                .partnerOrderId("partner_order_id")//뭐 넣을지 고민하기
                 .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
                 .pgToken(request.getPgToken())//pg_token
                 .build();
@@ -237,10 +237,7 @@ public class PayService {
 
 	@Transactional
 	public KakaopayCancelResponseDTO getCancelResponse(
-		HttpServletRequest httpServletRequest,
 		CancelPaymentRequestDTO request) {
-		//예약자
-		User user = (User)httpServletRequest.getAttribute("user");
 
 		//lessonId를 받았음
 		//lesson이 없으면 에러 반환
@@ -273,8 +270,8 @@ public class PayService {
 			//이걸로 결제 취소 시켜줘야함
 			int payback = payment.getTotalAmount() * studentChargeRate;
 			int settlementAmount = payment.getTotalAmount() * ownerChargeRate;
-			//강의 상태 강의 취소로 변경
-			lessonInfo.setLessonStatus(3);
+			//강의 상태 강의 취소(2)로 변경
+			lessonInfo.setLessonStatus(2);
 			lessonInfoRepository.save(lessonInfo);
 
 			// 여기서 카카오 페이 결제 취소 API 보냄
@@ -301,7 +298,6 @@ public class PayService {
 
 			settlementRepository.save(settlement);
 			// 여기서는 스케줄 없애기
-
 			return requestCancelToKakao(kakaopayCancelRequestDTO);
 		}
 		else {
@@ -413,7 +409,6 @@ public class PayService {
 		User user = (User) httpServletRequest.getAttribute("user");
 		return settlementRepository.findWithrawalList(user.getUserId());
 	}
-
 
 	// 가능 금액을 조회
 	// 내 총 핀매금액 - 총 정산 금액
