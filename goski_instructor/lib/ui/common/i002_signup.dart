@@ -1,15 +1,14 @@
-import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/const/enum/gender.dart';
-import 'package:goski_instructor/const/util/parser.dart';
-import 'package:goski_instructor/data/model/instructor.dart';
-import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
-import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/enum/gender.dart';
 import 'package:goski_instructor/const/font_size.dart';
+import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
 import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
+import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
@@ -44,10 +43,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: GoskiContainer(
-                onConfirm: isBoss
-                    ? () =>
-                        signupViewModel.ownerSignup(signupViewModel.owner.value)
-                    : () => 0,
+                onConfirm: () {
+                  print("로그 ${signupViewModel.user.value}");
+                  if (signupViewModel.user.value.isValid()) {
+                    print("로그 : 유효한 요청");
+                    if (signupViewModel.user.value.isOwner) {
+                      print("로그 : isOwner: true");
+                      signupViewModel.ownerSignup(signupViewModel.user.value);
+                    } else {
+                      print("로그 : isOwner: false");
+                      signupViewModel.instructorSignup(signupViewModel.user.value);
+                    }
+                  }
+                },
                 buttonName: "signup",
                 child: SingleChildScrollView(
                   child: GoskiCard(
@@ -61,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const BuildInterval(),
                           buildIsBossRow(),
                           const BuildInterval(),
-                          !isBoss
+                          !signupViewModel.user.value.isOwner
                               ? Column(
                                   children: [
                                     buildLessonCategory(),
@@ -179,10 +187,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           isExpanded: true,
         ),
         Checkbox(
-            value: isBoss,
+            value: signupViewModel.user.value.isOwner,
             onChanged: (newValue) {
               setState(() {
-                isBoss = newValue!;
+                signupViewModel.user.update((val) {
+                  val?.isOwner = newValue!;
+                });
               });
             }),
       ],
@@ -335,7 +345,7 @@ class BuildBasicInfo extends StatelessWidget {
           text: "name",
           textField: "enterName",
           onTextChange: (text) {
-            signupViewModel.owner.update((val) {
+            signupViewModel.user.update((val) {
               val?.userName = text;
             });
           },
@@ -355,7 +365,7 @@ class BuildBasicInfo extends StatelessWidget {
               ],
               width: screenSizeController.getWidthByRatio(0.6),
               onToggle: (index) {
-                signupViewModel.owner.update((val) {
+                signupViewModel.user.update((val) {
                   val?.gender = index == 0 ? Gender.MALE : Gender.FEMALE;
                 });
               },
@@ -367,7 +377,7 @@ class BuildBasicInfo extends StatelessWidget {
           text: "birthDate",
           textField: "enterBirthDate",
           onTextChange: (text) {
-            signupViewModel.owner.update((val) {
+            signupViewModel.user.update((val) {
               if (text.length == 8) {
                 val?.birthDate = stringToDateTime(text);
               }
@@ -379,7 +389,7 @@ class BuildBasicInfo extends StatelessWidget {
           text: "phoneNumber",
           textField: "enterPhoneNumber",
           onTextChange: (text) {
-            signupViewModel.owner.update((val) {
+            signupViewModel.user.update((val) {
               if (text.length == 11) {
                 val?.phoneNumber = text;
               }
