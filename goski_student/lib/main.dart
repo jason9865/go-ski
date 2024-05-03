@@ -5,20 +5,32 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/data/data_source/auth_service.dart';
+import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/test.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
+import 'package:goski_student/view_model/login_view_model.dart';
+import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+
+void initDependencies() {
+  Get.lazyPut(() => AuthService());
+  Get.lazyPut(() => AuthRepository());
+  Get.lazyPut(() => LoginViewModel());
+  Get.lazyPut(() => SignupViewModel());
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
   await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
+  initDependencies();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   runApp(EasyLocalization(

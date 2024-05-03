@@ -108,9 +108,10 @@ class BuildBasicInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "name",
           textField: "enterName",
+          onTextChange: (text) => 0,
         ),
         const BuildInterval(),
         Row(
@@ -127,14 +128,16 @@ class BuildBasicInfo extends StatelessWidget {
           ],
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "birthDate",
           textField: "enterBirthDate",
+          onTextChange: (text) => 0,
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "phoneNumber",
           textField: "enterPhoneNumber",
+          onTextChange: (text) => 0,
         ),
       ],
     );

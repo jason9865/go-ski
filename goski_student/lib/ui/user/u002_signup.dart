@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/enum/gender.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/const/util/parser.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/ui/component/goski_basic_info_container.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
@@ -10,10 +12,12 @@ import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+final SignupViewModel signupViewModel = Get.put(SignupViewModel());
 
 // loginController, 추후에 refactoring
 class LoginController extends GetxController {
@@ -48,7 +52,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: GoskiContainer(
-                onConfirm: () => Get.find<LoginController>().login(),
+                onConfirm: () {
+                  logger.d("로그 ${signupViewModel.user.value}");
+                  if (signupViewModel.user.value.isValid()) {
+                    logger.d("로그 : 유효한 요청");
+                    signupViewModel.userSignup(signupViewModel.user.value);
+                  }
+                },
                 buttonName: "signup",
                 child: SingleChildScrollView(
                   child: Padding(
@@ -139,9 +149,14 @@ class BuildBasicInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "name",
           textField: "enterName",
+          onTextChange: (text) {
+            signupViewModel.user.update((val) {
+              val?.userName = text;
+            });
+          },
         ),
         const BuildInterval(),
         Row(
@@ -157,18 +172,37 @@ class BuildBasicInfo extends StatelessWidget {
                 tr('female'),
               ],
               width: screenSizeController.getWidthByRatio(0.6),
+              onToggle: (index) {
+                signupViewModel.user.update((val) {
+                  val?.gender = index == 0 ? Gender.MALE : Gender.FEMALE;
+                });
+              },
             ),
           ],
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "birthDate",
           textField: "enterBirthDate",
+          onTextChange: (text) {
+            signupViewModel.user.update((val) {
+              if (text.length == 8) {
+                val?.birthDate = stringToDateTime(text);
+              }
+            });
+          },
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "phoneNumber",
           textField: "enterPhoneNumber",
+          onTextChange: (text) {
+            signupViewModel.user.update((val) {
+              if (text.length == 11) {
+                val?.phoneNumber = text;
+              }
+            });
+          },
         ),
       ],
     );
