@@ -75,10 +75,12 @@ class RegisterAccountScreen extends StatelessWidget {
                   const BuildInterval(),
                   GoskiTextField(
                     hintText: tr('enterAccountHolder'),
+                    onTextChange: (text) => 0,
                   ),
                   const BuildInterval(),
                   GoskiTextField(
                     hintText: tr('enterAccountNumber'),
+                    onTextChange: (text) => 0,
                   ),
                   const BuildInterval(),
                   Row(

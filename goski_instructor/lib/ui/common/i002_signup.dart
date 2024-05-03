@@ -1,4 +1,7 @@
 import 'package:goski_instructor/const/color.dart';
+import 'package:goski_instructor/const/enum/gender.dart';
+import 'package:goski_instructor/const/util/parser.dart';
+import 'package:goski_instructor/data/model/instructor.dart';
 import 'package:goski_instructor/ui/component/goski_basic_info_container.dart';
 import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,10 +15,12 @@ import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
+import 'package:goski_instructor/view_model/signup_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+final SignupViewModel signupViewModel = Get.put(SignupViewModel());
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -39,7 +44,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: GoskiContainer(
-                onConfirm: () => 0,
+                onConfirm: isBoss
+                    ? () =>
+                        signupViewModel.ownerSignup(signupViewModel.owner.value)
+                    : () => 0,
                 buttonName: "signup",
                 child: SingleChildScrollView(
                   child: GoskiCard(
@@ -214,6 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: screenSizeController.getWidthByRatio(0.6),
                     hintText: certificate,
                     canEdit: false,
+                    onTextChange: (text) => 0,
                   ),
                 ),
                 IconButton(
@@ -322,9 +331,14 @@ class BuildBasicInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "name",
           textField: "enterName",
+          onTextChange: (text) {
+            signupViewModel.owner.update((val) {
+              val?.userName = text;
+            });
+          },
         ),
         const BuildInterval(),
         Row(
@@ -340,18 +354,37 @@ class BuildBasicInfo extends StatelessWidget {
                 tr('female'),
               ],
               width: screenSizeController.getWidthByRatio(0.6),
+              onToggle: (index) {
+                signupViewModel.owner.update((val) {
+                  val?.gender = index == 0 ? Gender.MALE : Gender.FEMALE;
+                });
+              },
             ),
           ],
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "birthDate",
           textField: "enterBirthDate",
+          onTextChange: (text) {
+            signupViewModel.owner.update((val) {
+              if (text.length == 8) {
+                val?.birthDate = stringToDateTime(text);
+              }
+            });
+          },
         ),
         const BuildInterval(),
-        const BasicInfoContainer(
+        BasicInfoContainer(
           text: "phoneNumber",
           textField: "enterPhoneNumber",
+          onTextChange: (text) {
+            signupViewModel.owner.update((val) {
+              if (text.length == 11) {
+                val?.phoneNumber = text;
+              }
+            });
+          },
         ),
       ],
     );

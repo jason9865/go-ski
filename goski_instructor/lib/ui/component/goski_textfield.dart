@@ -15,6 +15,7 @@ class GoskiTextField extends StatefulWidget {
   final int? maxLines;
   final String text, hintText;
   final TextAlign textAlign;
+  final void Function(String) onTextChange;
 
   const GoskiTextField({
     super.key,
@@ -26,6 +27,7 @@ class GoskiTextField extends StatefulWidget {
     this.hasInnerPadding = true,
     this.isDigitOnly = false,
     this.textAlign = TextAlign.start,
+    required this.onTextChange,
   });
 
   @override
@@ -59,7 +61,7 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
         controller: _textEditingController,
         onChanged: (text) {
           setState(() {
-            // _textEditingController.text = text;
+            widget.onTextChange(text);
           });
         },
         decoration: InputDecoration(

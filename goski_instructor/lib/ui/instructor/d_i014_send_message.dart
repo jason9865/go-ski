@@ -49,6 +49,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
             SizedBox(height: titlePadding),
             GoskiTextField(
               hintText: tr('titleHint'),
+              onTextChange: (text) => 0,
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -65,6 +66,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
               child: GoskiTextField(
                 hintText: tr('contentHint'),
                 maxLines: 10,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(height: contentPadding),
@@ -96,7 +98,8 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                                       .getHeightByRatio(0.025),
                                 ),
                                 GoskiSmallsizeButton(
-                                  width: screenSizeController.getWidthByRatio(3),
+                                  width:
+                                      screenSizeController.getWidthByRatio(3),
                                   text: tr('confirm'),
                                   onTap: () {
                                     Navigator.pop(context);

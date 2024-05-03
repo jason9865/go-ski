@@ -4,14 +4,14 @@ import 'package:goski_instructor/const/enum/gender.dart';
 import 'package:goski_instructor/const/enum/role.dart';
 
 class User {
-  final int domainUserKey;
-  final File? profileImage;
-  final String kakaoProfileUrl;
-  final String userName;
-  final Gender gender;
-  final DateTime birthDate;
-  final Role role;
-  final String phoneNumber;
+  int domainUserKey;
+  File? profileImage;
+  String kakaoProfileUrl;
+  String userName;
+  Gender gender;
+  DateTime birthDate;
+  Role role;
+  String phoneNumber;
 
   User({
     required this.domainUserKey,

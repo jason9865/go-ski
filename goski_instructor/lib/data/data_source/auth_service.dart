@@ -7,6 +7,7 @@ import 'package:goski_instructor/const/enum/domain_name.dart';
 import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/data/model/default_dto.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
+import 'package:goski_instructor/data/model/owner.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +34,7 @@ class AuthService extends GetxService {
       await secureStorage.write(key: "isLoggedIn", value: "true");
       logger.e('kakao accessToken : ${token.accessToken}');
       // await sendFCMTokenToServer(); // FCM 토큰 서버에 저장
-
+      saveUserInfo(token.accessToken);
       return sendTokenToServer(token.accessToken); // 로그인 성공 반환
     } catch (error) {
       logger.e(error.toString());
@@ -149,6 +150,45 @@ class AuthService extends GetxService {
         logger.d("Succeed in SignUp!");
         return true;
       } else {
+        logger.e("Failed to SignUp...");
+      }
+    } catch (e) {
+      logger.e('Failed to send SignUp Request');
+    }
+    return false;
+  }
+
+  Future<bool> ownerSignUp(Owner owner) async {
+    var uri = Uri.parse('$baseUrl/user/signup/user');
+    var request = http.MultipartRequest('POST', uri);
+    String? domainUserKey = await secureStorage.read(key: "domainUserKey");
+    String? kakaoProfileImage = await secureStorage.read(key: "profileUrl");
+
+    request.fields['domainUserKey'] = domainUserKey!;
+    request.fields['kakaoProfileImage'] = kakaoProfileImage!;
+    if (owner.profileImage != null) {
+      // profileImage를 등록한 경우만
+      var bytes = await owner.profileImage!.readAsBytes();
+      var profileImage = http.MultipartFile.fromBytes(
+        'profileImage',
+        bytes,
+      );
+      request.files.add(profileImage);
+    }
+    request.fields['userName'] = owner.userName;
+    request.fields['gender'] = owner.gender.name;
+    request.fields['birthDate'] = dateTimeToString(owner.birthDate);
+    request.fields['role'] = owner.role.name;
+    request.fields['phoneNumber'] = phoneNumberParser(owner.phoneNumber);
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        logger.d("Succeed in SignUp!");
+        logger.d("responseData : $response");
+        return true;
+      } else {
+        logger.e(response.statusCode);
         logger.e("Failed to SignUp...");
       }
     } catch (e) {

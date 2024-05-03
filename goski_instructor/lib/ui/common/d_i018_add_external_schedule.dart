@@ -29,7 +29,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
             TitleWithDropdown(
               title: tr('mainInstructor'),
               hint: tr('hintMainInstructor'),
-              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
+              list: const ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
               onClicked: () {
                 // TODO. 담당 강사 드롭다운 로직 추가 필요
               },
@@ -92,7 +92,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
             TitleWithDropdown(
               title: tr('studentNumber'),
               hint: tr('hintStudentNumber'),
-              list: ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
+              list: const ['옵션1', '옵션2', '옵션3', '옵션4', '옵션5', '옵션6'],
               onClicked: () {
                 // TODO. 인원 선택 드롭다운 동작 추가 필요
               },
@@ -113,6 +113,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
                   child: GoskiTextField(
                     hintText: tr('hintReservationPerson'),
                     hasInnerPadding: false,
+                    onTextChange: (text) => 0,
                   ),
                 ),
               ],
@@ -132,6 +133,7 @@ class AddExternalScheduleDialog extends StatelessWidget {
               child: GoskiTextField(
                 hintText: tr('hintSpecialNote'),
                 maxLines: 3,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(height: contentPadding),

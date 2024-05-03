@@ -14,6 +14,7 @@ import 'package:goski_instructor/ui/common/i002_signup.dart';
 import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
 import 'package:goski_instructor/view_model/login_view_model.dart';
+import 'package:goski_instructor/view_model/signup_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 // import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
@@ -24,6 +25,7 @@ void initDependencies() {
   Get.lazyPut(() => AuthService());
   Get.lazyPut(() => AuthRepository());
   Get.lazyPut(() => LoginViewModel());
+  Get.lazyPut(() => SignupViewModel());
 }
 
 void main() async {

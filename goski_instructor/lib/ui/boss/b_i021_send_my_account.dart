@@ -27,12 +27,36 @@ class SendMyAccountBottomSheet extends StatefulWidget {
 
 class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
   List<Account> dummyData = [
-    Account(bankName: '국민은행1', depositorName: '송준석', accountNumber: '123456-12-123451', imagePath: 'assets/images/logo.png'),
-    Account(bankName: '국민은행2', depositorName: '송준석', accountNumber: '123456-12-123452', imagePath: 'assets/images/logo.png'),
-    Account(bankName: '국민은행3', depositorName: '송준석', accountNumber: '123456-12-123453', imagePath: 'assets/images/logo.png'),
-    Account(bankName: '국민은행4', depositorName: '송준석', accountNumber: '123456-12-123454', imagePath: 'assets/images/logo.png'),
-    Account(bankName: '국민은행5', depositorName: '송준석', accountNumber: '123456-12-123455', imagePath: 'assets/images/logo.png'),
-    Account(bankName: '국민은행6', depositorName: '송준석', accountNumber: '123456-12-123456', imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행1',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123451',
+        imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행2',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123452',
+        imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행3',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123453',
+        imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행4',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123454',
+        imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행5',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123455',
+        imagePath: 'assets/images/logo.png'),
+    Account(
+        bankName: '국민은행6',
+        depositorName: '송준석',
+        accountNumber: '123456-12-123456',
+        imagePath: 'assets/images/logo.png'),
   ];
   String? _selectedAccountNumber = '123456-12-123451';
 
@@ -123,7 +147,10 @@ class _SendMyAccountBottomSheetState extends State<SendMyAccountBottomSheet> {
         SizedBox(
           height: screenSizeController.getHeightByRatio(0.02),
         ),
-        GoskiTextField(hintText: tr('enterAmount')),
+        GoskiTextField(
+          hintText: tr('enterAmount'),
+          onTextChange: (text) => 0,
+        ),
         SizedBox(
           height: screenSizeController.getHeightByRatio(0.02),
         ),
@@ -145,10 +172,9 @@ class Account {
   final String accountNumber;
   final String imagePath;
 
-  Account({
-    required this.bankName,
-    required this.depositorName,
-    required this.accountNumber,
-    required this.imagePath
-  });
+  Account(
+      {required this.bankName,
+      required this.depositorName,
+      required this.accountNumber,
+      required this.imagePath});
 }

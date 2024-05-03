@@ -33,6 +33,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
                 isDigitOnly: true,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(
@@ -46,6 +47,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
                 isDigitOnly: true,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(
@@ -59,6 +61,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
                 isDigitOnly: true,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(
@@ -72,6 +75,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                 hintText: tr('enterPrice'),
                 textAlign: TextAlign.center,
                 isDigitOnly: true,
+                onTextChange: (text) => 0,
               ),
             ),
             SizedBox(
@@ -107,6 +111,7 @@ class SetPricePeopleDialog extends StatelessWidget {
                     hintText: tr('enterAdditionalPrice'),
                     textAlign: TextAlign.center,
                     isDigitOnly: true,
+                    onTextChange: (text) => 0,
                   ),
                 ),
               ],
