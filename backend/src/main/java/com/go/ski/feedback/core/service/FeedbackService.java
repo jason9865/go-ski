@@ -12,10 +12,12 @@ import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
 import com.go.ski.feedback.support.dto.FeedbackResponseDTO;
 import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
 import com.go.ski.feedback.support.exception.FeedbackExceptionEnum;
+import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,14 +49,16 @@ public class FeedbackService {
 
         Lesson lesson = getLesson(request.getLessonId());
 
+        validateAlreadyExist(lesson);
+
         Feedback feedback = Feedback.builder()
                 .content(request.getContent())
                 .lesson(lesson)
                 .build()
                 ;
-
+        
         Feedback savedFeedback = feedbackRepository.save(feedback);
-
+        
         saveMediaFiles(request,savedFeedback);
     }
 
@@ -75,20 +79,29 @@ public class FeedbackService {
 
     public Lesson getLesson(Integer lessonId) {
         return lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다."));
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.WRONG_REQUEST));
     }
 
     private void saveMediaFiles(FeedbackRequestDTO request, Feedback feedback) {
-        // dto에 분리되어있는 images와 videos 리스트를 하나로 합치기
-        List<MultipartFile> mediaFiles = request.getImages();
-        mediaFiles.addAll(request.getVideos());
+        // 기회가 된다면 media를 저장하는 로직은 별도로 분리하자
 
         List<FeedbackMedia> tobeSavedFiles = new ArrayList<>();
-        for(MultipartFile file : mediaFiles) {
-            String mediaUrl = file.getContentType().split("/")[0].equals("image") ? // content-Type에 따라 다른 경로에 저장
-                    s3Uploader.uploadFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, file) :  // image인 경우
-                    s3Uploader.uploadFile(FileUploadPath.FEEDBACK_VIDEO_PATH.path, file); // video인 경우
-            tobeSavedFiles.add(FeedbackMedia.builder().mediaUrl(mediaUrl).feedback(feedback).build());
+
+        List<MultipartFile> imageFiles = request.getImages();
+        if (imageFiles != null) {
+            for (MultipartFile file : imageFiles) {
+                String imageUrl = s3Uploader.uploadFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, file);
+                tobeSavedFiles.add(FeedbackMedia.builder().mediaUrl(imageUrl).feedback(feedback).build());
+            }
+        }
+
+        List<MultipartFile> videoFiles = request.getVideos();
+
+        if (videoFiles != null) {
+            for (MultipartFile file : videoFiles) {
+                String videoUrl = s3Uploader.uploadFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, file);
+                tobeSavedFiles.add(FeedbackMedia.builder().mediaUrl(videoUrl).feedback(feedback).build());
+            }
         }
 
         feedbackMediaRepository.saveAll(tobeSavedFiles);
@@ -107,6 +120,12 @@ public class FeedbackService {
         }
 
         feedbackMediaRepository.deleteAllInBatch(oldMediaFiles);
+    }
+
+    private void validateAlreadyExist(Lesson lesson) {
+        if (feedbackRepository.existsByLesson(lesson)){
+            throw ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_ALREADY_EXIST);
+        }
     }
 
 
