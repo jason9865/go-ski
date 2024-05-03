@@ -2,13 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/enum/auth_status.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
+import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -91,9 +95,19 @@ class KakaoLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 로그인 로직 구현
-        // Get.find<LoginController>().login();
-        Get.to(() => const SignUpScreen());
+        loginViewModel.loginWithKakao().then((result) {
+          switch (result) {
+            case AuthStatus.already:
+              Get.offAll(() => StudentMainScreen());
+              break;
+            case AuthStatus.first:
+              Get.off(() => const SignUpScreen());
+              break;
+            case AuthStatus.error:
+              Get.snackbar("Login Failed", "Please try again.");
+              break;
+          }
+        });
       },
       child: Image.asset(
         "assets/images/kakao_login.png",
