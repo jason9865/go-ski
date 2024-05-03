@@ -10,6 +10,7 @@ import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
+import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:logger/logger.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -27,19 +28,22 @@ class StudentMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildProfileCard(),
-            const BuildInterval(),
-            buildAdvertisement(),
-            const BuildInterval(),
-            buildResortInfo(context),
-            const BuildInterval(),
-            const BuildInterval(),
-            buildManual(),
-          ],
+    return Scaffold(
+      appBar: const GoskiMainHeader(),
+      body: GoskiContainer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildProfileCard(),
+              const BuildInterval(),
+              buildAdvertisement(),
+              const BuildInterval(),
+              buildResortInfo(context),
+              const BuildInterval(),
+              const BuildInterval(),
+              buildManual(),
+            ],
+          ),
         ),
       ),
     );

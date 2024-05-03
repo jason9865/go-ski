@@ -2,13 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/text_theme.dart';
+import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/test.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
+import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
@@ -33,26 +36,19 @@ void main() async {
   initDependencies();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
+  CustomDio.initialize(); // CustomDio 초기화
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
       fallbackLocale: const Locale('ko', 'KR'),
-      child: const MyApp()));
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  void getKeyHash() async {
-    print('======================================================');
-    print(await KakaoSdk.origin);
-    print('======================================================');
-  }
-
+  MyApp({super.key});
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
-    getKeyHash();
-
     final LoginController loginController = Get.put(LoginController());
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
@@ -62,8 +58,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Jua',
         textTheme: AppTextTheme.lightTextTheme,
       ),
-      home: Builder(
-        builder: (context) {
+      home: FutureBuilder(
+        future: secureStorage.read(key: "isLoggedIn"),
+        builder: (context, snapshot) {
           final mediaQueryData = MediaQuery.of(context);
           final screenSizeController = Get.put(ScreenSizeController());
           screenSizeController.setScreenSize(
@@ -72,18 +69,11 @@ class MyApp extends StatelessWidget {
           );
           logger.d(
               "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
-
-          return Obx(() {
-            if (loginController.isLogin.value) {
-              return const Scaffold(
-                appBar: GoskiMainHeader(),
-                // appBar: SubHeader(title: "페이지 이름"),
-                body: Test(),
-              );
-            } else {
-              return const LoginScreen();
-            }
-          });
+          if (snapshot.data != null) {
+            return StudentMainScreen();
+          } else {
+            return const LoginScreen();
+          }
         },
       ),
     );

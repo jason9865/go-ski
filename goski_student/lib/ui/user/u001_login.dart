@@ -98,6 +98,7 @@ class KakaoLoginButton extends StatelessWidget {
         loginViewModel.loginWithKakao().then((result) {
           switch (result) {
             case AuthStatus.already:
+              logger.e("다왔냐?");
               Get.offAll(() => StudentMainScreen());
               break;
             case AuthStatus.first:
