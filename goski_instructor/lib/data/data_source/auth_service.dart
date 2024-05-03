@@ -1,16 +1,15 @@
 import 'dart:convert';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
-import 'package:goski_instructor/const/enum/domain_name.dart';
 import 'package:goski_instructor/const/util/parser.dart';
-import 'package:goski_instructor/data/model/default_dto.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
 import 'package:goski_instructor/data/model/owner.dart';
+import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
-import 'package:http/http.dart' as http;
 
 var logger = Logger();
 
@@ -19,6 +18,10 @@ class AuthService extends GetxService {
   final baseUrl = dotenv.env['BASE_URL'];
 
   Future<AuthStatus> loginWithKakao() async {
+    print('======================================================');
+    print(await KakaoSdk.origin);
+    print('======================================================');
+
     try {
       OAuthToken token; // 카카오 로그인 성공 시 받은 토큰을 저장할 변수
       try {
@@ -111,7 +114,7 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<bool> instructorSignUp(Instructor instructor) async {
+  Future<bool> instructorSignUp(InstructorRequest instructor) async {
     var uri = Uri.parse('$baseUrl/user/signup/inst');
     var request = http.MultipartRequest('POST', uri);
     String? domainUserKey = await secureStorage.read(key: "domainUserKey");
@@ -130,7 +133,7 @@ class AuthService extends GetxService {
     }
     request.fields['userName'] = instructor.userName;
     request.fields['gender'] = instructor.gender.toString();
-    request.fields['birthDate'] = dateTimeToString(instructor.birthDate);
+    request.fields['birthDate'] = dateTimeToString(instructor.birthDate!);
     request.fields['role'] = instructor.role.toString();
     request.fields['phoneNumber'] = phoneNumberParser(instructor.phoneNumber);
     request.fields['lessonType'] = instructor.lessonType;
@@ -158,7 +161,7 @@ class AuthService extends GetxService {
     return false;
   }
 
-  Future<bool> ownerSignUp(Owner owner) async {
+  Future<bool> ownerSignUp(OwnerRequest owner) async {
     var uri = Uri.parse('$baseUrl/user/signup/user');
     var request = http.MultipartRequest('POST', uri);
     String? domainUserKey = await secureStorage.read(key: "domainUserKey");
@@ -177,7 +180,7 @@ class AuthService extends GetxService {
     }
     request.fields['userName'] = owner.userName;
     request.fields['gender'] = owner.gender.name;
-    request.fields['birthDate'] = dateTimeToString(owner.birthDate);
+    request.fields['birthDate'] = dateTimeToString(owner.birthDate!);
     request.fields['role'] = owner.role.name;
     request.fields['phoneNumber'] = phoneNumberParser(owner.phoneNumber);
 

@@ -1,39 +1,26 @@
-import 'package:goski_instructor/data/model/user.dart';
+import 'dart:io';
 
-class Owner extends User {
-  Owner({
-    required super.domainUserKey,
-    super.profileImage,
-    required super.kakaoProfileUrl,
-    required super.userName,
-    required super.gender,
-    required super.birthDate,
-    required super.role,
-    required super.phoneNumber,
+import '../../const/enum/gender.dart';
+import '../../const/enum/role.dart';
+
+class OwnerRequest {
+  int domainUserKey;
+  File? profileImage;
+  String kakaoProfileUrl;
+  String userName;
+  Gender gender;
+  DateTime? birthDate;
+  Role role;
+  String phoneNumber;
+
+  OwnerRequest({
+    required this.domainUserKey,
+    this.profileImage,
+    required this.kakaoProfileUrl,
+    required this.userName,
+    required this.gender,
+    required this.birthDate,
+    required this.role,
+    required this.phoneNumber,
   });
-
-  // factory User.fromJson(Map<String, dynamic> json) {
-  //   DateTime formattedBirthDate =
-  //       DateFormat('yyyy-MM-dd').parse(json['birthDate']);
-
-  //   return User(
-  //     profileUrl: json['profileUrl'],
-  //     userName: json['userName'],
-  //     gender: json['gender'],
-  //     birthDate: formattedBirthDate,
-  //     role: json['role'],
-  //     phoneNumber: json['phoneNumber'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'profileUrl': profileUrl,
-  //     'userName': userName,
-  //     'gender': gender.toString().split('.').last,
-  //     'birthDate': birthDate.toIso8601String(),
-  //     'role': role.toString().split('.').last,
-  //     'phoneNumber': phoneNumber,
-  //   };
-  // }
 }
