@@ -1,12 +1,15 @@
 package com.go.ski.notification.support;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
+import com.go.ski.feedback.core.model.Feedback;
+import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.support.events.MessageEvent;
-import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
+import com.go.ski.notification.support.events.NotificationEvent;
+import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -43,10 +46,10 @@ public class EventPublisher {
                 .filter(id -> !Objects.equals(id, instructor.getInstructorId()))
                 .toList());
         userIds.add(team.getUser().getUserId()); // 사장 Id 추가
-        publishEvent(userIds,instructor, inviteAcceptRequestDTO);
+        publishEvent(inviteAcceptRequestDTO,userIds,instructor);
     }
 
-    private void publishEvent(List<Integer> userIds, Instructor instructor, InviteAcceptRequestDTO inviteAcceptRequestDTO) {
+    private void publishEvent(InviteAcceptRequestDTO inviteAcceptRequestDTO, List<Integer> userIds, Instructor instructor) {
         userIds.forEach(
             userId -> applicationEventPublisher.publishEvent(
                     NotificationEvent.of(inviteAcceptRequestDTO, userId, instructor)
@@ -61,5 +64,7 @@ public class EventPublisher {
     }
 
 
-
+    public void publish(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson) {
+        applicationEventPublisher.publishEvent(NotificationEvent.of(feedbackRequestDTO,lesson));
+    }
 }

@@ -13,6 +13,7 @@ import com.go.ski.feedback.support.dto.FeedbackResponseDTO;
 import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
 import com.go.ski.feedback.support.exception.FeedbackExceptionEnum;
 import com.go.ski.lesson.support.exception.LessonExceptionEnum;
+import com.go.ski.notification.support.EventPublisher;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final FeedbackMediaRepository feedbackMediaRepository;
     private final LessonRepository lessonRepository;
+    private final EventPublisher eventPublisher;
     private final S3Uploader s3Uploader;
 
     public FeedbackResponseDTO getFeedback(Integer lessonId) {
@@ -58,8 +60,8 @@ public class FeedbackService {
                 ;
         
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        
         saveMediaFiles(request,savedFeedback);
+        eventPublisher.publish(request,lesson);
     }
 
     @Transactional
