@@ -15,6 +15,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -50,20 +51,10 @@ public class LessonInfo {
 			.duration(reserveLessonPaymentRequestDTO.getDuration())
 			.lessonType(reserveLessonPaymentRequestDTO.getLessonType())
 			.studentCount(reserveLessonPaymentRequestDTO.getStudentInfo().size())
+			.requestComplain(reserveLessonPaymentRequestDTO.getRequestComplain())
+			.lessonStatus(0)
 			.build();
 	}
-    
-    public static LessonInfo toLessonForPayment(Lesson lesson, ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
-        return LessonInfo.builder()
-                .lessonId(lesson.getLessonId())
-                .lesson(lesson)
-                .lessonDate(reserveLessonPaymentRequestDTO.getLessonDate())
-                .startTime(reserveLessonPaymentRequestDTO.getStartTime())
-                .duration(reserveLessonPaymentRequestDTO.getDuration())
-                .lessonType(reserveLessonPaymentRequestDTO.getLessonType())
-                .studentCount(reserveLessonPaymentRequestDTO.getStudentInfo().size())
-                .build();
-    }
 
     public LessonInfo(Instructor instructor, ReserveInfoVO reserveInfoVO) {
         lesson = Lesson.builder().instructor(instructor).build();

@@ -1,5 +1,6 @@
 package com.go.ski.payment.core.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.go.ski.payment.core.service.PayService;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayApproveRequestDTO;
 import com.go.ski.payment.support.dto.request.KakaopayCancelRequestDTO;
 import com.go.ski.payment.support.dto.request.ReserveLessonPaymentRequestDTO;
+import com.go.ski.payment.support.dto.request.VerifyAccountRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayApproveResponseDTO;
 import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
@@ -22,6 +26,7 @@ import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.core.service.KakaoPayService;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
+import com.go.ski.payment.support.dto.response.VerifyAccountResponseDTO;
 import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,11 +74,19 @@ public class PaymentController {
 		return ResponseEntity.ok().body(response);
 	}
 	@PostMapping("/reserve/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> ApprovePayment(
+	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ApprovePaymentRequestDTO request) {
 
 		KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@PostMapping("/reserve/cancel")
+	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(
+		@RequestBody CancelPaymentRequestDTO request) {
+
+		KakaopayCancelResponseDTO response = payService.getCancelResponse(request);
 		return ResponseEntity.ok().body(response);
 	}
 
@@ -106,6 +119,16 @@ public class PaymentController {
 	public ResponseEntity<Integer> getBalance(HttpServletRequest httpServletRequest) {
 		Integer response = payService.getBalance(httpServletRequest);
 		return ResponseEntity.ok().body(response);
+	}
+
+	@PostMapping("/validate_account")
+	public ResponseEntity<VerifyAccountResponseDTO> verifyAccount(@RequestBody VerifyAccountRequestDTO verifyAccountRequestDTO) throws
+		UnsupportedEncodingException,
+		JsonProcessingException,
+		InterruptedException {
+		VerifyAccountResponseDTO response = payService.requestToCodeF(verifyAccountRequestDTO);
+
+		return  ResponseEntity.ok().body(response);
 	}
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음

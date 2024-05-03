@@ -31,8 +31,8 @@ public class CustomEventListener {
         Notification notification = Notification.from(notificationEvent);
         notificationRepository.save(notification);
         if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-            log.warn("알림 보내기 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
-//        fcmClient.sendMessageTo(notification);
+            log.warn("알림 보내기 - {}",notification.getTitle());
+//            fcmClient.sendMessageTo(notification);
         }
 
     }
@@ -43,8 +43,8 @@ public class CustomEventListener {
         Notification notification = Notification.from(messageEvent);
         notificationRepository.save(notification);
         if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-            log.warn("알림 보내기 이벤트 리스너가 잘 작동합니다. - {}",notification.getTitle());
-//        fcmClient.sendMessageTo(messageEvent);
+            log.warn("DM 보내기 - {}",notification.getTitle());
+//            fcmClient.sendMessageTo(messageEvent);
         }
     }
 

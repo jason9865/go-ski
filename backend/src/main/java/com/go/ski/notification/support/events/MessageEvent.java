@@ -24,7 +24,7 @@ public class MessageEvent {
     private DeviceType deviceType;
     private String imageUrl;
 
-    public static MessageEvent of(FcmSendRequestDTO requestDTO, User user, String imageUrl){
+    public static MessageEvent of(FcmSendRequestDTO requestDTO, User user, String imageUrl, String deviceType){
         MessageEvent messageEvent = new MessageEvent();
         messageEvent.senderId = user.getUserId();
         messageEvent.senderName = user.getUserName();
@@ -33,7 +33,7 @@ public class MessageEvent {
         messageEvent.content = requestDTO.getContent();
         messageEvent.createdAt = LocalDateTime.now();
         messageEvent.notificationType = requestDTO.getNotificationType();
-        messageEvent.deviceType = requestDTO.getDeviceType();
+        messageEvent.deviceType = DeviceType.valueOf(deviceType);
         messageEvent.imageUrl = imageUrl;
         return messageEvent;
     }
