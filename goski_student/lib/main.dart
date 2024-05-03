@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/text_theme.dart';
@@ -12,8 +13,10 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
