@@ -97,7 +97,7 @@ public class ScheduleService {
             if (type == 1) {
                 return permission.isDeletePermission();
             } else {
-                return permission.isModifyPermission();
+                return permission.isModifyPermission() && lesson.getIsOwn() == 1;
             }
         }
     }
@@ -110,27 +110,31 @@ public class ScheduleService {
         if (reserveScheduleVO.getInstructorId() != null) {
             instructor = instructorRepository.findById(reserveScheduleVO.getInstructorId()).orElseThrow();
         }
-        Lesson lesson = lessonRepository.save(new Lesson(user, team, instructor, reserveScheduleVO.getRepresentativeName()));
+        Lesson lesson = lessonRepository.save(new Lesson(reserveScheduleVO.getLessonId(), user, team, instructor, reserveScheduleVO.getRepresentativeName()));
         lessonInfoRepository.save(new LessonInfo(lesson, reserveScheduleVO));
 
-        if (!scheduleCaching(team, reserveScheduleVO)) {
+        if (!scheduleCaching(team, reserveScheduleVO.getLessonDate())) {
             throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.FAIL_ADD_SCHEDULE);
         }
     }
 
+    @Transactional
     public void deleteSchedule(Integer lessonId) {
-
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
+        LessonInfo lessonInfo = lessonInfoRepository.findById(lessonId).orElseThrow();
+        if (lesson.getIsOwn() == 1) {
+            lessonRepository.delete(lesson);
+            scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
+        } else {
+            // payService의 결제 취소 메서드 이용!!
+        }
     }
 
-    public void updateSchedule(Integer lessonId) {
-
-    }
-
-    public boolean scheduleCaching(Team team, ReserveScheduleVO reserveScheduleVO) {
+    public boolean scheduleCaching(Team team, LocalDate lessonDate) {
         // 해당 팀에 소속된 강사 리스트
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeamAndIsInviteAccepted(team, true);
         // 강습 일자, 팀으로 이미 예약된 강습 리스트
-        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeam(reserveScheduleVO.getLessonDate(), team);
+        List<LessonInfo> lessonInfos = lessonInfoRepository.findByLessonDateAndLessonTeamAndLessonStatus(lessonDate, team, 0);
         // lessonInfo를 ReserveScheduleVO로 변환
         List<ReserveScheduleVO> reserveScheduleVOs = new ArrayList<>();
         for (LessonInfo lessonInfo : lessonInfos) {
@@ -145,9 +149,9 @@ public class ScheduleService {
         Map<Integer, List<ReserveScheduleVO>> reserveScheduleMap = assignLessons(reserveScheduleVOs, teamInstructors);
         if (reserveScheduleMap != null) {
             // 예약이 가능하면 기존에 저장되어 있던 것들을 지우고 새로 저장해야함
-            String id = team.getTeamId() + ":" + reserveScheduleVO.getLessonDate();
+            String id = team.getTeamId() + ":" + lessonDate;
             reserveScheduleMap.forEach((instructorId, ReserveScheduleVOs) ->
-                    scheduleCacheRepository.save(new ScheduleCacheDto(instructorId + ":" + id, ReserveScheduleVOs, reserveScheduleVO.getLessonDate())));
+                    scheduleCacheRepository.save(new ScheduleCacheDto(instructorId + ":" + id, ReserveScheduleVOs, lessonDate)));
             return true;
         }
         return false;

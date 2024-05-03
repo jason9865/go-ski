@@ -18,6 +18,5 @@ public class FcmSendRequestDTO {
     private String title;
     private String content;
     private MultipartFile image;
-    private DeviceType deviceType;
     private Integer notificationType;
 }

@@ -38,7 +38,9 @@ public class NotificationController {
     // 모든 알림 가져오기
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getNotifications(HttpServletRequest request) {
-        log.info("NotificationController.createFcmToken");
+        log.info("NotificationController.getNotifications");
+        log.info("User-Agent - {}.",request.getHeader("User-Agent"));
+        log.info("DeviceType - {}.",request.getHeader("DeviceType"));
         User user = (User)request.getAttribute("user");
         List<NotificationResponseDTO> response = notificationService.findAllNotifications(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
@@ -46,27 +48,36 @@ public class NotificationController {
 
 
     // 알림 읽기
-    @PatchMapping("/{notificationId}/read")
-    public ResponseEntity<ApiResponse<?>> readNotifications(@PathVariable Integer notificationId ){
+    @PatchMapping("/read/{notificationId}")
+    public ResponseEntity<ApiResponse<?>> readNotifications(HttpServletRequest request,@PathVariable Integer notificationId ){
         log.info("NotificationController.readNotifications");
-        notificationService.read(notificationId);
+        User user = (User)request.getAttribute("user");
+        notificationService.read(notificationId, user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
-    // 알림 보내기
+    // 알림 삭제
+    @DeleteMapping("/delete/{notificationId}")
+    public ResponseEntity<ApiResponse<?>> deleteNotification(HttpServletRequest request, @PathVariable Integer notificationId ){
+        log.info("NotificationController.deleteNotification");
+        User user = (User)request.getAttribute("user");
+        notificationService.delete(notificationId,user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    // 메시지 보내기
     @PostMapping("/dm")
     public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request,FcmSendRequestDTO requestDTO) {
         log.info("NotificationController.sendMessage");
-        User user = (User)request.getAttribute("user");
-        notificationService.sendMessage(requestDTO,user);
+        notificationService.sendMessage(requestDTO,request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
     }
 
     //팀 초대 요청
     @PostMapping("/invite")
-    public ResponseEntity<ApiResponse<?>> requestInvite(@RequestBody InviteRequestDTO requestDTO){
+    public ResponseEntity<ApiResponse<?>> requestInvite(HttpServletRequest request, @RequestBody InviteRequestDTO requestDTO){
         log.info("NotificationController.requestInvite");
-        notificationService.sendInvite(requestDTO);
+        notificationService.sendInvite(requestDTO,request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("초대 요청을 전송하였습니다."));
     }
 
@@ -74,8 +85,7 @@ public class NotificationController {
     @PostMapping("/invite-accept")
     public ResponseEntity<ApiResponse<?>> acceptInvite(HttpServletRequest request,@RequestBody InviteAcceptRequestDTO requestDTO) {
         log.info("NotificationController.acceptInvite");
-        User user = (User)request.getAttribute("user");
-        teamInstructorService.addNewInstructor(requestDTO,user);
+        teamInstructorService.addNewInstructor(requestDTO,request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 }

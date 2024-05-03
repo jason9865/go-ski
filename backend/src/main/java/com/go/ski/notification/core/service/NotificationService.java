@@ -15,6 +15,7 @@ import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,27 +58,49 @@ public class NotificationService {
     }
 
     @Transactional
-    public void read(Integer notificationId) {
-
+    public void read(Integer notificationId, User user) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
+
+        validateUser(notification, user);
 
         notification.read();
     }
 
     @Transactional
-    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO,User user){
+    public void delete(Integer notificationId, User user) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
+
+        validateUser(notification, user);
+
+        notificationRepository.delete(notification);
+    }
+
+    @Transactional
+    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO, HttpServletRequest request){
+        User user = (User)request.getAttribute("user");
+        String deviceType = request.getHeader("DeviceType");
         String imageUrl = fcmSendRequestDTO.getImage() != null ?
                 s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
                 null;
 
-        eventPublisher.publish(fcmSendRequestDTO, user, imageUrl);
+        eventPublisher.publish(fcmSendRequestDTO, user, imageUrl , deviceType);
     }
 
     @Transactional
-    public void sendInvite(InviteRequestDTO inviteRequestDTO) {
+    public void sendInvite(InviteRequestDTO inviteRequestDTO, HttpServletRequest request) {
+        String deviceType = request.getHeader("DeviceType");
         Team team = teamRepository.findById(inviteRequestDTO.getTeamId())
                         .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
-        eventPublisher.publish(inviteRequestDTO, team);
+        eventPublisher.publish(inviteRequestDTO, team, deviceType);
     }
+
+    public void validateUser(Notification notification,User user) {
+        if(notification.getReceiverId() != user.getUserId()){
+            throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_UNAUTHORIZED);
+        }
+    }
+
+
 }

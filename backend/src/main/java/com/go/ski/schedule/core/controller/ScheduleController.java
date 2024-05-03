@@ -60,13 +60,13 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{lessonId}")
-    public ResponseEntity<ApiResponse<?>> updateSchedule(HttpServletRequest request, @PathVariable Integer lessonId) {
+    public ResponseEntity<ApiResponse<?>> updateSchedule(HttpServletRequest request, @PathVariable Integer lessonId, @RequestBody CreateScheduleRequestDTO createScheduleRequestDTO) {
         log.info("스케줄 수정: {}", lessonId);
         User user = (User) request.getAttribute("user");
         if (!scheduleService.checkPermission(user, lessonId, 2)) {
             throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
         }
-        scheduleService.updateSchedule(lessonId);
+        scheduleService.createSchedule(new ReserveScheduleVO(lessonId, createScheduleRequestDTO));
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

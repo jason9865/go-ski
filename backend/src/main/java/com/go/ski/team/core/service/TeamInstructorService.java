@@ -15,6 +15,7 @@ import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.support.exception.UserExceptionEnum;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,11 @@ public class TeamInstructorService {
     }
 
     @Transactional
-    public void addNewInstructor(InviteAcceptRequestDTO request, User user) {
-        Team team = teamRepository.findById(request.getTeamId())
+    public void addNewInstructor(InviteAcceptRequestDTO inviteAcceptRequestDTO, HttpServletRequest request) {
+        User user = (User)request.getAttribute("user");
+        String deviceType = request.getHeader("DeviceType");
+
+        Team team = teamRepository.findById(inviteAcceptRequestDTO.getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TEAM_NOT_FOUND));
 
         Instructor instructor = instructorRepository.findById(user.getUserId())
@@ -66,7 +70,7 @@ public class TeamInstructorService {
                 .build();
         teamInstructorRepository.save(teamInstructor);
 
-        eventPublisher.publish(request, team, instructor);
+        eventPublisher.publish(inviteAcceptRequestDTO, team, instructor, deviceType);
     }
 
     private void validateIfExists(Team team,Instructor instructor ) {

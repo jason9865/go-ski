@@ -21,5 +21,4 @@ public interface TeamRepository extends JpaRepository<Team, Integer>, TeamReposi
     List<TeamResponseDTO> findTeamList(Integer userId);
 
     List<Team> findBySkiResort(SkiResort skiResort);
-
 }
