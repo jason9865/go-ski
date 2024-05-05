@@ -10,6 +10,9 @@ import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.repository.LessonInfoRepository;
+import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -31,7 +34,7 @@ public class EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamInstructorRepository teamInstructorRepository;
-    private final NotificationSettingRepository notificationSettingRepository;
+    private final LessonRepository lessonRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
         log.info("알림 보내기 EventPublisher");
@@ -66,5 +69,17 @@ public class EventPublisher {
 
     public void publish(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
         applicationEventPublisher.publishEvent(NotificationEvent.of(feedbackRequestDTO,lesson, deviceType));
+    }
+
+    public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
+        List<Integer> receiverIds = new ArrayList<>();
+        receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
+        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장
+        receiverIds.forEach(
+                receiverId ->  applicationEventPublisher.publishEvent(
+                        NotificationEvent.of(lessonInfo, receiverId, deviceType))
+
+        );
     }
 }

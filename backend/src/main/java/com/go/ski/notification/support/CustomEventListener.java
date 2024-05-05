@@ -32,7 +32,7 @@ public class CustomEventListener {
         notificationRepository.save(notification);
         if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
             log.warn("알림 보내기 - {}",notification.getTitle());
-//            fcmClient.sendMessageTo(notification);
+            fcmClient.sendMessageTo(notification);
         }
 
     }
@@ -44,7 +44,7 @@ public class CustomEventListener {
         notificationRepository.save(notification);
         if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
             log.warn("DM 보내기 - {}",notification.getTitle());
-//            fcmClient.sendMessageTo(messageEvent);
+            fcmClient.sendMessageTo(messageEvent);
         }
     }
 

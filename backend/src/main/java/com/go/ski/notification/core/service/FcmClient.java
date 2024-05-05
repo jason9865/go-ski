@@ -53,6 +53,7 @@ public class FcmClient {
     public void sendMessageTo(Integer receiverId, DeviceType deviceType, MessageGenerator messageGenerator) {
         String targetToken = getFcmToken(receiverId, deviceType);
         String message = messageGenerator.makeMessage(targetToken, objectMapper);
+        log.info("targetToken - {}",targetToken);
 
         RestTemplate restTemplate = new RestTemplate();
 

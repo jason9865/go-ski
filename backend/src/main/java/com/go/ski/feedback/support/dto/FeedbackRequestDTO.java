@@ -17,6 +17,5 @@ public class FeedbackRequestDTO {
     private List<MultipartFile> images;
     private List<MultipartFile> videos;
     private Integer notificationType;
-    private DeviceType deviceType;
 
 }

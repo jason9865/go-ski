@@ -1,11 +1,13 @@
 package com.go.ski.notification.support.events;
 
+import com.go.ski.common.util.TimeConvertor;
 import com.go.ski.feedback.core.model.Feedback;
 import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
 import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.Instructor;
 import lombok.*;
@@ -56,6 +58,30 @@ public class NotificationEvent {
         notificationEvent.title = lesson.getTeam().getTeamName() + " 강습에서 피드백이 등록되었습니다.";
         notificationEvent.createdAt = CREATED_TIME;
         notificationEvent.notificationType = feedbackRequestDTO.getNotificationType();
+        notificationEvent.deviceType = DeviceType.valueOf(deviceType);
+        return notificationEvent;
+    }
+
+    public static NotificationEvent of(LessonInfo lessonInfo, Integer receiverId, String deviceType) {
+        NotificationEvent notificationEvent = new NotificationEvent();
+        notificationEvent.receiverId = receiverId;
+        notificationEvent.title = "강습이 예약되었습니다.";
+        notificationEvent.content = lessonInfo.getLessonDate() + " " +
+                TimeConvertor.calLessonTimeInfo(lessonInfo.getStartTime(), lessonInfo.getDuration());
+        notificationEvent.createdAt = CREATED_TIME;
+        notificationEvent.notificationType = 2;
+        notificationEvent.deviceType = DeviceType.valueOf(deviceType);
+        return notificationEvent;
+    }
+
+    public static NotificationEvent cancelEvent(LessonInfo lessonInfo, Integer receiverId, String deviceType) {
+        NotificationEvent notificationEvent = new NotificationEvent();
+        notificationEvent.receiverId = receiverId;
+        notificationEvent.title = "강습이 취소되었습니다.";
+        notificationEvent.content = lessonInfo.getLessonDate() + " " +
+                TimeConvertor.calLessonTimeInfo(lessonInfo.getStartTime(), lessonInfo.getDuration());
+        notificationEvent.createdAt = CREATED_TIME;
+        notificationEvent.notificationType = 3;
         notificationEvent.deviceType = DeviceType.valueOf(deviceType);
         return notificationEvent;
     }
