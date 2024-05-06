@@ -7,11 +7,14 @@ import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.core.service.FcmClient;
+import com.go.ski.notification.support.events.LessonAlertEvent;
 import com.go.ski.notification.support.events.MessageEvent;
 import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +39,7 @@ public class CustomEventListener {
 
             Notification notification = Notification.of(notificationEvent, jsonContent);
             notificationRepository.save(notification);
-            log.warn("알림 보내기 - {}",notificationEvent.getNotificationType());
+            log.warn("알림 보내기 - {}",notificationEvent.getTitle());
 //        fcmClient.sendMessageTo(notification);
 //        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
 //            log.warn("알림 보내기 - {}",notification.getTitle());
@@ -46,10 +49,6 @@ public class CustomEventListener {
         } catch(JsonProcessingException e) {
             log.error("json error");
         }
-
-
-
-
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -61,6 +60,13 @@ public class CustomEventListener {
             log.warn("DM 보내기 - {}",notification.getTitle());
             fcmClient.sendMessageTo(messageEvent);
         }
+    }
+
+    @EventListener
+    public void createLessonMessage(LessonAlertEvent lessonAlertEvent) {
+        log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
+        Notification notification = Notification.from(lessonAlertEvent);
+        notificationRepository.save(notification);
     }
 
     public boolean isSendAvailable(Integer userId, Integer notificationType) {
