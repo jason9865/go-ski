@@ -11,6 +11,7 @@ import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
+import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
@@ -39,8 +40,7 @@ void main() async {
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   CustomDio.initialize(); // CustomDio 초기화
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  String? fcmToken = await FirebaseMessaging.instance.getToken();
-  logger.e(fcmToken);
+  await setFCM();
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
