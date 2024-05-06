@@ -67,6 +67,7 @@ class GoskiTextBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       textAlign: textAlign,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: color,
         fontSize: size,

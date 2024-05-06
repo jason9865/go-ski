@@ -5,7 +5,6 @@ import 'package:goski_student/const/font_size.dart';
 class GoskiSwitch extends StatefulWidget {
   final List<String> items;
   final double width;
-  final Function(int)? onChanged;
   final double size;
   final Function(int)? onToggle;
 
@@ -13,7 +12,6 @@ class GoskiSwitch extends StatefulWidget {
     super.key,
     required this.items,
     required this.width,
-    this.onChanged,
     this.size = goskiFontMedium,
     this.onToggle,
   });
@@ -24,16 +22,6 @@ class GoskiSwitch extends StatefulWidget {
 
 class _GoskiSwitchState extends State<GoskiSwitch> {
   int selectedIndex = 0;
-
-  void _handleSelection(int index) {
-    if (selectedIndex != index) {
-      setState(() {
-        selectedIndex = index;
-      });
-      // Only call the callback if it is not null
-      widget.onChanged?.call(index);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +57,8 @@ class _GoskiSwitchState extends State<GoskiSwitch> {
               });
             },
             selectedColor: goskiButtonBlack,
-            showCheckmark: false, // 선택시 체크 표시 비활성화
+            showCheckmark: false,
+            // 선택시 체크 표시 비활성화
             shape: index == 0
                 ? const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
