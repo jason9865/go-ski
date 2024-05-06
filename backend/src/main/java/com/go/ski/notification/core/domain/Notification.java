@@ -48,13 +48,13 @@ public class Notification {
         isRead = 1;
     }
 
-    public static Notification from(NotificationEvent notificationEvent) {
+    public static Notification of(NotificationEvent notificationEvent, String jsonContent) {
         return Notification.builder()
                 .receiverId(notificationEvent.getReceiverId())
                 .notificationType(notificationEvent.getNotificationType())
                 .deviceType(notificationEvent.getDeviceType())
                 .title(notificationEvent.getTitle())
-                .content(notificationEvent.getContent())
+                .content(jsonContent)
                 .createdAt(notificationEvent.getCreatedAt())
                 .build();
     }

@@ -1,5 +1,7 @@
 package com.go.ski.notification.support;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.notification.core.repository.NotificationRepository;
@@ -23,17 +25,30 @@ public class CustomEventListener {
     private final FcmClient fcmClient;
     private final NotificationRepository notificationRepository;
     private final NotificationSettingRepository notificationSettingRepository;
+    private final ObjectMapper objectMapper;
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void createNotification(NotificationEvent notificationEvent){
-        Notification notification = Notification.from(notificationEvent);
-        notificationRepository.save(notification);
-        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-            log.warn("알림 보내기 - {}",notification.getTitle());
-            fcmClient.sendMessageTo(notification);
+        try{
+            String jsonContent = objectMapper.writeValueAsString(notificationEvent);
+
+            Notification notification = Notification.of(notificationEvent, jsonContent);
+            notificationRepository.save(notification);
+            log.warn("알림 보내기 - {}",notificationEvent.getNotificationType());
+//        fcmClient.sendMessageTo(notification);
+//        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
+//            log.warn("알림 보내기 - {}",notification.getTitle());
+//            fcmClient.sendMessageTo(notification);
+//        }
+
+        } catch(JsonProcessingException e) {
+            log.error("json error");
         }
+
+
+
 
     }
 
