@@ -7,10 +7,10 @@ class SkiResortViewModel extends GetxController {
   var skiResorts = <SkiResort>[].obs;
 
   SkiResortViewModel() {
-    _getSkiResortList();
+    getSkiResortList();
   }
 
-  Future<void> _getSkiResortList() async {
+  Future<void> getSkiResortList() async {
     skiResorts.value = await _skiResortRepository.getSkiResortList();
   }
 

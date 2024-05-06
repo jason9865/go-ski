@@ -7,14 +7,15 @@ class ReservationRequest {
   final int duration;
   final int cost;
 
-  ReservationRequest(
-      {required this.resortId,
-      required this.lessonType,
-      required this.totalStudent,
-      required this.lessonDate,
-      required this.startTime,
-      required this.duration,
-      required this.cost});
+  ReservationRequest({
+    required this.resortId,
+    required this.lessonType,
+    required this.totalStudent,
+    required this.lessonDate,
+    required this.startTime,
+    required this.duration,
+    required this.cost,
+  });
 }
 
 class Reservation {}

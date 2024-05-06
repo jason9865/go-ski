@@ -14,12 +14,13 @@ import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
+import 'package:logger/logger.dart';
 
-final ReservationViewModel reservationViewModel =
-    Get.put(ReservationViewModel());
+Logger logger = Logger();
+// final ReservationViewModel reservationViewModel =
+//     Get.put(ReservationViewModel());
 final screenSizeController = Get.find<ScreenSizeController>();
-final SkiResortViewModel skiResortViewModel =
-    Get.put(SkiResortViewModel(), permanent: true);
+final SkiResortViewModel skiResortViewModel = Get.put(SkiResortViewModel());
 
 class ReservationSelectScreen extends StatelessWidget {
   ReservationSelectScreen({super.key});
@@ -40,15 +41,13 @@ class ReservationSelectScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                _SkiResortDropdown(screenSizeController: screenSizeController),
+                _SkiResortDropdown(),
                 SizedBox(height: contentPadding),
-                _StudentNumberDropdown(
-                    screenSizeController: screenSizeController),
+                _StudentNumberDropdown(),
                 SizedBox(height: contentPadding),
-                _DateTimeSelectors(screenSizeController: screenSizeController),
+                _DateTimeSelectors(),
                 SizedBox(height: contentPadding),
-                _DifficultyLevelSwitch(
-                    screenSizeController: screenSizeController),
+                _DifficultyLevelSwitch(),
                 SizedBox(height: contentPadding),
                 // Add more widgets as needed
               ],
@@ -61,14 +60,13 @@ class ReservationSelectScreen extends StatelessWidget {
 }
 
 class _SkiResortDropdown extends StatelessWidget {
-  final ScreenSizeController screenSizeController;
-  final skiResortViewModel = Get.find<SkiResortViewModel>();
-
-  _SkiResortDropdown({super.key, required this.screenSizeController});
+  _SkiResortDropdown({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final skiResortViewModel = Get.find<SkiResortViewModel>();
+    // logger.d(skiResortViewModel.skiResortNames);
 
     return Row(
       children: [
@@ -78,15 +76,13 @@ class _SkiResortDropdown extends StatelessWidget {
           isBold: true,
           isExpanded: true,
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5.0),
-          child: SizedBox(
-            width: screenSizeController.getWidthByRatio(0.6),
-            child: GoskiDropdown(
-              hint: tr('selectSkiResort'),
-              list: skiResortViewModel.skiResortNames,
-            ),
-          ),
+        SizedBox(
+          width: screenSizeController.getWidthByRatio(0.6),
+          child: Obx(() => GoskiDropdown(
+                hint: tr('selectSkiResort'),
+                list: skiResortViewModel.skiResortNames,
+                // TODO. selected 저장
+              )),
         ),
       ],
     );
@@ -94,9 +90,9 @@ class _SkiResortDropdown extends StatelessWidget {
 }
 
 class _StudentNumberDropdown extends StatelessWidget {
-  final ScreenSizeController screenSizeController;
-
-  const _StudentNumberDropdown({super.key, required this.screenSizeController});
+  const _StudentNumberDropdown({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +104,11 @@ class _StudentNumberDropdown extends StatelessWidget {
           isBold: true,
           isExpanded: true,
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5.0),
-          child: SizedBox(
-            width: screenSizeController.getWidthByRatio(0.6),
-            child: GoskiDropdown(
-              hint: tr('selectStudentNumber'),
-              list: ['1:1', '1:2', '1:3', '1:4이상'],
-            ),
+        SizedBox(
+          width: screenSizeController.getWidthByRatio(0.6),
+          child: GoskiDropdown(
+            hint: tr('selectStudentNumber'),
+            list: ['1:1', '1:2', '1:3', '1:4이상'],
           ),
         ),
       ],
@@ -124,9 +117,9 @@ class _StudentNumberDropdown extends StatelessWidget {
 }
 
 class _DateTimeSelectors extends StatelessWidget {
-  final ScreenSizeController screenSizeController;
-
-  _DateTimeSelectors({super.key, required this.screenSizeController});
+  _DateTimeSelectors({
+    super.key,
+  });
 
   final List<String> goskiLessonType = [
     tr('ski'),
@@ -171,7 +164,7 @@ class _DateTimeSelectors extends StatelessWidget {
       Row(
         children: [
           GoskiText(
-            text: "강습 종류",
+            text: tr('lessonType'),
             size: goskiFontLarge,
             isBold: true,
             isExpanded: true,
@@ -205,9 +198,9 @@ class _DateTimeSelectors extends StatelessWidget {
 }
 
 class _DifficultyLevelSwitch extends StatelessWidget {
-  final ScreenSizeController screenSizeController;
-
-  const _DifficultyLevelSwitch({super.key, required this.screenSizeController});
+  const _DifficultyLevelSwitch({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

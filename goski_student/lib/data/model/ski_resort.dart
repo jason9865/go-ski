@@ -11,8 +11,8 @@ class SkiResort {
 
   factory SkiResort.fromJson(Map<String, dynamic> json) {
     return SkiResort(
-        resortId: json['resortId'],
-        resortName: json['resortName'],
-        resortLocation: json['resortLocation']);
+        resortId: json['resortId'] as int,
+        resortName: json['resortName'] as String,
+        resortLocation: json['resortLocation'] as String);
   }
 }
