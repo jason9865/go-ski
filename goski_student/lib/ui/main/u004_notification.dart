@@ -8,6 +8,7 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_smallsize_button.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
 import '../component/goski_modal.dart';
@@ -53,63 +54,66 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                _DummyNotification item = list[index];
+    return Scaffold(
+      appBar: GoskiSubHeader(title: tr('notification')),
+      body: GoskiContainer(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  _DummyNotification item = list[index];
 
-                switch (item.type) {
-                  case Notification.INVITE:
-                    return InviteNotificationCard(
-                      dateTime: DateTime.now(),
-                      teamName: item.teamName,
-                    );
-                  case Notification.MESSAGE:
-                    return MessageNotificationCard(
-                      dateTime: DateTime.now(),
-                      title: item.title,
-                      content: item.content,
-                      imageUrl: item.imageUrl,
-                      isExpanded: item.isExpanded,
-                      onExpandBtnClicked: () {
-                        setState(() {
-                          item.isExpanded = !item.isExpanded;
-                        });
-                      },
-                      onItemDeleteClicked: () {
-                        setState(() {
-                          list.removeAt(index);
-                        });
-                      },
-                    );
-                  default:
-                    return LessonNotificationCard(
-                      dateTime: DateTime.now(),
-                      title: item.title,
-                      content: item.content,
-                      isExpanded: item.isExpanded,
-                      onExpandBtnClicked: () {
-                        setState(() {
-                          item.isExpanded = !item.isExpanded;
-                        });
-                      },
-                      onItemDeleteClicked: () {
-                        setState(() {
-                          list.removeAt(index);
-                        });
-                      },
-                    );
-                }
-              },
-            ),
-          ],
+                  switch (item.type) {
+                    case Notification.INVITE:
+                      return InviteNotificationCard(
+                        dateTime: DateTime.now(),
+                        teamName: item.teamName,
+                      );
+                    case Notification.MESSAGE:
+                      return MessageNotificationCard(
+                        dateTime: DateTime.now(),
+                        title: item.title,
+                        content: item.content,
+                        imageUrl: item.imageUrl,
+                        isExpanded: item.isExpanded,
+                        onExpandBtnClicked: () {
+                          setState(() {
+                            item.isExpanded = !item.isExpanded;
+                          });
+                        },
+                        onItemDeleteClicked: () {
+                          setState(() {
+                            list.removeAt(index);
+                          });
+                        },
+                      );
+                    default:
+                      return LessonNotificationCard(
+                        dateTime: DateTime.now(),
+                        title: item.title,
+                        content: item.content,
+                        isExpanded: item.isExpanded,
+                        onExpandBtnClicked: () {
+                          setState(() {
+                            item.isExpanded = !item.isExpanded;
+                          });
+                        },
+                        onItemDeleteClicked: () {
+                          setState(() {
+                            list.removeAt(index);
+                          });
+                        },
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
