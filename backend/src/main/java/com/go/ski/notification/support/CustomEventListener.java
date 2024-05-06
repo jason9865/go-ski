@@ -64,9 +64,15 @@ public class CustomEventListener {
 
     @EventListener
     public void createLessonMessage(LessonAlertEvent lessonAlertEvent) {
-        log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
-        Notification notification = Notification.from(lessonAlertEvent);
-        notificationRepository.save(notification);
+        try {
+            String jsonContent = objectMapper.writeValueAsString(lessonAlertEvent);
+            log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
+            Notification notification = Notification.of(lessonAlertEvent,jsonContent);
+            notificationRepository.save(notification);
+        } catch(JsonProcessingException e) {
+        log.error("json error");
+    }
+
     }
 
     public boolean isSendAvailable(Integer userId, Integer notificationType) {

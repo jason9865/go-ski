@@ -53,17 +53,17 @@ public class QuartzJob implements Job {
 
         for (LessonInfo lessonInfo : lessonList) {
             LocalDateTime now = LocalDateTime.now();
-            String oldStartTime = TimeConvertor.calNewStartTime(lessonInfo.getStartTime());
             LocalDateTime startTime = LocalDateTime.now()
-                    .withHour(Integer.parseInt(oldStartTime.substring(0,2)))
-                    .withMinute(Integer.parseInt(oldStartTime.substring(3,4)))
+                    .withHour(Integer.parseInt(lessonInfo.getStartTime().substring(0,2)))
+                    .withMinute(Integer.parseInt(lessonInfo.getStartTime().substring(2,4)))
                     .withSecond(0);
 
+            log.info("시작 시간 - {}",startTime);
             Duration duration = Duration.between(now,startTime);
 
-            log.info("레슨까지 남은 시간 - {}",Math.abs(duration.toHours()));
+            log.info("레슨까지 남은 시간 - {}",duration.toHours());
 
-            if (Math.abs(duration.toHours()) <= 24) {
+            if (duration.toHours() <= 1) {
                 Lesson lesson = lessonInfo.getLesson();
                 eventPublisher.publish(lessonInfo, lesson);
             }

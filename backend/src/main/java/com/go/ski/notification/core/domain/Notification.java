@@ -60,6 +60,17 @@ public class Notification {
                 .build();
     }
 
+    public static Notification of(LessonAlertEvent lessonAlertEvent, String jsonContent) {
+        return Notification.builder()
+                .receiverId(lessonAlertEvent.getReceiverId())
+                .notificationType(lessonAlertEvent.getNotificationType())
+                .deviceType(lessonAlertEvent.getDeviceType())
+                .title(lessonAlertEvent.getTitle())
+                .content(jsonContent)
+                .createdAt(lessonAlertEvent.getCreatedAt())
+                .build();
+    }
+
     public static Notification from(MessageEvent messageEvent) {
         return Notification.builder()
                 .senderId(messageEvent.getSenderId())
@@ -72,15 +83,7 @@ public class Notification {
                 .build();
     }
 
-    public static Notification from(LessonAlertEvent lessonAlertEvent) {
-        return Notification.builder()
-                .receiverId(lessonAlertEvent.getReceiverId())
-                .notificationType(lessonAlertEvent.getNotificationType())
-                .deviceType(lessonAlertEvent.getDeviceType())
-                .title(lessonAlertEvent.getTitle())
-                .createdAt(lessonAlertEvent.getCreatedAt())
-                .build();
-    }
+
 
 
 }

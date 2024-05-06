@@ -49,7 +49,7 @@ public class QuartzConfig {
                 .withIdentity("LessonAlertEvent Trigger", "go-ski")         // Trigger 이름, 그룹 지정
                 .withDescription("현재 시간 기준으로 1시간 남은 강습이 있는지 확인 - 30분 마다 실행 Trigger")     // Trigger 설명
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("/10 * * * * ?")).build();
+                .withSchedule(CronScheduleBuilder.cronSchedule("* 0/30 * * * ?")).build(); // 30분마다
 
         scheduler = new StdSchedulerFactory().getScheduler();
         QuartzListener quartzListener = new QuartzListener();
