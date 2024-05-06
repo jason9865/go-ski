@@ -71,7 +71,7 @@ public class EventPublisher {
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
         receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장
+//        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장 -> team에서 사장 Id를 가져올 수 없음
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
                         LessonCreateEvent.of(lessonInfo, receiverId, deviceType))
@@ -82,7 +82,7 @@ public class EventPublisher {
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-//        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장
+//        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장 -> team에서 사장 Id를 가져올 수 없음
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
                         LessonAlertEvent.of(lessonInfo, lesson, receiverId, "MOBILE"))

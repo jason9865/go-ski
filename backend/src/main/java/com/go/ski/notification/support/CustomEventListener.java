@@ -32,7 +32,7 @@ public class CustomEventListener {
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
+    @TransactionalEventListener // @Transaction이 붙은 Event
     public void createNotification(NotificationEvent notificationEvent){
         try{
             String jsonContent = objectMapper.writeValueAsString(notificationEvent);
@@ -62,7 +62,7 @@ public class CustomEventListener {
         }
     }
 
-    @EventListener
+    @EventListener // @Transaction이 붙지 않은 Event
     public void createLessonMessage(LessonAlertEvent lessonAlertEvent) {
         try {
             String jsonContent = objectMapper.writeValueAsString(lessonAlertEvent);

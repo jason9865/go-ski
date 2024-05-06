@@ -35,8 +35,11 @@ public class QuartzJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
+        // QuartzConfig에서 jobDataMap에 저장해둔 ApplicationContext 꺼내와서 사용
         ApplicationContext applicationContext = (ApplicationContext) jobExecutionContext.
                 getJobDetail().getJobDataMap().get("appContext");
+        
+        // ApplicationContext에서 EventPublisher와 LessonInfoRepository를 꺼내와서 JobExecutionContext에 빈 등록
         if (eventPublisher == null) {
             eventPublisher = applicationContext.getBean(EventPublisher.class);
         }
