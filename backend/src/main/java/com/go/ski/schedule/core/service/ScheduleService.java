@@ -9,6 +9,8 @@ import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
+import com.go.ski.payment.core.service.PayService;
+import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.ScheduleCacheDto;
 import com.go.ski.redis.repository.ScheduleCacheRepository;
@@ -49,6 +51,7 @@ public class ScheduleService {
     private final PermissionRepository permissionRepository;
     private final ScheduleCacheRepository scheduleCacheRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final PayService payService;
 
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
@@ -126,7 +129,7 @@ public class ScheduleService {
             lessonRepository.delete(lesson);
             scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
         } else {
-            // payService의 결제 취소 메서드 이용!!
+            payService.getCancelResponse(new CancelPaymentRequestDTO(lessonId));
         }
     }
 
