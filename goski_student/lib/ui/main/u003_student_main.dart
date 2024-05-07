@@ -12,6 +12,7 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:logger/logger.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -24,6 +25,7 @@ class StudentMainScreen extends StatelessWidget {
     'assets/images/adv.jpg',
     'assets/images/adv.jpg',
   ];
+
   StudentMainScreen({super.key});
 
   @override
@@ -96,7 +98,8 @@ class StudentMainScreen extends StatelessWidget {
                   UserMenu(
                     iconName: 'reservation',
                     iconImage: 'assets/images/calendar.svg',
-                    onClick: () => logger.d("예약"),
+                    onClick: () =>
+                        {logger.d("예약"), Get.toNamed("/reservation")},
                   ),
                   UserMenu(
                     iconName: 'couponBox',
@@ -298,24 +301,27 @@ class UserMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          iconImage,
-          width: 45,
-          height: 45,
-          colorFilter: const ColorFilter.mode(
-            goskiBlack,
-            BlendMode.srcIn,
+    return GestureDetector(
+      onTap: onClick,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            iconImage,
+            width: 45,
+            height: 45,
+            colorFilter: const ColorFilter.mode(
+              goskiBlack,
+              BlendMode.srcIn,
+            ),
           ),
-        ),
-        GoskiText(
-          text: tr(
-            iconName,
-          ),
-          size: goskiFontLarge,
-        )
-      ],
+          GoskiText(
+            text: tr(
+              iconName,
+            ),
+            size: goskiFontLarge,
+          )
+        ],
+      ),
     );
   }
 }

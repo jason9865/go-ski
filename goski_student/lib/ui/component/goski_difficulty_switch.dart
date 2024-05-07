@@ -18,15 +18,11 @@ class GoskiDifficultySwitch extends StatefulWidget {
 }
 
 class _DifficultySwitchState extends State<GoskiDifficultySwitch> {
-  final List<String> difficulties = [
-    tr('beginner'),
-    tr('intermediate'),
-    tr('advanced')
-  ];
+  final List<String> difficulties = ['beginner', 'intermediate', 'advanced'];
   final List<String> difficultiesDescription = [
-    tr('beginnerDescription'),
-    tr('intermediateDescription'),
-    tr('advancedDescription')
+    'beginnerDescription',
+    'intermediateDescription',
+    'advancedDescription'
   ];
   int selectedIndex = 0;
 
@@ -34,6 +30,7 @@ class _DifficultySwitchState extends State<GoskiDifficultySwitch> {
   Widget build(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(difficulties.length, (index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -47,16 +44,16 @@ class _DifficultySwitchState extends State<GoskiDifficultySwitch> {
                   height: 60,
                   alignment: AlignmentDirectional.center,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GoskiText(
                         text: tr(difficulties[index]),
-                        size: goskiFontMedium,
-                        color:
-                        selectedIndex == index ? goskiWhite : goskiBlack,
+                        size: goskiFontLarge,
+                        color: selectedIndex == index ? goskiWhite : goskiBlack,
                       ),
                       GoskiText(
                         text: tr(difficultiesDescription[index]),
-                        size: goskiFontSmall,
+                        size: goskiFontMedium,
                         color:
                             selectedIndex == index ? goskiWhite : goskiDarkGray,
                       )
