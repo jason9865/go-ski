@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.repository.SkiResortRepository;
+import com.go.ski.team.support.dto.ResortListDTO;
 import com.go.ski.user.core.model.Certificate;
 import com.go.ski.user.core.repository.CertificateRepository;
 
@@ -18,9 +19,9 @@ public class CommonService {
 	private final CertificateRepository certificateRepository;
 	private final SkiResortRepository skiResortRepository;
 
-	public List<SkiResort> getResortList() {
+	public List<ResortListDTO> getResortList() {
 
-		return skiResortRepository.findAll();
+		return skiResortRepository.findResortList();
 	}
 	public List<Certificate> getCertificateLsit() {
 
