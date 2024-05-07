@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @ToString
 public class MessageEvent {
 
+    private static final Integer NOTIFICATION_TYPE = 9;
+
     private Integer senderId;
     private String senderName;
     private Integer receiverId;
@@ -32,7 +34,7 @@ public class MessageEvent {
         messageEvent.title = requestDTO.getTitle();
         messageEvent.content = requestDTO.getContent();
         messageEvent.createdAt = LocalDateTime.now();
-        messageEvent.notificationType = requestDTO.getNotificationType();
+        messageEvent.notificationType = NOTIFICATION_TYPE;
         messageEvent.deviceType = DeviceType.valueOf(deviceType);
         messageEvent.imageUrl = imageUrl;
         return messageEvent;
