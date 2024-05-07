@@ -9,15 +9,17 @@ import 'package:goski_student/ui/component/goski_badge.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_middlesize_button.dart';
+import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/d_u012_send_message.dart';
 import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 import 'package:goski_student/ui/lesson/u015_review.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 
 class LessonListScreen extends StatelessWidget {
-  final lessonListViewModel = Get.put(LessonListViewModel());
+  final lessonListViewModel = Get.find<LessonListViewModel>();
 
   LessonListScreen({super.key});
 
@@ -38,40 +40,69 @@ class LessonListScreen extends StatelessWidget {
               final now = DateTime.now();
               String lessonStatus = 'notStart';
               Color lessonBackgroundColor = goskiDarkPink;
-        
-              if (lesson.startTime.isBefore(now) && lesson.endTime.isAfter(now)) {
+
+              if (lesson.startTime.isBefore(now) &&
+                  lesson.endTime.isAfter(now)) {
                 lessonStatus = 'onGoing';
                 lessonBackgroundColor = goskiBlue;
               } else if (lesson.endTime.isBefore(now)) {
                 lessonStatus = 'lessonFinished';
                 lessonBackgroundColor = goskiGreen;
               }
-        
+
               List<Widget> buttons = [];
               if (lessonStatus == 'notStart') {
                 buttons.add(createButton(
-                    screenSizeController, 'cancelLesson', "강습 예약 취소", lesson));
+                  screenSizeController,
+                  'cancelLesson',
+                  tr('cancelLesson'),
+                  lesson,
+                  () {},
+                ));
               }
               if (lesson.startTime
                       .isBefore(now.add(const Duration(minutes: 30))) &&
                   lesson.endTime.isAfter(now)) {
                 buttons.add(createButton(
-                    screenSizeController, 'sendMessage', "쪽지보내기", lesson));
+                  screenSizeController,
+                  'sendMessage',
+                  tr('sendMessage'),
+                  lesson,
+                  () {
+                    goToSendMessageDialog(context, lesson);
+                  },
+                ));
               }
               if (lesson.endTime.isBefore(now)) {
                 buttons.addAll([
                   createButton(
-                      screenSizeController, 'reLesson', "재강습 신청", lesson),
+                    screenSizeController,
+                    'reLesson',
+                    tr('reLessonRequest'),
+                    lesson,
+                    () {},
+                  ),
                   createButton(
-                      screenSizeController, 'feedback', "피드백 확인", lesson),
-                  createButton(screenSizeController, 'review', "리뷰 작성", lesson),
+                    screenSizeController,
+                    'feedback',
+                    tr('feedbackCheck'),
+                    lesson,
+                    () {},
+                  ),
+                  createButton(
+                    screenSizeController,
+                    'review',
+                    tr('writeReview'),
+                    lesson,
+                    () {},
+                  ),
                 ]);
               }
-        
+
               MainAxisAlignment alignment = buttons.length == 1
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.spaceBetween;
-        
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: GestureDetector(
@@ -98,57 +129,65 @@ class LessonListScreen extends StatelessWidget {
     );
   }
 
+  void goToCancelLessonScreen() {
+    Get.to(() => CancelLessonScreen());
+  }
+
+  void goToReviewScreen(LessonListItem lesson) {
+    Get.to(() => ReviewScreen(
+          resortName: lesson.resortName,
+          teamName: lesson.teamName,
+          instructorName: lesson.instructorName!,
+          startTime: lesson.startTime,
+          endTime: lesson.endTime,
+        ));
+  }
+
+  void goToFeedbackScreen(LessonListItem lesson) {
+    Get.to(() => FeedbackScreen(
+          resortName: lesson.resortName,
+          teamName: lesson.teamName,
+          instructorName: lesson.instructorName!,
+          startTime: lesson.startTime,
+          endTime: lesson.endTime,
+          feedbackImages: [
+            "assets/images/person1.png",
+            "assets/images/person1.png",
+            "assets/images/person1.png",
+            "assets/images/person1.png",
+            "assets/images/person1.png"
+          ],
+          feedbackVideos: [
+            "assets/images/person2.png",
+            "assets/images/person2.png",
+            "assets/images/person2.png",
+            "assets/images/person2.png",
+            "assets/images/person2.png",
+            "assets/images/person2.png"
+          ],
+          feedbackText:
+              "홍길동님, 안녕하세요!\n 오늘 스키 강습을 담당했던 김싸피라고 합니다.우리가 오늘 함께 연습했던 기술들에 대해서 간단하게 설명드리고, 그에 대한 피드백을 전달드리고자 합니다.\n첫 번째로, '스노우플라우'는 스키의 앞부분을 서로 가깝게 하고 뒷부분을 벌려 스키가 'V'자 형태를 이루게 하는 기술입니다. 이를 통해 속도를 조절하고 정지할 수 있죠. 홍길동님은 이 기술에서 체중 이동을 잘 해내셨어요. 정말 잘하셨습니다!\n다음으로, '스노우 플라우 턴'은 스노우플라우 자세에서 방향을 전환하는 기술입니다. 이때 중요한 것은 스키 끝이 서로 너무 멀어지지 않게 조절하는 것인데, 여기서 조금 아쉬웠던 점이 있습니다. 앞으로 이 부분에 조금 더 신경을 써 주시면 좋겠습니다.\n마지막으로, '슈템턴'은 한쪽 스키의 끝을 들고 반대쪽 스키로 회전하는 기술입니다. 여기서는 발을 모으는 타이밍이 조금 맞지 않았어요. 이 기술은 타이밍이 중요하므로, 다음 강습에서는 이 부분을 좀 더 집중적으로 연습해 보도록 하겠습니다.\n 오늘 강습에 참여해 주셔서 정말 감사합니다. 스키를 타며 즐거운 시간을 보내셨기를 바라며, 봄바람이 살랑이는 이 좋은 계절에 더욱 멋진 스키 실력을 쌓아가시길 응원합니다. 다음 강습에서 또 만나요!\n 김싸피 드림",
+        ));
+  }
+
+  void goToSendMessageDialog(BuildContext context, LessonListItem lesson) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GoskiModal(
+          title: tr('sendMessageTitle', args: [
+            (lesson.instructorName == null ? '이름 없음' : lesson.instructorName!)
+          ]),
+          child: SendMessageDialog(),
+        );
+      },
+    ).then((value) {
+      lessonListViewModel.initMessage(lesson);
+    });
+  }
+
   Widget createButton(ScreenSizeController screenSizeController, String textId,
-      String debugMessage, LessonListItem lesson) {
-    VoidCallback myOnTap = () {
-      print(debugMessage);
-    };
-
-    if (textId == 'cancelLesson') {
-      myOnTap = () {
-        Get.to(() => CancelLessonScreen());
-      };
-    } else if (textId == 'review') {
-      myOnTap = () {
-        Get.to(() => ReviewScreen(
-              resortName: lesson.resortName,
-              teamName: lesson.teamName,
-              instructorName: lesson.instructorName,
-              startTime: lesson.startTime,
-              endTime: lesson.endTime,
-            ));
-      };
-    } else if (textId == 'feedback') {
-      myOnTap = () {
-        Get.to(() => FeedbackScreen(
-              resortName: lesson.resortName,
-              teamName: lesson.teamName,
-              instructorName: lesson.instructorName,
-              startTime: lesson.startTime,
-              endTime: lesson.endTime,
-              feedbackImages: [
-                "assets/images/person1.png",
-                "assets/images/person1.png",
-                "assets/images/person1.png",
-                "assets/images/person1.png",
-                "assets/images/person1.png"
-              ],
-              feedbackVideos: [
-                "assets/images/person2.png",
-                "assets/images/person2.png",
-                "assets/images/person2.png",
-                "assets/images/person2.png",
-                "assets/images/person2.png",
-                "assets/images/person2.png"
-              ],
-              feedbackText:
-                  "홍길동님, 안녕하세요!\n 오늘 스키 강습을 담당했던 김싸피라고 합니다.우리가 오늘 함께 연습했던 기술들에 대해서 간단하게 설명드리고, 그에 대한 피드백을 전달드리고자 합니다.\n첫 번째로, '스노우플라우'는 스키의 앞부분을 서로 가깝게 하고 뒷부분을 벌려 스키가 'V'자 형태를 이루게 하는 기술입니다. 이를 통해 속도를 조절하고 정지할 수 있죠. 홍길동님은 이 기술에서 체중 이동을 잘 해내셨어요. 정말 잘하셨습니다!\n다음으로, '스노우 플라우 턴'은 스노우플라우 자세에서 방향을 전환하는 기술입니다. 이때 중요한 것은 스키 끝이 서로 너무 멀어지지 않게 조절하는 것인데, 여기서 조금 아쉬웠던 점이 있습니다. 앞으로 이 부분에 조금 더 신경을 써 주시면 좋겠습니다.\n마지막으로, '슈템턴'은 한쪽 스키의 끝을 들고 반대쪽 스키로 회전하는 기술입니다. 여기서는 발을 모으는 타이밍이 조금 맞지 않았어요. 이 기술은 타이밍이 중요하므로, 다음 강습에서는 이 부분을 좀 더 집중적으로 연습해 보도록 하겠습니다.\n 오늘 강습에 참여해 주셔서 정말 감사합니다. 스키를 타며 즐거운 시간을 보내셨기를 바라며, 봄바람이 살랑이는 이 좋은 계절에 더욱 멋진 스키 실력을 쌓아가시길 응원합니다. 다음 강습에서 또 만나요!\n 김싸피 드림",
-            ));
-      };
-    } else {
-      myOnTap = () => print(debugMessage);
-    }
-
+      String debugMessage, LessonListItem lesson, VoidCallback myOnTap) {
     return GoskiMiddlesizeButton(
       width: screenSizeController.getWidthByRatio(0.95),
       text: tr(textId),
@@ -180,7 +219,9 @@ class LessonListScreen extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: Image.asset(
-            lesson.profileUrl,
+            lesson.profileUrl != null
+                ? lesson.profileUrl!
+                : 'assets/images/person1.png',
             width: 90,
             height: screenSizeController.getHeightByRatio(0.12),
             fit: BoxFit.fitHeight,
@@ -202,7 +243,9 @@ class LessonListScreen extends StatelessWidget {
       children: [
         detailRow(
             'name',
-            tr('dynamicInstructor', args: [lesson.instructorName]),
+            tr('dynamicInstructor', args: [
+              lesson.instructorName == null ? '이름 없음' : lesson.instructorName!
+            ]),
             goskiFontSmall),
         SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
         detailRow('location', lesson.resortName, goskiFontSmall),
