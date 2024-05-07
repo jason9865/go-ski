@@ -1,5 +1,6 @@
 package com.go.ski.notification.support.events;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.notification.core.domain.DeviceType;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -11,14 +12,15 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class NotificationEvent {
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final Integer receiverId;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final LocalDateTime createdAt;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final Integer notificationType;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final DeviceType deviceType;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final String title;
 
 

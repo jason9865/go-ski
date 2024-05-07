@@ -38,7 +38,6 @@ public class TeamService {
     private final TeamImageRepository teamImageRepository;
     private final LevelOptionRepository levelOptionRepository;
     private final OneToNOptionRepository oneToNOptionRepository;
-    private final PermissionRepository permissionRepository;
     private final S3Uploader s3Uploader;
 
 

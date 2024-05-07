@@ -31,4 +31,11 @@ public class TimeConvertor {
                 .mapToInt(day -> 1 << day)
                 .sum();
     }
+
+    public static String convertFromBitmask(String bitmask) {
+        String type = bitmask.substring(1,3);
+        if (type.equals("01")) return "스키";
+        else if (type.equals("10")) return "보드";
+        else return "스키 & 보드";
+    }
 }
