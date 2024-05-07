@@ -68,6 +68,8 @@ class _SkiResortDropdown extends StatelessWidget {
             child: GoskiDropdown(
               hint: tr('selectSkiResort'),
               list: ['지산리조트', '곤지암리조트', '비발디파크'],
+              selected: null,
+              onSelected: (idx) {  },
             ),
           ),
         ),
@@ -98,6 +100,8 @@ class _StudentNumberDropdown extends StatelessWidget {
             child: GoskiDropdown(
               hint: tr('selectStudentNumber'),
               list: ['1:1', '1:2', '1:3', '1:4이상'],
+              selected: null,
+              onSelected: (idx) {  },
             ),
           ),
         ),
