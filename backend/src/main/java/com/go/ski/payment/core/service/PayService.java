@@ -470,4 +470,9 @@ public class PayService {
 		Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
 		return user.equals(lesson.getUser());
 	}
+
+	@Transactional
+    public LessonCostResponseDTO getLessonCost(Integer lessonId) {
+		return lessonRepository.findLessonCost(lessonId);
+    }
 }

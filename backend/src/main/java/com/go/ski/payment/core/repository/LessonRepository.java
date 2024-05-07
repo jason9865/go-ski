@@ -3,6 +3,7 @@ package com.go.ski.payment.core.repository;
 import java.util.List;
 
 import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.support.dto.response.LessonCostResponseDTO;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -44,6 +45,13 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);
+
+	@Query("SELECT NEW com.go.ski.payment.support.dto.response.LessonCostResponseDTO ( "
+		+ "p.totalAmount ) "
+		+ "FROM Lesson l "
+		+ "JOIN Payment  p ON l.lessonId = p.lessonPaymentInfo.lessonId "
+		+ "WHERE l.lessonId = :lessonId ")
+	LessonCostResponseDTO findLessonCost(Integer lessonId);
 
 	List<Lesson> findByUser(User user);
 
