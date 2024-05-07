@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.go.ski.common.service.CommonService;
-import com.go.ski.common.support.dto.ResortResponseDTO;
 import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.user.core.model.Certificate;
 
