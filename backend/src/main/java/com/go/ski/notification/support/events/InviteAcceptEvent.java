@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class InviteAcceptEvent extends NotificationEvent{
+    private static final Integer NOTIFICATION_TYPE = 5;
 
     private InviteAcceptEvent(
             Integer receiverId, LocalDateTime createdAt,
@@ -21,7 +22,7 @@ public class InviteAcceptEvent extends NotificationEvent{
         return new InviteAcceptEvent(
                 userId,
                 LocalDateTime.now(),
-                requestDTO.getNotificationType(),
+                NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
                 instructor.getUser().getUserName() + " 강사가 팀에 초대되었습니다"
         );

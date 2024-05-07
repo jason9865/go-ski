@@ -16,6 +16,5 @@ public class FeedbackRequestDTO {
     private String content;
     private List<MultipartFile> images;
     private List<MultipartFile> videos;
-    private Integer notificationType;
 
 }

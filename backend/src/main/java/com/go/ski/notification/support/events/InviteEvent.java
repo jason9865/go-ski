@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 public class InviteEvent extends NotificationEvent{
 
+    private static final Integer NOTIFICATION_TYPE = 5;
+
     private final Integer teamId;
 
     private InviteEvent(
@@ -24,7 +26,7 @@ public class InviteEvent extends NotificationEvent{
         return new InviteEvent(
                 inviteRequestDTO.getReceiverId(),
                 LocalDateTime.now(),
-                inviteRequestDTO.getNotificationType(),
+                NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
                 team.getTeamName() + "에서 팀 초대 요청이 왔습니다.",
                 team.getTeamId()
