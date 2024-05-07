@@ -29,7 +29,6 @@ public class NotificationMessage {
     @Getter
     public static class Data{
         private String title;
-        private String content;
         private String notificationType;
         private String createdAt;
     }
