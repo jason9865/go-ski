@@ -138,36 +138,65 @@ class CancelLessonScreen extends StatelessWidget {
               ),
               BuildInterval(),
               //TODO. 환불 규정 안내 추가
-              GoskiDropdown(hint: tr("환불 규정 안내"), list: [" ", " "]),
+              GoskiDropdown(
+                hint: tr("환불 규정 안내"),
+                list: [" ", " "],
+                selected: null,
+                onSelected: (idx) {  },
+              ),
               BuildInterval(),
               GoskiCard(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GoskiText(text: tr("checkRefund"), size: goskiFontMedium, isBold: true,),
+                      GoskiText(
+                        text: tr("checkRefund"),
+                        size: goskiFontMedium,
+                        isBold: true,
+                      ),
                       BuildInterval(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GoskiText(text: tr('paymentAmount'), size: goskiFontMedium),
-                          GoskiText(text: tr('moneyUnit',args: [reservation.payment.toString()]), size: goskiFontMedium),
+                          GoskiText(
+                              text: tr('paymentAmount'), size: goskiFontMedium),
+                          GoskiText(
+                              text: tr('moneyUnit',
+                                  args: [reservation.payment.toString()]),
+                              size: goskiFontMedium),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GoskiText(text: tr('refundCharge'), size: goskiFontMedium),
-                          GoskiText(text: tr('moneyUnit',args: [reservation.charge.toString()]), size: goskiFontMedium),
+                          GoskiText(
+                              text: tr('refundCharge'), size: goskiFontMedium),
+                          GoskiText(
+                              text: tr('moneyUnit',
+                                  args: [reservation.charge.toString()]),
+                              size: goskiFontMedium),
                         ],
                       ),
-                      Divider(thickness: 1, height: 15, color: goskiDashGray,),
+                      Divider(
+                        thickness: 1,
+                        height: 15,
+                        color: goskiDashGray,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GoskiText(text: tr('expectedRefund'), size: goskiFontMedium,),
-                          GoskiText(text: tr('moneyUnit',args: [reservation.finalPrice.toString()]), size: goskiFontMedium,),
+                          GoskiText(
+                            text: tr('expectedRefund'),
+                            size: goskiFontMedium,
+                          ),
+                          GoskiText(
+                            text: tr('moneyUnit',
+                                args: [reservation.finalPrice.toString()]),
+                            size: goskiFontMedium,
+                          ),
                         ],
                       ),
                     ],
