@@ -24,7 +24,7 @@ public class KakaopayCancelResponseDTO {
 	private Amount approvedCancelAmount;
 	@JsonProperty("canceled_amount")
 	private Amount canceledAmount;
-	@JsonProperty("cancel_available_amount")
+	@JsonProperty("item_name")
 	private Amount cancelAvailableAmount;
 	@JsonProperty("item_name")
 	private String itemName;

@@ -24,6 +24,7 @@ import com.go.ski.payment.support.dto.response.KakaopayCancelResponseDTO;
 import com.go.ski.payment.support.dto.request.KakaopayPrepareRequestDTO;
 import com.go.ski.payment.support.dto.response.KakaopayPrepareResponseDTO;
 import com.go.ski.payment.core.service.KakaoPayService;
+import com.go.ski.payment.support.dto.response.LessonCostResponseDTO;
 import com.go.ski.payment.support.dto.response.OwnerPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 import com.go.ski.payment.support.dto.response.VerifyAccountResponseDTO;
@@ -133,6 +134,13 @@ public class PaymentController {
 
 		return  ResponseEntity.ok().body(response);
 	}
+
+	@GetMapping("/lesson/{lesson_id}")
+	public ResponseEntity<LessonCostResponseDTO> getLessonCost(@PathVariable(value = "lesson_id") Integer lesson_id) {
+		LessonCostResponseDTO response = payService.getLessonCost(lesson_id);
+		return ResponseEntity.ok().body(response);
+	}
+
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음
 	// @GetMapping("/getPg/{pg_token}")

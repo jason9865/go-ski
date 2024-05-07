@@ -1,7 +1,5 @@
 package com.go.ski.payment.support.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class KakaopayCancelRequestDTO {
 	private String tid;
-	@JsonProperty("cancel_amount")
 	private Integer cancelAmount;
-	@JsonProperty("cancel_tax_free_amount")
 	private Integer cancelTaxFreeAmount;
 	//사용할 수 있는 것
 	/*

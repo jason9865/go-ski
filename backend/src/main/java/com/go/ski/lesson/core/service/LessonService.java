@@ -110,7 +110,10 @@ public class LessonService {
                     int teamCost = calculateTeamCost(team.getTeamCost(), optionalOneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
                     Optional<LevelOption> optionalLevelOption = levelOptionRepository.findById(teamId);
                     int levelCost = calculateLevelCost(optionalLevelOption, reserveNoviceTeamRequestDTO.getLevel());
-                    reserveAdvancedResponseDTO.setCost((teamCost + levelCost + permission.getDesignatedCost()) * reserveNoviceTeamRequestDTO.getDuration());
+
+                    reserveAdvancedResponseDTO.setCost(teamCost * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setDesignatedFee(permission.getDesignatedCost() * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setLevelOptionFee(levelCost * reserveNoviceTeamRequestDTO.getDuration());
                 }
                 // 별점 설정
                 List<ReviewResponseDTO> reviews = reviewRepository.findByLessonInstructor(instructor).stream().map(ReviewResponseDTO::new).toList();

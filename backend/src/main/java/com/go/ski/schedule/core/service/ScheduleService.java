@@ -118,18 +118,6 @@ public class ScheduleService {
         }
     }
 
-    @Transactional
-    public void deleteSchedule(Integer lessonId) {
-        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
-        LessonInfo lessonInfo = lessonInfoRepository.findById(lessonId).orElseThrow();
-        if (lesson.getIsOwn() == 1) {
-            lessonRepository.delete(lesson);
-            scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
-        } else {
-            // payService의 결제 취소 메서드 이용!!
-        }
-    }
-
     public boolean scheduleCaching(Team team, LocalDate lessonDate) {
         // 해당 팀에 소속된 강사 리스트
         List<TeamInstructor> teamInstructors = teamInstructorRepository.findByTeamAndIsInviteAccepted(team, true);
