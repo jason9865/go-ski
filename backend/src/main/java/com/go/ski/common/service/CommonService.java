@@ -1,0 +1,29 @@
+package com.go.ski.common.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.go.ski.team.core.model.SkiResort;
+import com.go.ski.team.core.repository.SkiResortRepository;
+import com.go.ski.user.core.model.Certificate;
+import com.go.ski.user.core.repository.CertificateRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class CommonService {
+
+	CertificateRepository certificateRepository;
+	SkiResortRepository skiResortRepository;
+	public List<SkiResort> getResortList() {
+
+		return skiResortRepository.findAll();
+	}
+
+	public List<Certificate> getCertificateLsit() {
+
+		return certificateRepository.findAll();
+	}
+}

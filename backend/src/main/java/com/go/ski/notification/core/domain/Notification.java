@@ -1,5 +1,6 @@
 package com.go.ski.notification.core.domain;
 
+import com.go.ski.notification.support.events.LessonAlertEvent;
 import com.go.ski.notification.support.events.MessageEvent;
 import com.go.ski.notification.support.events.NotificationEvent;
 import jakarta.persistence.*;
@@ -48,14 +49,25 @@ public class Notification {
         isRead = 1;
     }
 
-    public static Notification from(NotificationEvent notificationEvent) {
+    public static Notification of(NotificationEvent notificationEvent, String jsonContent) {
         return Notification.builder()
                 .receiverId(notificationEvent.getReceiverId())
                 .notificationType(notificationEvent.getNotificationType())
                 .deviceType(notificationEvent.getDeviceType())
                 .title(notificationEvent.getTitle())
-                .content(notificationEvent.getContent())
+                .content(jsonContent)
                 .createdAt(notificationEvent.getCreatedAt())
+                .build();
+    }
+
+    public static Notification of(LessonAlertEvent lessonAlertEvent, String jsonContent) {
+        return Notification.builder()
+                .receiverId(lessonAlertEvent.getReceiverId())
+                .notificationType(lessonAlertEvent.getNotificationType())
+                .deviceType(lessonAlertEvent.getDeviceType())
+                .title(lessonAlertEvent.getTitle())
+                .content(jsonContent)
+                .createdAt(lessonAlertEvent.getCreatedAt())
                 .build();
     }
 
@@ -70,6 +82,8 @@ public class Notification {
                 .createdAt(messageEvent.getCreatedAt())
                 .build();
     }
+
+
 
 
 }
