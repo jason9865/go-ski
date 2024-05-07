@@ -43,8 +43,7 @@ Future<void> setFCM() async {
   logger.d('User granted permission: ${settings.authorizationStatus}');
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    logger.d("알림 도착");
-
+    logger.d("알림 도착 ${message.data["title"]} ${message.data["content"]}");
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'high_importance_channel', 'High Importance Notifications',
@@ -56,11 +55,8 @@ Future<void> setFCM() async {
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0,
-        '${message.notification!.title}',
-        '${message.notification!.body}',
-        notificationDetails,
+    await flutterLocalNotificationsPlugin.show(0, '${message.data["title"]}',
+        '${message.data["content"]}', notificationDetails,
         payload: 'item x');
   });
 
