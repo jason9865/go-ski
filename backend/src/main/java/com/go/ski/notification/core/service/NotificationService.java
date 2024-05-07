@@ -54,17 +54,11 @@ public class NotificationService {
 
     public List<NotificationResponseDTO> findAllNotifications(User user) {
         return notificationRepository.findByReceiverId(user.getUserId());
-
     }
 
     @Transactional
-    public void read(Integer notificationId, User user) {
-        Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
-
-        validateUser(notification, user);
-
-        notification.read();
+    public void readAll(User user) {
+        notificationRepository.readAllNotifications(user.getUserId());
     }
 
     @Transactional

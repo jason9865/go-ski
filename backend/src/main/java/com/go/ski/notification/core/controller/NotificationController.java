@@ -24,7 +24,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
     private final TeamInstructorService teamInstructorService;
-    private final FcmClient fcmClient;
 
     // 토큰 발급 요청
     @PostMapping("/token")
@@ -48,11 +47,11 @@ public class NotificationController {
 
 
     // 알림 읽기
-    @PatchMapping("/read/{notificationId}")
-    public ResponseEntity<ApiResponse<?>> readNotifications(HttpServletRequest request,@PathVariable Integer notificationId ){
+    @PatchMapping("/read-all")
+    public ResponseEntity<ApiResponse<?>> readNotifications(HttpServletRequest request ){
         log.info("NotificationController.readNotifications");
         User user = (User)request.getAttribute("user");
-        notificationService.read(notificationId, user);
+        notificationService.readAll(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
@@ -82,7 +81,7 @@ public class NotificationController {
     }
 
     // 팀 초대 요청 수락
-    @PostMapping("/invite-accept")
+    @PostMapping("/accept-invite")
     public ResponseEntity<ApiResponse<?>> acceptInvite(HttpServletRequest request,@RequestBody InviteAcceptRequestDTO requestDTO) {
         log.info("NotificationController.acceptInvite");
         teamInstructorService.addNewInstructor(requestDTO,request);
