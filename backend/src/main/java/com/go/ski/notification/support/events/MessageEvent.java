@@ -1,5 +1,6 @@
 package com.go.ski.notification.support.events;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.user.core.model.User;
@@ -16,14 +17,21 @@ public class MessageEvent {
 
     private static final Integer NOTIFICATION_TYPE = 9;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer senderId;
     private String senderName;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer receiverId;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String title;
     private String content;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime createdAt;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer notificationType;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private DeviceType deviceType;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String imageUrl;
 
     public static MessageEvent of(FcmSendRequestDTO requestDTO, User user, String imageUrl, String deviceType){

@@ -79,6 +79,8 @@ public class NotificationService {
                 s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
                 null;
 
+        log.info("imageurl - {}",imageUrl);
+
         eventPublisher.publish(fcmSendRequestDTO, user, imageUrl , deviceType);
     }
 

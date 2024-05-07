@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 public class NotificationResponseDTO {
 
     private Integer notificationId;
-    private Integer senderId;
-    private String senderName;
     private Integer notificationType;
+    private LocalDateTime createdAt;
+    private byte isRead;
     private String title;
     private String content;
     private String imageUrl;
-    private byte isRead;
-    private LocalDateTime createdAt;
+    private Integer senderId;
+    private String senderName;
 }

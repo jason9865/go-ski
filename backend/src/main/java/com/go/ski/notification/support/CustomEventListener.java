@@ -8,6 +8,7 @@ import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.core.service.FcmClient;
 import com.go.ski.notification.support.events.LessonAlertEvent;
+import com.go.ski.notification.support.events.LessonCreateEvent;
 import com.go.ski.notification.support.events.MessageEvent;
 import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
@@ -54,12 +55,17 @@ public class CustomEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void createMessage(MessageEvent messageEvent) {
-        Notification notification = Notification.from(messageEvent);
-        notificationRepository.save(notification);
-        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-            log.warn("DM 보내기 - {}",notification.getTitle());
-            fcmClient.sendMessageTo(messageEvent);
-        }
+
+            Notification notification = Notification.from(messageEvent);
+            notificationRepository.save(notification);
+            log.warn("알림 보내기 - {}",messageEvent.getTitle());
+            fcmClient.sendMessageTo(notification);
+            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
+                log.warn("DM 보내기 - {}",notification.getTitle());
+                fcmClient.sendMessageTo(messageEvent);
+            }
+
+
     }
 
     @EventListener // @Transaction이 붙지 않은 Event

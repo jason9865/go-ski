@@ -79,6 +79,7 @@ public class Notification {
                 .deviceType(messageEvent.getDeviceType())
                 .title(messageEvent.getTitle())
                 .content(messageEvent.getContent())
+                .imageUrl(messageEvent.getImageUrl())
                 .createdAt(messageEvent.getCreatedAt())
                 .build();
     }
