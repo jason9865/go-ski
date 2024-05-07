@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.go.ski.common.service.CommonService;
 import com.go.ski.team.core.model.SkiResort;
+import com.go.ski.team.support.dto.ResortListDTO;
 import com.go.ski.user.core.model.Certificate;
 
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class CommonController {
 	private final CommonService commonService;
 
 	@GetMapping("/resort")
-	public ResponseEntity<List<SkiResort>> getResortList() {
+	public ResponseEntity<List<ResortListDTO>> getResortList() {
 
-		List<SkiResort> result = commonService.getResortList();
+		List<ResortListDTO> result = commonService.getResortList();
 		return ResponseEntity.ok().body(result);
 	}
 
