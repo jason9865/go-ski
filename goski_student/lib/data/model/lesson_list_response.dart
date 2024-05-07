@@ -1,16 +1,15 @@
-
+import 'package:intl/intl.dart';
 
 class LessonListItemResponse {
   int lessonId;
   int teamId;
   String teamName;
-  int instructorId;
-  String instructorName;
-  String profileUrl;
+  int? instructorId;
+  String? instructorName;
+  String? profileUrl;
   String resortName;
   DateTime lessonDate;
   DateTime startTime;
-  // String startTime;
   int duration;
   String lessonStatus;
 
@@ -29,17 +28,23 @@ class LessonListItemResponse {
   });
 
   factory LessonListItemResponse.fromJson(Map<String, dynamic> json) {
+    String timeString = json['startTime'];
+    String formattedTimeString = "${timeString.substring(0, 2)}:${timeString.substring(2)}";
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    String combinedDateTimeString = "$formattedDate $formattedTimeString";
+    DateTime dateTime = DateFormat("yyyy-MM-dd HH:mm").parse(combinedDateTimeString);
+
     return LessonListItemResponse(
       lessonId: json['lessonId'] as int,
       teamId: json['teamId'] as int,
       teamName: json['teamName'] as String,
-      instructorId: json['instructorId'] as int,
-      instructorName: json['instructorName'] as String,
-      profileUrl: json['profileUrl'] as String,
+      instructorId: json['instructorId'] as int?,
+      instructorName: json['instructorName'] as String?,
+      profileUrl: json['profileUrl'] as String?,
       resortName: json['resortName'] as String,
       lessonDate: DateTime.parse(json['lessonDate']),
-      startTime: DateTime.parse(json['startTime']),
-      // startTime: json['startTime'] as String,
+      startTime: dateTime,
       duration: json['duration'] as int,
       lessonStatus: json['lessonStatus'] as String,
     );
@@ -50,14 +55,13 @@ class LessonListItem {
   int lessonId;
   int teamId;
   String teamName;
-  int instructorId;
-  String instructorName;
-  String profileUrl;
+  int? instructorId;
+  String? instructorName;
+  String? profileUrl;
   String resortName;
   DateTime lessonDate;
   DateTime startTime;
   DateTime endTime;
-  // String startTime;
   int duration;
   String lessonStatus;
 
@@ -89,7 +93,7 @@ extension LessonListItemResponseToLessonListItem on LessonListItemResponse {
       resortName: resortName,
       lessonDate: lessonDate,
       startTime: startTime,
-      endTime: startTime.add(Duration(milliseconds: duration)),
+      endTime: startTime.add(Duration(hours: duration)),
       duration: duration,
       lessonStatus: lessonStatus,
     );

@@ -27,8 +27,8 @@ class StudentMainScreen extends StatelessWidget {
     'assets/images/adv.jpg',
     'assets/images/adv.jpg',
   ];
-  final mainViewModel = Get.put(MainViewModel());
-  final lessonListViewModel = Get.put(LessonListViewModel());
+  final mainViewModel = Get.find<MainViewModel>();
+  final lessonListViewModel = Get.find<LessonListViewModel>();
 
   StudentMainScreen({super.key});
 
