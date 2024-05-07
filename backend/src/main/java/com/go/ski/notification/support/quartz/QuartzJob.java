@@ -50,10 +50,6 @@ public class QuartzJob implements Job {
 
         List<LessonInfo> lessonList = lessonInfoRepository.findByLessonDateAndLessonStatus(LESSON_DATE, LESSON_STATUS);
 
-        log.info("lessonlist의 길이 - {}",lessonList.size());
-
-        log.info("현재 시간 - {}",LocalDateTime.now());
-
         for (LessonInfo lessonInfo : lessonList) {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime startTime = LocalDateTime.now()
@@ -61,10 +57,7 @@ public class QuartzJob implements Job {
                     .withMinute(Integer.parseInt(lessonInfo.getStartTime().substring(2,4)))
                     .withSecond(0);
 
-            log.info("시작 시간 - {}",startTime);
             Duration duration = Duration.between(now,startTime);
-
-            log.info("레슨까지 남은 시간 - {}",duration.toMinutes());
 
             if (duration.toHours() <= 1 && duration.toMinutes() > 30) {
                 Lesson lesson = lessonInfo.getLesson();
