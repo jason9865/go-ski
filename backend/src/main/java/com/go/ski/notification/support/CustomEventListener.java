@@ -8,6 +8,7 @@ import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.core.service.FcmClient;
 import com.go.ski.notification.support.events.LessonAlertEvent;
+import com.go.ski.notification.support.events.LessonCreateEvent;
 import com.go.ski.notification.support.events.MessageEvent;
 import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;

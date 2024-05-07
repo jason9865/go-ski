@@ -62,6 +62,7 @@ public class QuartzJob implements Job {
             if (duration.toHours() <= 1 && duration.toMinutes() > 30) {
                 Lesson lesson = lessonInfo.getLesson();
                 eventPublisher.publish(lessonInfo, lesson);
+//                eventPublisher.publish(lesson,lessonInfo,"MOBILE");
             }
         }
     }

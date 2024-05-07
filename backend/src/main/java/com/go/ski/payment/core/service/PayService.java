@@ -2,6 +2,7 @@ package com.go.ski.payment.core.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.go.ski.common.exception.ApiExceptionFactory;
+import com.go.ski.notification.support.EventPublisher;
 import com.go.ski.payment.core.model.*;
 import com.go.ski.payment.core.repository.*;
 import com.go.ski.payment.support.dto.request.*;
@@ -83,6 +84,7 @@ public class PayService {
     private final PaymentCacheRepository paymentCacheRepository;
     private final SettlementRepository settlementRepository;
     private final ChargeRepository chargeRepository;
+    private final EventPublisher eventPublisher;
 
     //카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
     public HttpHeaders getHeader(String mode) {
@@ -200,6 +202,9 @@ public class PayService {
                 .partnerUserId(String.valueOf(user.getUserId()))//유저 아이디
                 .pgToken(request.getPgToken())//pg_token
                 .build();
+
+        String deviceType = httpServletRequest.getHeader("DeviceType");
+        eventPublisher.publish(tmpLesson, tmpLessonInfo,deviceType);
 
         // 강습 가능여부 판단 후 캐싱하는 메서드
         if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(), paymentCache.getLessonInfo().getLessonDate())) {
