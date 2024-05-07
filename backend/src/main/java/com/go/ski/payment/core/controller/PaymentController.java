@@ -133,6 +133,8 @@ public class PaymentController {
 
 		return  ResponseEntity.ok().body(response);
 	}
+
+	@GetMapping("/lesson/{lesson_id}")
 	//pgTokenTest
 	//pg 토큰 받아와야해서 이렇게 만들어봤음
 	// @GetMapping("/getPg/{pg_token}")
