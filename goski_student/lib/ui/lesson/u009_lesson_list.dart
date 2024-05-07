@@ -4,137 +4,102 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/data/model/lesson_list_response.dart';
 import 'package:goski_student/ui/component/goski_badge.dart';
-import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_middlesize_button.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 import 'package:goski_student/ui/lesson/u015_review.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
 
 class LessonListScreen extends StatelessWidget {
-  const LessonListScreen({super.key});
+  final lessonListViewModel = Get.put(LessonListViewModel());
+
+  LessonListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     cardOnTap() => print("강습 세부정보");
 
-    final List<_Lesson> lessonList = [
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "임종율",
-          instructorProfileImage: "assets/images/person1.png",
-          startTime: DateTime.now().add(const Duration(minutes: 30)),
-          endTime: DateTime.now().add(const Duration(minutes: 50))),
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "임종율",
-          instructorProfileImage: "assets/images/person1.png",
-          startTime: DateTime.now().add(const Duration(days: 1)),
-          endTime: DateTime.now().add(const Duration(days: 1, hours: 2))),
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "김태훈",
-          instructorProfileImage: "assets/images/person2.png",
-          startTime: DateTime.now(),
-          endTime: DateTime.now().add(const Duration(hours: 3))),
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "김태훈",
-          instructorProfileImage: "assets/images/person2.png",
-          startTime: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-          endTime: DateTime.now().subtract(const Duration(days: 1))),
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "김태훈",
-          instructorProfileImage: "assets/images/person2.png",
-          startTime: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
-          endTime: DateTime.now().subtract(const Duration(days: 1, hours: 2))),
-      _Lesson(
-          resortName: "지산스키장",
-          teamName: "승민 스키교실",
-          instructorName: "김태훈",
-          instructorProfileImage: "assets/images/person2.png",
-          startTime: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
-          endTime: DateTime.now().subtract(const Duration(days: 1, hours: 2))),
-    ];
-
-    return GoskiContainer(
-      onConfirm: () => {print("돌아가기")},
-      buttonName: tr('back'),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: lessonList.length,
-        itemBuilder: (BuildContext context, int index) {
-          final lesson = lessonList[index];
-          final now = DateTime.now();
-          String lessonStatus = 'notStart';
-          Color lessonBackgroundColor = goskiDarkPink;
-
-          if (lesson.startTime.isBefore(now) && lesson.endTime.isAfter(now)) {
-            lessonStatus = 'onGoing';
-            lessonBackgroundColor = goskiBlue;
-          } else if (lesson.endTime.isBefore(now)) {
-            lessonStatus = 'lessonFinished';
-            lessonBackgroundColor = goskiGreen;
-          }
-
-          List<Widget> buttons = [];
-          if (lessonStatus == 'notStart') {
-            buttons.add(createButton(
-                screenSizeController, 'cancelLesson', "강습 예약 취소", lesson));
-          }
-          if (lesson.startTime.isBefore(now.add(const Duration(minutes: 30))) &&
-              lesson.endTime.isAfter(now)) {
-            buttons.add(createButton(
-                screenSizeController, 'sendMessage', "쪽지보내기", lesson));
-          }
-          if (lesson.endTime.isBefore(now)) {
-            buttons.addAll([
-              createButton(screenSizeController, 'reLesson', "재강습 신청", lesson),
-              createButton(screenSizeController, 'feedback', "피드백 확인", lesson),
-              createButton(screenSizeController, 'review', "리뷰 작성", lesson),
-            ]);
-          }
-
-          MainAxisAlignment alignment = buttons.length == 1
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.spaceBetween;
-
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: GestureDetector(
-              onTap: cardOnTap,
-              child: GoskiCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      badgeRow(lessonStatus, lessonBackgroundColor),
-                      profileRow(lesson, screenSizeController),
-                      buttonRow(buttons, alignment),
-                    ],
+    return Obx(
+      () => Scaffold(
+        appBar: GoskiSubHeader(title: tr('lessonHistory')),
+        body: GoskiContainer(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: lessonListViewModel.lessonList.length,
+            itemBuilder: (BuildContext context, int index) {
+              final lesson = lessonListViewModel.lessonList[index];
+              final now = DateTime.now();
+              String lessonStatus = 'notStart';
+              Color lessonBackgroundColor = goskiDarkPink;
+        
+              if (lesson.startTime.isBefore(now) && lesson.endTime.isAfter(now)) {
+                lessonStatus = 'onGoing';
+                lessonBackgroundColor = goskiBlue;
+              } else if (lesson.endTime.isBefore(now)) {
+                lessonStatus = 'lessonFinished';
+                lessonBackgroundColor = goskiGreen;
+              }
+        
+              List<Widget> buttons = [];
+              if (lessonStatus == 'notStart') {
+                buttons.add(createButton(
+                    screenSizeController, 'cancelLesson', "강습 예약 취소", lesson));
+              }
+              if (lesson.startTime
+                      .isBefore(now.add(const Duration(minutes: 30))) &&
+                  lesson.endTime.isAfter(now)) {
+                buttons.add(createButton(
+                    screenSizeController, 'sendMessage', "쪽지보내기", lesson));
+              }
+              if (lesson.endTime.isBefore(now)) {
+                buttons.addAll([
+                  createButton(
+                      screenSizeController, 'reLesson', "재강습 신청", lesson),
+                  createButton(
+                      screenSizeController, 'feedback', "피드백 확인", lesson),
+                  createButton(screenSizeController, 'review', "리뷰 작성", lesson),
+                ]);
+              }
+        
+              MainAxisAlignment alignment = buttons.length == 1
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.spaceBetween;
+        
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: GestureDetector(
+                  onTap: cardOnTap,
+                  child: GoskiCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          badgeRow(lessonStatus, lessonBackgroundColor),
+                          profileRow(lesson, screenSizeController),
+                          buttonRow(buttons, alignment),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
   Widget createButton(ScreenSizeController screenSizeController, String textId,
-      String debugMessage, _Lesson lesson) {
+      String debugMessage, LessonListItem lesson) {
     VoidCallback myOnTap = () {
       print(debugMessage);
     };
@@ -208,13 +173,14 @@ class LessonListScreen extends StatelessWidget {
     );
   }
 
-  Row profileRow(_Lesson lesson, ScreenSizeController screenSizeController) {
+  Row profileRow(
+      LessonListItem lesson, ScreenSizeController screenSizeController) {
     return Row(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: Image.asset(
-            lesson.instructorProfileImage,
+            lesson.profileUrl,
             width: 90,
             height: screenSizeController.getHeightByRatio(0.12),
             fit: BoxFit.fitHeight,
@@ -230,7 +196,7 @@ class LessonListScreen extends StatelessWidget {
   }
 
   Column detailColumn(
-      _Lesson lesson, ScreenSizeController screenSizeController) {
+      LessonListItem lesson, ScreenSizeController screenSizeController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -247,7 +213,7 @@ class LessonListScreen extends StatelessWidget {
     );
   }
 
-  Row dateRow(_Lesson lesson) {
+  Row dateRow(LessonListItem lesson) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,7 +235,7 @@ class LessonListScreen extends StatelessWidget {
     );
   }
 
-  Row timeRow(_Lesson lesson) {
+  Row timeRow(LessonListItem lesson) {
     return Row(
       children: [
         GoskiText(
@@ -315,22 +281,4 @@ class LessonListScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Lesson {
-  final String resortName;
-  final String teamName;
-  final String instructorName;
-  final String instructorProfileImage;
-  final DateTime startTime;
-  final DateTime endTime;
-
-  _Lesson({
-    required this.resortName,
-    required this.teamName,
-    required this.instructorName,
-    required this.instructorProfileImage,
-    required this.startTime,
-    required this.endTime,
-  });
 }
