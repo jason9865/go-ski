@@ -25,6 +25,7 @@ class DioInterceptor extends Interceptor {
       options.headers.addAll({
         "Content-Type": "application/json",
         "Authorization": "Bearer $accessToken",
+        "DeviceType": "MOBILE",
       });
     }
     return super.onRequest(options, handler);
