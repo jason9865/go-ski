@@ -40,11 +40,11 @@ public class CustomEventListener {
             Notification notification = Notification.of(notificationEvent, jsonContent);
             notificationRepository.save(notification);
             log.warn("알림 보내기 - {}",notificationEvent.getTitle());
-//        fcmClient.sendMessageTo(notification);
-//        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-//            log.warn("알림 보내기 - {}",notification.getTitle());
-//            fcmClient.sendMessageTo(notification);
-//        }
+            fcmClient.sendMessageTo(notification);
+            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
+                log.warn("알림 보내기 - {}",notification.getTitle());
+                fcmClient.sendMessageTo(notification);
+            }
 
         } catch(JsonProcessingException e) {
             log.error("json error");
@@ -69,6 +69,11 @@ public class CustomEventListener {
             log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
             Notification notification = Notification.of(lessonAlertEvent,jsonContent);
             notificationRepository.save(notification);
+//
+//            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
+//                log.warn("알림 보내기 - {}",notification.getTitle());
+//                fcmClient.sendMessageTo(notification);
+//            }
         } catch(JsonProcessingException e) {
         log.error("json error");
     }
