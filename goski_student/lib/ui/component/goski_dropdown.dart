@@ -9,12 +9,16 @@ import '../../const/util/screen_size_controller.dart';
 
 class GoskiDropdown extends StatefulWidget {
   final String hint;
+  final String? selected;
   final List<String> list;
+  final void Function(int) onSelected;
 
   const GoskiDropdown({
     super.key,
     required this.hint,
     required this.list,
+    this.selected,
+    required this.onSelected,
   });
 
   @override
@@ -26,7 +30,6 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
   final OverlayPortalController _tooltipController = OverlayPortalController();
   final _link = LayerLink();
   double? _buttonWidth;
-  String? _selected;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                _selected = widget.list[index];
+                                widget.onSelected(index);
                                 _tooltipController.toggle();
                               });
                             },
@@ -99,9 +102,9 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
               children: [
                 Expanded(
                   child: GoskiText(
-                    text: _selected == null ? widget.hint : _selected!,
+                    text: widget.selected == null ? widget.hint : widget.selected!,
                     size: goskiFontMedium,
-                    color: _selected == null ? goskiDarkGray : goskiBlack,
+                    color: widget.selected == null ? goskiDarkGray : goskiBlack,
                   ),
                 ),
                 AnimatedRotation(
