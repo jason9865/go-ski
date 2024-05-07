@@ -1,6 +1,5 @@
 package com.go.ski.lesson.support.dto;
 
-import com.go.ski.review.core.model.Review;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,8 @@ import java.util.List;
 @ToString
 public class ReserveResponseDTO {
     private Integer cost;
+    private Integer designatedFee;
+    private Integer levelOptionFee;
     private Double rating;
     private Integer reviewCount;
     private List<ReviewResponseDTO> reviews;
