@@ -10,6 +10,8 @@ import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.team.core.model.Team;
+import com.go.ski.team.core.repository.OneToNOptionRepository;
+import com.go.ski.team.core.repository.SkiResortRepository;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -31,6 +33,7 @@ public class EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamInstructorRepository teamInstructorRepository;
+    private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
         log.info("알림 보내기 EventPublisher");
@@ -68,8 +71,15 @@ public class EventPublisher {
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
+        log.info("lesson의 instructorID - {}",lesson.getInstructor().getInstructorId());
         Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+
+        log.info("resortname - {}",team.getSkiResort().getResortId());
+        Integer resortId = team.getSkiResort().getResortId();
+
+        String resortName = skiResortRepository.findById(resortId)
+                .orElseThrow(() -> new RuntimeException("해당 스키장이 존재하지 않습니다.")).getResortName();
 
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
@@ -77,7 +87,7 @@ public class EventPublisher {
         receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateEvent.of(lessonInfo, receiverId, deviceType))
+                        LessonCreateEvent.of(lessonInfo, resortName, receiverId, deviceType))
         );
     }
 
