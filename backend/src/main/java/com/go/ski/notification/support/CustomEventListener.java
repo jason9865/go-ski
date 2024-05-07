@@ -54,12 +54,23 @@ public class CustomEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void createMessage(MessageEvent messageEvent) {
-        Notification notification = Notification.from(messageEvent);
-        notificationRepository.save(notification);
-        if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
-            log.warn("DM 보내기 - {}",notification.getTitle());
-            fcmClient.sendMessageTo(messageEvent);
+
+        try{
+            String jsonContent = objectMapper.writeValueAsString(messageEvent);
+
+            Notification notification = Notification.of(messageEvent, jsonContent);
+            notificationRepository.save(notification);
+            log.warn("알림 보내기 - {}",messageEvent.getTitle());
+            fcmClient.sendMessageTo(notification);
+            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
+                log.warn("DM 보내기 - {}",notification.getTitle());
+                fcmClient.sendMessageTo(messageEvent);
+            }
+
+        } catch(JsonProcessingException e) {
+            log.error("json error");
         }
+
     }
 
     @EventListener // @Transaction이 붙지 않은 Event

@@ -71,14 +71,16 @@ public class Notification {
                 .build();
     }
 
-    public static Notification from(MessageEvent messageEvent) {
+    public static Notification of(MessageEvent messageEvent, String jsonData) {
         return Notification.builder()
                 .senderId(messageEvent.getSenderId())
                 .receiverId(messageEvent.getReceiverId())
                 .notificationType(messageEvent.getNotificationType())
                 .deviceType(messageEvent.getDeviceType())
                 .title(messageEvent.getTitle())
-                .content(messageEvent.getContent())
+//                .content(messageEvent.getContent())
+                .content(jsonData)
+                .imageUrl(messageEvent.getImageUrl())
                 .createdAt(messageEvent.getCreatedAt())
                 .build();
     }

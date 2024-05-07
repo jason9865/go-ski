@@ -12,17 +12,14 @@ public class FeedbackEvent extends NotificationEvent{
 
     private static final Integer NOTIFICATION_TYPE = 8;
 
-    private final Integer userId;
-    private final String representativeName;
+    private final Integer lessonId;
 
     private FeedbackEvent(
             Integer receiverId, LocalDateTime createdAt,
             Integer notificationType, DeviceType deviceType,
-            String title, Integer userId,
-            String representativeName){
+            String title, Integer lessonId){
         super(receiverId, createdAt, notificationType, deviceType,title);
-        this.userId = userId;
-        this.representativeName = representativeName;
+        this.lessonId = lessonId;
     }
 
     public static FeedbackEvent of(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
@@ -31,9 +28,8 @@ public class FeedbackEvent extends NotificationEvent{
                 LocalDateTime.now(),
                 NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
-                lesson.getTeam().getTeamName() + " 강습에서 피드백이 등록되었습니다.",
-                lesson.getUser().getUserId(),
-                lesson.getRepresentativeName()
+                lesson.getInstructor().getUser().getUserName() + " 강사로부터 피드백이 등록되었습니다.",
+                lesson.getLessonId()
         );
     }
 

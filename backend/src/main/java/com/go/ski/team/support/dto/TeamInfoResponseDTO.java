@@ -1,5 +1,6 @@
 package com.go.ski.team.support.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.go.ski.team.support.vo.TeamImageVO;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class TeamInfoResponseDTO {
     private String teamProfileImageUrl;
     private String description;
     private Integer teamCost;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer dayoff;
     @Setter
     private List<Integer> dayoffList;
