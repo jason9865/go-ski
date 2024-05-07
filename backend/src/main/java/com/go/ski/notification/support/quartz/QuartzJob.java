@@ -64,9 +64,9 @@ public class QuartzJob implements Job {
             log.info("시작 시간 - {}",startTime);
             Duration duration = Duration.between(now,startTime);
 
-            log.info("레슨까지 남은 시간 - {}",duration.toHours());
+            log.info("레슨까지 남은 시간 - {}",duration.toMinutes());
 
-            if (duration.toHours() <= 1) {
+            if (duration.toHours() <= 1 && duration.toMinutes() > 30) {
                 Lesson lesson = lessonInfo.getLesson();
                 eventPublisher.publish(lessonInfo, lesson);
             }
