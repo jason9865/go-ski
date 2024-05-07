@@ -11,6 +11,7 @@ import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
 import 'package:goski_student/data/data_source/ski_resort_service.dart';
+import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
 import 'package:goski_student/test.dart';
@@ -37,6 +38,7 @@ void initDependencies() {
   Get.lazyPut(() => LoginViewModel());
   Get.lazyPut(() => SignupViewModel());
   Get.lazyPut(() => SkiResortViewModel());
+  Get.lazyPut(() => UserService());
 }
 
 void main() async {
@@ -72,7 +74,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/reservation',
-          page: () => ReservationSelectScreen(),
+          page: () => const ReservationSelectScreen(),
         )
       ],
       theme: ThemeData(
