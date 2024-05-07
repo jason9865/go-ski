@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/ui/component/goski_modal.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/main/d_u007_notification_setting.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -15,81 +18,97 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: goskiBackground,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return Builder(builder: (context) {
+      return Scaffold(
+        appBar: GoskiSubHeader(title: tr('setting')),
+        body: Container(
+          decoration: const BoxDecoration(
+            color: goskiBackground,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SettingTitle(
+                          title: tr('notification'),
+                        ),
+                        SettingContent(
+                          content: tr('notificationSetting'),
+                          onConfirm: () => showDialog(
+                            context: context,
+                            builder: (BuildContext context) => GoskiModal(
+                              title: tr('notificationSetting'),
+                              child: const NotificationSettingDialog(),
+                            ),
+                          ),
+                          /*
+                          showDialog(
+                          context = context,
+                          builder = (BuildContext context) => GoskiModal(
+                            title: 모달 이름,
+                            child: 모달에 들어갈 컨텐츠(위젯),
+                            onConfirm: () => 함수 정의,
+                            buttonName: "버튼이름",
+                          ),
+                          */
+                        ),
+                        SettingTitle(
+                          title: tr('userInfo'),
+                        ),
+                        SettingContent(
+                          content: tr('logout'),
+                          onConfirm: () => logger.d("록아웃"),
+                        ),
+                        SettingTitle(
+                          title: tr('etc'),
+                        ),
+                        SettingContent(
+                          content: tr('term'),
+                          onConfirm: () => logger.d("약관"),
+                        ),
+                        buildDivider(),
+                        SettingContent(
+                          content: tr('guide'),
+                          onConfirm: () => logger.d("도움말"),
+                        ),
+                        buildDivider(),
+                        SettingContent(
+                          content: tr('ask'),
+                          onConfirm: () => logger.d("문의"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: goskiWhite,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SettingTitle(
-                      title: tr('notification'),
-                    ),
-                    SettingContent(
-                      content: tr('notificationSetting'),
-                      onConfirm: () => logger.d("알림 설정"),
-                    ),
-                    SettingTitle(
-                      title: tr('userInfo'),
-                    ),
-                    SettingContent(
-                      content: tr('updateUserInfo'),
-                      onConfirm: () => logger.d("개인 정보 수정"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('logout'),
-                      onConfirm: () => logger.d("록아웃"),
-                    ),
-                    SettingTitle(
-                      title: tr('etc'),
-                    ),
-                    SettingContent(
-                      content: tr('term'),
-                      onConfirm: () => logger.d("약관"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('guide'),
-                      onConfirm: () => logger.d("도움말"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('ask'),
-                      onConfirm: () => logger.d("문의"),
-                    ),
+                    Padding(
+                      padding: EdgeInsets.all(
+                          screenSizeController.getWidthByRatio(0.03)),
+                      child: GoskiText(
+                        text: tr('deleteUser'),
+                        size: goskiFontMedium,
+                        color: goskiDarkGray,
+                      ),
+                    )
                   ],
                 ),
               ),
             ],
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: goskiWhite,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(
-                      screenSizeController.getWidthByRatio(0.03)),
-                  child: GoskiText(
-                    text: tr('deleteUser'),
-                    size: goskiFontMedium,
-                    color: goskiDarkGray,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget buildDivider() {
