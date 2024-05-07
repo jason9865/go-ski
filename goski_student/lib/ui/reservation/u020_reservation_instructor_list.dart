@@ -129,7 +129,7 @@ class _ReservationInstructorListScreenState
                     tr('sortByRating')
                   ],
                   width: screenSizeController.getWidthByRatio(0.5),
-                  onChanged: sortInstructors,
+                  onToggle: sortInstructors,
                   size: goskiFontSmall,
                 ),
               ),
