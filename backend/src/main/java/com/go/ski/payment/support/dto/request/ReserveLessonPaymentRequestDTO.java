@@ -16,32 +16,21 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ReserveLessonPaymentRequestDTO {
-	@JsonProperty("team_id")
 	private Integer teamId;
-	@JsonProperty("inst_id")
 	private Integer instId;
-	@JsonProperty("lesson_date")
 	private LocalDate lessonDate;
-	@JsonProperty("start_time")
 	private String startTime;// 4자리 숫자
 	private Integer duration;
 	private Integer peopleNumber;
-	@JsonProperty("lesson_type")
 	private String lessonType;
-	@JsonProperty("basic_fee")
 	private Integer basicFee;
-	@JsonProperty("designated_fee")
 	private Integer designatedFee;
-	@JsonProperty("people_option_fee")
 	private Integer peopleOptionFee;
-	@JsonProperty("level_option_fee")
 	private Integer levelOptionFee;
 	private Integer level;
 	// 쿠폰 활성화되면 합류
 	// @JsonProperty("team_id")
 	// private Integer	couponId;
-	@JsonProperty("student_info")
 	private List<StudentInfoDTO> studentInfo;
-	@JsonProperty("request_complain")
 	private String requestComplain;
 }

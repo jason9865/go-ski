@@ -17,7 +17,7 @@ public class CommonService {
 
 	private final CertificateRepository certificateRepository;
 	private final SkiResortRepository skiResortRepository;
-	
+
 	public List<SkiResort> getResortList() {
 
 		return skiResortRepository.findAll();
