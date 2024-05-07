@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -33,7 +32,7 @@ public class FcmClient {
     private static final String PREFIX_ACCESS_TOKEN = "Bearer ";
     private static final String PREFIX_FCM_REQUEST_URL = "https://fcm.googleapis.com/v1/projects/";
     private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
-    private static final String FIREBASE_KEY_PATH = "firebase/goSkiAccountKey.json";
+    private static final String FIREBASE_KEY_PATH = "goSkiAccountKey.json";
     private static final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
 
     @Value("${firebase.project.id}")
