@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class LessonCreateEvent extends NotificationEvent{
 
-    private static final Integer NOTIFICATION_TYPE = 2;
+    private static final Integer NOTIFICATION_TYPE = 7;
 
     private final String detail;
     private final String lessonDate;

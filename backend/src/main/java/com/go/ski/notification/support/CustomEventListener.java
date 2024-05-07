@@ -56,10 +56,7 @@ public class CustomEventListener {
     @TransactionalEventListener
     public void createMessage(MessageEvent messageEvent) {
 
-        try{
-            String jsonContent = objectMapper.writeValueAsString(messageEvent);
-
-            Notification notification = Notification.of(messageEvent, jsonContent);
+            Notification notification = Notification.from(messageEvent);
             notificationRepository.save(notification);
             log.warn("알림 보내기 - {}",messageEvent.getTitle());
             fcmClient.sendMessageTo(notification);
@@ -68,9 +65,6 @@ public class CustomEventListener {
                 fcmClient.sendMessageTo(messageEvent);
             }
 
-        } catch(JsonProcessingException e) {
-            log.error("json error");
-        }
 
     }
 

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public class LessonAlertEvent extends NotificationEvent{
 
+    // 강습 1시간 전 알림
     private static final Integer NOTIFICATION_TYPE = 6;
 
     private final String lessonDate;
