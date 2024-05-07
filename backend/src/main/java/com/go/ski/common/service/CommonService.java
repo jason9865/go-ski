@@ -15,13 +15,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CommonService {
 
-	CertificateRepository certificateRepository;
-	SkiResortRepository skiResortRepository;
+	private final CertificateRepository certificateRepository;
+	private final SkiResortRepository skiResortRepository;
+	
 	public List<SkiResort> getResortList() {
 
 		return skiResortRepository.findAll();
 	}
-
 	public List<Certificate> getCertificateLsit() {
 
 		return certificateRepository.findAll();
