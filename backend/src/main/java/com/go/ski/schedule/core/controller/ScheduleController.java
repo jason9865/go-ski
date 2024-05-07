@@ -3,6 +3,9 @@ package com.go.ski.schedule.core.controller;
 import com.go.ski.auth.exception.AuthExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.response.ApiResponse;
+import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.schedule.core.service.ScheduleDeleteService;
 import com.go.ski.schedule.core.service.ScheduleService;
 import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
@@ -22,6 +25,7 @@ import java.time.LocalDate;
 @RestController
 public class ScheduleController {
     private final ScheduleService scheduleService;
+    private final ScheduleDeleteService scheduleDeleteService;
 
     @GetMapping("/mine")
     public ResponseEntity<ApiResponse<?>> getMySchedule(HttpServletRequest request) {
@@ -55,7 +59,7 @@ public class ScheduleController {
         if (!scheduleService.checkPermission(user, lessonId, 1)) {
             throw ApiExceptionFactory.fromExceptionEnum(AuthExceptionEnum.NO_ADMIN);
         }
-        scheduleService.deleteSchedule(lessonId);
+        scheduleDeleteService.deleteSchedule(lessonId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

@@ -19,19 +19,18 @@ public class NotificationMessageGenerator implements MessageGenerator{
     public String makeMessage(String targetToken, ObjectMapper objectMapper) {
         Data data = Data.builder()
                 .title(notification.getTitle())
-                .content(notification.getContent())
                 .notificationType(notification.getNotificationType().toString())
                 .createdAt(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
 
 
 
-        NotificationMessage dmMessage = NotificationMessage.builder()
+        NotificationMessage notificationMessage = NotificationMessage.builder()
                 .message(new NotificationMessage.Message(data,targetToken))
                 .validateOnly(VALIDATE_ONLY).build();
 
         try {
-            return objectMapper.writeValueAsString(dmMessage);
+            return objectMapper.writeValueAsString(notificationMessage);
         } catch (JsonProcessingException e) {
             throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.CONVERTING_JSON_ERROR);
         }

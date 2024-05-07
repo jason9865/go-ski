@@ -10,4 +10,7 @@ import java.util.List;
 
 public interface LessonInfoRepository extends JpaRepository<LessonInfo, Integer> {
     List<LessonInfo> findByLessonDateAndLessonTeamAndLessonStatus(LocalDate lessonDate, Team team, Integer lessonStatus);
+
+    List<LessonInfo> findByLessonDateAndLessonStatus(LocalDate lessonDate, Integer lessonStatus);
+
 }
