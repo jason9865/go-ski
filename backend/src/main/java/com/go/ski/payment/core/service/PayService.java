@@ -271,6 +271,8 @@ public class PayService {
 
             settlementRepository.save(settlement);
             // 여기서는 스케줄 없애기
+            scheduleService.scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
+
             return requestCancelToKakao(kakaopayCancelRequestDTO);
         } else {
             // 이용일 2일 이전 취소 시 : 환불이 불가
@@ -421,16 +423,16 @@ public class PayService {
         params.put("account", verifyAccountRequestDTO.getAccount());
         params.put("identity", verifyAccountRequestDTO.getIdentity());
 
-		//데모버전임
-		//추후 변경 요망
-		String name = codef.requestProduct("https://development.codef.io/v1/kr/bank/a/account/holder-authentication", EasyCodefServiceType.DEMO, params);
-		boolean isValid = name.equals(verifyAccountRequestDTO.getName());
-		return VerifyAccountResponseDTO.builder().isValid(isValid).build();
-	}
+        //데모버전임
+        //추후 변경 요망
+        String name = codef.requestProduct("https://development.codef.io/v1/kr/bank/a/account/holder-authentication", EasyCodefServiceType.DEMO, params);
+        boolean isValid = name.equals(verifyAccountRequestDTO.getName());
+        return VerifyAccountResponseDTO.builder().isValid(isValid).build();
+    }
 
-	public boolean checkAuthorization(Integer lessonId, HttpServletRequest httpServletRequest) {
-		User user = (User) httpServletRequest.getAttribute("user");
-		Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
-		return user.equals(lesson.getUser());
-	}
+    public boolean checkAuthorization(Integer lessonId, HttpServletRequest httpServletRequest) {
+        User user = (User) httpServletRequest.getAttribute("user");
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
+        return user.equals(lesson.getUser());
+    }
 }
