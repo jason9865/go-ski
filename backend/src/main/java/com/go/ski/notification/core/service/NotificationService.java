@@ -2,14 +2,14 @@ package com.go.ski.notification.core.service;
 
 import com.go.ski.common.util.S3Uploader;
 import com.go.ski.notification.core.domain.Notification;
+import com.go.ski.notification.core.domain.NotificationSetting;
 import com.go.ski.notification.core.repository.NotificationRepository;
+import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.support.EventPublisher;
-import com.go.ski.notification.support.dto.FcmSendRequestDTO;
-import com.go.ski.notification.support.dto.FcmTokenRequestDTO;
-import com.go.ski.notification.support.dto.InviteRequestDTO;
-import com.go.ski.notification.support.dto.NotificationResponseDTO;
+import com.go.ski.notification.support.dto.*;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
+import com.go.ski.notification.support.vo.NotificationSettingVO;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.EventListener;
 import java.util.List;
 
 import static com.go.ski.common.constant.FileUploadPath.NOTIFICATION_IMAGE_PATH;
@@ -34,6 +33,7 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final NotificationRepository notificationRepository;
+    private final NotificationSettingRepository notificationSettingRepository;
     private final S3Uploader s3Uploader;
     private final EventPublisher eventPublisher;
 
@@ -54,17 +54,11 @@ public class NotificationService {
 
     public List<NotificationResponseDTO> findAllNotifications(User user) {
         return notificationRepository.findByReceiverId(user.getUserId());
-
     }
 
     @Transactional
-    public void read(Integer notificationId, User user) {
-        Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
-
-        validateUser(notification, user);
-
-        notification.read();
+    public void readAll(User user) {
+        notificationRepository.readAllNotifications(user.getUserId());
     }
 
     @Transactional
@@ -94,6 +88,15 @@ public class NotificationService {
         Team team = teamRepository.findById(inviteRequestDTO.getTeamId())
                         .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
         eventPublisher.publish(inviteRequestDTO, team, deviceType);
+    }
+
+    @Transactional
+    public void setNotifications(NotificationSettingRequestDTO setNotificationRequestDTO, User user) {
+        List<NotificationSettingVO> notificationTypes = setNotificationRequestDTO.getNotificationTypes();
+        for(NotificationSettingVO vo : notificationTypes) {
+            notificationSettingRepository.updateNotificationStatus(vo.getNotificationType(), vo.getStatus(), user.getUserId());
+        }
+
     }
 
     public void validateUser(Notification notification,User user) {
