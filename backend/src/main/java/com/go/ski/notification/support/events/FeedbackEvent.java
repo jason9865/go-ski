@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 public class FeedbackEvent extends NotificationEvent{
 
+    private static final Integer NOTIFICATION_TYPE = 8;
+
     private final Integer userId;
     private final String representativeName;
 
@@ -27,7 +29,7 @@ public class FeedbackEvent extends NotificationEvent{
         return new FeedbackEvent(
                 lesson.getUser().getUserId(),
                 LocalDateTime.now(),
-                feedbackRequestDTO.getNotificationType(),
+                NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
                 lesson.getTeam().getTeamName() + " 강습에서 피드백이 등록되었습니다.",
                 lesson.getUser().getUserId(),

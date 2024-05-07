@@ -11,6 +11,7 @@ import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
+import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
@@ -30,7 +31,6 @@ public class EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamInstructorRepository teamInstructorRepository;
-    private final LessonRepository lessonRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
         log.info("알림 보내기 EventPublisher");
@@ -68,21 +68,26 @@ public class EventPublisher {
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
+        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
         receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-//        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장 -> team에서 사장 Id를 가져올 수 없음
+        receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
                         LessonCreateEvent.of(lessonInfo, receiverId, deviceType))
-
         );
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
+        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-//        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장 -> team에서 사장 Id를 가져올 수 없음
+        receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
                         LessonAlertEvent.of(lessonInfo, lesson, receiverId, "MOBILE"))

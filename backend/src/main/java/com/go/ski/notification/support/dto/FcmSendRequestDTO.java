@@ -18,5 +18,4 @@ public class FcmSendRequestDTO {
     private String title;
     private String content;
     private MultipartFile image;
-    private Integer notificationType;
 }
