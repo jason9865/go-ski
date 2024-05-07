@@ -205,7 +205,7 @@ public class PayService {
 		paymentRepository.save(tmpPayment);
 
 		//정산 테이블에 추가
-		Integer ownerId = tmpLesson.getTeam().getUser().getUserId();
+		int ownerId = tmpLesson.getTeam().getUser().getUserId();
 		User owner = userRepository.findById(ownerId).orElseThrow();
 		//사장이 없으면 Exception
 		Integer lastBalance = settlementRepository.findRecentBalance(ownerId);
