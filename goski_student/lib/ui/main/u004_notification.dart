@@ -42,7 +42,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: GoskiSubHeader(title: tr('notification')),
       body: Obx(() {
         if (notificationViewModel.notificationList.isEmpty) {
-          return const CircularProgressIndicator();
+          return Container(
+            color: goskiBackground,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
+              ),
+            ),
+          );
         }
         return GoskiContainer(
           child: SingleChildScrollView(

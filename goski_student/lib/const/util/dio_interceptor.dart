@@ -17,8 +17,6 @@ class DioInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     String? accessToken = await secureStorage.read(key: accessTokenKey!);
 
-    logger.w('accessToken : ${accessToken}');
-
     if (accessToken != null) {
       options.headers.addAll({
         "Content-Type": "application/json",
