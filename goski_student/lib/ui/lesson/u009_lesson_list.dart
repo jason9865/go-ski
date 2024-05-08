@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/default_image.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/lesson_list_response.dart';
@@ -130,7 +131,7 @@ class LessonListScreen extends StatelessWidget {
   }
 
   void goToCancelLessonScreen() {
-    Get.to(() => CancelLessonScreen());
+    Get.to(() => const CancelLessonScreen());
   }
 
   void goToReviewScreen(LessonListItem lesson) {
@@ -150,14 +151,14 @@ class LessonListScreen extends StatelessWidget {
           instructorName: lesson.instructorName!,
           startTime: lesson.startTime,
           endTime: lesson.endTime,
-          feedbackImages: [
+          feedbackImages: const [
             "assets/images/person1.png",
             "assets/images/person1.png",
             "assets/images/person1.png",
             "assets/images/person1.png",
             "assets/images/person1.png"
           ],
-          feedbackVideos: [
+          feedbackVideos: const [
             "assets/images/person2.png",
             "assets/images/person2.png",
             "assets/images/person2.png",
@@ -180,7 +181,7 @@ class LessonListScreen extends StatelessWidget {
           title: tr('sendMessageTitle', args: [
             (lesson.instructorName == null ? '이름 없음' : lesson.instructorName!)
           ]),
-          child: SendMessageDialog(),
+          child: const SendMessageDialog(),
         );
       },
     );
@@ -217,11 +218,9 @@ class LessonListScreen extends StatelessWidget {
     return Row(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          child: Image.asset(
-            lesson.profileUrl != null
-                ? lesson.profileUrl!
-                : 'assets/images/person1.png',
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          child: Image.network(
+            lesson.profileUrl != null ? lesson.profileUrl! : s3Penguin,
             width: 90,
             height: screenSizeController.getHeightByRatio(0.12),
             fit: BoxFit.fitHeight,
