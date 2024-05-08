@@ -28,4 +28,8 @@ class NotificationRepository {
       return [];
     }
   }
+
+  Future<bool> deleteNotification(int notificationId) async {
+    return await notificationService.deleteNotification(notificationId);
+  }
 }

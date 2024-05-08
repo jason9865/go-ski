@@ -21,4 +21,8 @@ class NotificationViewModel extends GetxController {
       notificationList.clear();
     }
   }
+
+  Future<bool> deleteNotification(int notificationId) async {
+    return await notificationRepository.deleteNotification(notificationId);
+  }
 }
