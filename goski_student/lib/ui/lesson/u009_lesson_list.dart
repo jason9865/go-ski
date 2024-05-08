@@ -171,6 +171,8 @@ class LessonListScreen extends StatelessWidget {
   }
 
   void goToSendMessageDialog(BuildContext context, LessonListItem lesson) {
+    lessonListViewModel.initMessage(lesson);
+
     showDialog(
       context: context,
       builder: (context) {
@@ -181,9 +183,7 @@ class LessonListScreen extends StatelessWidget {
           child: SendMessageDialog(),
         );
       },
-    ).then((value) {
-      lessonListViewModel.initMessage(lesson);
-    });
+    );
   }
 
   Widget createButton(ScreenSizeController screenSizeController, String textId,
