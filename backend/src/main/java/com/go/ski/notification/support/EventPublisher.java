@@ -70,11 +70,9 @@ public class EventPublisher {
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
-        log.info("lesson의 instructorID - {}",lesson.getInstructor().getInstructorId());
         Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
-        log.info("resortname - {}",team.getSkiResort().getResortId());
         Integer resortId = team.getSkiResort().getResortId();
 
         String resortName = skiResortRepository.findById(resortId)
@@ -82,7 +80,10 @@ public class EventPublisher {
 
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
-        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+        if (lesson.getInstructor() != null) {
+            log.info("lesson.getInstructor - {}",lesson.getInstructor());
+            receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+        }
         receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
