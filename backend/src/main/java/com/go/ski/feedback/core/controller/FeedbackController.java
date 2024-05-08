@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/feedback")
+@RequestMapping("/api/v1/lesson/feedback")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
