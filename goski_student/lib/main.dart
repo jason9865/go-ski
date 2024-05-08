@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,19 +15,19 @@ import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
-import 'package:goski_student/test.dart';
-import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
+
 import 'firebase_options.dart';
 
 Logger logger = Logger();

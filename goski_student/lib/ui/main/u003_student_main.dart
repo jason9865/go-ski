@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,9 +13,10 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
+import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:logger/logger.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
@@ -25,6 +27,8 @@ class StudentMainScreen extends StatelessWidget {
     'assets/images/adv.jpg',
     'assets/images/adv.jpg',
   ];
+  final mainViewModel = Get.find<MainViewModel>();
+  final lessonListViewModel = Get.find<LessonListViewModel>();
 
   StudentMainScreen({super.key});
 
@@ -72,9 +76,12 @@ class StudentMainScreen extends StatelessWidget {
                         size: goskiFontLarge,
                         color: goskiDarkGray,
                       ),
-                      GoskiText(
-                        text: tr('dynamicUser', args: ['송준석']),
-                        size: goskiFontXXLarge,
+                      Obx(
+                        () => GoskiText(
+                          text: tr('dynamicUser',
+                              args: [mainViewModel.userInfo.value.userName]),
+                          size: goskiFontXXLarge,
+                        ),
                       ),
                     ],
                   )
@@ -88,7 +95,11 @@ class StudentMainScreen extends StatelessWidget {
                   UserMenu(
                     iconName: 'myLesson',
                     iconImage: 'assets/images/user.svg',
-                    onClick: () => logger.d("나의 강습"),
+                    onClick: () => {
+                      logger.d("나의 강습"),
+                      lessonListViewModel.getUserInfo(),
+                      Get.to(() => LessonListScreen())
+                    },
                   ),
                   UserMenu(
                     iconName: 'paymentHistory',
