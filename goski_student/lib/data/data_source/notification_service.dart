@@ -44,6 +44,19 @@ class NotificationService extends GetxService {
     return false;
   }
 
+  Future<bool> readAllNoti() async {
+    try {
+      dynamic response =
+          await CustomDio.dio.patch('$baseUrl/notification/read-all');
+      if (response.data['status'] == "success") {
+        return true;
+      }
+    } catch (e) {
+      logger.e("Failed to request readAllNoti : $e");
+    }
+    return false;
+  }
+
   Future<List<NotificationSettingDTO>> fetchNotificationSetting() async {
     try {
       dynamic response =
