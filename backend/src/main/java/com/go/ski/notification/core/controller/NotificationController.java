@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -64,8 +65,11 @@ public class NotificationController {
 
     // 메시지 보내기
     @PostMapping("/dm")
-    public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request, FcmSendRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request, FcmSendRequestDTO requestDTO,
+                                                      @RequestParam(required = false) MultipartFile image) {
         log.info("NotificationController.sendMessage");
+        log.info("이미지 정보 - {}",image.getOriginalFilename());
+        requestDTO.setImage(image);
         notificationService.sendMessage(requestDTO, request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
     }
