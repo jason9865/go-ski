@@ -22,7 +22,7 @@ class MainService extends GetxService {
 
           return data;
       } else {
-        logger.e('UserService - getUserInfo - 응답 실패 ${response.body}');
+        logger.e('UserService - getUserInfo - 응답 실패 ${response.data}');
       }
 
     } catch (e) {

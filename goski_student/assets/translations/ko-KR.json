@@ -214,7 +214,7 @@
   "hintRequestMessage": "강사님께 바라는 요청을 적어주세요",
   "confirmAmountOfPayment": "결제금액을 확인해주세요",
   "paymentType": "결제 수단",
-  "refundPolicy": "예약 완료 후 환불규정 안내",
+  "refundPolicy": "환불 규정 안내",
   "reservationPeopleCount": "예약인원 {}명",
   "discount": "{}원 할인됨",
   "couponSelectCount": "{}장 보유",
@@ -242,5 +242,10 @@
   "reject": "거절",
   "accept": "수락",
   "deleteNotification": "알림 삭제",
-  "deleteNotificationConfirm": "알림을 삭제하시겠습니까?"
+  "deleteNotificationConfirm": "알림을 삭제하시겠습니까?",
+  "basicFee": "기본 수강료",
+  "designatedFee": "지정 강사비",
+  "peopleOptionFee": "인원 옵션 금액",
+  "levelOptionFee": "레벨 옵션 금액",
+  "unDesignated": "강사 미지정"
 }
