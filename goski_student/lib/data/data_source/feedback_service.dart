@@ -15,6 +15,8 @@ class FeedbackService extends GetxService {
         '$baseUrl/lesson/feedback/$lessonId',
       );
 
+      logger.w(response.data['data']);
+
       if (response.statusCode == 200 &&
           response.data is Map<String, dynamic>) {
         FeedbackResponse data = FeedbackResponse.fromJson(response.data['data'] as Map<String, dynamic>);
