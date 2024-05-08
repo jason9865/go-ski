@@ -56,28 +56,14 @@ class AuthService extends GetxService {
           'token': accessToken, // Kakao accessToken을 보낼 때만 'Bearer ' 생략
         }),
       );
-      // final response = await http.post(
-      //   Uri.parse('$baseUrl/user/signin/kakao'),
-      //   headers: <String, String>{
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //   },
-      //   body: jsonEncode(<String, String>{
-      //     'token': accessToken, // Kakao accessToken을 보낼 때만 'Bearer ' 생략
-      //   }),
-      // );
       if (response.statusCode == 200) {
         logger.d('Token successfully sent to the server');
-        logger.d("response: ${response.data["status"]}");
-        if (response.data["status"] == "success") {
-          return AuthStatus.already;
-        }
-        if (response.headers['accessToken'] == null) {
+        if (response.headers.value('accesstoken') == null) {
           return AuthStatus.first;
         }
-        final String? serverAccessToken = response.headers.value['accessToken'];
-        final String? serverRefreshToken =
-            response.headers.value['refreshToken'];
 
+        String? serverAccessToken = response.headers.value('accesstoken');
+        String? serverRefreshToken = response.headers.value('refreshtoken');
         if (serverAccessToken != null && serverRefreshToken != null) {
           await secureStorage.write(
               key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);

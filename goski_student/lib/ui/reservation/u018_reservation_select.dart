@@ -29,7 +29,7 @@ final ReservationViewModel reservationViewModel =
     Get.find<ReservationViewModel>();
 
 class ReservationSelectScreen extends StatelessWidget {
-  ReservationSelectScreen({super.key});
+  const ReservationSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
