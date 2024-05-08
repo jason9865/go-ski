@@ -9,12 +9,11 @@ import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
-import 'package:goski_student/data/data_source/lesson_list_service.dart';
-import 'package:goski_student/data/data_source/main_service.dart';
+import 'package:goski_student/data/data_source/notification_service.dart';
 import 'package:goski_student/data/data_source/ski_resort_service.dart';
+import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
-import 'package:goski_student/data/repository/lesson_list_repository.dart';
-import 'package:goski_student/data/repository/main_repository.dart';
+import 'package:goski_student/data/repository/notification_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
@@ -23,7 +22,7 @@ import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
-import 'package:goski_student/view_model/main_view_model.dart';
+import 'package:goski_student/view_model/notification_view_model.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -34,30 +33,28 @@ import 'firebase_options.dart';
 Logger logger = Logger();
 
 void initDependencies() {
-  Get.lazyPut(() => AuthService());
-  Get.lazyPut(() => SkiResortService());
-  Get.lazyPut(() => MainService());
-  Get.lazyPut(() => LessonListService());
-  Get.lazyPut(() => AuthRepository());
-  Get.lazyPut(() => SkiResortRepository());
-  Get.lazyPut(() => MainRepository());
-  Get.lazyPut(() => LessonListRepository());
-  Get.lazyPut(() => LoginViewModel());
-  Get.lazyPut(() => SignupViewModel());
-  Get.lazyPut(() => MainViewModel());
-  Get.lazyPut(() => SkiResortViewModel());
-  Get.lazyPut(() => LessonListViewModel());
+  Get.put(AuthService(), permanent: true);
+  Get.put(SkiResortService(), permanent: true);
+  Get.put(AuthRepository(), permanent: true);
+  Get.put(SkiResortRepository(), permanent: true);
+  Get.put(LoginViewModel(), permanent: true);
+  Get.put(SignupViewModel(), permanent: true);
+  Get.put(SkiResortViewModel(), permanent: true);
+  Get.put(UserService(), permanent: true);
+  Get.put(NotificationService(), permanent: true);
+  Get.put(NotificationRepository(), permanent: true);
+  Get.put(NotificationViewModel(), permanent: true);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
   await dotenv.load(fileName: ".env");
+  CustomDio.initialize();
   await EasyLocalization.ensureInitialized();
   initDependencies();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
-  CustomDio.initialize(); // CustomDio 초기화
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setFCM();
   runApp(EasyLocalization(
@@ -82,7 +79,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/reservation',
-          page: () => ReservationSelectScreen(),
+          page: () => const ReservationSelectScreen(),
         )
       ],
       theme: ThemeData(

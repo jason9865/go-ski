@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goski_student/const/color.dart';
-import 'package:goski_student/ui/component/goski_modal.dart';
-import 'package:goski_student/ui/component/goski_bottomsheet.dart';
 import 'package:goski_student/ui/main/u004_notification.dart';
 import 'package:goski_student/ui/main/u005_setting.dart';
 
