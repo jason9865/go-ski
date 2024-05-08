@@ -16,12 +16,10 @@ public class TeamUpdateRequestDTO {
 
     private String teamName;
     private Integer resortId;
-    private MultipartFile teamProfileImage;
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
     private List<Integer> deleteTeamImageIds;
-    private List<MultipartFile> newTeamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;

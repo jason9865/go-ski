@@ -229,8 +229,8 @@ public class PayService {
 			.pgToken(request.getPgToken())//pg_token
 			.build();
 
-		String deviceType = httpServletRequest.getHeader("DeviceType");
-        eventPublisher.publish(tmpLesson, tmpLessonInfo, deviceType);
+//		String deviceType = httpServletRequest.getHeader("DeviceType");
+//        eventPublisher.publish(tmpLesson, tmpLessonInfo,deviceType);
 
 		// 강습 가능여부 판단 후 캐싱하는 메서드
 		if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(),

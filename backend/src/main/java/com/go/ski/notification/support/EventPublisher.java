@@ -1,16 +1,14 @@
 package com.go.ski.notification.support;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
-import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
+import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
 import com.go.ski.notification.support.events.*;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
-import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.team.core.model.Team;
-import com.go.ski.team.core.repository.OneToNOptionRepository;
 import com.go.ski.team.core.repository.SkiResortRepository;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
@@ -33,6 +31,7 @@ public class EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamInstructorRepository teamInstructorRepository;
+    private final TeamRepository teamRepository;
     private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
@@ -66,13 +65,13 @@ public class EventPublisher {
     }
 
 
-    public void publish(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
-        applicationEventPublisher.publishEvent(FeedbackEvent.of(feedbackRequestDTO,lesson, deviceType));
+    public void publish(FeedbackCreateRequestDTO feedbackCreateRequestDTO, Lesson lesson, String deviceType) {
+        applicationEventPublisher.publishEvent(FeedbackEvent.of(feedbackCreateRequestDTO,lesson, deviceType));
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
         log.info("lesson의 instructorID - {}",lesson.getInstructor().getInstructorId());
-        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         log.info("resortname - {}",team.getSkiResort().getResortId());
@@ -92,7 +91,7 @@ public class EventPublisher {
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
-        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         List<Integer> receiverIds = new ArrayList<>();

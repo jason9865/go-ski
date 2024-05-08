@@ -12,11 +12,9 @@ public class TeamCreateRequestDTO {
 
     private String teamName;
     private Integer resortId;
-    private MultipartFile teamProfileImage;
     private String description;
     private Integer teamCost;
     private List<Integer> dayoff;
-    private List<MultipartFile> teamImages;
     private Integer intermediateFee;
     private Integer advancedFee;
     private Integer oneTwoFee;

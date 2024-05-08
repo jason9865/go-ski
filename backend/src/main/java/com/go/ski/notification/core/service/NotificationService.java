@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -67,16 +68,19 @@ public class NotificationService {
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
 
         validateUser(notification, user);
+        if(notification.getImageUrl() != null) {
+            s3Uploader.deleteFile(notification.getImageUrl());
+        }
 
         notificationRepository.delete(notification);
     }
 
     @Transactional
-    public void sendMessage(FcmSendRequestDTO fcmSendRequestDTO, HttpServletRequest request){
+    public void sendMessage(HttpServletRequest request, FcmSendRequestDTO fcmSendRequestDTO, MultipartFile image){
         User user = (User)request.getAttribute("user");
         String deviceType = request.getHeader("DeviceType");
-        String imageUrl = fcmSendRequestDTO.getImage() != null ?
-                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, fcmSendRequestDTO.getImage()) :
+        String imageUrl = image != null ?
+                s3Uploader.uploadFile(NOTIFICATION_IMAGE_PATH.path, image) :
                 null;
 
         log.info("imageurl - {}",imageUrl);
