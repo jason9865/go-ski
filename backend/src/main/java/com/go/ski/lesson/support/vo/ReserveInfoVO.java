@@ -20,7 +20,7 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
         super(reserveRequestDTO);
         switch (reserveRequestDTO.getLessonType()) {
             case "SKI" -> {
-                if (reserveRequestDTO.getLevel() == null) {
+                if (reserveRequestDTO.getLevel().equals("BEGINNER") || reserveRequestDTO.getLevel() == null) {
                     lessonType = "1010000";
                 } else {
                     switch (reserveRequestDTO.getLevel()) {
