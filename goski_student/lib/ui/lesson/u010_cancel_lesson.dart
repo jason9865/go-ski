@@ -2,10 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/const/util/text_formatter.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
-import 'package:goski_student/ui/component/goski_dropdown.dart';
+import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
@@ -126,7 +127,7 @@ class CancelLessonScreen extends StatelessWidget {
                             ),
                             GoskiText(
                               text: tr('moneyUnit',
-                                  args: [reservation.payment.toString()]),
+                                  args: [formatFromString(reservation.payment.toString())]),
                               size: goskiFontMedium,
                             )
                           ],
@@ -137,12 +138,25 @@ class CancelLessonScreen extends StatelessWidget {
                 ),
               ),
               BuildInterval(),
-              //TODO. 환불 규정 안내 추가
-              GoskiDropdown(
-                hint: tr("환불 규정 안내"),
-                list: [" ", " "],
-                selected: null,
-                onSelected: (idx) {  },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: GoskiExpansionTile(
+                  title: GoskiText(
+                    text: tr('refundPolicy'),
+                    size: goskiFontMedium,
+                  ),
+                  backgroundColor: goskiLightGray,
+                  radius: 15,
+                  children: [
+                    SizedBox(
+                      height: screenSizeController.getHeightByRatio(0.01),
+                    ),
+                    GoskiText(
+                      text: tr("환불 규정 내용이 들어가야 합니다"),
+                      size: goskiFontMedium,
+                    ),
+                  ],
+                ),
               ),
               BuildInterval(),
               GoskiCard(
@@ -165,7 +179,7 @@ class CancelLessonScreen extends StatelessWidget {
                               text: tr('paymentAmount'), size: goskiFontMedium),
                           GoskiText(
                               text: tr('moneyUnit',
-                                  args: [reservation.payment.toString()]),
+                                  args: [formatFromString(reservation.payment.toString())]),
                               size: goskiFontMedium),
                         ],
                       ),
@@ -176,7 +190,7 @@ class CancelLessonScreen extends StatelessWidget {
                               text: tr('refundCharge'), size: goskiFontMedium),
                           GoskiText(
                               text: tr('moneyUnit',
-                                  args: [reservation.charge.toString()]),
+                                  args: [formatFromString(reservation.charge.toString())]),
                               size: goskiFontMedium),
                         ],
                       ),
@@ -194,7 +208,7 @@ class CancelLessonScreen extends StatelessWidget {
                           ),
                           GoskiText(
                             text: tr('moneyUnit',
-                                args: [reservation.finalPrice.toString()]),
+                                args: [formatFromString(reservation.finalPrice.toString())]),
                             size: goskiFontMedium,
                           ),
                         ],
@@ -202,7 +216,8 @@ class CancelLessonScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+              BuildInterval(),
             ],
           ),
         ),

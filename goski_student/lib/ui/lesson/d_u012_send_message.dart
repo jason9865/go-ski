@@ -4,7 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:logger/logger.dart';
 
 import '../../const/color.dart';
 import '../../const/font_size.dart';
@@ -16,16 +17,22 @@ import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
 import '../component/goski_textfield.dart';
 
+var logger = Logger();
+
+
 class SendMessageDialog extends StatefulWidget {
-  const SendMessageDialog({super.key});
+  const SendMessageDialog({
+    super.key,
+  });
 
   @override
   State<SendMessageDialog> createState() => _SendMessageDialogState();
 }
 
 class _SendMessageDialogState extends State<SendMessageDialog> {
-  bool hasImage = false;
-  XFile? image;
+  LessonListViewModel lessonListViewModel = Get.find();
+  var titleTextController = TextEditingController();
+  var contentTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +55,12 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
             ),
             SizedBox(height: titlePadding),
             GoskiTextField(
+              text: lessonListViewModel.message.value.title,
               hintText: tr('titleHint'),
               onTextChange: (text) {
-                // TODO: 로직 추가 필요
+                lessonListViewModel.message.value.title = text;
               },
+
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -71,7 +80,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                 hintText: tr('contentHint'),
                 maxLines: 10,
                 onTextChange: (text) {
-                  // TODO: 로직 추가 필요
+                  lessonListViewModel.message.value.content = text;
                 },
               ),
             ),
@@ -85,19 +94,29 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
             GoskiBorderWhiteContainer(
               child: GestureDetector(
                 onTap: () async {
-                  if (hasImage && image != null) {
+                  if (lessonListViewModel.message.value.hasImage &&
+                      lessonListViewModel.message.value.image != null) {
                     showDialog(
                         context: context,
                         builder: (context) {
                           return GoskiModal(
-                            title: image!.name.split('.')[0].length <= 15
-                                ? image!.name
-                                : '${image!.name.split('.')[0].substring(0, 14)}···.${image!.name.split('.')[1]}',
+                            title: lessonListViewModel.message.value.image!.name
+                                        .split('.')[0]
+                                        .length <=
+                                    15
+                                ? lessonListViewModel.message.value.image!.name
+                                : '${lessonListViewModel.message.value.image!.name.split('.')[0].substring(0, 14)}···.${lessonListViewModel.message.value.image!.name.split('.')[1]}',
                             child: Column(
                               children: [
-                                Image.file(
-                                  File(image!.path),
-                                  width: double.infinity,
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxHeight: screenSizeController
+                                          .getHeightByRatio(0.5)),
+                                  child: Image.file(
+                                    File(lessonListViewModel
+                                        .message.value.image!.path),
+                                    width: double.infinity,
+                                  ),
                                 ),
                                 SizedBox(
                                   height: screenSizeController
@@ -117,29 +136,33 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                         });
                   } else {
                     // 이미지 추가
-                    image = await imagePickerController.getImage();
+                    lessonListViewModel.message.value.image =
+                        await imagePickerController.getImage();
                     setState(() {
-                      if (image != null) {
-                        hasImage = !hasImage;
+                      if (lessonListViewModel.message.value.image != null) {
+                        lessonListViewModel.message.value.hasImage =
+                            !lessonListViewModel.message.value.hasImage;
                       }
                     });
                   }
                 },
-                child: hasImage
+                child: lessonListViewModel.message.value.hasImage
                     ? Row(
                         children: [
                           Expanded(
                             child: GoskiText(
-                              text: image!.name,
+                              text:
+                                  lessonListViewModel.message.value.image!.name,
                               size: goskiFontMedium,
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
                               // 이미지 삭제
-                              image = null;
+                              lessonListViewModel.message.value.image = null;
                               setState(() {
-                                hasImage = !hasImage;
+                                lessonListViewModel.message.value.hasImage =
+                                    !lessonListViewModel.message.value.hasImage;
                               });
                             },
                             child: const Icon(
@@ -189,9 +212,11 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                 GoskiSmallsizeButton(
                   width: screenSizeController.getWidthByRatio(1),
                   text: tr('send'),
-                  onTap: () {
-                    // TODO. 보내기 버튼 동작 추가 필요
-                    Navigator.pop(context);
+                  onTap: () async {
+                    bool result = await lessonListViewModel.sendMessage();
+                    if (result) {
+                      if (context.mounted) Navigator.pop(context);
+                    }
                   },
                 )
               ],

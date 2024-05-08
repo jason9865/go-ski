@@ -17,14 +17,11 @@ class DioInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     String? accessToken = await secureStorage.read(key: accessTokenKey!);
 
-    // options.headers.addAll({
-    //   "Content-Type": "application/json",
-    //   "Authorization": "Bearer $accessToken",
-    // });
     if (accessToken != null) {
       options.headers.addAll({
         "Content-Type": "application/json",
         "Authorization": "Bearer $accessToken",
+        "DeviceType": "MOBILE",
       });
     }
     return super.onRequest(options, handler);
@@ -58,7 +55,6 @@ class DioInterceptor extends Interceptor {
   Future<Response<dynamic>> refreshToken(RequestOptions requestOptions) async {
     String? accessToken = await secureStorage.read(key: accessTokenKey!);
     String? refreshToken = await secureStorage.read(key: refreshTokenKey!);
-    // var response = await dio.post(APIs.refreshToken,
 
     final options = Options(
       method: requestOptions.method,
