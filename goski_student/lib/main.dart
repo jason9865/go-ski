@@ -9,10 +9,14 @@ import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
+import 'package:goski_student/data/data_source/lesson_list_service.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/data_source/notification_service.dart';
 import 'package:goski_student/data/data_source/ski_resort_service.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
+import 'package:goski_student/data/repository/lesson_list_repository.dart';
+import 'package:goski_student/data/repository/main_repository.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
@@ -22,6 +26,7 @@ import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
+import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
@@ -35,15 +40,23 @@ Logger logger = Logger();
 void initDependencies() {
   Get.put(AuthService(), permanent: true);
   Get.put(SkiResortService(), permanent: true);
+  Get.put(UserService(), permanent: true);
+  Get.put(NotificationService(), permanent: true);
+  Get.put(MainService(), permanent: true);
+  Get.put(LessonListService(), permanent: true);
+
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
+  Get.put(NotificationRepository(), permanent: true);
+  Get.put(MainRepository(), permanent: true);
+  Get.put(LessonListRepository(), permanent: true);
+
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
   Get.put(SkiResortViewModel(), permanent: true);
-  Get.put(UserService(), permanent: true);
-  Get.put(NotificationService(), permanent: true);
-  Get.put(NotificationRepository(), permanent: true);
   Get.put(NotificationViewModel(), permanent: true);
+  Get.put(MainViewModel(), permanent: true);
+  Get.put(LessonListViewModel(), permanent: true);
 }
 
 void main() async {
