@@ -65,6 +65,7 @@ class Settlement {
   int designatedFee;
   int peopleOptionFee;
   int levelOptionFee;
+  bool isExpanded;
 
   Settlement({
     required this.teamName,
@@ -79,11 +80,12 @@ class Settlement {
     required this.designatedFee,
     required this.peopleOptionFee,
     required this.levelOptionFee,
+    this.isExpanded = false,
   });
 
   @override
   String toString() {
-    return 'Settlement{teamName: $teamName, userName: $userName, instructorName: $instructorName, totalAmount: $totalAmount, paymentDate: $paymentDate, paymentStatus: $paymentStatus, chargeName: $chargeName, charge: $charge, basicFee: $basicFee, designatedFee: $designatedFee, peopleOptionFee: $peopleOptionFee, levelOptionFee: $levelOptionFee}';
+    return 'Settlement{teamName: $teamName, userName: $userName, instructorName: $instructorName, totalAmount: $totalAmount, paymentDate: $paymentDate, paymentStatus: $paymentStatus, chargeName: $chargeName, charge: $charge, basicFee: $basicFee, designatedFee: $designatedFee, peopleOptionFee: $peopleOptionFee, levelOptionFee: $levelOptionFee, isExpanded: $isExpanded}';
   }
 }
 
