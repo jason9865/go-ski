@@ -68,7 +68,6 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request, FcmSendRequestDTO requestDTO,
                                                       @RequestParam(required = false) MultipartFile image) {
         log.info("NotificationController.sendMessage");
-        log.info("이미지 정보 - {}",image.getOriginalFilename());
         requestDTO.setImage(image);
         notificationService.sendMessage(requestDTO, request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
