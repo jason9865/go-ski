@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/data/model/feedback_response.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
@@ -19,42 +18,18 @@ import 'package:path_provider/path_provider.dart';
 
 var logger = Logger();
 
-class FeedbackScreen extends StatefulWidget {
-  String resortName;
-  String teamName;
-  String instructorName;
-  DateTime startTime;
-  DateTime endTime;
-  List<MediaData> feedbackImages;
-  List<MediaData> feedbackVideos;
-  String feedbackText;
-  List<String> videoThumbnailList;
+class FeedbackScreen extends StatelessWidget {
+  final lessonListViewModel = Get.find<LessonListViewModel>();
+  final feedbackViewModel = Get.find<FeedbackViewModel>();
 
   FeedbackScreen({
     super.key,
-    required this.resortName,
-    required this.teamName,
-    required this.instructorName,
-    required this.startTime,
-    required this.endTime,
-    required this.feedbackImages,
-    required this.feedbackVideos,
-    required this.feedbackText,
-    required this.videoThumbnailList,
   });
-
-  @override
-  State<FeedbackScreen> createState() => _FeedbackScreenState();
-}
-
-class _FeedbackScreenState extends State<FeedbackScreen> {
-  final lessonListViewModel = Get.find<LessonListViewModel>();
-  final feedbackViewModel = Get.find<FeedbackViewModel>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-        () => Scaffold(
+      () => Scaffold(
         appBar: GoskiSubHeader(
           title: tr("feedback"),
         ),
@@ -82,6 +57,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Widget infoCard(BuildContext context) {
+    var lesson = lessonListViewModel.selectedLesson;
+
     return GoskiCard(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -93,9 +70,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GoskiText(text: widget.resortName, size: goskiFontLarge),
+                GoskiText(text: lesson.value.resortName, size: goskiFontLarge),
                 const GoskiText(text: " - ", size: goskiFontLarge),
-                GoskiText(text: widget.teamName, size: goskiFontLarge),
+                GoskiText(text: lesson.value.teamName, size: goskiFontLarge),
               ],
             ),
             Row(
@@ -104,21 +81,26 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               children: [
                 GoskiText(
                   text: tr(DateFormat('yyyy.MM.dd (E) HH:mm')
-                      .format(widget.startTime)
+                      .format(lesson.value.startTime)
                       .toString()),
                   size: goskiFontSmall,
                   color: goskiDarkGray,
                 ),
                 GoskiText(
-                  text: tr(
-                      DateFormat('~HH:mm').format(widget.endTime).toString()),
+                  text: tr(DateFormat('~HH:mm')
+                      .format(lesson.value.endTime)
+                      .toString()),
                   size: goskiFontSmall,
                   color: goskiDarkGray,
                 ),
               ],
             ),
             GoskiText(
-              text: tr('dynamicInstructor', args: [widget.instructorName]),
+              text: tr('dynamicInstructor', args: [
+                lesson.value.instructorName == null
+                    ? '이름 없음'
+                    : lesson.value.instructorName!
+              ]),
               size: goskiFontSmall,
               color: goskiDarkGray,
             ),
@@ -147,11 +129,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        // TODO. 이미지 전체 다운로드 기능
-                        String savedDir = (await getApplicationDocumentsDirectory()).path;
+                        String savedDir =
+                            (await getApplicationDocumentsDirectory()).path;
 
-                        for (var mediaData in widget.feedbackImages) {
-                          feedbackViewModel.download(mediaData.mediaUrl, savedDir);
+                        for (var mediaData in feedbackViewModel.feedback.value.images) {
+                          feedbackViewModel.download(
+                              mediaData.mediaUrl, savedDir);
                         }
                       },
                       icon: const Icon(Icons.file_download)),
@@ -162,22 +145,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               height: 120,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: widget.feedbackImages
-                    .map(
-                        (image) {
-                      return Container(
-                        width: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.network(
-                          image.mediaUrl,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }
-                )
-                    .toList(),
+                children: feedbackViewModel.feedback.value.images.map((image) {
+                  return Container(
+                    width: 100,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Image.network(
+                      image.mediaUrl,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ],
@@ -206,13 +185,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        // TODO. 동영상 전체 다운로드 기능
-                        String savedDir = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+                        String savedDir = await ExternalPath
+                            .getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_DOWNLOADS);
 
                         logger.d('savedDir : $savedDir');
 
-                        for (var mediaData in widget.feedbackVideos) {
-                          feedbackViewModel.download(mediaData.mediaUrl, savedDir);
+                        for (var mediaData in feedbackViewModel.feedback.value.videos) {
+                          feedbackViewModel.download(
+                              mediaData.mediaUrl, savedDir);
                         }
                       },
                       icon: const Icon(Icons.file_download)),
@@ -223,10 +204,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               height: 120,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: widget.videoThumbnailList
+                children: feedbackViewModel.feedback.value.videoThumbnailList
                     .map(
-                      (thumbnailPath) =>
-                      Container(
+                      (thumbnailPath) => Container(
                         width: 100,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         child: Image.file(
@@ -236,7 +216,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                )
+                    )
                     .toList(),
               ),
             ),
@@ -255,7 +235,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           children: [
             GoskiText(text: tr('feedback'), size: goskiFontLarge),
             GoskiText(
-              text: tr(widget.feedbackText),
+              text: tr(feedbackViewModel.feedback.value.content),
               size: goskiFontMedium,
             )
           ],
@@ -263,6 +243,4 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       ),
     );
   }
-
-// You can create methods to handle the downloading of images/videos and displaying a snackbar or alert when done
 }
