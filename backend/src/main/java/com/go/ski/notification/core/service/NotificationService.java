@@ -97,7 +97,7 @@ public class NotificationService {
     }
 
     public List<NotificationSettingResponseDTO> getNotifications(User user) {
-        return notificationSettingRepository.findByUserId(user);
+        return notificationSettingRepository.findByUser(user);
     }
 
     @Transactional
