@@ -33,6 +33,7 @@ public class EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamInstructorRepository teamInstructorRepository;
+    private final TeamRepository teamRepository;
     private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
@@ -72,7 +73,7 @@ public class EventPublisher {
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
         log.info("lesson의 instructorID - {}",lesson.getInstructor().getInstructorId());
-        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         log.info("resortname - {}",team.getSkiResort().getResortId());
@@ -92,7 +93,7 @@ public class EventPublisher {
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
-        Team team = teamInstructorRepository.findTeamByInstructorId(lesson.getInstructor().getInstructorId())
+        Team team = teamRepository.findById(lesson.getInstructor().getInstructorId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         List<Integer> receiverIds = new ArrayList<>();
