@@ -205,10 +205,12 @@ public class PayService {
 		paymentRepository.save(tmpPayment);
 
 		//정산 테이블에 추가
-		int ownerId = tmpLesson.getTeam().getUser().getUserId();
+		Team team = teamRepository.findById(tmpLesson.getTeam().getTeamId()).orElseThrow();
+		int ownerId = team.getUser().getUserId();
 		User owner = userRepository.findById(ownerId).orElseThrow();
 		//사장이 없으면 Exception
 		Integer lastBalance = settlementRepository.findRecentBalance(ownerId);
+		if (lastBalance == null) { lastBalance = 0;}
 
 		Settlement settlement = Settlement.builder()
 			.settlementAmount(tmpPayment.getTotalAmount())
@@ -219,7 +221,6 @@ public class PayService {
 			.build();
 
 		settlementRepository.save(settlement);
-
 		// 이 정보는 굳이 내보내야하나?
 		KakaopayApproveRequestDTO kakaopayApproveRequestDTO = KakaopayApproveRequestDTO.builder()
 			.tid(request.getTid())
@@ -229,7 +230,7 @@ public class PayService {
 			.build();
 
 		String deviceType = httpServletRequest.getHeader("DeviceType");
-        eventPublisher.publish(tmpLesson, tmpLessonInfo,deviceType);
+        eventPublisher.publish(tmpLesson, tmpLessonInfo, deviceType);
 
 		// 강습 가능여부 판단 후 캐싱하는 메서드
 		if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(),
