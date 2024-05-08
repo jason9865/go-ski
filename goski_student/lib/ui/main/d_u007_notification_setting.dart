@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/main.dart';
+import 'package:goski_student/view_model/notification_view_model.dart';
 
 import '../../const/color.dart';
 import '../../const/font_size.dart';
@@ -19,62 +21,88 @@ class NotificationSettingDialog extends StatefulWidget {
 }
 
 class _NotificationSettingDialogState extends State<NotificationSettingDialog> {
+  final NotificationViewModel notificationViewModel =
+      Get.find<NotificationViewModel>();
   final screenSizeController = Get.find<ScreenSizeController>();
-  final List<DummyNotification> list = [
-    DummyNotification(title: tr('lessonReservationNotification'), isChecked: true),
-    DummyNotification(title: tr('feedbackNotification'), isChecked: true),
-    DummyNotification(title: tr('messageNotification'), isChecked: false),
-  ];
-  final List isCheckedList = [false, true, true];
+
+  @override
+  void initState() {
+    super.initState();
+    notificationViewModel.getNotificationSetting();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListView.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return NotificationSettingRow(
-                title: list[index].title,
-                isChecked: list[index].isChecked,
-                onClicked: (value) {
-                  setState(() {
-                    list[index].isChecked = value;
-                  });
-                });
-          },
-          separatorBuilder: (context, index) {
-            return SizedBox(
-              height: screenSizeController.getHeightByRatio(0.02),
-            );
-          },
-        ),
-        SizedBox(
-          height: screenSizeController.getHeightByRatio(0.05),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GoskiSmallsizeButton(
-              width: screenSizeController.getWidthByRatio(1),
-              text: tr('cancel'),
-              onTap: () {
-                Navigator.pop(context);
-              },
+    return Obx(() {
+      if (notificationViewModel.notificationSettings.isEmpty) {
+        return Container(
+          color: goskiBackground,
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: goskiBlack,
             ),
-            GoskiSmallsizeButton(
-              width: screenSizeController.getWidthByRatio(1),
-              text: tr('save'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        )
-      ],
-    );
+          ),
+        );
+      }
+      return Column(
+        children: [
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: notificationViewModel.notificationSettings.length,
+            itemBuilder: (context, index) {
+              return NotificationSettingRow(
+                  title: notificationTypeToString(notificationViewModel
+                      .notificationSettings[index].notificationType),
+                  isChecked:
+                      notificationViewModel.notificationSettings[index].status,
+                  onClicked: (value) {
+                    setState(() {
+                      notificationViewModel.notificationSettings[index].status =
+                          value;
+                    });
+                  });
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(
+                height: screenSizeController.getHeightByRatio(0.02),
+              );
+            },
+          ),
+          SizedBox(
+            height: screenSizeController.getHeightByRatio(0.05),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GoskiSmallsizeButton(
+                width: screenSizeController.getWidthByRatio(1),
+                text: tr('cancel'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              GoskiSmallsizeButton(
+                width: screenSizeController.getWidthByRatio(1),
+                text: tr('save'),
+                onTap: () {
+                  notificationViewModel.updateNotificationSetting();
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          )
+        ],
+      );
+    });
+  }
+
+  String notificationTypeToString(int notificationType) {
+    return notificationType == 7
+        ? tr('lessonReservationNotification')
+        : notificationType == 8
+            ? tr('feedbackNotification')
+            : tr('messageNotification');
   }
 }
 
@@ -121,14 +149,4 @@ class NotificationSettingRow extends StatelessWidget {
       ],
     );
   }
-}
-
-class DummyNotification {
-  final String title;
-  bool isChecked;
-
-  DummyNotification({
-    required this.title,
-    required this.isChecked,
-  });
 }
