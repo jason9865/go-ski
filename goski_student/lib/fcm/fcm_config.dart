@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/firebase_options.dart';
 import 'package:logger/logger.dart';
 
@@ -17,6 +19,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 );
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+final UserService userService = Get.find();
 
 Future<void> setFCM() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -62,6 +65,7 @@ Future<void> setFCM() async {
 
   String token = await FirebaseMessaging.instance.getToken() ?? '';
   logger.d("fcmToken : $token");
+  userService.sendFCMTokenToServer(token);
 }
 
 Future<void> androidNotiSet() async {
