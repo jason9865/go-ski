@@ -1,6 +1,6 @@
 package com.go.ski.payment.support.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class OwnerPaymentHistoryResponseDTO {
 	private String teamName;
 	private String studentName;
 	// private String instructorName; // 굳이 필요한가?
-	private LocalDate paymentDate;
+	private LocalDateTime paymentDate;
 	private String chargeName;
 	private Integer charge;
 	private Integer totalAmount;

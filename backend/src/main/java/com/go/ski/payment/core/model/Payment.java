@@ -1,6 +1,6 @@
 package com.go.ski.payment.core.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,9 +34,11 @@ public class Payment {
 	@Column
 	private Integer totalAmount;
 	@Column
+	private Integer paymentStatus;
+	@Column
 	private Integer chargeId;//0은 사용자, 100?
 	@Column
-	private LocalDate paymentDate;
+	private LocalDateTime paymentDate;
 	@Column
-	private LocalDate paybackDate;
+	private LocalDateTime paybackDate;
 }
