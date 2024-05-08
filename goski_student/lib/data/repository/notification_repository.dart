@@ -19,6 +19,10 @@ class NotificationRepository {
     return await notificationService.deleteNotification(notificationId);
   }
 
+  Future<bool> readAllNoti() async {
+    return await notificationService.readAllNoti();
+  }
+
   Future<List<NotificationSetting>> getNotificationSetting() async {
     List<NotificationSettingDTO> responses =
         await notificationService.fetchNotificationSetting();

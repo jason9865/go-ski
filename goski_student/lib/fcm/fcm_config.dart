@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/firebase_options.dart';
+import 'package:goski_student/view_model/notification_view_model.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -20,6 +21,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 final UserService userService = Get.find();
+final NotificationViewModel notificationViewModel = Get.find();
 
 Future<void> setFCM() async {
   // Handling background messages
@@ -59,6 +61,7 @@ Future<void> setFCM() async {
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
+    notificationViewModel.hasUnread.value = true;
     await flutterLocalNotificationsPlugin.show(0, '${message.data["title"]}',
         '${message.data["content"]}', notificationDetails,
         payload: 'item x');
@@ -109,6 +112,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
+  notificationViewModel.hasUnread.value = true;
   await flutterLocalNotificationsPlugin.show(0, '${message.data["title"]}',
       '${message.data["content"]}', notificationDetails,
       payload: 'item x');
