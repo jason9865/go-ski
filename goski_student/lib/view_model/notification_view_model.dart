@@ -9,14 +9,30 @@ class NotificationViewModel extends GetxController {
   RxList<Noti> notificationList = <Noti>[].obs;
   RxList<NotificationSetting> notificationSettings =
       <NotificationSetting>[].obs;
+  RxBool hasUnread = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    initFetchNotificationList();
+  }
+
+  Future<void> initFetchNotificationList() async {
+    List<Noti> fetchedNotifications =
+        await notificationRepository.getNotificationList();
+    updateUnreadStatus(fetchedNotifications);
+  }
 
   Future<void> getNotificationList() async {
+    notificationList.clear();
     List<Noti> fetchedNotifications =
         await notificationRepository.getNotificationList();
     if (fetchedNotifications.isNotEmpty) {
       notificationList.assignAll(fetchedNotifications);
+      readAllNoti();
     } else {
       notificationList.clear();
+      hasUnread.value = false;
     }
   }
 
@@ -25,9 +41,21 @@ class NotificationViewModel extends GetxController {
     return await notificationRepository.deleteNotification(notificationId);
   }
 
+  Future<void> readAllNoti() async {
+    if (await notificationRepository.readAllNoti()) {
+      hasUnread.value = false;
+    }
+  }
+
+  void updateUnreadStatus(List<Noti> list) {
+    bool foundUnread = list.any((noti) => noti.isRead == 0);
+    hasUnread.value = foundUnread;
+  }
+
   Future<void> getNotificationSetting() async {
     List<NotificationSetting> fetchedNotificationSettings =
         await notificationRepository.getNotificationSetting();
+    notificationSettings.clear();
     if (fetchedNotificationSettings.isNotEmpty) {
       notificationSettings.assignAll(fetchedNotificationSettings);
     } else {
