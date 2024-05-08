@@ -80,7 +80,6 @@ class _SkiResortDropdown extends StatelessWidget {
           child: Obx(() => GoskiDropdown(
                 hint: tr('selectSkiResort'),
                 list: skiResortViewModel.skiResortNames,
-                onSelected: (p0) {},
                 // TODO. selected 저장
                 selected: null,
                 onSelected: (idx) {},
@@ -110,8 +109,6 @@ class _StudentNumberDropdown extends StatelessWidget {
           width: screenSizeController.getWidthByRatio(0.6),
           child: GoskiDropdown(
             hint: tr('selectStudentNumber'),
-            list: const ['1:1', '1:2', '1:3', '1:4이상'],
-            onSelected: (p0) {},
             list: const ['1:1', '1:2', '1:3', '1:4이상'],
             selected: null,
             onSelected: (idx) {},

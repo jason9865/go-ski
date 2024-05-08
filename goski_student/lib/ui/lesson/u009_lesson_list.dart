@@ -58,7 +58,9 @@ class LessonListScreen extends StatelessWidget {
                   'cancelLesson',
                   tr('cancelLesson'),
                   lesson,
-                  () {},
+                  () {
+                    goToCancelLessonScreen();
+                  },
                 ));
               }
               if (lesson.startTime
@@ -81,21 +83,27 @@ class LessonListScreen extends StatelessWidget {
                     'reLesson',
                     tr('reLessonRequest'),
                     lesson,
-                    () {},
+                    () {
+
+                    },
                   ),
                   createButton(
                     screenSizeController,
                     'feedback',
                     tr('feedbackCheck'),
                     lesson,
-                    () {},
+                    () {
+                      goToFeedbackScreen(lesson);
+                    },
                   ),
                   createButton(
                     screenSizeController,
-                    'review',
+                    'writeReview',
                     tr('writeReview'),
                     lesson,
-                    () {},
+                    () {
+                      goToReviewScreen(lesson);
+                    },
                   ),
                 ]);
               }
@@ -138,7 +146,7 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => ReviewScreen(
           resortName: lesson.resortName,
           teamName: lesson.teamName,
-          instructorName: lesson.instructorName!,
+          instructorName: lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
           startTime: lesson.startTime,
           endTime: lesson.endTime,
         ));
@@ -148,7 +156,7 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => FeedbackScreen(
           resortName: lesson.resortName,
           teamName: lesson.teamName,
-          instructorName: lesson.instructorName!,
+          instructorName: lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
           startTime: lesson.startTime,
           endTime: lesson.endTime,
           feedbackImages: const [
@@ -242,9 +250,9 @@ class LessonListScreen extends StatelessWidget {
       children: [
         detailRow(
             'name',
-            tr('dynamicInstructor', args: [
-              lesson.instructorName == null ? '이름 없음' : lesson.instructorName!
-            ]),
+            lesson.instructorName != null
+                ? tr('dynamicInstructor', args: [lesson.instructorName!])
+                : tr('unDesignated'),
             goskiFontSmall),
         SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
         detailRow('location', lesson.resortName, goskiFontSmall),

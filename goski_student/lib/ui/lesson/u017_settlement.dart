@@ -3,31 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/const/util/datetime_util.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/const/util/text_formatter.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/view_model/settlement_view_model.dart';
 
 class SettlementScreen extends StatelessWidget {
-  const SettlementScreen({super.key});
+  final settlementViewModel = Get.find<SettlementViewModel>();
+
+  SettlementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
+    final list = settlementViewModel.settlementList;
 
-    // TODO. 정상결제가 아닌 건에 대한 처리 필요 (빨간색 글씨, 환불 완료, 부분 환불 등)
-    return GoskiContainer(
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                // shrinkWrap: true,
-                itemCount: 8,
-                itemBuilder: (BuildContext context, int index) {
-                  return GoskiCard(
-                    child: ListTileTheme(
+    return Obx(
+      () => Scaffold(
+        appBar: GoskiSubHeader(title: tr('paymentHistory')),
+        body: GoskiContainer(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  // shrinkWrap: true,
+                  itemCount: settlementViewModel.settlementList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GoskiCard(
+                      child: ListTileTheme(
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 12.0),
+                          vertical: 8.0,
+                          horizontal: 12.0,
+                        ),
                         horizontalTitleGap: 0,
                         minLeadingWidth: 0,
                         dense: true,
@@ -44,13 +55,20 @@ class SettlementScreen extends StatelessWidget {
                           title: Row(
                             children: [
                               GoskiText(
-                                text: "2024.04.11 09:25",
+                                text: DateTimeUtil.getDateTime(
+                                    list[index].paymentDate),
                                 size: goskiFontSmall,
                               ),
-                              GoskiText(text: " / ", size: goskiFontSmall),
-                              GoskiText(
-                                text: "정상결제",
+                              const GoskiText(
+                                text: " / ",
                                 size: goskiFontSmall,
+                              ),
+                              GoskiText(
+                                text: list[index].chargeName,
+                                size: goskiFontSmall,
+                                color: list[index].paymentStatus == 0
+                                    ? goskiBlack
+                                    : goskiRed,
                               )
                             ],
                           ),
@@ -59,23 +77,39 @@ class SettlementScreen extends StatelessWidget {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  GoskiText(
-                                      text: "고승민의 스키교실", size: goskiFontMedium),
-                                  GoskiText(
-                                      text: "170,000원", size: goskiFontMedium)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // 만약 지정강사예약이라면
-                                  GoskiText(
-                                    text: '강사명',
-                                    size: goskiFontSmall,
-                                    color: goskiDarkGray,
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GoskiText(
+                                        text: list[index].teamName,
+                                        size: goskiFontMedium,
+                                      ),
+                                      Visibility(
+                                        visible:
+                                            list[index].instructorName != null,
+                                        child: GoskiText(
+                                          text:
+                                              list[index].instructorName != null
+                                                  ? list[index].instructorName!
+                                                  : '',
+                                          size: goskiFontSmall,
+                                          color: goskiDarkGray,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  GoskiText(
+                                    text: list[index].paymentStatus == 0
+                                        ? formatFromInt(list[index].totalAmount)
+                                        : '+${formatFromInt(list[index].totalAmount)}',
+                                    size: goskiFontMedium,
+                                    color: list[index].paymentStatus == 0
+                                        ? goskiBlack
+                                        : goskiRed,
+                                  )
                                 ],
                               ),
                             ],
@@ -87,73 +121,93 @@ class SettlementScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Divider(
+                                  const Divider(
                                     color: goskiDashGray,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GoskiText(
-                                          text: '기본요금', size: goskiFontSmall),
-                                      GoskiText(
-                                          text: '+100,000원',
-                                          size: goskiFontSmall),
-                                    ],
+                                  Visibility(
+                                    visible: list[index].basicFee > 0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GoskiText(
+                                          text: tr('basicFee'),
+                                          size: goskiFontSmall,
+                                        ),
+                                        GoskiText(
+                                          text: formatFromInt(list[index].basicFee),
+                                          size: goskiFontSmall,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GoskiText(
-                                          text: '지정강사비', size: goskiFontSmall),
-                                      GoskiText(
-                                          text: '+30,000원',
-                                          size: goskiFontSmall),
-                                    ],
+                                  Visibility(
+                                    visible: list[index].designatedFee > 0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GoskiText(
+                                          text: tr('designatedFee'),
+                                          size: goskiFontSmall,
+                                        ),
+                                        GoskiText(
+                                          text: '+${formatFromInt(list[index].designatedFee)}',
+                                          size: goskiFontSmall,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GoskiText(
-                                          text: '인원옵션금액', size: goskiFontSmall),
-                                      GoskiText(
-                                          text: '+40,000원',
-                                          size: goskiFontSmall),
-                                    ],
+                                  Visibility(
+                                    visible: list[index].peopleOptionFee > 0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GoskiText(
+                                          text: tr('peopleOptionFee'),
+                                          size: goskiFontSmall,
+                                        ),
+                                        GoskiText(
+                                          text:
+                                              '+${formatFromInt(list[index].peopleOptionFee)}',
+                                          size: goskiFontSmall,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GoskiText(
-                                          text: '레벨옵션금액', size: goskiFontSmall),
-                                      GoskiText(
-                                          text: '+20,000원',
-                                          size: goskiFontSmall),
-                                    ],
+                                  Visibility(
+                                    visible: list[index].levelOptionFee > 0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GoskiText(
+                                          text: tr('peopleOptionFee'),
+                                          size: goskiFontSmall,
+                                        ),
+                                        GoskiText(
+                                          text:
+                                              '+${formatFromInt(list[index].levelOptionFee)}',
+                                          size: goskiFontSmall,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GoskiText(
-                                          text: '부분환불', size: goskiFontSmall),
-                                      GoskiText(
-                                          text: '-85,000원',
-                                          size: goskiFontSmall),
-                                    ],
-                                  ),
+                                  // TODO: 쿠폰 등 할인 관련 처리 필요
                                 ],
                               ),
                             ),
                           ],
-                        )),
-                  );
-                }),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
