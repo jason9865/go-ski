@@ -90,7 +90,7 @@ public class PaymentController {
 		HttpServletRequest httpServletRequest,
 		@RequestBody CancelPaymentRequestDTO request) {
 
-		if(!payService.checkAuthorization(request.getLessonId(), httpServletRequest)) return ResponseEntity.badRequest().body(null);
+		if(!payService.checkAuthorization(request.getLessonId(), httpServletRequest)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
 		KakaopayCancelResponseDTO response = payService.getCancelResponse(request);
 		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
