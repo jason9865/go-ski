@@ -17,6 +17,4 @@ public class FcmSendRequestDTO {
     private Integer receiverId;
     private String title;
     private String content;
-    @Setter
-    private MultipartFile image;
 }

@@ -1,6 +1,6 @@
 package com.go.ski.notification.support.events;
 
-import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
+import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
 import com.go.ski.notification.core.domain.DeviceType;
 import com.go.ski.payment.core.model.Lesson;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class FeedbackEvent extends NotificationEvent{
         this.lessonId = lessonId;
     }
 
-    public static FeedbackEvent of(FeedbackRequestDTO feedbackRequestDTO, Lesson lesson, String deviceType) {
+    public static FeedbackEvent of(FeedbackCreateRequestDTO feedbackCreateRequestDTO, Lesson lesson, String deviceType) {
         return new FeedbackEvent(
                 lesson.getUser().getUserId(),
                 LocalDateTime.now(),

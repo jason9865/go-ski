@@ -10,8 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class FeedbackCreateRequestDTO extends FeedbackRequestDTO{
+public class FeedbackCreateRequestDTO {
 
+    private String content;
     private Integer lessonId;
 
 }

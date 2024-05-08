@@ -42,13 +42,14 @@ public class TeamService {
 
 
     @Transactional
-    public void createTeam(TeamCreateRequestDTO request,User user) {
+    public void createTeam(User user,TeamCreateRequestDTO request,
+                           MultipartFile teamProfileImage, List<MultipartFile> teamImages) {
         log.info("TeamService.createTeam");
         // Team 테이블에 저장할 SkiResort 생성
         SkiResort skiResort = getSkiResort(request.getResortId());
 
         // 0. 프로필 이미지부터 S3에 저장
-        String teamProfileUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage());
+        String teamProfileUrl = s3Uploader.uploadFile(FileUploadPath.TEAM_PROFILE_PATH.path, teamProfileImage);
 
         // 1. 팀 생성
         Team team = Team.builder()
@@ -66,8 +67,8 @@ public class TeamService {
         log.info("팀 생성 성공 - teamId : {}", savedTeam.getTeamId());
 
         // 2. 팀 이미지 생성
-        if (request.getTeamImages() != null) {
-            saveTeamImages(request.getTeamImages(),savedTeam);
+        if (teamImages!= null) {
+            saveTeamImages(teamImages,savedTeam);
         }
 
         // 3. 중고급 옵션 생성
@@ -105,7 +106,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request) {
+    public void updateTeamInfo(User user, Integer teamId, TeamUpdateRequestDTO request,
+                               MultipartFile teamProfileImage, List<MultipartFile> newTeamImages) {
         Team team = getTeam(teamId);
 
         // Team 테이블에 저장할 SkiResort 생성
@@ -116,9 +118,9 @@ public class TeamService {
         team.updateTeam(request, skiResort);
 
         // s3에서 프로필 이미지 변경
-        if(request.getTeamProfileImage() != null) {
+        if(teamProfileImage != null) {
             String originalFileUrl = team.getTeamProfileUrl();
-            String newTeamProfileUrl = s3Uploader.updateFile(FileUploadPath.TEAM_PROFILE_PATH.path, request.getTeamProfileImage(), originalFileUrl);
+            String newTeamProfileUrl = s3Uploader.updateFile(FileUploadPath.TEAM_PROFILE_PATH.path, teamProfileImage, originalFileUrl);
             team.updateTeamProfile(newTeamProfileUrl);
         }
 
@@ -131,8 +133,8 @@ public class TeamService {
         List<TeamImage> teamImages = teamImageRepository.findByTeamId(teamId);
 
         // 2-1. 새로운 이미지 s3에 저장
-        if(request.getNewTeamImages() != null) {
-            saveTeamImages(request.getNewTeamImages(),savedTeam);
+        if(newTeamImages != null) {
+            saveTeamImages(newTeamImages,savedTeam);
         }
 
         // 2-2. 예전 이미지 s3와 TeamImage테이블에서 삭제

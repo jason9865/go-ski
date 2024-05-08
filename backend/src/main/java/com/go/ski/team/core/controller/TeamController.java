@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,10 +25,12 @@ public class TeamController {
     private final TeamInstructorService teamInstructorService;
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createTeam(HttpServletRequest request, TeamCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> createTeam(HttpServletRequest request, TeamCreateRequestDTO requestDTO,
+                                                     @RequestPart MultipartFile teamProfileImage,
+                                                     @RequestPart List<MultipartFile> teamImages) {
         log.info("=====TeamController.createTeam=====");
         User user = (User) request.getAttribute("user");
-        teamService.createTeam(requestDTO,user);
+        teamService.createTeam(user,requestDTO, teamProfileImage, teamImages);
         log.info("=====팀 생성 완료=====");
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
@@ -42,11 +45,12 @@ public class TeamController {
 
     @PatchMapping("/update/{teamId}")
     public ResponseEntity<ApiResponse<?>> updateTeamInfo(@PathVariable Integer teamId, HttpServletRequest request,
-                                                      TeamUpdateRequestDTO requestDTO) {
+                                                         TeamUpdateRequestDTO requestDTO,
+                                                         @RequestPart MultipartFile teamProfileImage,
+                                                         @RequestPart List<MultipartFile>  newTeamImages) {
         log.info("=====TeamController.updateTeamInfo=====");
         User user = (User) request.getAttribute("user");
-        log.info("userId -> {}",user.toString());
-        teamService.updateTeamInfo(user, teamId,requestDTO);
+        teamService.updateTeamInfo(user, teamId,requestDTO,teamProfileImage,newTeamImages);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 

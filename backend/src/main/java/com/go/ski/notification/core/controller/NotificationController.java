@@ -66,10 +66,9 @@ public class NotificationController {
     // 메시지 보내기
     @PostMapping("/dm")
     public ResponseEntity<ApiResponse<?>> sendMessage(HttpServletRequest request, FcmSendRequestDTO requestDTO,
-                                                      @RequestParam(required = false) MultipartFile image) {
+                                                      @RequestPart(required = false) MultipartFile image) {
         log.info("NotificationController.sendMessage");
-        requestDTO.setImage(image);
-        notificationService.sendMessage(requestDTO, request);
+        notificationService.sendMessage(request,requestDTO,image);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("메시지 전송을 완료했습니다."));
     }
 

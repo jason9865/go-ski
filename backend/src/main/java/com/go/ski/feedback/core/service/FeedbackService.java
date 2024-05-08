@@ -8,7 +8,6 @@ import com.go.ski.feedback.core.model.FeedbackMedia;
 import com.go.ski.feedback.core.repository.FeedbackMediaRepository;
 import com.go.ski.feedback.core.repository.FeedbackRepository;
 import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
-import com.go.ski.feedback.support.dto.FeedbackRequestDTO;
 import com.go.ski.feedback.support.dto.FeedbackResponseDTO;
 import com.go.ski.feedback.support.dto.FeedbackUpdateRequestDTO;
 import com.go.ski.feedback.support.exception.FeedbackExceptionEnum;
@@ -19,7 +18,6 @@ import com.go.ski.payment.core.repository.LessonRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +46,8 @@ public class FeedbackService {
     }
 
     @Transactional
-    public void createFeedback(FeedbackCreateRequestDTO feedbackCreateRequestDTO, HttpServletRequest request) {
+    public void createFeedback(HttpServletRequest request, FeedbackCreateRequestDTO feedbackCreateRequestDTO,
+                               List<MultipartFile> images, List<MultipartFile> videos) {
         String deviceType = request.getHeader("DeviceType");
 
         Lesson lesson = getLesson(feedbackCreateRequestDTO.getLessonId());
@@ -62,12 +61,13 @@ public class FeedbackService {
                 ;
         
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        saveMediaFiles(feedbackCreateRequestDTO,savedFeedback);
+        saveMediaFiles(images,videos,savedFeedback);
         eventPublisher.publish(feedbackCreateRequestDTO,lesson, deviceType);
     }
 
     @Transactional
-    public void updateFeedback(Integer feedbackId, FeedbackUpdateRequestDTO request) {
+    public void updateFeedback(Integer feedbackId, FeedbackUpdateRequestDTO request,
+                               List<MultipartFile> images, List<MultipartFile> videos) {
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(FeedbackExceptionEnum.FEEDBACK_NOT_FOUND));
 
@@ -75,7 +75,7 @@ public class FeedbackService {
 
         feedback.updateContent(request);
 
-        saveMediaFiles(request,feedback);
+        saveMediaFiles(images, videos, feedback);
         deleteMediaFiles(oldMediaFiles);
 
         feedbackRepository.save(feedback);
@@ -86,20 +86,17 @@ public class FeedbackService {
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.WRONG_REQUEST));
     }
 
-    private void saveMediaFiles(FeedbackRequestDTO request, Feedback feedback) {
+    private void saveMediaFiles(List<MultipartFile> imageFiles, List<MultipartFile> videoFiles, Feedback feedback) {
         // 기회가 된다면 media를 저장하는 로직은 별도로 분리하자
 
         List<FeedbackMedia> tobeSavedFiles = new ArrayList<>();
 
-        List<MultipartFile> imageFiles = request.getImages();
         if (imageFiles != null) {
             for (MultipartFile file : imageFiles) {
                 String imageUrl = s3Uploader.uploadFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, file);
                 tobeSavedFiles.add(FeedbackMedia.builder().mediaUrl(imageUrl).feedback(feedback).build());
             }
         }
-
-        List<MultipartFile> videoFiles = request.getVideos();
 
         if (videoFiles != null) {
             for (MultipartFile file : videoFiles) {
