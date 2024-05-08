@@ -2,16 +2,14 @@ package com.go.ski.notification.support.events;
 
 import com.go.ski.common.util.TimeConvertor;
 import com.go.ski.notification.core.domain.DeviceType;
-import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
-import com.go.ski.team.core.model.Team;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-public class LessonCreateEvent extends NotificationEvent{
+public class LessonCreateStudentEvent extends NotificationEvent{
 
     private static final Integer NOTIFICATION_TYPE = 7;
 
@@ -23,7 +21,7 @@ public class LessonCreateEvent extends NotificationEvent{
     private final String lessonType;
 
 
-    private LessonCreateEvent(
+    private LessonCreateStudentEvent(
             Integer receiverId, LocalDateTime createdAt,
             Integer notificationType, DeviceType deviceType,
             String title, String detail, String lessonDate,
@@ -38,8 +36,8 @@ public class LessonCreateEvent extends NotificationEvent{
         this.lessonType = lessonType;
     }
 
-    public static LessonCreateEvent of(LessonInfo lessonInfo, String resortName,
-                                       Integer receiverId, String deviceType) {
+    public static LessonCreateStudentEvent of(LessonInfo lessonInfo, String resortName,
+                                              Integer receiverId, String deviceType) {
 
         LocalDate lessonDate = lessonInfo.getLessonDate();
         String month = lessonDate.getMonth().getValue() + "월";
@@ -53,7 +51,7 @@ public class LessonCreateEvent extends NotificationEvent{
         String detail = month + " " + day + " " + hour + " " + minute + " " + resortName + "\n" + lessonOneToN
                 + " 강습이 예약되었습니다";
 
-        return new LessonCreateEvent(
+        return new LessonCreateStudentEvent(
                 receiverId,
                 LocalDateTime.now(),
                 NOTIFICATION_TYPE,

@@ -19,6 +19,4 @@ public class NotificationType{
 
     private String notificationTypeName;
 
-
-
 }
