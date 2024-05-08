@@ -32,4 +32,18 @@ class NotificationService extends GetxService {
       return [];
     }
   }
+
+  Future<bool> deleteNotification(int notificationId) async {
+    try {
+      dynamic response = await CustomDio.dio.delete(
+        '$baseUrl/notification/delete/$notificationId',
+      );
+      if (response.data['status'] == "success") {
+        return true;
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+    return false;
+  }
 }
