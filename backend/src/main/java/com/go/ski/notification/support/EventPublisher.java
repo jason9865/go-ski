@@ -93,7 +93,7 @@ public class EventPublisher {
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
-        Team team = teamRepository.findById(lesson.getInstructor().getInstructorId())
+        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
         List<Integer> receiverIds = new ArrayList<>();
