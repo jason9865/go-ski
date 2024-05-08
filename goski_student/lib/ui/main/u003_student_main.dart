@@ -100,7 +100,7 @@ class StudentMainScreen extends StatelessWidget {
                     iconImage: 'assets/images/user.svg',
                     onClick: () => {
                       logger.d("나의 강습"),
-                      lessonListViewModel.getUserInfo(),
+                      lessonListViewModel.getLessonList(),
                       Get.to(() => LessonListScreen())
                     },
                   ),

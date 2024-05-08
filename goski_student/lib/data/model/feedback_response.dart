@@ -46,7 +46,7 @@ class MediaResponse {
   factory MediaResponse.fromJson(Map<String, dynamic> json) {
     return MediaResponse(
       mediaId: json['mediaId'] as int,
-      mediaUrl: json['mediaUrl:'] as String,
+      mediaUrl: json['mediaUrl'] as String,
     );
   }
 
