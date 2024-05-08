@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:goski_student/data/model/feedback_response.dart';
 import 'package:goski_student/data/repository/feedback_repository.dart';
 import 'package:logger/logger.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 var logger = Logger();
 
@@ -28,7 +29,24 @@ class FeedbackViewModel extends GetxController {
     Feedback? response = await feedbackRepository.getFeedback(lessonId);
 
     if (response != null) {
+      var list = <String>[];
+
+      for (MediaData mediaData in response.videos) {
+        String thumbnailPath = (await VideoThumbnail.thumbnailFile(
+          video: mediaData.mediaUrl,
+          imageFormat: ImageFormat.WEBP,
+          maxWidth: 100,
+          maxHeight: 100,
+          quality: 75,
+        ))!;
+
+        list.add(thumbnailPath);
+      }
+
+      logger.w(list);
+
       feedback.value = response;
+      feedback.value.videoThumbnailList = list;
     }
   }
 
@@ -36,12 +54,14 @@ class FeedbackViewModel extends GetxController {
     await FlutterDownloader.enqueue(
       url: url,
       savedDir: savedDir,
+      saveInPublicStorage: true,
     );
   }
 
   static void downloadCallback(String id, int status, int progress) {
-    logger.w(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    print('======================================================================================');
+    print('Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    print('======================================================================================');
     final SendPort send =
         IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);

@@ -46,7 +46,7 @@ class MediaResponse {
   factory MediaResponse.fromJson(Map<String, dynamic> json) {
     return MediaResponse(
       mediaId: json['mediaId'] as int,
-      mediaUrl: json['mediaUrl:'] as String,
+      mediaUrl: json['mediaUrl'] as String,
     );
   }
 
@@ -61,6 +61,7 @@ class Feedback {
   String content;
   List<MediaData> images;
   List<MediaData> videos;
+  List<String> videoThumbnailList = [];
 
   Feedback({
     required this.feedbackId,
@@ -71,7 +72,7 @@ class Feedback {
 
   @override
   String toString() {
-    return 'Feedback{feedbackId: $feedbackId, content: $content, images: $images, videos: $videos}';
+    return 'Feedback{feedbackId: $feedbackId, content: $content, images: $images, videos: $videos, videoThumbnailList: $videoThumbnailList}';
   }
 }
 
