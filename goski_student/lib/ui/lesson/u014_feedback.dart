@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/data/model/feedback_response.dart';
 import 'package:goski_student/ui/component/goski_border_white_container.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
@@ -15,8 +16,8 @@ class FeedbackScreen extends StatefulWidget {
   final String instructorName;
   final DateTime startTime;
   final DateTime endTime;
-  final List<String> feedbackImages;
-  final List<String> feedbackVideos;
+  final List<MediaData> feedbackImages;
+  final List<MediaData> feedbackVideos;
   final String feedbackText;
 
   const FeedbackScreen({
@@ -77,7 +78,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GoskiText(text: widget.resortName, size: goskiFontLarge),
-                GoskiText(text: " - ", size: goskiFontLarge),
+                const GoskiText(text: " - ", size: goskiFontLarge),
                 GoskiText(text: widget.teamName, size: goskiFontLarge),
               ],
             ),
@@ -144,8 +145,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       (image) => Container(
                         width: 100,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.asset(
-                          image,
+                        child: Image.network(
+                          image.mediaUrl,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
@@ -195,8 +196,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       (video) => Container(
                         width: 100,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.asset(
-                          video,
+                        child: Image.network(
+                          video.mediaUrl,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,

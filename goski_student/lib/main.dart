@@ -10,12 +10,14 @@ import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
+import 'package:goski_student/data/data_source/feedback_service.dart';
 import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/data_source/notification_service.dart';
 import 'package:goski_student/data/data_source/settlement_service.dart';
 import 'package:goski_student/data/data_source/ski_resort_service.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
+import 'package:goski_student/data/repository/feedback_repository.dart';
 import 'package:goski_student/data/repository/main_repository.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
 import 'package:goski_student/data/repository/settlement_repository.dart';
@@ -24,7 +26,7 @@ import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
-import 'package:goski_student/ui/user/u002_signup.dart';
+import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
@@ -49,6 +51,7 @@ void initDependencies() {
   Get.put(MainService(), permanent: true);
   Get.put(LessonListService(), permanent: true);
   Get.put(SettlementService(), permanent: true);
+  Get.put(FeedbackService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
@@ -56,6 +59,7 @@ void initDependencies() {
   Get.put(MainRepository(), permanent: true);
   Get.put(LessonListRepository(), permanent: true);
   Get.put(SettlementRepository(), permanent: true);
+  Get.put(FeedbackRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -64,6 +68,7 @@ void initDependencies() {
   Get.put(MainViewModel(), permanent: true);
   Get.put(LessonListViewModel(), permanent: true);
   Get.put(SettlementViewModel(), permanent: true);
+  Get.put(FeedbackViewModel(), permanent: true);
 }
 
 void main() async {
@@ -92,7 +97,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.put(LoginController());
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
