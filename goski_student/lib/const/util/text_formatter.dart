@@ -21,3 +21,11 @@ class TextFormatter extends TextInputFormatter {
     );
   }
 }
+
+String formatFromString(String amount) {
+  return NumberFormat.simpleCurrency(locale: 'ko').format(int.parse(amount));
+}
+
+String formatFromInt(int amount) {
+  return NumberFormat.simpleCurrency(locale: 'ko').format(amount);
+}

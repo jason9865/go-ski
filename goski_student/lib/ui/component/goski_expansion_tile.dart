@@ -11,13 +11,14 @@ class GoskiExpansionTile extends StatelessWidget {
   final double radius, verticalPadding;
   final Color backgroundColor;
 
-  const GoskiExpansionTile(
-      {super.key,
-      required this.title,
-      required this.children,
-      this.radius = 10,
-      this.backgroundColor = goskiLightGray,
-      this.verticalPadding = -4.0});
+  const GoskiExpansionTile({
+    super.key,
+    required this.title,
+    required this.children,
+    this.radius = 10,
+    this.backgroundColor = goskiLightGray,
+    this.verticalPadding = -4.0,
+  });
 
   @override
   Widget build(BuildContext context) {

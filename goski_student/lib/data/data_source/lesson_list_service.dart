@@ -30,7 +30,7 @@ class LessonListService extends GetxService {
 
         return data;
       } else {
-        logger.e('LessonListService - getLessonList - 응답 실패 ${response.body}');
+        logger.e('LessonListService - getLessonList - 응답 실패 ${response.data}');
       }
     } catch (e) {
       logger.e('LessonListService - getLessonList - 응답 실패 ${e}');

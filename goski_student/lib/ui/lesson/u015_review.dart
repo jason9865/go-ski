@@ -123,7 +123,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             tr("잘생김"),
                             tr("잘생김"),
                             tr("잘생김"),
-                            tr("잘생김")
+                            tr("잘생김"),
+                            tr("잘생김"),
+                            tr("잘생김"),
+                            tr("잘생김"),
                           ])
                         ],
                       ),
@@ -193,7 +196,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GoskiText(text: widget.resortName, size: goskiFontLarge),
-                GoskiText(text: " - ", size: goskiFontLarge),
+                const GoskiText(text: " - ", size: goskiFontLarge),
                 GoskiText(text: widget.teamName, size: goskiFontLarge),
               ],
             ),
