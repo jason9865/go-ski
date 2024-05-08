@@ -85,9 +85,7 @@ class LessonListScreen extends StatelessWidget {
                     'reLesson',
                     tr('reLessonRequest'),
                     lesson,
-                    () {
-
-                    },
+                    () {},
                   ),
                   createButton(
                     screenSizeController,
@@ -148,7 +146,8 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => ReviewScreen(
           resortName: lesson.resortName,
           teamName: lesson.teamName,
-          instructorName: lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
+          instructorName:
+              lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
           startTime: lesson.startTime,
           endTime: lesson.endTime,
         ));
@@ -160,12 +159,14 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => FeedbackScreen(
           resortName: lesson.resortName,
           teamName: lesson.teamName,
-          instructorName: lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
+          instructorName:
+              lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
           startTime: lesson.startTime,
           endTime: lesson.endTime,
           feedbackImages: feedbackViewModel.feedback.value.images,
           feedbackVideos: feedbackViewModel.feedback.value.videos,
           feedbackText: feedbackViewModel.feedback.value.content,
+          videoThumbnailList: feedbackViewModel.feedback.value.videoThumbnailList,
         ));
   }
 
