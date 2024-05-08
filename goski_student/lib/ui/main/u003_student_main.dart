@@ -14,8 +14,10 @@ import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
+import 'package:goski_student/ui/lesson/u017_settlement.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
+import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -29,6 +31,7 @@ class StudentMainScreen extends StatelessWidget {
   ];
   final mainViewModel = Get.find<MainViewModel>();
   final lessonListViewModel = Get.find<LessonListViewModel>();
+  final settlementViewModel = Get.find<SettlementViewModel>();
 
   StudentMainScreen({super.key});
 
@@ -104,7 +107,11 @@ class StudentMainScreen extends StatelessWidget {
                   UserMenu(
                     iconName: 'paymentHistory',
                     iconImage: 'assets/images/receipt.svg',
-                    onClick: () => logger.d("결제 내역"),
+                    onClick: () => {
+                      logger.d("결제 내역"),
+                      settlementViewModel.getSettlementList(),
+                      Get.to(() => SettlementScreen())
+                    },
                   ),
                   UserMenu(
                     iconName: 'reservation',

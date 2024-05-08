@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/ui/component/goski_border_white_container.dart';
@@ -43,8 +43,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         title: tr("feedback"),
       ),
       body: GoskiContainer(
-        buttonName: tr('back'),
-        onConfirm: () => Navigator.of(context).pop(),
         child: SingleChildScrollView(
           child: Column(
             children: [
