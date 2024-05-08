@@ -71,7 +71,7 @@ extension UserToDTO on User {
 }
 
 extension UserRequestToUser on UserRequest {
-  User toUserRequest() {
+  User toUser() {
     return User(
       domainUserKey: domainUserKey,
       kakaoProfileUrl: kakaoProfileUrl,
