@@ -18,6 +18,8 @@ import 'package:goski_student/ui/lesson/u017_settlement.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
+import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -117,7 +119,15 @@ class StudentMainScreen extends StatelessWidget {
                     iconName: 'reservation',
                     iconImage: 'assets/images/calendar.svg',
                     onClick: () =>
-                        {logger.d("예약"), Get.toNamed("/reservation")},
+                        // {logger.d("예약"), Get.toNamed("/reservation")},
+                        {
+                      logger.d("예약"),
+                      Get.to(() => ReservationSelectScreen(),
+                          binding: BindingsBuilder(() {
+                        Get.lazyPut<ReservationViewModel>(
+                            () => ReservationViewModel());
+                      }))
+                    },
                   ),
                   UserMenu(
                     iconName: 'couponBox',
