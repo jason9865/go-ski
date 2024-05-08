@@ -61,7 +61,6 @@ class Feedback {
   String content;
   List<MediaData> images;
   List<MediaData> videos;
-  List<String> videoThumbnailList = [];
 
   Feedback({
     required this.feedbackId,
@@ -72,7 +71,7 @@ class Feedback {
 
   @override
   String toString() {
-    return 'Feedback{feedbackId: $feedbackId, content: $content, images: $images, videos: $videos, videoThumbnailList: $videoThumbnailList}';
+    return 'Feedback{feedbackId: $feedbackId, content: $content, images: $images, videos: $videos}';
   }
 }
 

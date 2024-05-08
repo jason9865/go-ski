@@ -31,7 +31,7 @@ class FeedbackScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: GoskiSubHeader(
-          title: tr("feedback"),
+          title: tr('feedback'),
         ),
         body: GoskiContainer(
           child: SingleChildScrollView(
@@ -43,7 +43,7 @@ class FeedbackScreen extends StatelessWidget {
                   imageListCard(),
                   const BuildInterval()
                 ],
-                if (feedbackViewModel.feedback.value.images.isNotEmpty) ...[
+                if (feedbackViewModel.feedback.value.videos.isNotEmpty) ...[
                   videoListCard(),
                   const BuildInterval()
                 ],
@@ -83,14 +83,14 @@ class FeedbackScreen extends StatelessWidget {
                   text: tr(DateFormat('yyyy.MM.dd (E) HH:mm')
                       .format(lesson.value.startTime)
                       .toString()),
-                  size: goskiFontSmall,
+                  size: goskiFontMedium,
                   color: goskiDarkGray,
                 ),
                 GoskiText(
                   text: tr(DateFormat('~HH:mm')
                       .format(lesson.value.endTime)
                       .toString()),
-                  size: goskiFontSmall,
+                  size: goskiFontMedium,
                   color: goskiDarkGray,
                 ),
               ],
@@ -101,7 +101,7 @@ class FeedbackScreen extends StatelessWidget {
                     ? '이름 없음'
                     : lesson.value.instructorName!
               ]),
-              size: goskiFontSmall,
+              size: goskiFontMedium,
               color: goskiDarkGray,
             ),
           ],
@@ -123,7 +123,8 @@ class FeedbackScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GoskiText(
-                    text: tr('feedbackImage'),
+                    text:
+                        '${tr('feedbackImage')} (${feedbackViewModel.feedback.value.images.length})',
                     size: goskiFontLarge,
                     isExpanded: true,
                   ),
@@ -132,7 +133,8 @@ class FeedbackScreen extends StatelessWidget {
                         String savedDir =
                             (await getApplicationDocumentsDirectory()).path;
 
-                        for (var mediaData in feedbackViewModel.feedback.value.images) {
+                        for (var mediaData
+                            in feedbackViewModel.feedback.value.images) {
                           feedbackViewModel.download(
                               mediaData.mediaUrl, savedDir);
                         }
@@ -179,7 +181,8 @@ class FeedbackScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GoskiText(
-                    text: tr('feedbackVideo'),
+                    text:
+                        '${tr('feedbackVideo')} (${feedbackViewModel.feedback.value.videos.length})',
                     size: goskiFontLarge,
                     isExpanded: true,
                   ),
@@ -191,7 +194,8 @@ class FeedbackScreen extends StatelessWidget {
 
                         logger.d('savedDir : $savedDir');
 
-                        for (var mediaData in feedbackViewModel.feedback.value.videos) {
+                        for (var mediaData
+                            in feedbackViewModel.feedback.value.videos) {
                           feedbackViewModel.download(
                               mediaData.mediaUrl, savedDir);
                         }
@@ -204,7 +208,7 @@ class FeedbackScreen extends StatelessWidget {
               height: 120,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: feedbackViewModel.feedback.value.videoThumbnailList
+                children: feedbackViewModel.videoThumbnailList
                     .map(
                       (thumbnailPath) => Container(
                         width: 100,
@@ -229,11 +233,14 @@ class FeedbackScreen extends StatelessWidget {
   Widget feedbackTextCard() {
     return GoskiCard(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GoskiText(text: tr('feedback'), size: goskiFontLarge),
+            SizedBox(
+              height: screenSizeController.getHeightByRatio(0.02),
+            ),
             GoskiText(
               text: tr(feedbackViewModel.feedback.value.content),
               size: goskiFontMedium,

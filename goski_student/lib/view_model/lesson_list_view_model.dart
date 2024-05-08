@@ -26,6 +26,7 @@ class LessonListViewModel extends GetxController {
     duration: 0,
     lessonStatus: '',
   ).obs;
+  RxBool isLoadingLessonList = true.obs;
 
   void initMessage(LessonListItem lesson) {
     message.value.receiverId = 34;
@@ -40,10 +41,12 @@ class LessonListViewModel extends GetxController {
     return message.value.receiverId != 0 && message.value.title.isNotEmpty;
   }
 
-  void getUserInfo() async {
+  void getLessonList() async {
+    isLoadingLessonList.value = true;
     List<LessonListItem> response = await lessonListRepository.getLessonList();
 
     lessonList.value = response;
+    isLoadingLessonList.value = false;
   }
 
   Future<bool> sendMessage() async {
@@ -51,14 +54,10 @@ class LessonListViewModel extends GetxController {
       DefaultDTO? response =
           await lessonListRepository.sendMessage(message.value);
 
-      logger.w('일단 유효한 메시지');
-
       if (response != null && response.status == 'success') {
         return true;
       }
     }
-
-    logger.w('일단 유효하지 않은 메시지 ${message.value.toString()}');
 
     return false;
   }
