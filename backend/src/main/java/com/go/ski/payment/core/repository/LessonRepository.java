@@ -13,7 +13,7 @@ import com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO;
 
 public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.UserPaymentHistoryResponseDTO ( "
-		+ "l.user.userName, t.teamName, p.paymentDate, c.chargeName, c.studentChargeRate, p.totalAmount, "
+		+ "l.user.userName, t.teamName, p.paymentDate, p.paymentStatus, c.chargeName, c.studentChargeRate, p.totalAmount, "
 		+ "lp.basicFee, lp.designatedFee, lp.peopleOptionFee, lp.levelOptionFee) "
 		+ "FROM Lesson l "
 		+ "JOIN Team t  ON t.teamId = l.team.teamId "

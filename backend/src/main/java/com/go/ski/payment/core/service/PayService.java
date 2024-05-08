@@ -201,7 +201,7 @@ public class PayService {
 			)
 			.chargeId(0)// 사용자 0? 100?
 			.tid(paymentCache.getTid())
-			.paymentDate(LocalDate.now()).build();
+			.paymentDate(LocalDateTime.now()).build();
 		paymentRepository.save(tmpPayment);
 
 		//정산 테이블에 추가
