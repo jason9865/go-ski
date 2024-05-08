@@ -154,20 +154,10 @@ class LessonListScreen extends StatelessWidget {
   }
 
   void goToFeedbackScreen(LessonListItem lesson) async {
-    await feedbackViewModel.getFeedback(lesson.lessonId);
+    lessonListViewModel.selectedLesson.value = lesson;
+    feedbackViewModel.getFeedback(lesson.lessonId);
 
-    Get.to(() => FeedbackScreen(
-          resortName: lesson.resortName,
-          teamName: lesson.teamName,
-          instructorName:
-              lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
-          startTime: lesson.startTime,
-          endTime: lesson.endTime,
-          feedbackImages: feedbackViewModel.feedback.value.images,
-          feedbackVideos: feedbackViewModel.feedback.value.videos,
-          feedbackText: feedbackViewModel.feedback.value.content,
-          videoThumbnailList: feedbackViewModel.feedback.value.videoThumbnailList,
-        ));
+    Get.to(() => FeedbackScreen());
   }
 
   void goToSendMessageDialog(BuildContext context, LessonListItem lesson) {
