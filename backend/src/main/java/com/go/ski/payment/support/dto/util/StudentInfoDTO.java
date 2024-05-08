@@ -21,7 +21,6 @@ public class StudentInfoDTO {
     private Height height;
     @Enumerated(EnumType.STRING)
     private Weight weight;
-    @JsonProperty("foot_size")
     private Integer footSize;
     @Enumerated(EnumType.STRING)
     private Age age;
