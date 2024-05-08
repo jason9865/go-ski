@@ -20,7 +20,7 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
         super(reserveRequestDTO);
         switch (reserveRequestDTO.getLessonType()) {
             case "SKI" -> {
-                if (reserveRequestDTO.getLevel().equals("BEGINNER") || reserveRequestDTO.getLevel() == null) {
+                if (reserveRequestDTO.getLevel() == null || reserveRequestDTO.getLevel().equals("BEGINNER")) {
                     lessonType = "1010000";
                 } else {
                     switch (reserveRequestDTO.getLevel()) {
@@ -31,7 +31,7 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
                 }
             }
             case "BOARD" -> {
-                if (reserveRequestDTO.getLevel() == null) {
+                if (reserveRequestDTO.getLevel() == null || reserveRequestDTO.getLevel().equals("BEGINNER")) {
                     lessonType = "1100000";
                 } else {
                     switch (reserveRequestDTO.getLevel()) {
