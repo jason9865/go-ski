@@ -12,7 +12,6 @@ import 'package:goski_student/ui/component/goski_dropdown.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -83,6 +82,8 @@ class _SkiResortDropdown extends StatelessWidget {
                 list: skiResortViewModel.skiResortNames,
                 onSelected: (p0) {},
                 // TODO. selected 저장
+                selected: null,
+                onSelected: (idx) {},
               )),
         ),
       ],
@@ -111,6 +112,9 @@ class _StudentNumberDropdown extends StatelessWidget {
             hint: tr('selectStudentNumber'),
             list: const ['1:1', '1:2', '1:3', '1:4이상'],
             onSelected: (p0) {},
+            list: const ['1:1', '1:2', '1:3', '1:4이상'],
+            selected: null,
+            onSelected: (idx) {},
           ),
         ),
       ],
