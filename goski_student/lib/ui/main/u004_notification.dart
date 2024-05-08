@@ -13,6 +13,7 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_smallsize_button.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
 
 import '../component/goski_modal.dart';
@@ -41,7 +42,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: GoskiSubHeader(title: tr('notification')),
       body: Obx(() {
         if (notificationViewModel.notificationList.isEmpty) {
-          return const Center(child: Text("No notifications yet."));
+          return Container(
+            color: goskiBackground,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
+              ),
+            ),
+          );
         }
         return GoskiContainer(
           child: SingleChildScrollView(
@@ -58,9 +66,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     switch (item.notificationType) {
                       case 8:
                         return FeedbackNotificationCard(
-                          dateTime: item.createdAt,
-                          title: item.title,
-                        );
+                            dateTime: item.createdAt,
+                            title: item.title,
+                            onItemDeleteClicked: () {
+                              notificationViewModel
+                                  .deleteNotification(item.notificationId);
+                              setState(() {
+                                notificationViewModel.notificationList
+                                    .removeAt(index);
+                              });
+                            });
                       case 9:
                         return MessageNotificationCard(
                           dateTime: item.createdAt,
@@ -169,11 +184,13 @@ class NotificationCard extends StatelessWidget {
 class FeedbackNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final String title;
+  final VoidCallback onItemDeleteClicked;
 
   const FeedbackNotificationCard({
     super.key,
     required this.dateTime,
     required this.title,
+    required this.onItemDeleteClicked,
   });
 
   @override
@@ -181,22 +198,42 @@ class FeedbackNotificationCard extends StatelessWidget {
     final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
-    return NotificationCard(
-      dateTime: dateTime,
-      child: Column(
-        children: [
-          SizedBox(height: titlePadding),
-          Row(
-            children: [
-              GoskiText(
-                text: title,
-                size: goskiFontMedium,
-                isBold: true,
+    return GestureDetector(
+      onTap: () => Get.off(() => LessonListScreen()),
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: tr('deleteNotification'),
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context),
+                onConfirm: () {
+                  onItemDeleteClicked();
+                  Navigator.pop(context);
+                },
               ),
-            ],
-          ),
-          SizedBox(height: titlePadding),
-        ],
+            );
+          },
+        );
+      },
+      child: NotificationCard(
+        dateTime: dateTime,
+        child: Column(
+          children: [
+            SizedBox(height: titlePadding),
+            Row(
+              children: [
+                GoskiText(
+                  text: title,
+                  size: goskiFontMedium,
+                  isBold: true,
+                ),
+              ],
+            ),
+            SizedBox(height: titlePadding),
+          ],
+        ),
       ),
     );
   }

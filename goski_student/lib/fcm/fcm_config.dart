@@ -22,8 +22,10 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 final UserService userService = Get.find();
 
 Future<void> setFCM() async {
+  // Handling background messages
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  // Settings
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
@@ -34,17 +36,16 @@ Future<void> setFCM() async {
     provisional: false,
     sound: true,
   );
-
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
-
   androidNotiSet();
 
   logger.d('User granted permission: ${settings.authorizationStatus}');
 
+  // Handling Foreground messages
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     logger.d("알림 도착 ${message.data["title"]} ${message.data["content"]}");
     const AndroidNotificationDetails androidNotificationDetails =
@@ -63,6 +64,7 @@ Future<void> setFCM() async {
         payload: 'item x');
   });
 
+  // Send FCMToken to server
   String token = await FirebaseMessaging.instance.getToken() ?? '';
   logger.d("fcmToken : $token");
   userService.sendFCMTokenToServer(token);
@@ -96,5 +98,19 @@ Future<void> androidNotiSet() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  const AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
+          'high_importance_channel', 'High Importance Notifications',
+          channelDescription:
+              'This channel is used for important notifications.',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker');
+
+  const NotificationDetails notificationDetails =
+      NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(0, '${message.data["title"]}',
+      '${message.data["content"]}', notificationDetails,
+      payload: 'item x');
   logger.d("Handling a background message: ${message.messageId}");
 }
