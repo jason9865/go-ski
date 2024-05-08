@@ -18,6 +18,7 @@ class FeedbackViewModel extends GetxController {
     images: <MediaData>[],
     videos: <MediaData>[],
   ).obs;
+  final RxList<String> videoThumbnailList = <String>[].obs;
 
   @override
   void onInit() {
@@ -29,24 +30,19 @@ class FeedbackViewModel extends GetxController {
     Feedback? response = await feedbackRepository.getFeedback(lessonId);
 
     if (response != null) {
-      var list = <String>[];
+      feedback.value = response;
 
       for (MediaData mediaData in response.videos) {
         String thumbnailPath = (await VideoThumbnail.thumbnailFile(
           video: mediaData.mediaUrl,
-          imageFormat: ImageFormat.WEBP,
-          maxWidth: 100,
-          maxHeight: 100,
-          quality: 75,
+          timeMs: 2000,
+          quality: 100,
         ))!;
 
-        list.add(thumbnailPath);
+        videoThumbnailList.add(thumbnailPath);
       }
 
-      logger.w(list);
-
-      feedback.value = response;
-      feedback.value.videoThumbnailList = list;
+      logger.w(videoThumbnailList);
     }
   }
 
@@ -59,9 +55,12 @@ class FeedbackViewModel extends GetxController {
   }
 
   static void downloadCallback(String id, int status, int progress) {
-    print('======================================================================================');
-    print('Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-    print('======================================================================================');
+    print(
+        '======================================================================================');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    print(
+        '======================================================================================');
     final SendPort send =
         IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);

@@ -247,5 +247,6 @@
   "designatedFee": "지정 강사비",
   "peopleOptionFee": "인원 옵션 금액",
   "levelOptionFee": "레벨 옵션 금액",
-  "unDesignated": "강사 미지정"
+  "unDesignated": "강사 미지정",
+  "noLessonHistory": "강습 내역이 존재하지 않습니다"
 }

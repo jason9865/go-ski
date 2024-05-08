@@ -31,111 +31,136 @@ class LessonListScreen extends StatelessWidget {
     final screenSizeController = Get.find<ScreenSizeController>();
     cardOnTap() => print("강습 세부정보");
 
-    return Obx(
-      () => Scaffold(
-        appBar: GoskiSubHeader(title: tr('lessonHistory')),
-        body: GoskiContainer(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: lessonListViewModel.lessonList.length,
-            itemBuilder: (BuildContext context, int index) {
-              final lesson = lessonListViewModel.lessonList[index];
-              final now = DateTime.now();
-              String lessonStatus = 'notStart';
-              Color lessonBackgroundColor = goskiDarkPink;
+    return Obx(() {
+      if (lessonListViewModel.isLoadingLessonList.value) {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('lessonHistory')),
+          body: const GoskiContainer(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
+              ),
+            ),
+          ),
+        );
+      } else if (lessonListViewModel.lessonList.isEmpty) {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('lessonHistory')),
+          body: GoskiContainer(
+            child: Center(
+              child: GoskiText(
+                text: tr('noLessonHistory'),
+                size: goskiFontLarge,
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('lessonHistory')),
+          body: GoskiContainer(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: lessonListViewModel.lessonList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final lesson = lessonListViewModel.lessonList[index];
+                final now = DateTime.now();
+                String lessonStatus = 'notStart';
+                Color lessonBackgroundColor = goskiDarkPink;
 
-              if (lesson.startTime.isBefore(now) &&
-                  lesson.endTime.isAfter(now)) {
-                lessonStatus = 'onGoing';
-                lessonBackgroundColor = goskiBlue;
-              } else if (lesson.endTime.isBefore(now)) {
-                lessonStatus = 'lessonFinished';
-                lessonBackgroundColor = goskiGreen;
-              }
+                if (lesson.startTime.isBefore(now) &&
+                    lesson.endTime.isAfter(now)) {
+                  lessonStatus = 'onGoing';
+                  lessonBackgroundColor = goskiBlue;
+                } else if (lesson.endTime.isBefore(now)) {
+                  lessonStatus = 'lessonFinished';
+                  lessonBackgroundColor = goskiGreen;
+                }
 
-              List<Widget> buttons = [];
-              if (lessonStatus == 'notStart') {
-                buttons.add(createButton(
-                  screenSizeController,
-                  'cancelLesson',
-                  tr('cancelLesson'),
-                  lesson,
-                  () {
-                    goToCancelLessonScreen();
-                  },
-                ));
-              }
-              if (lesson.startTime
-                      .isBefore(now.add(const Duration(minutes: 30))) &&
-                  lesson.endTime.isAfter(now)) {
-                buttons.add(createButton(
-                  screenSizeController,
-                  'sendMessage',
-                  tr('sendMessage'),
-                  lesson,
-                  () {
-                    goToSendMessageDialog(context, lesson);
-                  },
-                ));
-              }
-              if (lesson.endTime.isBefore(now)) {
-                buttons.addAll([
-                  createButton(
+                List<Widget> buttons = [];
+                if (lessonStatus == 'notStart') {
+                  buttons.add(createButton(
                     screenSizeController,
-                    'reLesson',
-                    tr('reLessonRequest'),
-                    lesson,
-                    () {},
-                  ),
-                  createButton(
-                    screenSizeController,
-                    'feedback',
-                    tr('feedbackCheck'),
+                    'cancelLesson',
+                    tr('cancelLesson'),
                     lesson,
                     () {
-                      goToFeedbackScreen(lesson);
+                      goToCancelLessonScreen();
                     },
-                  ),
-                  createButton(
+                  ));
+                }
+                if (lesson.startTime
+                        .isBefore(now.add(const Duration(minutes: 30))) &&
+                    lesson.endTime.isAfter(now)) {
+                  buttons.add(createButton(
                     screenSizeController,
-                    'writeReview',
-                    tr('writeReview'),
+                    'sendMessage',
+                    tr('sendMessage'),
                     lesson,
                     () {
-                      goToReviewScreen(lesson);
+                      goToSendMessageDialog(context, lesson);
                     },
-                  ),
-                ]);
-              }
+                  ));
+                }
+                if (lesson.endTime.isBefore(now)) {
+                  buttons.addAll([
+                    createButton(
+                      screenSizeController,
+                      'reLesson',
+                      tr('reLessonRequest'),
+                      lesson,
+                      () {},
+                    ),
+                    createButton(
+                      screenSizeController,
+                      'feedback',
+                      tr('feedbackCheck'),
+                      lesson,
+                      () {
+                        goToFeedbackScreen(lesson);
+                      },
+                    ),
+                    createButton(
+                      screenSizeController,
+                      'writeReview',
+                      tr('writeReview'),
+                      lesson,
+                      () {
+                        goToReviewScreen(lesson);
+                      },
+                    ),
+                  ]);
+                }
 
-              MainAxisAlignment alignment = buttons.length == 1
-                  ? MainAxisAlignment.end
-                  : MainAxisAlignment.spaceBetween;
+                MainAxisAlignment alignment = buttons.length == 1
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.spaceBetween;
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: GestureDetector(
-                  onTap: cardOnTap,
-                  child: GoskiCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          badgeRow(lessonStatus, lessonBackgroundColor),
-                          profileRow(lesson, screenSizeController),
-                          buttonRow(buttons, alignment),
-                        ],
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: GestureDetector(
+                    onTap: cardOnTap,
+                    child: GoskiCard(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            badgeRow(lessonStatus, lessonBackgroundColor),
+                            profileRow(lesson, screenSizeController),
+                            buttonRow(buttons, alignment),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      }
+    });
   }
 
   void goToCancelLessonScreen() {
