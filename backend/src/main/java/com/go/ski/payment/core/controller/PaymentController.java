@@ -3,6 +3,7 @@ package com.go.ski.payment.core.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.go.ski.common.response.ApiResponse;
 import com.go.ski.payment.core.service.PayService;
 import com.go.ski.payment.support.dto.request.ApprovePaymentRequestDTO;
 import com.go.ski.payment.support.dto.request.CancelPaymentRequestDTO;
@@ -67,78 +69,78 @@ public class PaymentController {
 
 	//결제의 단계가 준비랑, 승인임
 	@PostMapping("/reserve/prepare")
-	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(
+	public ResponseEntity<ApiResponse<?>> preparePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ReserveLessonPaymentRequestDTO request) {
 
 		KakaopayPrepareResponseDTO response = payService.getPrepareResponse(httpServletRequest, request);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 	@PostMapping("/reserve/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(
+	public ResponseEntity<ApiResponse<?>> approvePayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody ApprovePaymentRequestDTO request) {
 
 		KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@PostMapping("/reserve/cancel")
-	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(
+	public ResponseEntity<?> cancelPayment(
 		HttpServletRequest httpServletRequest,
 		@RequestBody CancelPaymentRequestDTO request) {
 
 		if(!payService.checkAuthorization(request.getLessonId(), httpServletRequest)) return ResponseEntity.badRequest().body(null);
 
 		KakaopayCancelResponseDTO response = payService.getCancelResponse(request);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/history")
-	public ResponseEntity<List<UserPaymentHistoryResponseDTO>> getUserPaymentHistory(HttpServletRequest httpServletRequest) {
+	public ResponseEntity<ApiResponse<?>> getUserPaymentHistory(HttpServletRequest httpServletRequest) {
 		List<UserPaymentHistoryResponseDTO> response = payService.getUserPaymentHistories(httpServletRequest);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/history/head")
-	public ResponseEntity<List<OwnerPaymentHistoryResponseDTO>> getOwnerPaymentHistory(HttpServletRequest httpServletRequest) {
+	public ResponseEntity<ApiResponse<?>> getOwnerPaymentHistory(HttpServletRequest httpServletRequest) {
 		List<OwnerPaymentHistoryResponseDTO> response = payService.getOwnerPaymentHistories(httpServletRequest);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/history/{team_id}")
-	public ResponseEntity<List<OwnerPaymentHistoryResponseDTO>> getTeamPaymentHistory(HttpServletRequest httpServletRequest
+	public ResponseEntity<ApiResponse<?>> getTeamPaymentHistory(HttpServletRequest httpServletRequest
 		, @PathVariable(value = "team_id") Integer teamId) {
 		List<OwnerPaymentHistoryResponseDTO> response = payService.getTeamPaymentHistories(httpServletRequest, teamId);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/withdrawal")
-	public ResponseEntity<List<WithdrawalResponseDTO>> getWithdrawalList(HttpServletRequest httpServletRequest) {
+	public ResponseEntity<ApiResponse<?>> getWithdrawalList(HttpServletRequest httpServletRequest) {
 		List<WithdrawalResponseDTO> response = payService.getWithdrawalList(httpServletRequest);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/balance")
-	public ResponseEntity<Integer> getBalance(HttpServletRequest httpServletRequest) {
+	public ResponseEntity<ApiResponse<?>> getBalance(HttpServletRequest httpServletRequest) {
 		Integer response = payService.getBalance(httpServletRequest);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@PostMapping("/validate_account")
-	public ResponseEntity<VerifyAccountResponseDTO> verifyAccount(@RequestBody VerifyAccountRequestDTO verifyAccountRequestDTO) throws
+	public ResponseEntity<ApiResponse<?>> verifyAccount(@RequestBody VerifyAccountRequestDTO verifyAccountRequestDTO) throws
 		UnsupportedEncodingException,
 		JsonProcessingException,
 		InterruptedException {
 		VerifyAccountResponseDTO response = payService.requestToCodeF(verifyAccountRequestDTO);
 
-		return  ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	@GetMapping("/lesson/{lesson_id}")
-	public ResponseEntity<LessonCostResponseDTO> getLessonCost(@PathVariable(value = "lesson_id") Integer lesson_id) {
+	public ResponseEntity<ApiResponse<?>> getLessonCost(@PathVariable(value = "lesson_id") Integer lesson_id) {
 		LessonCostResponseDTO response = payService.getLessonCost(lesson_id);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
 	}
 
 	//pgTokenTest
