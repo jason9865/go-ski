@@ -23,7 +23,7 @@ final screenSizeController = Get.find<ScreenSizeController>();
 final SkiResortViewModel skiResortViewModel = Get.put(SkiResortViewModel());
 
 class ReservationSelectScreen extends StatelessWidget {
-  ReservationSelectScreen({super.key});
+  const ReservationSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +41,13 @@ class ReservationSelectScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                _SkiResortDropdown(),
+                const _SkiResortDropdown(),
                 SizedBox(height: contentPadding),
-                _StudentNumberDropdown(),
+                const _StudentNumberDropdown(),
                 SizedBox(height: contentPadding),
                 _DateTimeSelectors(),
                 SizedBox(height: contentPadding),
-                _DifficultyLevelSwitch(),
+                const _DifficultyLevelSwitch(),
                 SizedBox(height: contentPadding),
                 // Add more widgets as needed
               ],
@@ -60,7 +60,7 @@ class ReservationSelectScreen extends StatelessWidget {
 }
 
 class _SkiResortDropdown extends StatelessWidget {
-  _SkiResortDropdown({
+  const _SkiResortDropdown({
     super.key,
   });
 
@@ -81,6 +81,7 @@ class _SkiResortDropdown extends StatelessWidget {
           child: Obx(() => GoskiDropdown(
                 hint: tr('selectSkiResort'),
                 list: skiResortViewModel.skiResortNames,
+                onSelected: (p0) {},
                 // TODO. selected 저장
               )),
         ),
@@ -108,7 +109,8 @@ class _StudentNumberDropdown extends StatelessWidget {
           width: screenSizeController.getWidthByRatio(0.6),
           child: GoskiDropdown(
             hint: tr('selectStudentNumber'),
-            list: ['1:1', '1:2', '1:3', '1:4이상'],
+            list: const ['1:1', '1:2', '1:3', '1:4이상'],
+            onSelected: (p0) {},
           ),
         ),
       ],
@@ -215,7 +217,7 @@ class _DifficultyLevelSwitch extends StatelessWidget {
               size: goskiFontLarge,
               isBold: true,
             ),
-            Icon(Icons.info_outline)
+            const Icon(Icons.info_outline)
           ],
         ),
         SizedBox(height: contentPadding),
