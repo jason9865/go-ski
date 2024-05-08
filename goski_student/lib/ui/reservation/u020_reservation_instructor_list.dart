@@ -6,6 +6,7 @@ import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
@@ -114,37 +115,42 @@ class _ReservationInstructorListScreenState
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GoskiSwitch(
-                  items: [
-                    tr('sortByLowPrice'),
-                    tr('sortByHighPrice'),
-                    tr('sortByRating')
-                  ],
-                  width: screenSizeController.getWidthByRatio(0.5),
-                  onToggle: sortInstructors,
-                  size: goskiFontSmall,
+    return Scaffold(
+      appBar: GoskiSubHeader(
+        title: tr('instructorList'),
+      ),
+      body: GoskiContainer(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GoskiSwitch(
+                    items: [
+                      tr('sortByLowPrice'),
+                      tr('sortByHighPrice'),
+                      tr('sortByRating')
+                    ],
+                    width: screenSizeController.getWidthByRatio(0.5),
+                    onToggle: sortInstructors,
+                    size: goskiFontSmall,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: instructors.length,
-              itemBuilder: (context, index) {
-                final instructor = instructors[index];
-                return instructorCard(instructor);
-              },
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: instructors.length,
+                itemBuilder: (context, index) {
+                  final instructor = instructors[index];
+                  return instructorCard(instructor);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -152,7 +158,7 @@ class _ReservationInstructorListScreenState
   Widget instructorCard(_Instructor instructor) {
     return GoskiCard(
       child: Container(
-        height: 150,
+        height: screenSizeController.getHeightByRatio(0.2),
         padding: const EdgeInsets.all(8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,8 +167,8 @@ class _ReservationInstructorListScreenState
               borderRadius: BorderRadius.circular(8.0),
               child: Image.asset(
                 instructor.imagePath,
-                width: 90,
-                height: 120,
+                width: 120,
+                height: 160,
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -176,21 +182,25 @@ class _ReservationInstructorListScreenState
                     height: 30,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         GoskiText(
                             text: tr('dynamicInstructor',
                                 args: [instructor.name]),
-                            size: goskiFontMedium),
+                            size: goskiFontXLarge),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: GoskiText(
                             text: instructor.certificateName,
-                            size: goskiFontSmall,
+                            size: goskiFontLarge,
                             color: goskiDarkGray,
                           ),
                         )
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: screenSizeController.getHeightByRatio(0.01),
                   ),
                   SizedBox(
                     child: Row(
@@ -199,7 +209,8 @@ class _ReservationInstructorListScreenState
                         Expanded(
                           child: Text(
                             instructor.description,
-                            style: TextStyle(fontSize: goskiFontSmall),
+                            textScaleFactor: 1.0,
+                            style: TextStyle(fontSize: goskiFontLarge),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -207,7 +218,9 @@ class _ReservationInstructorListScreenState
                       ],
                     ),
                   ),
-                  BuildInterval(),
+                  SizedBox(
+                    height: screenSizeController.getHeightByRatio(0.01),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -217,16 +230,16 @@ class _ReservationInstructorListScreenState
                           GoskiText(
                               text:
                                   '${instructor.rating.toStringAsFixed(1)} (${instructor.reviewCount})',
-                              size: goskiFontSmall)
+                              size: goskiFontMedium)
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: GoskiText(
                           text: tr('moneyUnit', args: [
-                            NumberFormat('#,###').format(instructor.cost)
+                            NumberFormat('###,###,###').format(instructor.cost)
                           ]),
-                          size: goskiFontSmall,
+                          size: goskiFontLarge,
                           isBold: true,
                         ),
                       )
