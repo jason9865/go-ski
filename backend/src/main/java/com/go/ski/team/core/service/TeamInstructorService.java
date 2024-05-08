@@ -37,7 +37,7 @@ public class TeamInstructorService {
     private final EventPublisher eventPublisher;
 
     public List<TeamInstructorResponseDTO> getTeamInstructorList(Integer teamId) {
-        return teamInstructorRepository.findTeamInstructors(teamId);
+        return teamInstructorRepository.findByTeamId(teamId);
     }
 
     public void updateTeamInstructorInfo(TeamInstructorUpdateRequestDTO request) {

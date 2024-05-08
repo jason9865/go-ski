@@ -249,7 +249,7 @@ public class PayService {
 
 		String deviceType = httpServletRequest.getHeader("DeviceType");
 
-		return requestApproveToKakao(kakaopayApproveRequestDTO,tmpLesson, tmpLessonInfo, deviceType);
+		return requestApproveToKakao(kakaopayApproveRequestDTO,tmpLesson, tmpLessonInfo, deviceType, paymentCache);
 	}
 
 	@Transactional
@@ -374,7 +374,8 @@ public class PayService {
 	//카카오 페이에 거래 승인 요청 메소드
 	@Transactional
 	public KakaopayApproveResponseDTO requestApproveToKakao(KakaopayApproveRequestDTO request, Lesson lesson,
-															LessonInfo lessonInfo, String deviceType) {
+															LessonInfo lessonInfo, String deviceType,
+															PaymentCacheDto paymentCache) {
 		HttpHeaders headers = getHeader("test");
 
 		Map<String, String> params = new HashMap<>();
@@ -388,7 +389,7 @@ public class PayService {
 		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
 			requestEntity, KakaopayApproveResponseDTO.class);
 
-//		eventPublisher.publish(lesson, lessonInfo, deviceType);
+//		eventPublisher.publish(lesson, lessonInfo, deviceType, paymentCache);
 
 		// 여기서 결제 정보를 db에 저장
 		return responseEntity.getBody();
