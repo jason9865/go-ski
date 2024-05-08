@@ -20,7 +20,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
             "FROM Notification n " +
             "LEFT OUTER JOIN User u " +
             "ON n.senderId = u.userId " +
-            "WHERE n.receiverId = :receiverId")
+            "WHERE n.receiverId = :receiverId " +
+            "ORDER BY n.createdAt DESC")
     List<NotificationResponseDTO> findByReceiverId(Integer receiverId);
 
     @Modifying
