@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface NotificationSettingRepository extends JpaRepository<NotificationSetting, Integer> {
 
     @Query("SELECT new com.go.ski.notification.support.dto.NotificationSettingResponseDTO(" +
-            "nt.id, nt.notificationTypeName, ns.notificationStatus) " +
+            "nt.id, ns.notificationStatus) " +
             "FROM NotificationSetting ns " +
             "LEFT OUTER JOIN NotificationType nt " +
             "ON ns.notificationType.id = nt.id " +
