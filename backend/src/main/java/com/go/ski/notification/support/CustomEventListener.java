@@ -33,13 +33,13 @@ public class CustomEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener // @Transaction이 붙은 Event
     public void createNotification(NotificationEvent notificationEvent){
+        log.info("EventListener - createNotification");
         try{
             String jsonContent = objectMapper.writeValueAsString(notificationEvent);
 
             Notification notification = Notification.of(notificationEvent, jsonContent);
             notificationRepository.save(notification);
             log.warn("알림 보내기 - {}",notificationEvent.getTitle());
-            fcmClient.sendMessageTo(notification);
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("알림 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(notification);
@@ -57,12 +57,10 @@ public class CustomEventListener {
             Notification notification = Notification.from(messageEvent);
             notificationRepository.save(notification);
             log.warn("알림 보내기 - {}",messageEvent.getTitle());
-            fcmClient.sendMessageTo(notification);
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("DM 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(messageEvent);
             }
-
 
     }
 
