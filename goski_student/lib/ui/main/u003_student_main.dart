@@ -13,6 +13,7 @@ import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -99,7 +100,15 @@ class StudentMainScreen extends StatelessWidget {
                     iconName: 'reservation',
                     iconImage: 'assets/images/calendar.svg',
                     onClick: () =>
-                        {logger.d("예약"), Get.toNamed("/reservation")},
+                        // {logger.d("예약"), Get.toNamed("/reservation")},
+                        {
+                      logger.d("예약"),
+                      Get.to(() => ReservationSelectScreen(),
+                          binding: BindingsBuilder(() {
+                        Get.lazyPut<ReservationViewModel>(
+                            () => ReservationViewModel());
+                      }))
+                    },
                   ),
                   UserMenu(
                     iconName: 'couponBox',

@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
@@ -12,15 +15,18 @@ import 'package:goski_student/ui/component/goski_dropdown.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/reservation/u019_reservation_team_select.dart';
+import 'package:goski_student/ui/reservation/u020_reservation_instructor_list.dart';
+import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
-// final ReservationViewModel reservationViewModel =
-//     Get.put(ReservationViewModel());
 final screenSizeController = Get.find<ScreenSizeController>();
 final SkiResortViewModel skiResortViewModel = Get.put(SkiResortViewModel());
+final ReservationViewModel reservationViewModel =
+    Get.find<ReservationViewModel>();
 
 class ReservationSelectScreen extends StatelessWidget {
   ReservationSelectScreen({super.key});
@@ -35,22 +41,36 @@ class ReservationSelectScreen extends StatelessWidget {
       ),
       body: GoskiContainer(
         buttonName: 'next',
-        onConfirm: () => {print("다음으로")},
-        child: GoskiCard(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                _SkiResortDropdown(),
-                SizedBox(height: contentPadding),
-                _StudentNumberDropdown(),
-                SizedBox(height: contentPadding),
-                _DateTimeSelectors(),
-                SizedBox(height: contentPadding),
-                _DifficultyLevelSwitch(),
-                SizedBox(height: contentPadding),
-                // Add more widgets as needed
-              ],
+        onConfirm: () {
+          if (reservationViewModel.reservation.value.isValid() &&
+              reservationViewModel.reservation.value.level == 'beginner') {
+            reservationViewModel.submitReservation();
+            Get.to(ReservationTeamSelectScreen());
+          } else if (reservationViewModel.reservation.value.isValid()) {
+            reservationViewModel.submitReservation();
+            Get.to(ReservationInstructorListScreen());
+          } else {
+            logger.d("전부 입력 x");
+            reservationViewModel.submitReservation();
+          }
+        },
+        child: SingleChildScrollView(
+          child: GoskiCard(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  _SkiResortDropdown(),
+                  SizedBox(height: contentPadding),
+                  _StudentNumberField(),
+                  SizedBox(height: contentPadding),
+                  _DateTimeSelectors(),
+                  SizedBox(height: contentPadding),
+                  _DifficultyLevelSwitch(),
+                  SizedBox(height: contentPadding),
+                  // Add more widgets as needed
+                ],
+              ),
             ),
           ),
         ),
@@ -81,7 +101,12 @@ class _SkiResortDropdown extends StatelessWidget {
           child: Obx(() => GoskiDropdown(
                 hint: tr('selectSkiResort'),
                 list: skiResortViewModel.skiResortNames,
-                // TODO. selected 저장
+                selected: skiResortViewModel.skiResortSelected.value,
+                onSelected: (idx) {
+                  skiResortViewModel.setResort(idx);
+                  reservationViewModel.reservation.value.resortId = idx + 1;
+                  // FIXME. reservationViewModel.resortId를 skiResortName에 해당하는 resortId를 저장하도록 변경
+                },
               )),
         ),
       ],
@@ -89,10 +114,18 @@ class _SkiResortDropdown extends StatelessWidget {
   }
 }
 
-class _StudentNumberDropdown extends StatelessWidget {
-  const _StudentNumberDropdown({
-    super.key,
-  });
+class _StudentNumberField extends StatelessWidget {
+  final TextEditingController _controller = TextEditingController();
+
+  // _StudentNumberField({super.key});
+  _StudentNumberField() {
+    _controller.addListener(() {
+      if (_controller.text.isNotEmpty) {
+        reservationViewModel
+            .setTotalStudent(int.tryParse(_controller.text) ?? 0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +139,30 @@ class _StudentNumberDropdown extends StatelessWidget {
         ),
         SizedBox(
           width: screenSizeController.getWidthByRatio(0.6),
-          child: GoskiDropdown(
-            hint: tr('selectStudentNumber'),
-            list: ['1:1', '1:2', '1:3', '1:4이상'],
+          child: TextFormField(
+            style: const TextStyle(
+              color: goskiBlack,
+              fontSize: goskiFontSmall,
+            ),
+            controller: _controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration: InputDecoration(
+              hintText: tr('selectStudentNumber'),
+              fillColor: goskiWhite,
+              filled: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
         ),
       ],
@@ -141,24 +195,45 @@ class _DateTimeSelectors extends StatelessWidget {
       ),
       SizedBox(height: contentPadding),
       GoskiBorderWhiteContainer(
-        child: TextWithIconRow(
-          text: tr('hintDate'),
-          icon: Icons.calendar_month,
-          // onClicked: () => _selectDate(),
-          onClicked: () {
-            // TODO. 시간 선택 버튼을 눌렀을 때 동작 추가 필요
-          },
-        ),
+        child: Obx(() => TextWithIconRow(
+              text: reservationViewModel.reservation.value.lessonDate == ''
+                  ? tr('hintDate')
+                  : reservationViewModel.reservation.value.lessonDate,
+              icon: Icons.calendar_month,
+              // selectedTime: reservationViewModel.reservation.value.lessonDate,
+              onClicked: () {
+                _selectDate(context);
+              },
+            )),
       ),
       SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
       GoskiBorderWhiteContainer(
         child: TextWithIconRow(
           text: tr('hintTime'),
           icon: Icons.access_time_rounded,
+          // selectedTime: reservationViewModel.reservation.value.startTime,
           onClicked: () {
-            // TODO. 시간 선택 버튼을 눌렀을 때 동작 추가 필요
+            _selectTime(context);
           },
         ),
+      ),
+      SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
+      SizedBox(
+        width: double.infinity,
+        child: Obx(() => GoskiDropdown(
+              hint: tr('hintDuration'),
+              list: skiResortViewModel.lessonTimeStrings,
+              selected: skiResortViewModel.lessonTimeStrings.isNotEmpty
+                  ? skiResortViewModel.lessonTimeStrings[
+                      skiResortViewModel.selectedLessonTimeIndex.value]
+                  : "",
+              onSelected: (idx) {
+                skiResortViewModel.selectedLessonTimeIndex.value = idx;
+                // Update your reservation view model as needed
+                reservationViewModel.reservation.value.duration =
+                    skiResortViewModel.selectedResortLessonTimes[idx];
+              },
+            )),
       ),
       SizedBox(height: contentPadding),
       Row(
@@ -173,8 +248,9 @@ class _DateTimeSelectors extends StatelessWidget {
             items: goskiLessonType,
             width: screenSizeController.getWidthByRatio(0.5),
             onToggle: (selectedType) {
-              print(goskiLessonType[selectedType]);
-              print(selectedType);
+              selectedType == 0
+                  ? reservationViewModel.reservation.value.lessonType = 'SKI'
+                  : reservationViewModel.reservation.value.lessonType = 'BOARD';
             },
           ),
         ],
@@ -182,18 +258,31 @@ class _DateTimeSelectors extends StatelessWidget {
     ]);
   }
 
-  Future _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    // if (selected != null) {
-    //   setState(() {
-    //     _selectedDate = (DateFormat.yMMMd()).format(selected);
-    //   });
-    // }
+    if (picked != null) {
+      reservationViewModel
+          .setLessonDate(DateFormat('yyyy-MM-dd').format(picked));
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      final now = DateTime.now();
+      final dateTime =
+          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+      final formattedTime = DateFormat('HHmm').format(dateTime);
+      reservationViewModel.setStartTime(formattedTime);
+    }
   }
 }
 
@@ -215,13 +304,14 @@ class _DifficultyLevelSwitch extends StatelessWidget {
               size: goskiFontLarge,
               isBold: true,
             ),
-            Icon(Icons.info_outline)
+            const Icon(Icons.info_outline)
           ],
         ),
         SizedBox(height: contentPadding),
         GoskiDifficultySwitch(
-          onSelected: (selectedDifficulty) {
-            print(selectedDifficulty);
+          onSelected: (_selectedDifficulty) {
+            print(_selectedDifficulty);
+            reservationViewModel.reservation.value.level = _selectedDifficulty;
           },
         ),
       ],
@@ -253,7 +343,7 @@ class TextWithIconRow extends StatelessWidget {
             child: GoskiText(
               text: text,
               size: goskiFontMedium,
-              color: goskiDarkGray,
+              // color: selectedTime.isEmpty ? goskiDarkGray : goskiBlack,
             ),
           ),
           Icon(
