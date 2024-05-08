@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FeedbackUpdateRequestDTO extends FeedbackRequestDTO{
-    // 이름 구분용
+public class FeedbackUpdateRequestDTO{
+    private String content;
 }
