@@ -67,6 +67,9 @@ public class NotificationService {
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_NOT_FOUND));
 
         validateUser(notification, user);
+        if(notification.getImageUrl() != null) {
+            s3Uploader.deleteFile(notification.getImageUrl());
+        }
 
         notificationRepository.delete(notification);
     }
