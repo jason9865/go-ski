@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class NotificationSettingResponseDTO {
 
-    private Integer notificationTypeId;
+    private Integer notificationType;
     private String notificationTypeName;
     private Boolean status;
 
