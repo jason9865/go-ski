@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:logger/logger.dart';
 
 import '../../const/color.dart';
 import '../../const/font_size.dart';
@@ -15,6 +16,9 @@ import '../component/goski_modal.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
 import '../component/goski_textfield.dart';
+
+var logger = Logger();
+
 
 class SendMessageDialog extends StatefulWidget {
   const SendMessageDialog({
@@ -211,7 +215,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   onTap: () async {
                     bool result = await lessonListViewModel.sendMessage();
                     if (result) {
-                      Navigator.pop(context);
+                      if (context.mounted) Navigator.pop(context);
                     }
                   },
                 )

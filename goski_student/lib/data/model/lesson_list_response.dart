@@ -79,6 +79,11 @@ class LessonListItem {
     required this.duration,
     required this.lessonStatus,
   });
+
+  @override
+  String toString() {
+    return 'LessonListItem{lessonId: $lessonId, teamId: $teamId, teamName: $teamName, instructorId: $instructorId, instructorName: $instructorName, profileUrl: $profileUrl, resortName: $resortName, lessonDate: $lessonDate, startTime: $startTime, endTime: $endTime, duration: $duration, lessonStatus: $lessonStatus}';
+  }
 }
 
 extension LessonListItemResponseToLessonListItem on LessonListItemResponse {

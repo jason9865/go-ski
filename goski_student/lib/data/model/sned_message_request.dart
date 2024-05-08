@@ -28,6 +28,11 @@ class SendMessage {
     this.image,
     this.hasImage = false,
   });
+
+  @override
+  String toString() {
+    return 'SendMessage{receiverId: $receiverId, title: $title, content: $content, image: $image, hasImage: $hasImage}';
+  }
 }
 
 extension SendMessageToSendMessageRequest on SendMessage {
