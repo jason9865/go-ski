@@ -96,6 +96,10 @@ public class NotificationService {
         eventPublisher.publish(inviteRequestDTO, team, deviceType);
     }
 
+    public List<NotificationSettingResponseDTO> getNotifications(User user) {
+        return notificationSettingRepository.findByUserId(user);
+    }
+
     @Transactional
     public void setNotifications(NotificationSettingRequestDTO setNotificationRequestDTO, User user) {
         List<NotificationSettingVO> notificationTypes = setNotificationRequestDTO.getNotificationTypes();

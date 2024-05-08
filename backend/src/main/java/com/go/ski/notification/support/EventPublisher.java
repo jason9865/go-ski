@@ -86,7 +86,7 @@ public class EventPublisher {
         receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateEvent.of(lessonInfo, resortName, receiverId, deviceType))
+                        LessonCreateStudentEvent.of(lessonInfo, resortName, receiverId, deviceType))
         );
     }
 
