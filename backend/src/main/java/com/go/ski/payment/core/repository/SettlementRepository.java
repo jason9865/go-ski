@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.go.ski.payment.core.model.Settlement;
+import com.go.ski.payment.support.dto.response.RecentSettlementRecordResponseDTO;
 import com.go.ski.payment.support.dto.response.WithdrawalResponseDTO;
 import com.go.ski.payment.support.dto.util.TotalSettlementDTO;
 
@@ -32,5 +33,5 @@ public interface SettlementRepository extends JpaRepository<Settlement, Integer>
 		+ "WHERE s.user.userId = :userId "
 		+ "ORDER BY s.settlementDate DESC, s.settlementId DESC "
 		+ "LIMIT 1 ")
-	Integer findRecentBalance(Integer userId);
+	RecentSettlementRecordResponseDTO findRecentBalance(Integer userId);
 }

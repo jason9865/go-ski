@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class KakaopayCancelRequestDTO {
+	private String cid;
 	private String tid;
 	private Integer cancelAmount;
 	private Integer cancelTaxFreeAmount;
