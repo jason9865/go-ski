@@ -21,7 +21,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
             "FROM Lesson l " +
             "LEFT OUTER JOIN LessonInfo li " +
             "ON l.lessonId = li.lessonId " +
-            "LEFT OUTER JOIN Review r " +
+            "JOIN Review r " +
             "ON l.lessonId = r.lesson.lessonId " +
             "WHERE l.instructor = :instructor")
     List<InstructorReviewVO> findByInstructor(Instructor instructor);
