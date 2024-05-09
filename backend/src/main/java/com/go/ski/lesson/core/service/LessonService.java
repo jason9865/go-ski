@@ -12,6 +12,7 @@ import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonPaymentInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.payment.core.repository.StudentInfoRepository;
+import com.go.ski.review.core.model.Review;
 import com.go.ski.review.core.repository.ReviewRepository;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.team.core.model.*;
@@ -132,7 +133,7 @@ public class LessonService {
             try {
                 LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
                 Boolean hasReview = Boolean.TRUE;
-                if (reviewRepository.findByLesson(lesson).isEmpty()) hasReview = Boolean.TRUE;
+                if (reviewRepository.findByLesson(lesson).isEmpty()) hasReview = Boolean.FALSE;
                 userLessonResponseDTOs.add(new UserLessonResponseDTO(lesson, lessonInfo, hasReview));
             } catch (NoSuchElementException ignored) {
             }
