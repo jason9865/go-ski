@@ -271,22 +271,20 @@ public class PayService {
 		// 예약일이 지금보다 뒤에 있으면 취소 가능
 		// 반환 금액과 chargeId 변경해주기
 		long dayDiff = ChronoUnit.DAYS.between(LocalDate.now(), reservationDate);
-		int chargeId;
-		int paymentStatus = 3;
+		int chargeId = 3;
+		int paymentStatus = 2;
 
 		// 돈을 바로 송금 해야함
 		// 날짜  확인
 		// 예약 후 취소시 : 전액 환불
 		if (dayDiff > 7) {
 			chargeId = 1;
-			paymentStatus = 1;
 		}
 		// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
-		else {
+		else if (dayDiff > 2) {
 			chargeId = 2;
-			paymentStatus = 2;
 		}
-		// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
+
 		Charge charge = chargeRepository.findById(chargeId).orElseThrow();
 		double studentChargeRate = charge.getStudentChargeRate() / 100.0;
 		double ownerChargeRate = charge.getOwnerChargeRate() / 100.0;
