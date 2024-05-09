@@ -77,19 +77,18 @@ public class PayService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ScheduleService scheduleService;
 
-    private final UserRepository userRepository;
-    private final TeamRepository teamRepository;
-    private final InstructorRepository instructorRepository;
-    private final LessonRepository lessonRepository;
-    private final LessonInfoRepository lessonInfoRepository;
-    private final LessonPaymentInfoRepository lessonPaymentInfoRepository;
-    private final StudentInfoRepository studentInfoRepository;
-    private final PaymentRepository paymentRepository;
-    private final PaymentCacheRepository paymentCacheRepository;
-    private final SettlementRepository settlementRepository;
-    private final ChargeRepository chargeRepository;
-    private final EventPublisher eventPublisher;
-
+	private final UserRepository userRepository;
+	private final TeamRepository teamRepository;
+	private final InstructorRepository instructorRepository;
+	private final LessonRepository lessonRepository;
+	private final LessonInfoRepository lessonInfoRepository;
+	private final LessonPaymentInfoRepository lessonPaymentInfoRepository;
+	private final StudentInfoRepository studentInfoRepository;
+	private final PaymentRepository paymentRepository;
+	private final PaymentCacheRepository paymentCacheRepository;
+	private final SettlementRepository settlementRepository;
+	private final ChargeRepository chargeRepository;
+	private final EventPublisher eventPublisher;
 
 	//카카오 페이에 보낼 요청의 헤더 값을 넣어주는 메소드
 	public HttpHeaders getHeader(String mode) {
@@ -212,9 +211,12 @@ public class PayService {
 		int ownerId = team.getUser().getUserId();
 		User owner = userRepository.findById(ownerId).orElseThrow();
 		//사장이 없으면 Exception
-		RecentSettlementRecordResponseDTO recentSettlementRecordResponseDTO = settlementRepository.findRecentBalance(ownerId);
+		RecentSettlementRecordResponseDTO recentSettlementRecordResponseDTO = settlementRepository.findRecentBalance(
+			ownerId);
 		Integer lastBalance = recentSettlementRecordResponseDTO.getBalance();
-		if (lastBalance == null) { lastBalance = 0;}
+		if (lastBalance == null) {
+			lastBalance = 0;
+		}
 
 		String timeString = tmpLessonInfo.getStartTime();
 
@@ -241,6 +243,9 @@ public class PayService {
 			.pgToken(request.getPgToken())//pg_token
 			.build();
 
+		//		String deviceType = httpServletRequest.getHeader("DeviceType");
+		//        eventPublisher.publish(tmpLesson, tmpLessonInfo,deviceType);
+
 		// 강습 가능여부 판단 후 캐싱하는 메서드
 		if (!scheduleService.scheduleCaching(paymentCache.getLesson().getTeam(),
 			paymentCache.getLessonInfo().getLessonDate())) {
@@ -263,87 +268,75 @@ public class PayService {
 		LocalDate reservationDate = lessonInfo.getLessonDate();
 		Payment payment = paymentRepository.findByLessonPaymentInfoLessonId(request.getLessonId());
 
-		int compareResult = reservationDate.compareTo(LocalDate.now());
 		// 예약일이 지금보다 뒤에 있으면 취소 가능
 		// 반환 금액과 chargeId 변경해주기
 		long dayDiff = ChronoUnit.DAYS.between(LocalDate.now(), reservationDate);
 		int chargeId;
-		int paymentStatus = 1;
+		int paymentStatus = 3;
 
-		if (compareResult > 0 && dayDiff > 2) {
-			// 돈을 바로 송금 해야함
-			// 날짜  확인
-			// 예약 후 취소시 : 전액 환불
-			if (dayDiff > 7)
-				chargeId = 1;
-				// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
-			else {
-				chargeId = 2;
-				paymentStatus = 2;
-			}
-			// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
-			Charge charge = chargeRepository.findById(chargeId).orElseThrow();
-			double studentChargeRate = charge.getStudentChargeRate() / 100.0;
-			double ownerChargeRate = charge.getOwnerChargeRate() / 100.0;
-
-			//이걸로 결제 취소 시켜줘야함
-			double payback = payment.getTotalAmount() * studentChargeRate;
-			double settlementAmount = payment.getTotalAmount() * ownerChargeRate;
-			//강의 상태 강의 취소(2)로 변경
-			lessonInfo.setLessonStatus(2);
-			lessonInfoRepository.save(lessonInfo);
-
-			Payment tmpPayment = Payment.builder()
-				.tid(payment.getTid())
-				.lessonPaymentInfo(payment.getLessonPaymentInfo())
-				.totalAmount((int)payback)
-				.paymentStatus(paymentStatus)
-				.chargeId(chargeId)
-				.paymentDate(payment.getPaymentDate())
-				.paybackDate(LocalDateTime.now())
-				.build();
-			paymentRepository.save(tmpPayment);
-
-			// 여기서 카카오 페이 결제 취소 API 보냄
-			KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
-				//tid 그대로 입력
-				.cid(testId)
-				.tid(payment.getTid())
-				.cancelAmount((int)payback)
-				.cancelTaxFreeAmount(0)
-				.build();
-
-			//정산 테이블에 추가
-			int ownerId = lesson.getTeam().getUser().getUserId();
-			User owner = userRepository.findById(ownerId).orElseThrow();
-			//사장이 없으면 Exception
-			RecentSettlementRecordResponseDTO recentSettlementRecordResponseDTO = settlementRepository.findRecentBalance(ownerId);
-			int lastBalance = recentSettlementRecordResponseDTO.getBalance();
-			Settlement settlement = Settlement.builder()
-				.settlementAmount((int)settlementAmount)
-				.balance(lastBalance + (int)settlementAmount)
-				.depositStatus(0)
-				.settlementDate(LocalDateTime.now())
-				.user(owner)
-				.build();
-
-			settlementRepository.save(settlement);
-			// 여기서는 스케줄 없애기
-			scheduleService.scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
-
-			log.info("paymentStatus - {}", paymentStatus);
-			log.info("cancelAvailableAmount - {}", (int)payback);
-			log.info("payment - totalAmount = {}", payment.getTotalAmount());
-			log.info("studentChargeRate = {}", studentChargeRate);
-
-			requestCancelToKakao(kakaopayCancelRequestDTO);
-		} else {
-			// 이용일 2일 이전 취소 시 : 환불이 불가
-			// Exception 보내기
-			// 잘못된 변수 or 부적절한 요청
-			// 알아서 return
-			throw new IllegalArgumentException("잘못된 변수 or 부적절한 요청");
+		// 돈을 바로 송금 해야함
+		// 날짜  확인
+		// 예약 후 취소시 : 전액 환불
+		if (dayDiff > 7) {
+			chargeId = 1;
+			paymentStatus = 1;
 		}
+		// 이용일 7일 이전 취소 시 : 예약금의 50% 환불
+		else {
+			chargeId = 2;
+			paymentStatus = 2;
+		}
+		// 이용일 3일 이전 취소 시 : 예약금의 30% 환불
+		Charge charge = chargeRepository.findById(chargeId).orElseThrow();
+		double studentChargeRate = charge.getStudentChargeRate() / 100.0;
+		double ownerChargeRate = charge.getOwnerChargeRate() / 100.0;
+
+		//이걸로 결제 취소 시켜줘야함
+		double payback = payment.getTotalAmount() * studentChargeRate;
+		double settlementAmount = payment.getTotalAmount() * ownerChargeRate;
+		//강의 상태 강의 취소(2)로 변경
+		lessonInfo.setLessonStatus(2);
+		lessonInfoRepository.save(lessonInfo);
+
+		Payment tmpPayment = Payment.builder()
+			.tid(payment.getTid())
+			.lessonPaymentInfo(payment.getLessonPaymentInfo())
+			.totalAmount((int)payback)
+			.paymentStatus(paymentStatus)
+			.chargeId(chargeId)
+			.paymentDate(payment.getPaymentDate())
+			.paybackDate(LocalDateTime.now())
+			.build();
+		paymentRepository.save(tmpPayment);
+
+		// 여기서 카카오 페이 결제 취소 API 보냄
+		KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
+			//tid 그대로 입력
+			.cid(testId)
+			.tid(payment.getTid())
+			.cancelAmount((int)payback)
+			.cancelTaxFreeAmount(0)
+			.build();
+
+		//정산 테이블에 추가
+		int ownerId = lesson.getTeam().getUser().getUserId();
+		User owner = userRepository.findById(ownerId).orElseThrow();
+		//사장이 없으면 Exception
+		RecentSettlementRecordResponseDTO recentSettlementRecordResponseDTO = settlementRepository.findRecentBalance(
+			ownerId);
+		int lastBalance = recentSettlementRecordResponseDTO.getBalance();
+		Settlement settlement = Settlement.builder()
+			.settlementAmount((int)settlementAmount)
+			.balance(lastBalance + (int)settlementAmount)
+			.depositStatus(0)
+			.settlementDate(LocalDateTime.now())
+			.user(owner)
+			.build();
+
+		settlementRepository.save(settlement);
+		// 여기서는 스케줄 없애기
+		scheduleService.scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
+		requestCancelToKakao(kakaopayCancelRequestDTO);
 	}
 
 	//카카오 페이에 보내는 준비 요청 메소드
@@ -513,7 +506,7 @@ public class PayService {
 	}
 
 	@Transactional
-    public LessonCostResponseDTO getLessonCost(Integer lessonId) {
+	public LessonCostResponseDTO getLessonCost(Integer lessonId) {
 		return lessonRepository.findLessonCost(lessonId);
-    }
+	}
 }
