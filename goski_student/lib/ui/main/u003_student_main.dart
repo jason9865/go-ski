@@ -15,11 +15,12 @@ import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/ui/lesson/u017_settlement.dart';
+import 'package:goski_student/ui/main/u026_coupon.dart';
+import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
-import 'package:goski_student/view_model/settlement_view_model.dart';
-import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
+import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -132,7 +133,10 @@ class StudentMainScreen extends StatelessWidget {
                   UserMenu(
                     iconName: 'couponBox',
                     iconImage: 'assets/images/couponBox.svg',
-                    onClick: () => logger.d("쿠폰함"),
+                    onClick: () => {
+                      logger.d("쿠폰함"),
+                      Get.to(() => CouponScreen()),
+                    },
                   ),
                 ],
               ),
