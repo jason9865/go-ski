@@ -24,14 +24,30 @@ import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/review_view_model.dart';
 
-class LessonListScreen extends StatelessWidget {
-  final lessonListViewModel = Get.find<LessonListViewModel>();
-  final feedbackViewModel = Get.find<FeedbackViewModel>();
-  final reviewViewModel = Get.find<ReviewViewModel>();
-  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
-  final instructorProfileViewModel = Get.find<InstructorProfileViewModel>();
+class LessonListScreen extends StatefulWidget {
 
   LessonListScreen({super.key});
+
+  @override
+  State<LessonListScreen> createState() => _LessonListScreenState();
+}
+
+class _LessonListScreenState extends State<LessonListScreen> {
+  final lessonListViewModel = Get.find<LessonListViewModel>();
+
+  final feedbackViewModel = Get.find<FeedbackViewModel>();
+
+  final reviewViewModel = Get.find<ReviewViewModel>();
+
+  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
+
+  final instructorProfileViewModel = Get.find<InstructorProfileViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    lessonListViewModel.getLessonList();
+  }
 
   @override
   Widget build(BuildContext context) {
