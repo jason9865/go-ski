@@ -102,9 +102,12 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
               children: [
                 Expanded(
                   child: GoskiText(
-                    text: widget.selected == null ? widget.hint : widget.selected!,
+                    text: widget.selected!.isEmpty
+                        ? widget.hint
+                        : widget.selected!,
                     size: goskiFontMedium,
-                    color: widget.selected == null ? goskiDarkGray : goskiBlack,
+                    color:
+                        widget.selected!.isEmpty ? goskiDarkGray : goskiBlack,
                   ),
                 ),
                 AnimatedRotation(
@@ -112,8 +115,7 @@ class _GoskiDropdownState extends State<GoskiDropdown> {
                   turns: _tooltipController.isShowing ? 0.5 : 0,
                   child: Icon(
                       size: screenSizeController.getWidthByRatio(0.06),
-                      Icons.keyboard_arrow_down
-                  ),
+                      Icons.keyboard_arrow_down),
                 ),
               ],
             ),

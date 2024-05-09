@@ -38,7 +38,6 @@ import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
@@ -65,6 +64,7 @@ void initDependencies() {
   Get.put(LessonListService(), permanent: true);
   Get.put(SettlementService(), permanent: true);
   Get.put(FeedbackService(), permanent: true);
+  Get.put(ReservationService(), permanent: true);
   Get.put(ReviewService(), permanent: true);
   Get.put(CancelLessonService(), permanent: true);
   Get.put(InstructorProfileService(), permanent: true);
@@ -76,6 +76,7 @@ void initDependencies() {
   Get.put(LessonListRepository(), permanent: true);
   Get.put(SettlementRepository(), permanent: true);
   Get.put(FeedbackRepository(), permanent: true);
+  Get.put(ReservationRepository(), permanent: true);
   Get.put(ReviewRepository(), permanent: true);
   Get.put(CancelLessonRepository() , permanent: true);
   Get.put(InstructorProfileRepository(), permanent: true);
@@ -88,6 +89,8 @@ void initDependencies() {
   Get.put(LessonListViewModel(), permanent: true);
   Get.put(SettlementViewModel(), permanent: true);
   Get.put(FeedbackViewModel(), permanent: true);
+  Get.put(ReservationViewModel(), permanent: true);
+  // Get.put(LessonTeamListViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
   Get.put(CancelLessonViewModel() , permanent: true);
   Get.put(InstructorProfileViewModel(), permanent: true);

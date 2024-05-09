@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
@@ -17,7 +15,6 @@ import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/reservation/u019_reservation_team_select.dart';
 import 'package:goski_student/ui/reservation/u020_reservation_instructor_list.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
@@ -45,10 +42,13 @@ class ReservationSelectScreen extends StatelessWidget {
           if (reservationViewModel.reservation.value.isValid() &&
               reservationViewModel.reservation.value.level == 'beginner') {
             reservationViewModel.submitReservation();
-            Get.to(ReservationTeamSelectScreen());
+            Get.to(() => ReservationTeamSelectScreen(),
+                binding: BindingsBuilder(() {
+              Get.lazyPut(() => LessonTeamListViewModel());
+            }));
           } else if (reservationViewModel.reservation.value.isValid()) {
             reservationViewModel.submitReservation();
-            Get.to(ReservationInstructorListScreen());
+            Get.to(() => ReservationInstructorListScreen());
           } else {
             logger.d("전부 입력 x");
             reservationViewModel.submitReservation();
