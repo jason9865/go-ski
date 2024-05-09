@@ -18,9 +18,11 @@ class ReviewScreen extends StatelessWidget {
   final imageWidth = screenSizeController.getWidthByRatio(0.5);
   final lessonListViewModel = Get.find<LessonListViewModel>();
   final reviewViewModel = Get.find<ReviewViewModel>();
+  final bool goFeedbackScreen;
 
   ReviewScreen({
     super.key,
+    required this.goFeedbackScreen,
   });
 
   @override
@@ -34,8 +36,17 @@ class ReviewScreen extends StatelessWidget {
             buttonName: reviewViewModel.rating > 0 ? tr('completed') : null,
             onConfirm: reviewViewModel.rating > 0
                 ? () async {
-                    bool result = await reviewViewModel.writeReview(lessonListViewModel.selectedLesson.value.lessonId);
-                    if (result) Get.off(() => FeedbackScreen());
+                    bool result = await reviewViewModel.writeReview(
+                        lessonListViewModel.selectedLesson.value.lessonId);
+                    if (result) {
+                      lessonListViewModel.getLessonList();
+
+                      if (goFeedbackScreen) {
+                        Get.off(() => FeedbackScreen());
+                      } else {
+                        Get.back();
+                      }
+                    }
                   }
                 : null,
             child: SingleChildScrollView(
@@ -93,25 +104,27 @@ class ReviewScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => FeedbackScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GoskiText(
-                            text: tr('skip'),
-                            size: goskiFontXSmall,
-                            color: goskiDarkGray,
-                          )
-                        ],
+                  if (goFeedbackScreen) ...[
+                    GestureDetector(
+                      onTap: () {
+                        Get.off(() => FeedbackScreen());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GoskiText(
+                              text: tr('skip'),
+                              size: goskiFontXSmall,
+                              color: goskiDarkGray,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  ]
                 ],
               ),
             ),

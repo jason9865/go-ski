@@ -136,7 +136,7 @@ class LessonListScreen extends StatelessWidget {
                         if (lesson.hasReview) {
                           goToFeedbackScreen(lesson);
                         } else {
-                          goToReviewScreen(lesson);
+                          goToReviewScreen(lesson, true);
                         }
                       },
                     ),
@@ -149,7 +149,7 @@ class LessonListScreen extends StatelessWidget {
                         tr('writeReview'),
                         lesson,
                         () {
-                          goToReviewScreen(lesson);
+                          goToReviewScreen(lesson, false);
                         },
                       ),
                     );
@@ -203,12 +203,12 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => CheckInstructorScreen());
   }
 
-  void goToReviewScreen(LessonListItem lesson) async {
+  void goToReviewScreen(LessonListItem lesson, bool goFeedbackScreen) async {
     lessonListViewModel.selectedLesson.value = lesson;
     await reviewViewModel.getReviewTagList();
     reviewViewModel.initReview();
 
-    Get.to(() => ReviewScreen());
+    Get.to(() => ReviewScreen(goFeedbackScreen: goFeedbackScreen));
   }
 
   void goToFeedbackScreen(LessonListItem lesson) async {
