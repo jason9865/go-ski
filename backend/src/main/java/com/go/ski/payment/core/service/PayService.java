@@ -253,7 +253,7 @@ public class PayService {
 	}
 
 	@Transactional
-	public KakaopayCancelResponseDTO getCancelResponse(
+	public void getCancelResponse(
 		CancelPaymentRequestDTO request) {
 
 		//lessonId를 받았음
@@ -336,7 +336,7 @@ public class PayService {
 			log.info("payment - totalAmount = {}", payment.getTotalAmount());
 			log.info("studentChargeRate = {}", studentChargeRate);
 
-			return requestCancelToKakao(kakaopayCancelRequestDTO);
+			requestCancelToKakao(kakaopayCancelRequestDTO);
 		} else {
 			// 이용일 2일 이전 취소 시 : 환불이 불가
 			// Exception 보내기
