@@ -22,10 +22,12 @@ import 'package:logger/logger.dart';
 Logger logger = Logger();
 
 void initDependencies() {
-  Get.lazyPut(() => AuthService());
-  Get.lazyPut(() => AuthRepository());
-  Get.lazyPut(() => LoginViewModel());
-  Get.lazyPut(() => SignupViewModel());
+  Get.put(AuthService(), permanent: true);
+
+  Get.put(AuthRepository(), permanent: true);
+
+  Get.put(LoginViewModel(), permanent: true);
+  Get.put(SignupViewModel(), permanent: true);
 }
 
 void main() async {
