@@ -45,11 +45,15 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 		+ "JOIN Charge c ON p.chargeId = c.chargeId "
 		+ "WHERE t.teamId = :teamId")
 	List<OwnerPaymentHistoryResponseDTO> findTeamPaymentHistories(Integer teamId);
-
 	@Query("SELECT NEW com.go.ski.payment.support.dto.response.LessonCostResponseDTO ( "
-		+ "p.totalAmount ) "
+		+ "p.totalAmount, "
+		+ "c.studentChargeRate ) " // 여기서 someColumn은 Charge 엔터티의 특정 열입니다.
 		+ "FROM Lesson l "
-		+ "JOIN Payment  p ON l.lessonId = p.lessonPaymentInfo.lessonId "
+		+ "JOIN Payment p ON l.lessonId = p.lessonPaymentInfo.lessonId "
+		+ "JOIN LessonInfo li ON l.lessonId = li.lessonId "
+		+ "JOIN Charge c ON c.chargeId = CASE WHEN FUNCTION('DATEDIFF', li.lessonDate, CURRENT_DATE) <= 2 THEN 3 "
+		+ "WHEN FUNCTION('DATEDIFF', li.lessonDate, CURRENT_DATE) <= 7 THEN 2 "
+		+ "ELSE 1 END "
 		+ "WHERE l.lessonId = :lessonId ")
 	LessonCostResponseDTO findLessonCost(Integer lessonId);
 
