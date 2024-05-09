@@ -35,7 +35,7 @@ class LessonListItemResponse {
     String timeString = json['startTime'];
     String formattedTimeString = "${timeString.substring(0, 2)}:${timeString.substring(2)}";
     String lessonDate = json['lessonDate'];
-    String formattedDate = DateFormat('yyyy-MM-dd').parse(lessonDate).toString();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateFormat('yyyy-MM-dd').parse(lessonDate));
     String combinedDateTimeString = "$formattedDate $formattedTimeString";
     DateTime dateTime = DateFormat("yyyy-MM-dd HH:mm").parse(combinedDateTimeString);
 

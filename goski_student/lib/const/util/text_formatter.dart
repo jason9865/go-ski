@@ -12,7 +12,7 @@ class TextFormatter extends TextInputFormatter {
     }
 
     final int parsedValue = int.parse(newValue.text);
-    final formatter = NumberFormat.simpleCurrency(locale: 'ko');
+    final formatter = NumberFormat('#,###');
     String newText = formatter.format(parsedValue);
 
     return newValue.copyWith(
@@ -23,9 +23,9 @@ class TextFormatter extends TextInputFormatter {
 }
 
 String formatFromString(String amount) {
-  return NumberFormat.simpleCurrency(locale: 'ko').format(int.parse(amount));
+  return NumberFormat('#,###').format(int.parse(amount));
 }
 
 String formatFromInt(int amount) {
-  return NumberFormat.simpleCurrency(locale: 'ko').format(amount);
+  return NumberFormat('#,###').format(amount);
 }

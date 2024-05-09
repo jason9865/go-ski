@@ -90,7 +90,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                               GoskiText(
                                 text: list[index].paymentStatus == 0
                                     ? formatFromInt(list[index].totalAmount)
-                                    : '+${formatFromInt(list[index].totalAmount)}',
+                                    : '+ ${formatFromInt(list[index].totalAmount)}',
                                 size: goskiFontMedium,
                                 color: list[index].paymentStatus == 0
                                     ? goskiBlack
@@ -136,7 +136,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                 ),
                                 GoskiText(
                                   text:
-                                  '+${formatFromInt(list[index].designatedFee)}',
+                                  '+ ${formatFromInt(list[index].designatedFee)}',
                                   size: goskiFontSmall,
                                 ),
                               ],
@@ -154,7 +154,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                 ),
                                 GoskiText(
                                   text:
-                                  '+${formatFromInt(list[index].peopleOptionFee)}',
+                                  '+ ${formatFromInt(list[index].peopleOptionFee)}',
                                   size: goskiFontSmall,
                                 ),
                               ],
@@ -172,7 +172,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                 ),
                                 GoskiText(
                                   text:
-                                  '+${formatFromInt(list[index].levelOptionFee)}',
+                                  '+ ${formatFromInt(list[index].levelOptionFee)}',
                                   size: goskiFontSmall,
                                 ),
                               ],

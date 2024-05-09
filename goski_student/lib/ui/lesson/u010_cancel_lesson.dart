@@ -11,7 +11,6 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 
@@ -35,8 +34,10 @@ class CancelLessonScreen extends StatelessWidget {
           onConfirm: () async {
             bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
 
-            if (result) Get.off(() => LessonListScreen());
-            },
+            if (result) {
+              Get.back();
+            }
+          },
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +57,7 @@ class CancelLessonScreen extends StatelessWidget {
                                 isBold: true,
                               )
                             ]),
-                        BuildInterval(),
+                        const BuildInterval(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -110,8 +111,7 @@ class CancelLessonScreen extends StatelessWidget {
                                 color: goskiDarkGray,
                               ),
                               GoskiText(
-                                  text: tr(
-                                      '${lesson.studentCount.toString()} 명'),
+                                  text: tr('hintStudentCount', args: [lesson.studentCount.toString()]),
                                   size: goskiFontMedium),
                             ],
                           ),
@@ -137,7 +137,7 @@ class CancelLessonScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                BuildInterval(),
+                const BuildInterval(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: GoskiExpansionTile(
@@ -155,7 +155,7 @@ class CancelLessonScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                BuildInterval(),
+                const BuildInterval(),
                 GoskiCard(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -168,7 +168,7 @@ class CancelLessonScreen extends StatelessWidget {
                           size: goskiFontMedium,
                           isBold: true,
                         ),
-                        BuildInterval(),
+                        const BuildInterval(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -186,8 +186,7 @@ class CancelLessonScreen extends StatelessWidget {
                             GoskiText(
                                 text: tr('refundCharge'), size: goskiFontMedium),
                             GoskiText(
-                                text: tr('moneyUnit',
-                                    args: [formatFromString('50000')]),
+                                text: '- ${tr('moneyUnit', args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * (100 - cancelLessonViewModel.paybackRate.value))])}',
                                 size: goskiFontMedium),
                           ],
                         ),
@@ -205,7 +204,7 @@ class CancelLessonScreen extends StatelessWidget {
                             ),
                             GoskiText(
                               text: tr('moneyUnit',
-                                  args: [formatFromString('100000')]),
+                                  args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * cancelLessonViewModel.paybackRate.value)]),
                               size: goskiFontMedium,
                             ),
                           ],
