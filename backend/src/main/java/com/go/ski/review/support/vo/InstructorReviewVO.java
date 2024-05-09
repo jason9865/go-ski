@@ -3,6 +3,7 @@ package com.go.ski.review.support.vo;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -18,5 +19,6 @@ public class InstructorReviewVO {
     private String representativeName;
     private Integer rating;
     private String content;
+    private LocalDateTime createdAt;
 
 }

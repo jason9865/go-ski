@@ -4,6 +4,8 @@ import com.go.ski.payment.core.model.Lesson;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -24,6 +26,12 @@ public class Review {
     private String contents;
 
     private Integer rating;
+
+    private LocalDateTime createdAt;
+
+    public void updateCreatedAt(){
+        this.createdAt = LocalDateTime.now();
+    }
 
 
 }
