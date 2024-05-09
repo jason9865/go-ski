@@ -26,6 +26,7 @@ public class ResortListDTO {
 		String lessonTimeString = lessonTime.toString();
 		this.lessonTime = Arrays.stream(lessonTimeString.split(","))
 			.map(Integer::parseInt)
+			.sorted()
 			.collect(Collectors.toList());
 	}
 }

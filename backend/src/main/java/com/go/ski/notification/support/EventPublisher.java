@@ -8,6 +8,7 @@ import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.SkiResortRepository;
 import com.go.ski.team.core.repository.TeamInstructorRepository;
@@ -69,12 +70,10 @@ public class EventPublisher {
         applicationEventPublisher.publishEvent(FeedbackEvent.of(feedbackCreateRequestDTO,lesson, deviceType));
     }
 
-    public void publish(Lesson lesson, LessonInfo lessonInfo, String deviceType){
-        log.info("lesson의 instructorID - {}",lesson.getInstructor().getInstructorId());
+    public void publish(Lesson lesson, LessonInfo lessonInfo, PaymentCacheDto paymentCache, String deviceType){
         Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
-        log.info("resortname - {}",team.getSkiResort().getResortId());
         Integer resortId = team.getSkiResort().getResortId();
 
         String resortName = skiResortRepository.findById(resortId)
@@ -82,12 +81,16 @@ public class EventPublisher {
 
         List<Integer> receiverIds = new ArrayList<>();
         receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
-        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+        if (lesson.getInstructor() != null) {
+            log.info("lesson.getInstructor - {}",lesson.getInstructor());
+            receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+        }
         receiverIds.add(team.getUser().getUserId()); // 사장
-        receiverIds.forEach(
+        receiverIds.forEach( // LessonCreateInstructor 이벤트로 바뀌어야 함 -> 사장, 강사용
                 receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateEvent.of(lessonInfo, resortName, receiverId, deviceType))
+                        LessonCreateInstructorEvent.of(lessonInfo, resortName, receiverId, paymentCache, deviceType))
         );
+//        applicationEventPublisher.publishEvent(LessonCreateInstructorEvent.of());
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {

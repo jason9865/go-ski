@@ -100,7 +100,7 @@ public class FeedbackService {
 
         if (videoFiles != null) {
             for (MultipartFile file : videoFiles) {
-                String videoUrl = s3Uploader.uploadFile(FileUploadPath.FEEDBACK_IMAGE_PATH.path, file);
+                String videoUrl = s3Uploader.uploadFile(FileUploadPath.FEEDBACK_VIDEO_PATH.path, file);
                 tobeSavedFiles.add(FeedbackMedia.builder().mediaUrl(videoUrl).feedback(feedback).build());
             }
         }

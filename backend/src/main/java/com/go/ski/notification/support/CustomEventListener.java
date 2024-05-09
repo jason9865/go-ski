@@ -8,13 +8,11 @@ import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.core.service.FcmClient;
 import com.go.ski.notification.support.events.LessonAlertEvent;
-import com.go.ski.notification.support.events.LessonCreateEvent;
 import com.go.ski.notification.support.events.MessageEvent;
 import com.go.ski.notification.support.events.NotificationEvent;
 import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,18 +33,16 @@ public class CustomEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener // @Transaction이 붙은 Event
     public void createNotification(NotificationEvent notificationEvent){
+        log.info("EventListener - createNotification");
         try{
             String jsonContent = objectMapper.writeValueAsString(notificationEvent);
-
             Notification notification = Notification.of(notificationEvent, jsonContent);
             notificationRepository.save(notification);
-            log.warn("알림 보내기 - {}",notificationEvent.getTitle());
-            fcmClient.sendMessageTo(notification);
+
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("알림 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(notification);
             }
-
         } catch(JsonProcessingException e) {
             log.error("json error");
         }
@@ -58,13 +54,11 @@ public class CustomEventListener {
 
             Notification notification = Notification.from(messageEvent);
             notificationRepository.save(notification);
-            log.warn("알림 보내기 - {}",messageEvent.getTitle());
-            fcmClient.sendMessageTo(notification);
+
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("DM 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(messageEvent);
             }
-
 
     }
 
@@ -72,10 +66,9 @@ public class CustomEventListener {
     public void createLessonMessage(LessonAlertEvent lessonAlertEvent) {
         try {
             String jsonContent = objectMapper.writeValueAsString(lessonAlertEvent);
-            log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
             Notification notification = Notification.of(lessonAlertEvent,jsonContent);
             notificationRepository.save(notification);
-//
+
 //            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
 //                log.warn("알림 보내기 - {}",notification.getTitle());
 //                fcmClient.sendMessageTo(notification);

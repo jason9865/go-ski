@@ -37,8 +37,6 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getNotifications(HttpServletRequest request) {
         log.info("NotificationController.getNotifications");
-        log.info("User-Agent - {}.", request.getHeader("User-Agent"));
-        log.info("DeviceType - {}.", request.getHeader("DeviceType"));
         User user = (User) request.getAttribute("user");
         List<NotificationResponseDTO> response = notificationService.findAllNotifications(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
@@ -88,11 +86,20 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
+    // 알림 권한 조회
+    @GetMapping("/setting")
+    public ResponseEntity<ApiResponse<?>> getNotification(HttpServletRequest request) {
+        log.info("NotificationController.getNotificationSettings");
+        User user = (User) request.getAttribute("user");
+        List<NotificationSettingResponseDTO> response = notificationService.getNotifications(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
     // 알림 권한 수정
     @PatchMapping("/setting")
     public ResponseEntity<ApiResponse<?>> setNotification(HttpServletRequest request,
                                                           @RequestBody NotificationSettingRequestDTO requestDTO) {
-        log.info("NotificationController.setNotification");
+        log.info("NotificationController.setNotificationSettings");
         User user = (User) request.getAttribute("user");
         notificationService.setNotifications(requestDTO, user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
