@@ -83,7 +83,9 @@
   "feedbackImage": "사진",
   "feedbackVideo": "동영상",
   "male": "남자",
+  "MALE": "남자",
   "female": "여자",
+  "FEMALE": "여자",
   "TeamList": "팀원 목록",
   "instructorList": "강사 목록",
   "inviteTeammate": "팀원 초대",
@@ -255,5 +257,6 @@
   "noNotificationIndicator" : "수신한 알림이 없습니다.",
   "skip": "건너뛰기",
   "reviewHint": "리뷰 내용을 입력하세요.",
-  "refundPolicyDetail": "이용일 7일 이전 취소 시 : 전액 환불\n이용일 7일 이내 취소 시 : 예약금의 50% 환불\n이용일 3일 이내 취소 시 : 예약금의 30% 환불\n이용일 2일 이내 취소 불가능"
+  "refundPolicyDetail": "이용일 7일 이전 취소 시 : 전액 환불\n이용일 7일 이내 취소 시 : 예약금의 50% 환불\n이용일 2일 이내 취소 불가능",
+  "instructorProfile": "강사 프로필"
 }

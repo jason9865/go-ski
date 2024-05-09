@@ -43,7 +43,7 @@ class LessonListViewModel extends GetxController {
     return message.value.receiverId != 0 && message.value.title.isNotEmpty;
   }
 
-  void getLessonList() async {
+  Future<void> getLessonList() async {
     isLoadingLessonList.value = true;
     List<LessonListItem> response = await lessonListRepository.getLessonList();
 
