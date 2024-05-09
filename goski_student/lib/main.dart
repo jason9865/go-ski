@@ -91,12 +91,12 @@ void main() async {
   await dotenv.load(fileName: ".env");
   CustomDio.initialize();
   await EasyLocalization.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   initDependencies();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setFCM();
-  await FlutterDownloader.initialize(debug: true);
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
