@@ -25,6 +25,8 @@ class LessonListViewModel extends GetxController {
     endTime: DateTime.now(),
     duration: 0,
     lessonStatus: '',
+    hasReview: false,
+    studentCount: 0,
   ).obs;
   RxBool isLoadingLessonList = true.obs;
 

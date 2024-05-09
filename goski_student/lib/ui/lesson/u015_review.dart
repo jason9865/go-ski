@@ -76,7 +76,7 @@ class ReviewScreen extends StatelessWidget {
                                 reviewViewModel.content.value = text;
                               },
                             ),
-                            BuildInterval(),
+                            const BuildInterval(),
                             GoskiText(
                               text: tr("instructorReview"),
                               size: goskiFontMedium,
@@ -97,20 +97,18 @@ class ReviewScreen extends StatelessWidget {
                     onTap: () {
                       Get.to(() => FeedbackScreen());
                     },
-                    child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GoskiText(
-                              text: tr('skip'),
-                              size: goskiFontXSmall,
-                              color: goskiDarkGray,
-                            )
-                          ],
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GoskiText(
+                            text: tr('skip'),
+                            size: goskiFontXSmall,
+                            color: goskiDarkGray,
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -191,7 +189,7 @@ class StarRating extends StatelessWidget {
         (index) {
           return IconButton(
             padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
+            constraints: const BoxConstraints(),
             icon: Icon(
               index < value ? Icons.star : Icons.star_border,
             ),
