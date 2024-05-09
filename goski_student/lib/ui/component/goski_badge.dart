@@ -8,12 +8,14 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 class GoskiBadge extends StatelessWidget {
   final String text;
   final Color backgroundColor, textColor;
+  final double font;
 
   const GoskiBadge({
     super.key,
     required this.text,
     required this.backgroundColor,
     this.textColor = goskiWhite,
+    this.font = goskiFontSmall,
   });
 
   @override
@@ -24,7 +26,7 @@ class GoskiBadge extends StatelessWidget {
     return Chip(
       label: GoskiText(
         text: text,
-        size: goskiFontSmall,
+        size: font,
         color: textColor,
       ),
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),

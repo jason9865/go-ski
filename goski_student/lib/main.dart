@@ -85,7 +85,6 @@ void initDependencies() {
   Get.put(SettlementViewModel(), permanent: true);
   Get.put(FeedbackViewModel(), permanent: true);
   Get.put(ReservationViewModel(), permanent: true);
-  // Get.put(LessonTeamListViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
   Get.put(CancelLessonViewModel(), permanent: true);
 }
