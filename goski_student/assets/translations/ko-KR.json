@@ -54,7 +54,6 @@
   "lessonReview": "강습 리뷰",
   "instructorReview": "강사 리뷰",
   "review": "리뷰",
-  "reviewHint": "리뷰 내용을 입력하세요.",
   "writeReview": "리뷰 작성",
   "createFeedback": "피드백 작성",
   "updateFeedback": "피드백 수정",
@@ -253,5 +252,5 @@
   "levelOptionFee": "레벨 옵션 금액",
   "unDesignated": "강사 미지정",
   "noLessonHistory": "강습 내역이 존재하지 않습니다",
-  "skip": "건너뛰기"
+  "noNotificationIndicator" : "수신한 알림이 없습니다."
 }
