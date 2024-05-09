@@ -97,6 +97,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             });
                           },
                           onItemDeleteClicked: () {
+                            notificationViewModel
+                                .deleteNotification(item.notificationId);
                             setState(() {
                               notificationViewModel.notificationList
                                   .removeAt(index);
@@ -115,6 +117,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             });
                           },
                           onItemDeleteClicked: () {
+                            notificationViewModel
+                                .deleteNotification(item.notificationId);
                             setState(() {
                               notificationViewModel.notificationList
                                   .removeAt(index);
