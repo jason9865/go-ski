@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ public class ReviewService {
                 .lesson(lesson)
                 .contents(request.getContent())
                 .rating(request.getRating())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         Review savedReview = reviewRepository.save(review);
@@ -82,6 +84,7 @@ public class ReviewService {
 
         List<ReviewResponseDTO> result = new ArrayList<>();
         for (Review review : reviewList) {
+            review.updateCreatedAt();
             List<InstructorTagsVO> instructorTags = tagOnReviewRepository.findByReviewId(review.getReviewId());
             result.add(ReviewResponseDTO.toDTO(review,instructorTags));
         }

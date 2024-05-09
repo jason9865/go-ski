@@ -4,6 +4,7 @@ import com.go.ski.review.core.model.Review;
 import com.go.ski.review.support.vo.InstructorTagsVO;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,7 @@ public class ReviewResponseDTO {
     private Integer reviewId;
     private Integer rating;
     private String content;
+    private LocalDateTime createdAt;
     List<InstructorTagsVO> instructorTags;
 
     public static ReviewResponseDTO toDTO(Review review, List<InstructorTagsVO> vos) {
@@ -23,6 +25,7 @@ public class ReviewResponseDTO {
                 .reviewId(review.getReviewId())
                 .rating(review.getRating())
                 .content(review.getContents())
+                .createdAt(review.getCreatedAt())
                 .instructorTags(vos)
                 .build();
     }
