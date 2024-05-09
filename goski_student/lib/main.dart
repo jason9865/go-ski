@@ -35,7 +35,6 @@ import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
@@ -75,7 +74,7 @@ void initDependencies() {
   Get.put(FeedbackRepository(), permanent: true);
   Get.put(ReservationRepository(), permanent: true);
   Get.put(ReviewRepository(), permanent: true);
-  Get.put(CancelLessonRepository() , permanent: true);
+  Get.put(CancelLessonRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -88,7 +87,7 @@ void initDependencies() {
   Get.put(ReservationViewModel(), permanent: true);
   // Get.put(LessonTeamListViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
-  Get.put(CancelLessonViewModel() , permanent: true);
+  Get.put(CancelLessonViewModel(), permanent: true);
 }
 
 void main() async {
