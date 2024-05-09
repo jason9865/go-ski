@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 test.dart
+.env
+.keystore
+google-services.json
