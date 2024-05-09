@@ -11,133 +11,119 @@ import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/component/goski_textfield.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:goski_student/view_model/review_view_model.dart';
 
-class ReviewScreen extends StatefulWidget {
-  final String resortName;
-  final String teamName;
-  final String instructorName;
-  final DateTime startTime;
-  final DateTime endTime;
+class ReviewScreen extends StatelessWidget {
+  final imageWidth = screenSizeController.getWidthByRatio(0.5);
+  final lessonListViewModel = Get.find<LessonListViewModel>();
+  final reviewViewModel = Get.find<ReviewViewModel>();
 
-  const ReviewScreen({
+  ReviewScreen({
     super.key,
-    required this.resortName,
-    required this.teamName,
-    required this.instructorName,
-    required this.startTime,
-    required this.endTime,
   });
 
   @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
-}
-
-class _ReviewScreenState extends State<ReviewScreen> {
-  int _rating = 0;
-  final imageWidth = screenSizeController.getWidthByRatio(0.5);
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: GoskiSubHeader(
-          title: tr('review'),
-        ),
-        body: GoskiContainer(
-          buttonName: _rating > 0 ? tr('completed') : null,
-          onConfirm: _rating > 0
-              ? () {
-                  Get.to(() => FeedbackScreen());
-                }
-              : null,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/penguin.png",
-                  width: imageWidth,
-                  height: imageWidth,
-                  fit: BoxFit.fitHeight,
-                ),
-                infoCard(context),
-                StarRating(
-                  onChanged: (rating) {
-                    setState(() {
-                      _rating = rating;
-                    });
-                  },
-                  value: _rating,
-                ),
-                if (_rating > 0) ...[
-                  GoskiCard(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GoskiText(
-                            text: tr("lessonReview"),
-                            size: goskiFontMedium,
-                            isBold: true,
-                          ),
-                          GoskiTextField(
-                            hintText: tr("리뷰 내용을 입력하세요."),
-                            maxLines: 2,
-                            onTextChange: (text) {
-                              // TODO: 로직 추가 필요
-                            },
-                          ),
-                          BuildInterval(),
-                          GoskiText(
-                            text: tr("instructorReview"),
-                            size: goskiFontMedium,
-                            isBold: true,
-                          ),
-                          GoskiMultiSelectTags(tags: [
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                            tr("잘생김"),
-                          ])
-                        ],
+    return Obx(
+      () => Scaffold(
+          appBar: GoskiSubHeader(
+            title: tr('review'),
+          ),
+          body: GoskiContainer(
+            buttonName: reviewViewModel.rating > 0 ? tr('completed') : null,
+            onConfirm: reviewViewModel.rating > 0
+                ? () async {
+                    bool result = await reviewViewModel.writeReview(lessonListViewModel.selectedLesson.value.lessonId);
+                    if (result) Get.off(() => FeedbackScreen());
+                  }
+                : null,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/penguin.png",
+                    width: imageWidth,
+                    height: imageWidth,
+                    fit: BoxFit.fitHeight,
+                  ),
+                  infoCard(context),
+                  StarRating(
+                    onChanged: (rating) {
+                      reviewViewModel.rating.value = rating;
+                    },
+                    value: reviewViewModel.rating.value,
+                  ),
+                  if (reviewViewModel.rating > 0) ...[
+                    GoskiCard(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GoskiText(
+                              text: tr('lessonReview'),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
+                            GoskiTextField(
+                              hintText: tr('reviewHint'),
+                              maxLines: 2,
+                              onTextChange: (text) {
+                                reviewViewModel.content.value = text;
+                              },
+                            ),
+                            BuildInterval(),
+                            GoskiText(
+                              text: tr("instructorReview"),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
+                            GoskiMultiSelectTags(
+                              tags: reviewViewModel.reviewTagList
+                                  .map((reviewTag) => reviewTag.tagName)
+                                  .toList(),
+                              isSelected: reviewViewModel.isSelected,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => FeedbackScreen());
+                    },
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GoskiText(
+                              text: tr('skip'),
+                              size: goskiFontXSmall,
+                              color: goskiDarkGray,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => FeedbackScreen());
-                  },
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GoskiText(
-                            text: "건너뛰기",
-                            size: goskiFontXSmall,
-                            color: goskiDarkGray,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget infoCard(BuildContext context) {
+    var lesson = lessonListViewModel.selectedLesson;
+
     return GoskiCard(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -149,9 +135,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GoskiText(text: widget.resortName, size: goskiFontLarge),
+                GoskiText(text: lesson.value.resortName, size: goskiFontLarge),
                 const GoskiText(text: " - ", size: goskiFontLarge),
-                GoskiText(text: widget.teamName, size: goskiFontLarge),
+                GoskiText(text: lesson.value.teamName, size: goskiFontLarge),
               ],
             ),
             Row(
@@ -160,21 +146,26 @@ class _ReviewScreenState extends State<ReviewScreen> {
               children: [
                 GoskiText(
                   text: tr(DateFormat('yyyy.MM.dd (E) HH:mm')
-                      .format(widget.startTime)
+                      .format(lesson.value.startTime)
                       .toString()),
                   size: goskiFontSmall,
                   color: goskiDarkGray,
                 ),
                 GoskiText(
-                  text: tr(
-                      DateFormat('~HH:mm').format(widget.endTime).toString()),
+                  text: tr(DateFormat('~HH:mm')
+                      .format(lesson.value.endTime)
+                      .toString()),
                   size: goskiFontSmall,
                   color: goskiDarkGray,
                 ),
               ],
             ),
             GoskiText(
-              text: tr('dynamicInstructor', args: [widget.instructorName]),
+              text: tr('dynamicInstructor', args: [
+                lesson.value.instructorName == null
+                    ? '이름 없음'
+                    : lesson.value.instructorName!
+              ]),
               size: goskiFontSmall,
               color: goskiDarkGray,
             ),
@@ -189,26 +180,29 @@ class StarRating extends StatelessWidget {
   final int value;
   final void Function(int) onChanged;
 
-  StarRating({this.value = 0, required this.onChanged});
+  const StarRating({super.key, this.value = 0, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(5, (index) {
-        return IconButton(
-          padding: EdgeInsets.zero,
-          constraints: BoxConstraints(),
-          icon: Icon(
-            index < value ? Icons.star : Icons.star_border,
-          ),
-          color: goskiYellow,
-          iconSize: 40,
-          onPressed: () {
-            onChanged(index + 1);
-          },
-        );
-      }),
+      children: List.generate(
+        5,
+        (index) {
+          return IconButton(
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+            icon: Icon(
+              index < value ? Icons.star : Icons.star_border,
+            ),
+            color: goskiYellow,
+            iconSize: 40,
+            onPressed: () {
+              onChanged(index + 1);
+            },
+          );
+        },
+      ),
     );
   }
 }

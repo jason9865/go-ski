@@ -16,7 +16,7 @@ class MainService extends GetxService {
         '$baseUrl/user/profile/user',
       );
 
-      if (response.statusCode == 200) {
+      if (response.data['status'] == 'success') {
           MainResponse data = MainResponse.fromJson(response.data['data'] as Map<String, dynamic>);
           logger.d('UserService - getUserInfo - 응답 성공 ${data}');
 

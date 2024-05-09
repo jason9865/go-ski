@@ -1,7 +1,7 @@
 class DefaultDTO {
   final String status;
   final String? message;
-  final String data;
+  final String? data;
 
   DefaultDTO({
     required this.status,

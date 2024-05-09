@@ -30,8 +30,8 @@ class LessonListItemResponse {
   factory LessonListItemResponse.fromJson(Map<String, dynamic> json) {
     String timeString = json['startTime'];
     String formattedTimeString = "${timeString.substring(0, 2)}:${timeString.substring(2)}";
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    String lessonDate = json['lessonDate'];
+    String formattedDate = DateFormat('yyyy-MM-dd').parse(lessonDate).toString();
     String combinedDateTimeString = "$formattedDate $formattedTimeString";
     DateTime dateTime = DateFormat("yyyy-MM-dd HH:mm").parse(combinedDateTimeString);
 
@@ -43,11 +43,16 @@ class LessonListItemResponse {
       instructorName: json['instructorName'] as String?,
       profileUrl: json['profileUrl'] as String?,
       resortName: json['resortName'] as String,
-      lessonDate: DateTime.parse(json['lessonDate']),
+      lessonDate: DateTime.parse(lessonDate),
       startTime: dateTime,
       duration: json['duration'] as int,
       lessonStatus: json['lessonStatus'] as String,
     );
+  }
+
+  @override
+  String toString() {
+    return 'LessonListItemResponse{lessonId: $lessonId, teamId: $teamId, teamName: $teamName, instructorId: $instructorId, instructorName: $instructorName, profileUrl: $profileUrl, resortName: $resortName, lessonDate: $lessonDate, startTime: $startTime, duration: $duration, lessonStatus: $lessonStatus}';
   }
 }
 

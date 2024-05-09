@@ -3,22 +3,19 @@ import 'package:goski_student/const/color.dart';
 
 class GoskiMultiSelectTags extends StatefulWidget {
   final List<String> tags;
+  final List<bool> isSelected;
 
-  GoskiMultiSelectTags({required this.tags});
+  const GoskiMultiSelectTags({
+    super.key,
+    required this.tags,
+    required this.isSelected,
+  });
 
   @override
   _MultiSelectTagsState createState() => _MultiSelectTagsState();
 }
 
 class _MultiSelectTagsState extends State<GoskiMultiSelectTags> {
-  late List<bool> isSelected;
-
-  @override
-  void initState() {
-    super.initState();
-    isSelected = List<bool>.filled(widget.tags.length, false);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -29,17 +26,17 @@ class _MultiSelectTagsState extends State<GoskiMultiSelectTags> {
           showCheckmark: false,
           padding: EdgeInsets.zero,
           label: Text(widget.tags[index]),
-          selected: isSelected[index],
+          selected: widget.isSelected[index],
           onSelected: (bool selected) {
             setState(() {
-              isSelected[index] = selected;
+              widget.isSelected[index] = selected;
             });
           },
           selectedColor: goskiButtonBlack,
-          backgroundColor: isSelected[index] ? goskiButtonBlack : goskiWhite,
-          labelStyle: isSelected[index]
-              ? TextStyle(color: goskiWhite)
-              : TextStyle(color: goskiBlack),
+          backgroundColor: widget.isSelected[index] ? goskiButtonBlack : goskiWhite,
+          labelStyle: widget.isSelected[index]
+              ? const TextStyle(color: goskiWhite)
+              : const TextStyle(color: goskiBlack),
         );
       }),
     );
