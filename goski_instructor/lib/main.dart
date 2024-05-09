@@ -4,9 +4,12 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:goski_instructor/const/text_theme.dart';
+import 'package:goski_instructor/const/util/custom_dio.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/data/data_source/auth_service.dart';
+import 'package:goski_instructor/data/data_source/user_service.dart';
 import 'package:goski_instructor/data/repository/auth_repository.dart';
+import 'package:goski_instructor/data/repository/user_repository.dart';
 import 'package:goski_instructor/test.dart';
 
 // import 'package:goski_instructor/ui/I004.dart';
@@ -25,10 +28,14 @@ import 'package:logger/logger.dart';
 Logger logger = Logger();
 
 void initDependencies() {
-  Get.lazyPut(() => AuthService());
-  Get.lazyPut(() => AuthRepository());
-  Get.lazyPut(() => LoginViewModel());
-  Get.lazyPut(() => SignupViewModel());
+  Get.put(AuthService(), permanent: true);
+  Get.put(UserService(), permanent: true);
+
+  Get.put(AuthRepository(), permanent: true);
+  Get.put(UserRespository(), permanent: true);
+
+  Get.put(LoginViewModel(), permanent: true);
+  Get.put(SignupViewModel(), permanent: true);
 }
 
 void main() async {
@@ -36,6 +43,7 @@ void main() async {
   await FlutterConfig.loadEnvVariables();
 
   await dotenv.load(fileName: ".env");
+  CustomDio.initialize();
   await EasyLocalization.ensureInitialized();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);

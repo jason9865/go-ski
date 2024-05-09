@@ -24,8 +24,4 @@ class AuthRepository {
     }
     return false;
   }
-
-  // Future<DefaultDTO> ownerSignIn(Owner owner) async {
-  //   return await authService.ownerSignUp();
-  // }
 }

@@ -4,12 +4,13 @@ import 'package:goski_instructor/const/enum/gender.dart';
 import 'package:goski_instructor/const/enum/role.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
 import 'package:goski_instructor/data/model/owner.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'certificate.dart';
 
 class UserRequest {
   int domainUserKey;
-  File? profileImage;
+  XFile? profileImage;
   String kakaoProfileUrl;
   String userName;
   Gender gender;
@@ -35,7 +36,7 @@ class UserRequest {
 
 class User {
   int domainUserKey;
-  File? profileImage;
+  XFile? profileImage;
   String kakaoProfileUrl;
   String userName;
   Gender gender;
@@ -55,7 +56,7 @@ class User {
     DateTime? birthDate,
     this.role = Role.INSTRUCTOR,
     this.phoneNumber = '',
-    this.certificates = const [],
+    required this.certificates,
     this.lessonType = '',
     this.isOwner = false,
   }) : birthDate = birthDate ?? DateTime.now();
@@ -64,7 +65,10 @@ class User {
     if (isOwner) {
       return birthDate != null && userName.isNotEmpty && phoneNumber.isNotEmpty;
     } else {
-      return birthDate != null && userName.isNotEmpty && phoneNumber.isNotEmpty && certificates.isNotEmpty;
+      return birthDate != null &&
+          userName.isNotEmpty &&
+          phoneNumber.isNotEmpty &&
+          certificates.isNotEmpty;
     }
   }
 
@@ -117,7 +121,7 @@ extension UserToDTO on User {
 }
 
 extension UserRequestToUser on UserRequest {
-  User toUserRequest() {
+  User toUser() {
     return User(
       domainUserKey: domainUserKey,
       kakaoProfileUrl: kakaoProfileUrl,
