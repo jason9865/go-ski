@@ -18,7 +18,7 @@ class SettlementService extends GetxService {
 
       logger.w(response.data['data']);
 
-      if (response.statusCode == 200 &&
+      if (response.data['status'] == 'success' &&
           response.data is Map<String, dynamic> &&
           response.data['data'] is List) {
         List<SettlementResponse> data = (response.data['data'] as List)
