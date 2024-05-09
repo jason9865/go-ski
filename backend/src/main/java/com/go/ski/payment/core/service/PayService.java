@@ -307,14 +307,6 @@ public class PayService {
 			.build();
 		paymentRepository.save(tmpPayment);
 
-		// 여기서 카카오 페이 결제 취소 API 보냄
-		KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
-			//tid 그대로 입력
-			.cid(testId)
-			.tid(payment.getTid())
-			.cancelAmount((int)payback)
-			.cancelTaxFreeAmount(0)
-			.build();
 
 		//정산 테이블에 추가
 		int ownerId = lesson.getTeam().getUser().getUserId();
@@ -334,6 +326,16 @@ public class PayService {
 		settlementRepository.save(settlement);
 		// 여기서는 스케줄 없애기
 		scheduleService.scheduleCaching(lesson.getTeam(), lessonInfo.getLessonDate());
+
+		if(dayDiff <= 2) return;
+		// 여기서 카카오 페이 결제 취소 API 보냄
+		KakaopayCancelRequestDTO kakaopayCancelRequestDTO = KakaopayCancelRequestDTO.builder()
+			//tid 그대로 입력
+			.cid(testId)
+			.tid(payment.getTid())
+			.cancelAmount((int)payback)
+			.cancelTaxFreeAmount(0)
+			.build();
 		requestCancelToKakao(kakaopayCancelRequestDTO);
 	}
 
