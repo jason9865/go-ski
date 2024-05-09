@@ -36,9 +36,9 @@ public class CustomEventListener {
         log.info("EventListener - createNotification");
         try{
             String jsonContent = objectMapper.writeValueAsString(notificationEvent);
-
             Notification notification = Notification.of(notificationEvent, jsonContent);
             notificationRepository.save(notification);
+
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("알림 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(notification);
@@ -54,7 +54,7 @@ public class CustomEventListener {
 
             Notification notification = Notification.from(messageEvent);
             notificationRepository.save(notification);
-            log.warn("알림 보내기 - {}",messageEvent.getTitle());
+
             if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
                 log.warn("DM 보내기 - {}",notification.getTitle());
                 fcmClient.sendMessageTo(messageEvent);
@@ -66,10 +66,9 @@ public class CustomEventListener {
     public void createLessonMessage(LessonAlertEvent lessonAlertEvent) {
         try {
             String jsonContent = objectMapper.writeValueAsString(lessonAlertEvent);
-            log.warn("알림 보내기 - {}",lessonAlertEvent.getTitle());
             Notification notification = Notification.of(lessonAlertEvent,jsonContent);
             notificationRepository.save(notification);
-//
+
 //            if (isSendAvailable(notification.getReceiverId(), notification.getNotificationType())){
 //                log.warn("알림 보내기 - {}",notification.getTitle());
 //                fcmClient.sendMessageTo(notification);
