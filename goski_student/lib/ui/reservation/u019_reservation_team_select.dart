@@ -11,6 +11,7 @@ import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
+import 'package:goski_student/ui/reservation/u021_reservation_team_detail.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -122,7 +123,21 @@ class _ReservationTeamSelectScreenState
 
   Widget buildTeamCard(BeginnerResponse team) {
     return GestureDetector(
-      onTap: () => logger.d("팀 상세 페이지로 이동"),
+      onTap: () {
+        logger.d("팀 상세 페이지로 이동");
+        Get.to(
+            ReservationTeamDetailScreen(
+              teamId: team.teamId,
+              teamName: team.teamName,
+              teamImages: team.teamImages,
+              description: team.description,
+              instructors: team.instructors,
+              cost: team.cost,
+            ), binding: BindingsBuilder(() {
+          // Get.put(() => BeginnerInstructorListViewModel(), permanent: true);
+          Get.lazyPut(() => BeginnerInstructorListViewModel());
+        }));
+      },
       child: Padding(
         padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.01)),
         child: GoskiCard(

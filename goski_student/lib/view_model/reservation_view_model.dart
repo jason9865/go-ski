@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
 import 'package:logger/logger.dart';
@@ -39,9 +40,18 @@ class LessonTeamListViewModel extends GetxController {
   var lessonTeams = <BeginnerResponse>[].obs;
 
   Future<void> getLessonTeamList(ReservationRequest reservationRequest) async {
-    logger.w("뭐 뭐 뭐 뭐적으라고");
     lessonTeams.value = await _reservationRepository
         .getBeginnerLessonTeamInfo(reservationRequest);
     lessonTeams.value.sort((a, b) => a.cost.compareTo(b.cost));
+  }
+}
+
+class BeginnerInstructorListViewModel extends GetxController {
+  var instructors = <Instructor>[].obs;
+
+  Future<void> getBeginnerInstructorList(List<int> instructorsId,
+      int studentCount, int duration, String level, int teamId) async {
+    instructors.value = await _reservationRepository.getBeginnerInstructorList(
+        instructorsId, studentCount, duration, level, teamId);
   }
 }
