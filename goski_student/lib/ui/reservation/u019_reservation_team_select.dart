@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
@@ -12,11 +10,14 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
+import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+final ReservationViewModel reservationViewModel =
+    Get.find<ReservationViewModel>();
 final LessonTeamListViewModel lessonTeamListViewModel =
     Get.find<LessonTeamListViewModel>();
 
@@ -30,19 +31,18 @@ class ReservationTeamSelectScreen extends StatefulWidget {
 
 class _ReservationTeamSelectScreenState
     extends State<ReservationTeamSelectScreen> {
-  List<Team> teamList = [];
+  List<BeginnerResponse> teamList = lessonTeamListViewModel.lessonTeams;
   final format = NumberFormat('###,###,###,###');
 
   @override
   void initState() {
+    lessonTeamListViewModel
+        .getLessonTeamList(reservationViewModel.reservation.value);
     super.initState();
-    teamList = fetchTeamList();
   }
 
   @override
   Widget build(BuildContext context) {
-    //TODO. List가 제대로 렌더링 되지않음.
-    logger.e(lessonTeamListViewModel.lessonTeams);
     return Scaffold(
       appBar: GoskiSubHeader(
         title: tr('selectTeam'),
@@ -51,34 +51,17 @@ class _ReservationTeamSelectScreenState
         child: Column(
           children: [
             buildSwitch(),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: lessonTeamListViewModel.lessonTeams.length,
-                  itemBuilder: (context, index) {
-                    return buildTeamCard(
-                        lessonTeamListViewModel.lessonTeams[index]);
-                  }),
-            ),
+            Obx(() => Expanded(
+                  child: ListView.builder(
+                      itemCount: teamList.length,
+                      itemBuilder: (context, index) {
+                        return buildTeamCard(teamList[index]);
+                      }),
+                )),
           ],
         ),
       ),
     );
-  }
-
-  List<Team> fetchTeamList() {
-    List<Team> list = [];
-    for (var item in dummy) {
-      Team team = Team(
-        teamName: item['teamName'],
-        cost: item['cost'],
-        teamProfileUrl: item['teamProfileUrl'],
-        description: item['description'],
-        rating: item['rating'],
-        reviewCount: item['reviewCount'],
-      );
-      list.add(team);
-    }
-    return list;
   }
 
   void sortByLowerPrice() {
@@ -95,7 +78,15 @@ class _ReservationTeamSelectScreenState
 
   void sortByRating() {
     setState(() {
-      teamList.sort((a, b) => b.rating.compareTo(a.rating));
+      // teamList.sort((a, b) => b.rating.compareTo(a.rating));
+      teamList.sort((a, b) {
+        // Handle nulls first, assuming lower priority for nulls
+        if (a.rating == null || b.rating == null) {
+          return (a.rating == null) ? (b.rating == null ? 0 : 1) : -1;
+        }
+        // If both are non-null, use regular comparison
+        return b.rating!.compareTo(a.rating!);
+      });
     });
   }
 
@@ -130,8 +121,6 @@ class _ReservationTeamSelectScreenState
   }
 
   Widget buildTeamCard(BeginnerResponse team) {
-    logger.d("asdfasdf\n${lessonTeamListViewModel}");
-
     return GestureDetector(
       onTap: () => logger.d("팀 상세 페이지로 이동"),
       child: Padding(
@@ -149,7 +138,8 @@ class _ReservationTeamSelectScreenState
                     height: screenSizeController.getWidthByRatio(0.25),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(team.teamProfileUrl),
+                        // image: Image.network(team.teamProfileUrl),
+                        image: NetworkImage(team.teamProfileUrl),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(15),
@@ -181,7 +171,7 @@ class _ReservationTeamSelectScreenState
                                     Icons.star,
                                   ),
                                   GoskiText(
-                                    text: team.rating.toString(),
+                                    text: team.rating!.toStringAsFixed(1),
                                     size: goskiFontMedium,
                                   ),
                                   GoskiText(
@@ -209,7 +199,8 @@ class _ReservationTeamSelectScreenState
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               GoskiText(
-                                text: '${format.format(team.cost).toString()}원',
+                                text: tr('moneyUnit',
+                                    args: [team.cost.toString()]),
                                 size: goskiFontLarge,
                               ),
                             ],
@@ -226,73 +217,4 @@ class _ReservationTeamSelectScreenState
       ),
     );
   }
-}
-
-List<Map<String, dynamic>> dummy = [
-  {
-    "teamName": "팀이름1",
-    "cost": 180000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.0,
-    "reviewCount": 30,
-  },
-  {
-    "teamName": "팀이름2",
-    "cost": 170000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.1,
-    "reviewCount": 30,
-  },
-  {
-    "teamName": "팀이름3",
-    "cost": 160000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.2,
-    "reviewCount": 30,
-  },
-  {
-    "teamName": "팀이름4",
-    "cost": 150000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.3,
-    "reviewCount": 30,
-  },
-  {
-    "teamName": "팀이름5",
-    "cost": 140000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.4,
-    "reviewCount": 30,
-  },
-  {
-    "teamName": "팀이름6",
-    "cost": 130000,
-    "teamProfileUrl": "assets/images/penguin.png",
-    "description": "팀소개입니다.",
-    "rating": 4.5,
-    "reviewCount": 30,
-  },
-];
-
-class Team {
-  final String teamName;
-  final int cost;
-  final String teamProfileUrl;
-  final String description;
-  final double rating;
-  final int reviewCount;
-
-  Team({
-    required this.teamName,
-    required this.cost,
-    required this.teamProfileUrl,
-    required this.description,
-    required this.rating,
-    required this.reviewCount,
-  });
 }

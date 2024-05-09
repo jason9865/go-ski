@@ -35,7 +35,6 @@ import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
@@ -62,6 +61,7 @@ void initDependencies() {
   Get.put(LessonListService(), permanent: true);
   Get.put(SettlementService(), permanent: true);
   Get.put(FeedbackService(), permanent: true);
+  Get.put(ReservationService(), permanent: true);
   Get.put(ReviewService(), permanent: true);
   Get.put(CancelLessonService(), permanent: true);
 
@@ -72,8 +72,9 @@ void initDependencies() {
   Get.put(LessonListRepository(), permanent: true);
   Get.put(SettlementRepository(), permanent: true);
   Get.put(FeedbackRepository(), permanent: true);
+  Get.put(ReservationRepository(), permanent: true);
   Get.put(ReviewRepository(), permanent: true);
-  Get.put(CancelLessonRepository() , permanent: true);
+  Get.put(CancelLessonRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -83,12 +84,10 @@ void initDependencies() {
   Get.put(LessonListViewModel(), permanent: true);
   Get.put(SettlementViewModel(), permanent: true);
   Get.put(FeedbackViewModel(), permanent: true);
+  Get.put(ReservationViewModel(), permanent: true);
+  // Get.put(LessonTeamListViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
-  Get.put(CancelLessonViewModel() , permanent: true);
-  Get.lazyPut(() => ReservationService());
-  Get.lazyPut(() => ReservationRepository());
-  Get.lazyPut(() => ReservationViewModel());
-  Get.lazyPut(() => LessonTeamListViewModel());
+  Get.put(CancelLessonViewModel(), permanent: true);
 }
 
 void main() async {
