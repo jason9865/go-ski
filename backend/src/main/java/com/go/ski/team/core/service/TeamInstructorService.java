@@ -11,6 +11,7 @@ import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.dto.TeamInstructorResponseDTO;
 import com.go.ski.team.support.dto.TeamInstructorUpdateRequestDTO;
+import com.go.ski.team.support.exception.TeamExceptionEnum;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
@@ -29,6 +30,8 @@ import static com.go.ski.team.support.exception.TeamExceptionEnum.*;
 @Service
 @RequiredArgsConstructor
 public class TeamInstructorService {
+    private static final Integer DEFAULT_DESIGNATED_COST = 100000;
+    private static final Integer DEFAULT_POSITION = 4;
 
     private final TeamRepository teamRepository;
     private final InstructorRepository instructorRepository;
@@ -55,11 +58,8 @@ public class TeamInstructorService {
         User user = (User)request.getAttribute("user");
         String deviceType = request.getHeader("DeviceType");
 
-        Team team = teamRepository.findById(inviteAcceptRequestDTO.getTeamId())
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TEAM_NOT_FOUND));
-
-        Instructor instructor = instructorRepository.findById(user.getUserId())
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
+        Team team = getTeam(inviteAcceptRequestDTO.getTeamId());
+        Instructor instructor = getInstructor(34);
 
         validateIfExists(team, instructor);
 
@@ -68,9 +68,28 @@ public class TeamInstructorService {
                 .team(team)
                 .isInviteAccepted(true)
                 .build();
+
         teamInstructorRepository.save(teamInstructor);
 
+        Permission permission = Permission.builder()
+                .teamInstructorId(teamInstructor.getTeamInstructorId())
+                .teamInstructor(teamInstructor)
+                .designatedCost(DEFAULT_DESIGNATED_COST)
+                .position(DEFAULT_POSITION)
+                .build();
+        permissionRepository.save(permission);
+
         eventPublisher.publish(inviteAcceptRequestDTO, team, instructor, deviceType);
+    }
+
+    public Team getTeam(Integer teamId){
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+    }
+
+    public Instructor getInstructor(Integer instructorId){
+        return instructorRepository.findById(instructorId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.USER_NOT_FOUND));
     }
 
     private void validateIfExists(Team team,Instructor instructor ) {

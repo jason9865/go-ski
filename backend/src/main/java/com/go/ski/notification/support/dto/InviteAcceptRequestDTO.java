@@ -10,5 +10,4 @@ import lombok.*;
 @ToString
 public class InviteAcceptRequestDTO{
     private Integer teamId;
-    private Integer notificationType;
 }

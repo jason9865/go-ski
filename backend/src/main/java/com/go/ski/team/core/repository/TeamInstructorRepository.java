@@ -32,7 +32,7 @@ public interface TeamInstructorRepository extends JpaRepository<TeamInstructor, 
             "LEFT OUTER JOIN User u " +
             "ON ti.instructor.instructorId = u.userId " +
             "LEFT OUTER JOIN Permission p " +
-            "ON ti.instructor.instructorId = p.teamInstructorId " +
+            "ON ti.teamInstructorId = p.teamInstructorId " +
             "WHERE ti.team.teamId = :teamId")
     List<TeamInstructorResponseDTO> findByTeamId(Integer teamId);
 

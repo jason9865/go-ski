@@ -11,10 +11,15 @@ import com.go.ski.notification.support.exception.NotificationExceptionEnum;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.notification.support.vo.NotificationSettingVO;
 import com.go.ski.team.core.model.Team;
+import com.go.ski.team.core.model.TeamInstructor;
+import com.go.ski.team.core.repository.TeamInstructorRepository;
 import com.go.ski.team.core.repository.TeamRepository;
 import com.go.ski.team.support.exception.TeamExceptionEnum;
+import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
+import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
+import com.go.ski.user.support.exception.UserExceptionEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +38,8 @@ public class NotificationService {
 
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private final TeamInstructorRepository teamInstructorRepository;
+    private final InstructorRepository instructorRepository;
     private final NotificationRepository notificationRepository;
     private final NotificationSettingRepository notificationSettingRepository;
     private final S3Uploader s3Uploader;
@@ -90,9 +97,11 @@ public class NotificationService {
 
     @Transactional
     public void sendInvite(InviteRequestDTO inviteRequestDTO, HttpServletRequest request) {
+        Team team = getTeam(inviteRequestDTO.getTeamId());
+        Instructor instructor = getInstructor(inviteRequestDTO.getReceiverId());
+        validateInvite(team, instructor);
+
         String deviceType = request.getHeader("DeviceType");
-        Team team = teamRepository.findById(inviteRequestDTO.getTeamId())
-                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
         eventPublisher.publish(inviteRequestDTO, team, deviceType);
     }
 
@@ -109,9 +118,27 @@ public class NotificationService {
 
     }
 
+    public Team getTeam(Integer teamId){
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
+    }
+
+    public Instructor getInstructor(Integer instructorId){
+        return instructorRepository.findById(instructorId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.USER_NOT_FOUND));
+    }
+
     public void validateUser(Notification notification,User user) {
         if(notification.getReceiverId() != user.getUserId()){
             throw ApiExceptionFactory.fromExceptionEnum(NotificationExceptionEnum.NOTIFICATION_UNAUTHORIZED);
+        }
+    }
+
+
+    private void validateInvite(Team team, Instructor instructor) {
+        TeamInstructor teamInstructor = teamInstructorRepository.findByTeamAndInstructor(team, instructor).orElse(null);
+        if(teamInstructor != null) {
+            throw ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_INSTRUCTOR_EXISTS);
         }
     }
 
