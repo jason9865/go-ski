@@ -17,6 +17,7 @@ import 'package:goski_student/ui/lesson/d_u012_send_message.dart';
 import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 import 'package:goski_student/ui/lesson/u015_review.dart';
+import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/review_view_model.dart';
@@ -25,6 +26,7 @@ class LessonListScreen extends StatelessWidget {
   final lessonListViewModel = Get.find<LessonListViewModel>();
   final feedbackViewModel = Get.find<FeedbackViewModel>();
   final reviewViewModel = Get.find<ReviewViewModel>();
+  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
 
   LessonListScreen({super.key});
 
@@ -83,7 +85,9 @@ class LessonListScreen extends StatelessWidget {
                     tr('cancelLesson'),
                     lesson,
                     () {
-                      goToCancelLessonScreen();
+                      goToCancelLessonScreen(
+                        lesson
+                      );
                     },
                   ));
                 }
@@ -161,8 +165,11 @@ class LessonListScreen extends StatelessWidget {
     });
   }
 
-  void goToCancelLessonScreen() {
-    Get.to(() => const CancelLessonScreen());
+  void goToCancelLessonScreen(LessonListItem lesson) async {
+    lessonListViewModel.selectedLesson.value = lesson;
+    cancelLessonViewModel.getLessonCost(lesson.lessonId);
+
+    Get.to(() => CancelLessonScreen());
   }
 
   void goToReviewScreen(LessonListItem lesson) async {
