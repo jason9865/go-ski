@@ -15,20 +15,39 @@ import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/d_u012_send_message.dart';
 import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
+import 'package:goski_student/ui/lesson/u011_check_instructor.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 import 'package:goski_student/ui/lesson/u015_review.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
+import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/review_view_model.dart';
 
-class LessonListScreen extends StatelessWidget {
-  final lessonListViewModel = Get.find<LessonListViewModel>();
-  final feedbackViewModel = Get.find<FeedbackViewModel>();
-  final reviewViewModel = Get.find<ReviewViewModel>();
-  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
+class LessonListScreen extends StatefulWidget {
 
   LessonListScreen({super.key});
+
+  @override
+  State<LessonListScreen> createState() => _LessonListScreenState();
+}
+
+class _LessonListScreenState extends State<LessonListScreen> {
+  final lessonListViewModel = Get.find<LessonListViewModel>();
+
+  final feedbackViewModel = Get.find<FeedbackViewModel>();
+
+  final reviewViewModel = Get.find<ReviewViewModel>();
+
+  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
+
+  final instructorProfileViewModel = Get.find<InstructorProfileViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    lessonListViewModel.getLessonList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +89,9 @@ class LessonListScreen extends StatelessWidget {
                 final lesson = lessonListViewModel.lessonList[index];
                 final now = DateTime.now();
                 String lessonStatus = lesson.lessonStatus;
-                if (lessonStatus == 'yesFeedback') lessonStatus = 'lessonFinished';
+                if (lessonStatus == 'yesFeedback') {
+                  lessonStatus = 'lessonFinished';
+                }
                 Color lessonBackgroundColor = lessonStatus == 'notStart'
                     ? goskiDarkPink
                     : lessonStatus == 'onGoing'
@@ -85,9 +106,18 @@ class LessonListScreen extends StatelessWidget {
                     tr('cancelLesson'),
                     lesson,
                     () {
-                      goToCancelLessonScreen(
-                        lesson
-                      );
+                      goToCancelLessonScreen(lesson);
+                    },
+                  ));
+                }
+                if (lessonStatus != 'lessonFinished' && lessonStatus != 'cancelLesson' && lesson.instructorId != null) {
+                  buttons.add(createButton(
+                    screenSizeController,
+                    'instructorProfile',
+                    tr('instructorProfile'),
+                    lesson,
+                        () {
+                      goToCheckInstructorScreen(lesson);
                     },
                   ));
                 }
@@ -119,24 +149,33 @@ class LessonListScreen extends StatelessWidget {
                       tr('feedbackCheck'),
                       lesson,
                       () {
-                        goToFeedbackScreen(lesson);
-                      },
-                    ),
-                    createButton(
-                      screenSizeController,
-                      'writeReview',
-                      tr('writeReview'),
-                      lesson,
-                      () {
-                        goToReviewScreen(lesson);
+                        if (lesson.hasReview) {
+                          goToFeedbackScreen(lesson);
+                        } else {
+                          goToReviewScreen(lesson, true);
+                        }
                       },
                     ),
                   ]);
+                  if (!lesson.hasReview) {
+                    buttons.add(
+                      createButton(
+                        screenSizeController,
+                        'writeReview',
+                        tr('writeReview'),
+                        lesson,
+                        () {
+                          goToReviewScreen(lesson, false);
+                        },
+                      ),
+                    );
+                  }
                 }
-
                 MainAxisAlignment alignment = buttons.length == 1
-                    ? MainAxisAlignment.end
-                    : MainAxisAlignment.spaceBetween;
+                    ? MainAxisAlignment.center
+                    : buttons.length == 2
+                        ? MainAxisAlignment.spaceEvenly
+                        : MainAxisAlignment.spaceBetween;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -172,12 +211,20 @@ class LessonListScreen extends StatelessWidget {
     Get.to(() => CancelLessonScreen());
   }
 
-  void goToReviewScreen(LessonListItem lesson) async {
+  void goToCheckInstructorScreen(LessonListItem lesson) async {
+    lessonListViewModel.selectedLesson.value = lesson;
+    await instructorProfileViewModel.getInstructorProfile(lesson.instructorId!);
+    await instructorProfileViewModel.getInstructorReview(lesson.instructorId!);
+
+    Get.to(() => CheckInstructorScreen());
+  }
+
+  void goToReviewScreen(LessonListItem lesson, bool goFeedbackScreen) async {
     lessonListViewModel.selectedLesson.value = lesson;
     await reviewViewModel.getReviewTagList();
     reviewViewModel.initReview();
 
-    Get.to(() => ReviewScreen());
+    Get.to(() => ReviewScreen(goFeedbackScreen: goFeedbackScreen));
   }
 
   void goToFeedbackScreen(LessonListItem lesson) async {
