@@ -2,7 +2,6 @@ package com.go.ski.notification.core.service;
 
 import com.go.ski.common.util.S3Uploader;
 import com.go.ski.notification.core.domain.Notification;
-import com.go.ski.notification.core.domain.NotificationSetting;
 import com.go.ski.notification.core.repository.NotificationRepository;
 import com.go.ski.notification.core.repository.NotificationSettingRepository;
 import com.go.ski.notification.support.EventPublisher;

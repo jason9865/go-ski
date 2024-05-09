@@ -2,14 +2,13 @@ package com.go.ski.notification.core.domain;
 
 import com.go.ski.user.core.model.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class NotificationSetting {
@@ -27,7 +26,6 @@ public class NotificationSetting {
     @JoinColumn(name="user_id")
     private User user;
 
-    @ColumnDefault("1")
     private boolean notificationStatus;
 
 }
