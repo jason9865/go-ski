@@ -7,6 +7,9 @@ import com.go.ski.auth.oauth.dto.Domain;
 import com.go.ski.auth.oauth.type.OauthServerType;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
+import com.go.ski.notification.core.repository.NotificationSettingRepository;
+import com.go.ski.notification.core.repository.NotificationTypeRepository;
+import com.go.ski.notification.support.generators.NotificationSettingGenerator;
 import com.go.ski.user.core.model.Certificate;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.InstructorCert;
@@ -43,6 +46,7 @@ public class UserService {
     private final CertificateRepository certificateRepository;
     private final JwtUtil jwtUtil;
     private final S3Uploader s3Uploader;
+    private final NotificationSettingGenerator generator;
 
     public User login(OauthServerType oauthServerType, String role, String authCode, String accessToken) {
         try {
@@ -66,6 +70,10 @@ public class UserService {
 
         // 프로필 이미지 업로드 후 save
         uploadProfileImage(user, signupUserRequestDTO);
+
+        // 알림 권한 종류 추가
+        generator.createNotificationSettings(user);
+
         return user;
     }
 
@@ -89,6 +97,10 @@ public class UserService {
 
         // 자격증 사진 업로드 후 save
         uploadCertificateImages(instructor, signupInstructorRequestDTO);
+
+        // 알림 권한 종류 추가
+        generator.createNotificationSettings(user);
+
         return user;
     }
 
