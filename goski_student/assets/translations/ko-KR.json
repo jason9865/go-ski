@@ -259,5 +259,6 @@
   "skip": "건너뛰기",
   "reviewHint": "리뷰 내용을 입력하세요.",
   "refundPolicyDetail": "이용일 7일 이전 취소 시 : 전액 환불\n이용일 7일 이내 취소 시 : 예약금의 50% 환불\n이용일 2일 이내 취소 불가능",
-  "instructorProfile": "강사 프로필"
+  "instructorProfile": "강사 프로필",
+  "hintStudentCount": "{} 명"
 }
