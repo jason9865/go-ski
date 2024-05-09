@@ -28,8 +28,6 @@ import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
-import 'package:goski_student/ui/user/u002_signup.dart';
-import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
@@ -57,6 +55,7 @@ void initDependencies() {
   Get.put(LessonListService(), permanent: true);
   Get.put(SettlementService(), permanent: true);
   Get.put(FeedbackService(), permanent: true);
+  Get.put(ReservationService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
@@ -65,6 +64,7 @@ void initDependencies() {
   Get.put(LessonListRepository(), permanent: true);
   Get.put(SettlementRepository(), permanent: true);
   Get.put(FeedbackRepository(), permanent: true);
+  Get.put(ReservationRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -74,10 +74,8 @@ void initDependencies() {
   Get.put(LessonListViewModel(), permanent: true);
   Get.put(SettlementViewModel(), permanent: true);
   Get.put(FeedbackViewModel(), permanent: true);
-  Get.lazyPut(() => ReservationService());
-  Get.lazyPut(() => ReservationRepository());
-  Get.lazyPut(() => ReservationViewModel());
-  Get.lazyPut(() => LessonTeamListViewModel());
+  Get.put(ReservationViewModel(), permanent: true);
+  // Get.put(LessonTeamListViewModel(), permanent: true);
 }
 
 void main() async {
