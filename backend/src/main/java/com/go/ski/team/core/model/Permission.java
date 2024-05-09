@@ -18,7 +18,7 @@ public class Permission {
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_instructor_id",referencedColumnName = "team_instructor_id")
+    @JoinColumn(name = "team_instructor_id")
     private TeamInstructor teamInstructor;
 
     @Column(nullable = false)
