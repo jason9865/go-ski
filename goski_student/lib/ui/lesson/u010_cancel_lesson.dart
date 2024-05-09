@@ -35,7 +35,6 @@ class CancelLessonScreen extends StatelessWidget {
             bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
 
             if (result) {
-              await lessonListViewModel.getLessonList();
               Get.back();
             }
           },
@@ -112,8 +111,7 @@ class CancelLessonScreen extends StatelessWidget {
                                 color: goskiDarkGray,
                               ),
                               GoskiText(
-                                  text: tr(
-                                      '${lesson.studentCount.toString()} 명'),
+                                  text: tr('hintStudentCount', args: [lesson.studentCount.toString()]),
                                   size: goskiFontMedium),
                             ],
                           ),
