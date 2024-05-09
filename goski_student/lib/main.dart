@@ -140,8 +140,6 @@ class MyApp extends StatelessWidget {
             mediaQueryData.size.width,
             mediaQueryData.size.height,
           );
-          logger.d(
-              "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
           if (snapshot.data != null) {
             return StudentMainScreen();
           } else {

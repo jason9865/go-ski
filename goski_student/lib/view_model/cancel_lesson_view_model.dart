@@ -6,13 +6,18 @@ import 'package:goski_student/data/repository/cancel_lesson_repository.dart';
 class CancelLessonViewModel extends GetxController {
   final CancelLessonRepository cancelLessonRepository = Get.find();
   RxInt lessonCost = 0.obs;
+  RxInt paybackRate = 0.obs;
 
-  void getLessonCost(int lessonId) async {
+  Future<void> getLessonCost(int lessonId) async {
+    lessonCost.value = 0;
+    paybackRate.value = 0;
+
     CancelLesson? response =
         await cancelLessonRepository.getLessonCost(lessonId);
 
     if (response != null) {
       lessonCost.value = response.cost;
+      paybackRate.value = response.paybackRate;
     }
   }
 

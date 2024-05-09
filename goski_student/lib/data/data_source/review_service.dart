@@ -24,8 +24,6 @@ class ReviewService extends GetxService {
         ),
       );
 
-      logger.w(response.data['status']);
-
       if (response.data['status'] == 'success') {
         logger.d('ReviewService - writeReview - 응답 성공');
         DefaultDTO defaultDTO = DefaultDTO.fromJson(response.data as Map<String, dynamic>);
