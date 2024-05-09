@@ -11,6 +11,7 @@ import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
 import 'package:goski_student/data/data_source/cancel_lesson_service.dart';
+import 'package:goski_student/data/data_source/coupon_service.dart';
 import 'package:goski_student/data/data_source/feedback_service.dart';
 import 'package:goski_student/data/data_source/instructor_profile_service.dart';
 import 'package:goski_student/data/data_source/main_service.dart';
@@ -22,6 +23,7 @@ import 'package:goski_student/data/data_source/ski_resort_service.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/data/repository/cancel_lesson_repository.dart';
+import 'package:goski_student/data/repository/coupon_repository.dart';
 import 'package:goski_student/data/repository/feedback_repository.dart';
 import 'package:goski_student/data/repository/instructor_profile_repository.dart';
 import 'package:goski_student/data/repository/main_repository.dart';
@@ -35,6 +37,7 @@ import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
+import 'package:goski_student/view_model/coupon_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
@@ -68,6 +71,7 @@ void initDependencies() {
   Get.put(ReviewService(), permanent: true);
   Get.put(CancelLessonService(), permanent: true);
   Get.put(InstructorProfileService(), permanent: true);
+  Get.put(CouponService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
@@ -80,6 +84,7 @@ void initDependencies() {
   Get.put(ReviewRepository(), permanent: true);
   Get.put(CancelLessonRepository() , permanent: true);
   Get.put(InstructorProfileRepository(), permanent: true);
+  Get.put(CouponRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -94,6 +99,7 @@ void initDependencies() {
   Get.put(ReviewViewModel(), permanent: true);
   Get.put(CancelLessonViewModel() , permanent: true);
   Get.put(InstructorProfileViewModel(), permanent: true);
+  Get.put(CouponViewModel(), permanent: true);
   Get.lazyPut(() => ReservationService());
   Get.lazyPut(() => ReservationRepository());
   Get.lazyPut(() => ReservationViewModel());

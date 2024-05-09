@@ -11,7 +11,6 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 
@@ -37,7 +36,7 @@ class CancelLessonScreen extends StatelessWidget {
 
             if (result) {
               await lessonListViewModel.getLessonList();
-              Get.off(() => LessonListScreen());
+              Get.back();
             }
           },
           child: SingleChildScrollView(
@@ -189,7 +188,7 @@ class CancelLessonScreen extends StatelessWidget {
                             GoskiText(
                                 text: tr('refundCharge'), size: goskiFontMedium),
                             GoskiText(
-                                text: '-${tr('moneyUnit', args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * (100 - cancelLessonViewModel.paybackRate.value))])}',
+                                text: '- ${tr('moneyUnit', args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * (100 - cancelLessonViewModel.paybackRate.value))])}',
                                 size: goskiFontMedium),
                           ],
                         ),
