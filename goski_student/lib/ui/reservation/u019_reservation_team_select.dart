@@ -6,14 +6,19 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+final LessonTeamListViewModel lessonTeamListViewModel =
+    Get.find<LessonTeamListViewModel>();
 
 class ReservationTeamSelectScreen extends StatefulWidget {
   const ReservationTeamSelectScreen({super.key});
@@ -27,6 +32,7 @@ class _ReservationTeamSelectScreenState
     extends State<ReservationTeamSelectScreen> {
   List<Team> teamList = [];
   final format = NumberFormat('###,###,###,###');
+
   @override
   void initState() {
     super.initState();
@@ -35,18 +41,26 @@ class _ReservationTeamSelectScreenState
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: Column(
-        children: [
-          buildSwitch(),
-          Expanded(
-            child: ListView.builder(
-                itemCount: teamList.length,
-                itemBuilder: (context, index) {
-                  return buildTeamCard(teamList[index]);
-                }),
-          ),
-        ],
+    //TODO. List가 제대로 렌더링 되지않음.
+    logger.e(lessonTeamListViewModel.lessonTeams);
+    return Scaffold(
+      appBar: GoskiSubHeader(
+        title: tr('selectTeam'),
+      ),
+      body: GoskiContainer(
+        child: Column(
+          children: [
+            buildSwitch(),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: lessonTeamListViewModel.lessonTeams.length,
+                  itemBuilder: (context, index) {
+                    return buildTeamCard(
+                        lessonTeamListViewModel.lessonTeams[index]);
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -99,6 +113,7 @@ class _ReservationTeamSelectScreenState
               tr('orderByStar')
             ],
             width: screenSizeController.getWidthByRatio(0.6),
+            size: goskiFontSmall,
             onToggle: (index) {
               if (index == 0) {
                 sortByLowerPrice();
@@ -114,7 +129,9 @@ class _ReservationTeamSelectScreenState
     );
   }
 
-  Widget buildTeamCard(Team team) {
+  Widget buildTeamCard(BeginnerResponse team) {
+    logger.d("asdfasdf\n${lessonTeamListViewModel}");
+
     return GestureDetector(
       onTap: () => logger.d("팀 상세 페이지로 이동"),
       child: Padding(
