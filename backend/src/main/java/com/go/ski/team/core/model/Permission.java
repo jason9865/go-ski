@@ -17,8 +17,8 @@ public class Permission {
     private Integer teamInstructorId;
 
     @MapsId
-    @OneToOne
-    @JoinColumn(name = "team_instructor_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_instructor_id",referencedColumnName = "team_instructor_id")
     private TeamInstructor teamInstructor;
 
     @Column(nullable = false)
@@ -37,11 +37,9 @@ public class Permission {
     private boolean costPermission;
 
     @Column(nullable = false)
-    @ColumnDefault("4")
     private Integer position;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     private Integer designatedCost;
 
     public static Permission createPermission(TeamInstructor teamInstructor, TeamInstructorUpdateRequestDTO requestDTO) {
