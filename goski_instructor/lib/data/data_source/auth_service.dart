@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
 import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
@@ -18,10 +19,6 @@ class AuthService extends GetxService {
   final baseUrl = dotenv.env['BASE_URL'];
 
   Future<AuthStatus> loginWithKakao() async {
-    print('======================================================');
-    print(await KakaoSdk.origin);
-    print('======================================================');
-
     try {
       OAuthToken token; // 카카오 로그인 성공 시 받은 토큰을 저장할 변수
       try {
@@ -115,6 +112,8 @@ class AuthService extends GetxService {
   }
 
   Future<bool> instructorSignUp(InstructorRequest instructor) async {
+    FormData formData = FormData();
+
     var uri = Uri.parse('$baseUrl/user/signup/inst');
     var request = http.MultipartRequest('POST', uri);
     String? domainUserKey = await secureStorage.read(key: "domainUserKey");
@@ -199,8 +198,4 @@ class AuthService extends GetxService {
     }
     return false;
   }
-
-  // Future<DefaultDTO> ownerSignIn(Owner owner) async {
-  //   return;
-  // }
 }
