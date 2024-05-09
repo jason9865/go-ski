@@ -19,7 +19,7 @@ class LessonListService extends GetxService {
         '$baseUrl/lesson/list/user',
       );
 
-      if (response.statusCode == 200 &&
+      if (response.data['status'] == 'success' &&
           response.data is Map<String, dynamic> &&
           response.data['data'] is List) {
         List<LessonListItemResponse> data = (response.data['data'] as List)

@@ -10,30 +10,37 @@ import 'package:goski_student/const/text_theme.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
+import 'package:goski_student/data/data_source/cancel_lesson_service.dart';
 import 'package:goski_student/data/data_source/feedback_service.dart';
 import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/data_source/notification_service.dart';
-import 'package:goski_student/data/data_source/settlement_service.dart';
 import 'package:goski_student/data/data_source/reservation_service.dart';
+import 'package:goski_student/data/data_source/review_service.dart';
+import 'package:goski_student/data/data_source/settlement_service.dart';
 import 'package:goski_student/data/data_source/ski_resort_service.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
-import 'package:goski_student/data/repository/reservation_repository.dart';
+import 'package:goski_student/data/repository/cancel_lesson_repository.dart';
 import 'package:goski_student/data/repository/feedback_repository.dart';
 import 'package:goski_student/data/repository/main_repository.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
+import 'package:goski_student/data/repository/reservation_repository.dart';
+import 'package:goski_student/data/repository/review_repository.dart';
 import 'package:goski_student/data/repository/settlement_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
+import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:goski_student/view_model/lesson_team_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
-import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
+import 'package:goski_student/view_model/review_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
@@ -56,6 +63,8 @@ void initDependencies() {
   Get.put(SettlementService(), permanent: true);
   Get.put(FeedbackService(), permanent: true);
   Get.put(ReservationService(), permanent: true);
+  Get.put(ReviewService(), permanent: true);
+  Get.put(CancelLessonService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
@@ -65,6 +74,8 @@ void initDependencies() {
   Get.put(SettlementRepository(), permanent: true);
   Get.put(FeedbackRepository(), permanent: true);
   Get.put(ReservationRepository(), permanent: true);
+  Get.put(ReviewRepository(), permanent: true);
+  Get.put(CancelLessonRepository() , permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -76,6 +87,8 @@ void initDependencies() {
   Get.put(FeedbackViewModel(), permanent: true);
   Get.put(ReservationViewModel(), permanent: true);
   // Get.put(LessonTeamListViewModel(), permanent: true);
+  Get.put(ReviewViewModel(), permanent: true);
+  Get.put(CancelLessonViewModel() , permanent: true);
 }
 
 void main() async {
@@ -84,12 +97,12 @@ void main() async {
   await dotenv.load(fileName: ".env");
   CustomDio.initialize();
   await EasyLocalization.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   initDependencies();
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setFCM();
-  await FlutterDownloader.initialize(debug: true);
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
