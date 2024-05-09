@@ -17,5 +17,6 @@ public class InstructorReviewVO {
     private Integer duration;
     private String representativeName;
     private Integer rating;
+    private String content;
 
 }

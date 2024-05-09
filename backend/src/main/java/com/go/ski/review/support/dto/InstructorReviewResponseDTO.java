@@ -22,6 +22,7 @@ public class InstructorReviewResponseDTO {
     private String lessonTimeInfo;
     private String representativeName;
     private Integer rating;
+    private String content;
     private List<InstructorTagsVO> instructorTags;
 
     public static InstructorReviewResponseDTO toDTO(InstructorReviewVO vo, List<InstructorTagsVO> tags) {
@@ -31,6 +32,7 @@ public class InstructorReviewResponseDTO {
                 .lessonDate(vo.getLessonDate())
                 .representativeName(vo.getRepresentativeName())
                 .rating(vo.getRating())
+                .content(vo.getContent())
                 .lessonTimeInfo(TimeConvertor.calLessonTimeInfo(vo.getStartTime(), vo.getDuration()))
                 .instructorTags(tags)
                 .build()
