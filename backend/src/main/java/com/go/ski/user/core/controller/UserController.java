@@ -130,4 +130,11 @@ public class UserController {
         ProfileInstructorResponseDTO profileInstructorResponseDTO = userService.getInstructor(user, profileUserResponseDTO);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(profileInstructorResponseDTO));
     }
+
+    @GetMapping("/profile/inst/{instructorId}")
+    public ResponseEntity<ApiResponse<?>> getInstructorById(@PathVariable Integer instructorId) {
+        log.info("강사 Id를 통해 강사 프로필 조회");
+        ProfileInstructorResponseDTO profileInstructorResponseDTO = userService.getInstructorById(instructorId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(profileInstructorResponseDTO));
+    }
 }

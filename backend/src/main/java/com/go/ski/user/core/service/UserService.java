@@ -19,6 +19,7 @@ import com.go.ski.user.core.repository.InstructorCertRepository;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.dto.*;
+import com.go.ski.user.support.exception.UserExceptionEnum;
 import com.go.ski.user.support.vo.CertificateImageVO;
 import com.go.ski.user.support.vo.CertificateUrlVO;
 import jakarta.servlet.http.HttpServletResponse;
@@ -163,6 +164,29 @@ public class UserService {
         }
         return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs);
     }
+
+    public ProfileInstructorResponseDTO getInstructorById(Integer instructorId) {
+        User user = userRepository.findById(instructorId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.USER_NOT_FOUND));
+
+        ProfileUserResponseDTO profileUserResponseDTO = getUser(user);
+
+        Instructor instructor = instructorRepository.findById(instructorId)
+                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.INSTRUCTOR_NOT_FOUND));
+        log.info(instructor.getDescription());
+        List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
+
+        List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
+        for (InstructorCert instructorCert : instructorCerts) {
+            certificateUrlVOs.add(CertificateUrlVO.builder()
+                    .certificateId(instructorCert.getCertificate().getCertificateId())
+                    .certificateImageUrl(instructorCert.getCertificateImageUrl())
+                    .build());
+        }
+
+        return new ProfileInstructorResponseDTO(profileUserResponseDTO,certificateUrlVOs,instructor);
+    }
+
 
     public void createTokens(HttpServletResponse response, User user) {
         String accessToken = jwtUtil.createToken(user.getUserId(), user.getRole(), "access");
