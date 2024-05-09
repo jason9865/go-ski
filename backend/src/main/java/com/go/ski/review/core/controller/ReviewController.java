@@ -6,6 +6,7 @@ import com.go.ski.review.support.dto.InstructorReviewResponseDTO;
 import com.go.ski.review.support.dto.ReviewCreateRequestDTO;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.review.support.dto.TagReviewResponseDTO;
+import com.go.ski.user.core.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,15 @@ public class ReviewController {
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<?>> searchInstructorReviews(HttpServletRequest request){
         log.info("====ReviewController.searchInstructorReviews====");
-        List<InstructorReviewResponseDTO> response = reviewService.getInstructorReviews(request);
+        User user = (User) request.getAttribute("user");
+        List<InstructorReviewResponseDTO> response = reviewService.getInstructorReviews(user.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @GetMapping("/list/{instructorId}")
+    public ResponseEntity<ApiResponse<?>> searchInstructorReviewsByInstructorId(@PathVariable Integer instructorId){
+        log.info("====ReviewController.searchInstructorReviews====");
+        List<InstructorReviewResponseDTO> response = reviewService.getInstructorReviews(instructorId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
