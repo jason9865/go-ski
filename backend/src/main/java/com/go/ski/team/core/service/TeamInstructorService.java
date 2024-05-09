@@ -59,7 +59,7 @@ public class TeamInstructorService {
         String deviceType = request.getHeader("DeviceType");
 
         Team team = getTeam(inviteAcceptRequestDTO.getTeamId());
-        Instructor instructor = getInstructor(34);
+        Instructor instructor = getInstructor(user.getUserId());
 
         validateIfExists(team, instructor);
 

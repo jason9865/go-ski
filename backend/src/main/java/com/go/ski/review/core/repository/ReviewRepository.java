@@ -16,7 +16,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findByLesson(Lesson lesson);
 
     @Query("SELECT new com.go.ski.review.support.vo.InstructorReviewVO(" +
-            "r.reviewId, li.lessonId, li.lessonDate, li.startTime, li.duration, l.representativeName, r.rating) " +
+            "r.reviewId, li.lessonId, li.lessonDate, li.startTime, li.duration, l.representativeName, r.rating, r.contents) " +
             "FROM Lesson l " +
             "LEFT OUTER JOIN LessonInfo li " +
             "ON l.lessonId = li.lessonId " +
