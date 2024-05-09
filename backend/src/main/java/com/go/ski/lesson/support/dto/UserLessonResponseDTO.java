@@ -10,8 +10,9 @@ public class UserLessonResponseDTO extends LessonResponseDTO {
     private Integer instructorId;
     private String instructorName;
     private String profileUrl;
-
-    public UserLessonResponseDTO(Lesson lesson, LessonInfo lessonInfo) {
+    private final Integer studentCount;
+    private final Boolean hasReview;
+    public UserLessonResponseDTO(Lesson lesson, LessonInfo lessonInfo, Boolean hasReview) {
         super(lesson, lessonInfo);
         Instructor instructor = lesson.getInstructor();
         if (instructor != null) {
@@ -19,5 +20,7 @@ public class UserLessonResponseDTO extends LessonResponseDTO {
             instructorName = instructor.getUser().getUserName();
             profileUrl = instructor.getUser().getProfileUrl();
         }
+        this.studentCount = lessonInfo.getStudentCount();
+        this.hasReview = hasReview;
     }
 }
