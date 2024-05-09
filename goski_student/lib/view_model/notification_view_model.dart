@@ -10,6 +10,7 @@ class NotificationViewModel extends GetxController {
   RxList<NotificationSetting> notificationSettings =
       <NotificationSetting>[].obs;
   RxBool hasUnread = false.obs;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -25,8 +26,10 @@ class NotificationViewModel extends GetxController {
 
   Future<void> getNotificationList() async {
     notificationList.clear();
+    isLoading.value = true;
     List<Noti> fetchedNotifications =
         await notificationRepository.getNotificationList();
+    isLoading.value = false;
     if (fetchedNotifications.isNotEmpty) {
       notificationList.assignAll(fetchedNotifications);
       readAllNoti();
