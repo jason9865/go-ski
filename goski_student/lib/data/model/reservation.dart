@@ -1,6 +1,9 @@
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
+
+Logger logger = Logger();
 
 class ReservationRequest {
   int resortId;
@@ -29,6 +32,18 @@ class ReservationRequest {
         duration != 0 &&
         level != '';
   }
+
+  Map<String, dynamic> ReservationRequestToJson() {
+    return {
+      "resortId": resortId,
+      "lessonType": lessonType,
+      "studentCount": studentCount,
+      "lessonDate": lessonDate,
+      "startTime": startTime,
+      "duration": duration,
+      "level": level.toUpperCase()
+    };
+  }
 }
 
 class BeginnerResponse {
@@ -38,8 +53,8 @@ class BeginnerResponse {
   String teamProfileUrl;
   List<int> instructors;
   List<TeamImage> teamImages;
-  double rating;
-  int reviewCount;
+  double? rating;
+  int? reviewCount;
   int cost;
 
   BeginnerResponse({
@@ -58,15 +73,22 @@ class BeginnerResponse {
     var list = json['instructors'] as List;
     List<int> instructorsList = list.map((i) => i as int).toList();
 
+    List<TeamImage> teamImages = [];
+    if (json['teamImageVOs'] != null) {
+      teamImages = (json['teamImageVOs'] as List)
+          .map((item) => TeamImage.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+
     return BeginnerResponse(
       teamId: json['teamId'] as int,
       teamName: json['teamName'] as String,
-      description: json['resortLocation'] as String,
-      teamProfileUrl: json['resortLocation'] as String,
+      description: json['description'] as String,
+      teamProfileUrl: json['teamProfileUrl'] as String,
       instructors: instructorsList,
-      teamImages: json['teamImages'] as List<TeamImage>,
-      rating: json['rating'] as double,
-      reviewCount: json['reviewCount'] as int,
+      teamImages: teamImages,
+      rating: json['rating'] as double? ?? 0.0,
+      reviewCount: json['reviewCount'] as int? ?? 0,
       cost: json['cost'] as int,
     );
   }
@@ -77,4 +99,11 @@ class TeamImage {
   String teamImageUrl;
 
   TeamImage({required this.teamImageId, required this.teamImageUrl});
+
+  factory TeamImage.fromJson(Map<String, dynamic> json) {
+    return TeamImage(
+      teamImageId: json['teamImageId'] as int,
+      teamImageUrl: json['imageUrl'] as String,
+    );
+  }
 }
