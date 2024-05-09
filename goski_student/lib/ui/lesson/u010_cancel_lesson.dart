@@ -35,6 +35,7 @@ class CancelLessonScreen extends StatelessWidget {
             bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
 
             if (result) {
+              await lessonListViewModel.getLessonList();
               Get.back();
             }
           },
