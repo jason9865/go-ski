@@ -12,6 +12,7 @@ public enum UserExceptionEnum implements ExceptionEnum {
     WRONG_REQUEST(HttpStatus.BAD_REQUEST, 400, "잘못된 요청입니다."),
     NO_PARAM(HttpStatus.BAD_REQUEST, 400, "데이터가 없습니다."),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST,400,"해당 유저가 존재하지 않습니다."),
+    INSTRUCTOR_NOT_FOUND(HttpStatus.BAD_REQUEST,400,"해당 유저가 존재하지 않습니다."),
     RESIGNED_USER(HttpStatus.BAD_REQUEST, 400, "탈퇴한 유저입니다.");
 
     private final HttpStatus status;
