@@ -35,8 +35,11 @@ class CancelLessonScreen extends StatelessWidget {
           onConfirm: () async {
             bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
 
-            if (result) Get.off(() => LessonListScreen());
-            },
+            if (result) {
+              await lessonListViewModel.getLessonList();
+              Get.off(() => LessonListScreen());
+            }
+          },
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +59,7 @@ class CancelLessonScreen extends StatelessWidget {
                                 isBold: true,
                               )
                             ]),
-                        BuildInterval(),
+                        const BuildInterval(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -137,7 +140,7 @@ class CancelLessonScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                BuildInterval(),
+                const BuildInterval(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: GoskiExpansionTile(
@@ -155,7 +158,7 @@ class CancelLessonScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                BuildInterval(),
+                const BuildInterval(),
                 GoskiCard(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -168,7 +171,7 @@ class CancelLessonScreen extends StatelessWidget {
                           size: goskiFontMedium,
                           isBold: true,
                         ),
-                        BuildInterval(),
+                        const BuildInterval(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -186,8 +189,7 @@ class CancelLessonScreen extends StatelessWidget {
                             GoskiText(
                                 text: tr('refundCharge'), size: goskiFontMedium),
                             GoskiText(
-                                text: tr('moneyUnit',
-                                    args: [formatFromString('50000')]),
+                                text: '-${tr('moneyUnit', args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * (100 - cancelLessonViewModel.paybackRate.value))])}',
                                 size: goskiFontMedium),
                           ],
                         ),
@@ -205,7 +207,7 @@ class CancelLessonScreen extends StatelessWidget {
                             ),
                             GoskiText(
                               text: tr('moneyUnit',
-                                  args: [formatFromString('100000')]),
+                                  args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * cancelLessonViewModel.paybackRate.value)]),
                               size: goskiFontMedium,
                             ),
                           ],

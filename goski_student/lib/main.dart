@@ -12,6 +12,7 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/auth_service.dart';
 import 'package:goski_student/data/data_source/cancel_lesson_service.dart';
 import 'package:goski_student/data/data_source/feedback_service.dart';
+import 'package:goski_student/data/data_source/instructor_profile_service.dart';
 import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/data_source/notification_service.dart';
 import 'package:goski_student/data/data_source/reservation_service.dart';
@@ -22,6 +23,7 @@ import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/data/repository/auth_repository.dart';
 import 'package:goski_student/data/repository/cancel_lesson_repository.dart';
 import 'package:goski_student/data/repository/feedback_repository.dart';
+import 'package:goski_student/data/repository/instructor_profile_repository.dart';
 import 'package:goski_student/data/repository/main_repository.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
@@ -34,6 +36,7 @@ import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
+import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
@@ -64,6 +67,7 @@ void initDependencies() {
   Get.put(ReservationService(), permanent: true);
   Get.put(ReviewService(), permanent: true);
   Get.put(CancelLessonService(), permanent: true);
+  Get.put(InstructorProfileService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
@@ -74,7 +78,8 @@ void initDependencies() {
   Get.put(FeedbackRepository(), permanent: true);
   Get.put(ReservationRepository(), permanent: true);
   Get.put(ReviewRepository(), permanent: true);
-  Get.put(CancelLessonRepository(), permanent: true);
+  Get.put(CancelLessonRepository() , permanent: true);
+  Get.put(InstructorProfileRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
@@ -87,7 +92,12 @@ void initDependencies() {
   Get.put(ReservationViewModel(), permanent: true);
   // Get.put(LessonTeamListViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
-  Get.put(CancelLessonViewModel(), permanent: true);
+  Get.put(CancelLessonViewModel() , permanent: true);
+  Get.put(InstructorProfileViewModel(), permanent: true);
+  Get.lazyPut(() => ReservationService());
+  Get.lazyPut(() => ReservationRepository());
+  Get.lazyPut(() => ReservationViewModel());
+  Get.lazyPut(() => LessonTeamListViewModel());
 }
 
 void main() async {
@@ -139,8 +149,6 @@ class MyApp extends StatelessWidget {
             mediaQueryData.size.width,
             mediaQueryData.size.height,
           );
-          logger.d(
-              "ScreenHeight: ${screenSizeController.height}, ScreenWidth: ${screenSizeController.width}");
           if (snapshot.data != null) {
             return StudentMainScreen();
           } else {

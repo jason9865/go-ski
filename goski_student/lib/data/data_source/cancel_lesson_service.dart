@@ -36,7 +36,7 @@ class CancelLessonService extends GetxService {
 
   Future<DefaultDTO?> cancelLesson(int lessonId) async {
     try {
-      dynamic response = await CustomDio.dio.delete(
+      dynamic response = await CustomDio.dio.post(
         '$baseUrl/payment/reserve/cancel',
         data: { 'lessonId': lessonId },
         options: Options(
