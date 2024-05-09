@@ -1,237 +1,235 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/text_formatter.dart';
+import 'package:goski_student/data/model/lesson_list_response.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
+import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
+import 'package:goski_student/view_model/lesson_list_view_model.dart';
 
 class CancelLessonScreen extends StatelessWidget {
-  const CancelLessonScreen({super.key});
+  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
+  final lessonListViewModel = Get.find<LessonListViewModel>();
+
+  CancelLessonScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _Reservation reservation = _Reservation(
-      resortName: '지산스키장',
-      teamName: '고승민의 스키교실',
-      instructorName: '고승민',
-      startTime: DateTime(2024, 1, 1, 15, 0),
-      endTime: DateTime(2024, 1, 1, 17, 0),
-      numberOfStudents: 3,
-      payment: 160000,
-      charge: 48000,
-      finalPrice: 112000,
-    );
+    LessonListItem lesson = lessonListViewModel.selectedLesson.value;
 
-    return Scaffold(
-      appBar: GoskiSubHeader(
-        title: tr('cancelLesson'),
-      ),
-      body: GoskiContainer(
-        buttonName: "cancelLesson",
-        onConfirm: () {
-          //TODO. 예약 취소 기능
-          print("예약취소");
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GoskiCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Obx(
+      () => Scaffold(
+        appBar: GoskiSubHeader(
+          title: tr('cancelLesson'),
+        ),
+        body: GoskiContainer(
+          buttonName: "cancelLesson",
+          onConfirm: () async {
+            bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
+
+            if (result) Get.off(() => LessonListScreen());
+            },
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GoskiCard(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GoskiText(
+                                text: tr('reservationInfo'),
+                                size: goskiFontLarge,
+                                isBold: true,
+                              )
+                            ]),
+                        BuildInterval(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  GoskiText(
+                                      text: tr(lesson.resortName),
+                                      size: goskiFontMedium),
+                                  GoskiText(
+                                      text: tr(' - '), size: goskiFontMedium),
+                                  GoskiText(
+                                      text: tr(lesson.teamName),
+                                      size: goskiFontMedium),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GoskiText(
+                                      text: tr('designatedInstructor',
+                                          args: [lesson.instructorName == null ? '이름 없음' : lesson.instructorName!]),
+                                      size: goskiFontMedium),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GoskiText(
+                                text: tr('date'),
+                                size: goskiFontSmall,
+                                color: goskiDarkGray,
+                              ),
+                              dateRow(lesson),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GoskiText(
+                                text: tr('studentNumber'),
+                                size: goskiFontSmall,
+                                color: goskiDarkGray,
+                              ),
+                              GoskiText(
+                                  text: tr(
+                                      '${lesson.studentCount.toString()} 명'),
+                                  size: goskiFontMedium),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GoskiText(
+                                text: tr('paymentAmount'),
+                                size: goskiFontMedium,
+                              ),
+                              GoskiText(
+                                text: tr('moneyUnit',
+                                    args: [formatFromInt(cancelLessonViewModel.lessonCost.value)]),
+                                size: goskiFontMedium,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                BuildInterval(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: GoskiExpansionTile(
+                    title: GoskiText(
+                      text: tr('refundPolicy'),
+                      size: goskiFontMedium,
+                    ),
+                    backgroundColor: goskiLightGray,
+                    radius: 15,
                     children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GoskiText(
-                              text: tr('reservationInfo'),
-                              size: goskiFontLarge,
-                              isBold: true,
-                            )
-                          ]),
-                      BuildInterval(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                GoskiText(
-                                    text: tr(reservation.resortName),
-                                    size: goskiFontMedium),
-                                GoskiText(
-                                    text: tr(' - '), size: goskiFontMedium),
-                                GoskiText(
-                                    text: tr(reservation.teamName),
-                                    size: goskiFontMedium),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                GoskiText(
-                                    text: tr('designatedInstructor',
-                                        args: [reservation.instructorName]),
-                                    size: goskiFontMedium),
-                              ],
-                            ),
-                          ],
-                        ),
+                      GoskiText(
+                        text: tr('refundPolicyDetail'),
+                        size: goskiFontMedium,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GoskiText(
-                              text: tr('date'),
-                              size: goskiFontSmall,
-                              color: goskiDarkGray,
-                            ),
-                            dateRow(reservation),
-                          ],
+                    ],
+                  ),
+                ),
+                BuildInterval(),
+                GoskiCard(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoskiText(
+                          text: tr("checkRefund"),
+                          size: goskiFontMedium,
+                          isBold: true,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GoskiText(
-                              text: tr('studentNumber'),
-                              size: goskiFontSmall,
-                              color: goskiDarkGray,
-                            ),
-                            GoskiText(
-                                text: tr(
-                                    '${reservation.numberOfStudents.toString()} 명'),
-                                size: goskiFontMedium),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                        BuildInterval(),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GoskiText(
-                              text: tr('paymentAmount'),
+                                text: tr('paymentAmount'), size: goskiFontMedium),
+                            GoskiText(
+                                text: tr('moneyUnit',
+                                    args: [formatFromInt(cancelLessonViewModel.lessonCost.value)]),
+                                size: goskiFontMedium),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GoskiText(
+                                text: tr('refundCharge'), size: goskiFontMedium),
+                            GoskiText(
+                                text: tr('moneyUnit',
+                                    args: [formatFromString('50000')]),
+                                size: goskiFontMedium),
+                          ],
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          height: 15,
+                          color: goskiDashGray,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GoskiText(
+                              text: tr('expectedRefund'),
                               size: goskiFontMedium,
                             ),
                             GoskiText(
                               text: tr('moneyUnit',
-                                  args: [formatFromString(reservation.payment.toString())]),
+                                  args: [formatFromString('100000')]),
                               size: goskiFontMedium,
-                            )
+                            ),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              BuildInterval(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: GoskiExpansionTile(
-                  title: GoskiText(
-                    text: tr('refundPolicy'),
-                    size: goskiFontMedium,
-                  ),
-                  backgroundColor: goskiLightGray,
-                  radius: 15,
-                  children: [
-                    SizedBox(
-                      height: screenSizeController.getHeightByRatio(0.01),
+                      ],
                     ),
-                    GoskiText(
-                      text: tr("환불 규정 내용이 들어가야 합니다"),
-                      size: goskiFontMedium,
-                    ),
-                  ],
-                ),
-              ),
-              BuildInterval(),
-              GoskiCard(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GoskiText(
-                        text: tr("checkRefund"),
-                        size: goskiFontMedium,
-                        isBold: true,
-                      ),
-                      BuildInterval(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GoskiText(
-                              text: tr('paymentAmount'), size: goskiFontMedium),
-                          GoskiText(
-                              text: tr('moneyUnit',
-                                  args: [formatFromString(reservation.payment.toString())]),
-                              size: goskiFontMedium),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GoskiText(
-                              text: tr('refundCharge'), size: goskiFontMedium),
-                          GoskiText(
-                              text: tr('moneyUnit',
-                                  args: [formatFromString(reservation.charge.toString())]),
-                              size: goskiFontMedium),
-                        ],
-                      ),
-                      Divider(
-                        thickness: 1,
-                        height: 15,
-                        color: goskiDashGray,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GoskiText(
-                            text: tr('expectedRefund'),
-                            size: goskiFontMedium,
-                          ),
-                          GoskiText(
-                            text: tr('moneyUnit',
-                                args: [formatFromString(reservation.finalPrice.toString())]),
-                            size: goskiFontMedium,
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ),
-              ),
-              BuildInterval(),
-            ],
+                const BuildInterval(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget dateRow(_Reservation reservation) {
+  Widget dateRow(LessonListItem lesson) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GoskiText(
           text: DateFormat('yyyy.MM.dd (E)')
-              .format(reservation.startTime)
+              .format(lesson.startTime)
               .toString(),
           size: goskiFontMedium,
         ),
@@ -239,11 +237,11 @@ class CancelLessonScreen extends StatelessWidget {
           children: [
             GoskiText(
               text:
-                  DateFormat('HH:mm').format(reservation.startTime).toString(),
+                  DateFormat('HH:mm').format(lesson.startTime).toString(),
               size: goskiFontMedium,
             ),
             GoskiText(
-              text: DateFormat('~HH:mm').format(reservation.endTime).toString(),
+              text: DateFormat('~HH:mm').format(lesson.endTime).toString(),
               size: goskiFontMedium,
             ),
           ],
@@ -251,28 +249,4 @@ class CancelLessonScreen extends StatelessWidget {
       ],
     );
   }
-}
-
-class _Reservation {
-  final String resortName;
-  final String teamName;
-  final String instructorName;
-  final DateTime startTime;
-  final DateTime endTime;
-  final int numberOfStudents;
-  final int payment;
-  final int charge;
-  final int finalPrice;
-
-  _Reservation({
-    required this.resortName,
-    required this.teamName,
-    required this.instructorName,
-    required this.startTime,
-    required this.endTime,
-    required this.numberOfStudents,
-    required this.payment,
-    required this.charge,
-    required this.finalPrice,
-  });
 }
