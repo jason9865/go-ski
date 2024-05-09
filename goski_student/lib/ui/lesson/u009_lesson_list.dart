@@ -17,12 +17,16 @@ import 'package:goski_student/ui/lesson/d_u012_send_message.dart';
 import 'package:goski_student/ui/lesson/u010_cancel_lesson.dart';
 import 'package:goski_student/ui/lesson/u014_feedback.dart';
 import 'package:goski_student/ui/lesson/u015_review.dart';
+import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
+import 'package:goski_student/view_model/review_view_model.dart';
 
 class LessonListScreen extends StatelessWidget {
   final lessonListViewModel = Get.find<LessonListViewModel>();
   final feedbackViewModel = Get.find<FeedbackViewModel>();
+  final reviewViewModel = Get.find<ReviewViewModel>();
+  final cancelLessonViewModel = Get.find<CancelLessonViewModel>();
 
   LessonListScreen({super.key});
 
@@ -65,17 +69,13 @@ class LessonListScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 final lesson = lessonListViewModel.lessonList[index];
                 final now = DateTime.now();
-                String lessonStatus = 'notStart';
-                Color lessonBackgroundColor = goskiDarkPink;
-
-                if (lesson.startTime.isBefore(now) &&
-                    lesson.endTime.isAfter(now)) {
-                  lessonStatus = 'onGoing';
-                  lessonBackgroundColor = goskiBlue;
-                } else if (lesson.endTime.isBefore(now)) {
-                  lessonStatus = 'lessonFinished';
-                  lessonBackgroundColor = goskiGreen;
-                }
+                String lessonStatus = lesson.lessonStatus;
+                if (lessonStatus == 'yesFeedback') lessonStatus = 'lessonFinished';
+                Color lessonBackgroundColor = lessonStatus == 'notStart'
+                    ? goskiDarkPink
+                    : lessonStatus == 'onGoing'
+                        ? goskiBlue
+                        : goskiGreen;
 
                 List<Widget> buttons = [];
                 if (lessonStatus == 'notStart') {
@@ -85,7 +85,9 @@ class LessonListScreen extends StatelessWidget {
                     tr('cancelLesson'),
                     lesson,
                     () {
-                      goToCancelLessonScreen();
+                      goToCancelLessonScreen(
+                        lesson
+                      );
                     },
                   ));
                 }
@@ -163,19 +165,19 @@ class LessonListScreen extends StatelessWidget {
     });
   }
 
-  void goToCancelLessonScreen() {
-    Get.to(() => const CancelLessonScreen());
+  void goToCancelLessonScreen(LessonListItem lesson) async {
+    lessonListViewModel.selectedLesson.value = lesson;
+    cancelLessonViewModel.getLessonCost(lesson.lessonId);
+
+    Get.to(() => CancelLessonScreen());
   }
 
-  void goToReviewScreen(LessonListItem lesson) {
-    Get.to(() => ReviewScreen(
-          resortName: lesson.resortName,
-          teamName: lesson.teamName,
-          instructorName:
-              lesson.instructorName != null ? lesson.instructorName! : '이름 없음',
-          startTime: lesson.startTime,
-          endTime: lesson.endTime,
-        ));
+  void goToReviewScreen(LessonListItem lesson) async {
+    lessonListViewModel.selectedLesson.value = lesson;
+    await reviewViewModel.getReviewTagList();
+    reviewViewModel.initReview();
+
+    Get.to(() => ReviewScreen());
   }
 
   void goToFeedbackScreen(LessonListItem lesson) async {

@@ -12,6 +12,8 @@ class LessonListItemResponse {
   DateTime startTime;
   int duration;
   String lessonStatus;
+  bool hasReview;
+  int studentCount;
 
   LessonListItemResponse({
     required this.lessonId,
@@ -25,13 +27,15 @@ class LessonListItemResponse {
     required this.startTime,
     required this.duration,
     required this.lessonStatus,
+    required this.hasReview,
+    required this.studentCount,
   });
 
   factory LessonListItemResponse.fromJson(Map<String, dynamic> json) {
     String timeString = json['startTime'];
     String formattedTimeString = "${timeString.substring(0, 2)}:${timeString.substring(2)}";
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    String lessonDate = json['lessonDate'];
+    String formattedDate = DateFormat('yyyy-MM-dd').parse(lessonDate).toString();
     String combinedDateTimeString = "$formattedDate $formattedTimeString";
     DateTime dateTime = DateFormat("yyyy-MM-dd HH:mm").parse(combinedDateTimeString);
 
@@ -43,11 +47,18 @@ class LessonListItemResponse {
       instructorName: json['instructorName'] as String?,
       profileUrl: json['profileUrl'] as String?,
       resortName: json['resortName'] as String,
-      lessonDate: DateTime.parse(json['lessonDate']),
+      lessonDate: DateTime.parse(lessonDate),
       startTime: dateTime,
       duration: json['duration'] as int,
       lessonStatus: json['lessonStatus'] as String,
+      hasReview: json['hasReview'] as bool,
+      studentCount: json['studentCount'] as int,
     );
+  }
+
+  @override
+  String toString() {
+    return 'LessonListItemResponse{lessonId: $lessonId, teamId: $teamId, teamName: $teamName, instructorId: $instructorId, instructorName: $instructorName, profileUrl: $profileUrl, resortName: $resortName, lessonDate: $lessonDate, startTime: $startTime, duration: $duration, lessonStatus: $lessonStatus, hasReview: $hasReview, studentCount: $studentCount}';
   }
 }
 
@@ -64,6 +75,8 @@ class LessonListItem {
   DateTime endTime;
   int duration;
   String lessonStatus;
+  bool hasReview;
+  int studentCount;
 
   LessonListItem({
     required this.lessonId,
@@ -78,11 +91,13 @@ class LessonListItem {
     required this.endTime,
     required this.duration,
     required this.lessonStatus,
+    required this.hasReview,
+    required this.studentCount,
   });
 
   @override
   String toString() {
-    return 'LessonListItem{lessonId: $lessonId, teamId: $teamId, teamName: $teamName, instructorId: $instructorId, instructorName: $instructorName, profileUrl: $profileUrl, resortName: $resortName, lessonDate: $lessonDate, startTime: $startTime, endTime: $endTime, duration: $duration, lessonStatus: $lessonStatus}';
+    return 'LessonListItem{lessonId: $lessonId, teamId: $teamId, teamName: $teamName, instructorId: $instructorId, instructorName: $instructorName, profileUrl: $profileUrl, resortName: $resortName, lessonDate: $lessonDate, startTime: $startTime, endTime: $endTime, duration: $duration, lessonStatus: $lessonStatus, hasReview: $hasReview, studentCount: $studentCount}';
   }
 }
 
@@ -101,6 +116,8 @@ extension LessonListItemResponseToLessonListItem on LessonListItemResponse {
       endTime: startTime.add(Duration(hours: duration)),
       duration: duration,
       lessonStatus: lessonStatus,
+      hasReview: hasReview,
+      studentCount: studentCount,
     );
   }
 }
