@@ -94,7 +94,22 @@ public class LessonService {
 
     public List<ReserveAdvancedResponseDTO> getInstructorsInTeam(int teamId, ReserveNoviceTeamRequestDTO reserveNoviceTeamRequestDTO) {
         List<ReserveAdvancedResponseDTO> reserveAdvancedResponseDTOs = new ArrayList<>();
-        for (int instructorId : reserveNoviceTeamRequestDTO.getInstructorsList()) {
+        List<Integer> instructors = reserveNoviceTeamRequestDTO.getInstructorsList();
+        Map<Integer, Integer> instructorPositionMap = new HashMap<>();
+        for (int instructorId : instructors) {
+            Integer teamInstructorId = teamInstructorRepository.findTeamInstructorIdByInstructorIdAndTeamId(instructorId, teamId);
+            Permission permission = permissionRepository.findById(teamInstructorId).orElseThrow();
+            int tmpPosition = permission.getPosition();
+            // instructorId와 tmpPosition을 맵에 저장
+            instructorPositionMap.put(instructorId, tmpPosition);
+        }
+
+        List<Integer> sortedInstructorsByPosition = instructorPositionMap.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .toList();
+
+        for (int instructorId : sortedInstructorsByPosition) {
             try {
                 Instructor instructor = instructorRepository.findById(instructorId).orElseThrow();
                 Team team = teamRepository.findById(teamId).orElseThrow();
