@@ -132,7 +132,7 @@ public class LessonService {
             try {
                 LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
                 Boolean hasReview = Boolean.TRUE;
-                if (reviewRepository.findByLesson(lesson).isEmpty()) hasReview = Boolean.TRUE;
+                if (reviewRepository.findByLesson(lesson).isEmpty()) hasReview = Boolean.FALSE;
                 userLessonResponseDTOs.add(new UserLessonResponseDTO(lesson, lessonInfo, hasReview));
             } catch (NoSuchElementException ignored) {
             }
