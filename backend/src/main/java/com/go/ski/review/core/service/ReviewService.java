@@ -92,9 +92,8 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<InstructorReviewResponseDTO> getInstructorReviews(HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
-        Instructor instructor = instructorRepository.findById(user.getUserId())
+    public List<InstructorReviewResponseDTO> getInstructorReviews(Integer userId) {
+        Instructor instructor = instructorRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 강사가 없습니다!")); // 추후 변경 예정
 
         List<InstructorReviewVO> instructorReviews = reviewRepository.findByInstructor(instructor);
