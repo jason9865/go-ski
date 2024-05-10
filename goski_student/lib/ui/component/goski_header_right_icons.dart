@@ -36,7 +36,7 @@ Widget headerRightIcons(BuildContext context) {
       IconButton(
         icon: const Icon(Icons.settings),
         onPressed: () {
-          Get.to(() => const SettingScreen());
+          Get.to(() => SettingScreen());
         },
       ),
     ],

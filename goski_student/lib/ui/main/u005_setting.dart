@@ -9,7 +9,12 @@ import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/main/d_u007_notification_setting.dart';
+import 'package:goski_student/ui/main/u029_term.dart';
+import 'package:goski_student/ui/main/u030_guide.dart';
+import 'package:goski_student/ui/main/u031_ask.dart';
+import 'package:goski_student/ui/user/d_u032_resign.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
+import 'package:goski_student/view_model/use_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -17,8 +22,9 @@ final screenSizeController = Get.find<ScreenSizeController>();
 
 class SettingScreen extends StatelessWidget {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  final UserViewModel userViewModel = Get.find();
 
-  const SettingScreen({super.key});
+  SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +71,17 @@ class SettingScreen extends StatelessWidget {
                         ),
                         SettingContent(
                           content: tr('term'),
-                          onConfirm: () => logger.d("약관"),
+                          onConfirm: () => Get.to(() => const TermScreen()),
                         ),
                         buildDivider(),
                         SettingContent(
                           content: tr('guide'),
-                          onConfirm: () => logger.d("도움말"),
+                          onConfirm: () => Get.to(() => const GuideScreen()),
                         ),
                         buildDivider(),
                         SettingContent(
                           content: tr('ask'),
-                          onConfirm: () => logger.d("문의"),
+                          onConfirm: () => Get.to(() => const AskScreen()),
                         ),
                       ],
                     ),
@@ -89,13 +95,36 @@ class SettingScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(
-                          screenSizeController.getWidthByRatio(0.03)),
-                      child: GoskiText(
-                        text: tr('deleteUser'),
-                        size: goskiFontMedium,
-                        color: goskiDarkGray,
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return GoskiModal(
+                              title: tr('deleteUser'),
+                              child: ResignConfirmDialog(
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onConfirm: () async {
+                                  await userViewModel.requestResign();
+                                  if (context.mounted) Navigator.pop(context);
+                                  secureStorage.deleteAll();
+                                  Get.offAll(() => const LoginScreen());
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            screenSizeController.getWidthByRatio(0.03)),
+                        child: GoskiText(
+                          text: tr('deleteUser'),
+                          size: goskiFontMedium,
+                          color: goskiDarkGray,
+                        ),
                       ),
                     )
                   ],
@@ -119,6 +148,7 @@ class SettingScreen extends StatelessWidget {
 class SettingContent extends StatelessWidget {
   final String content;
   final VoidCallback? onConfirm;
+
   const SettingContent({
     required this.content,
     required this.onConfirm,
@@ -154,6 +184,7 @@ class SettingContent extends StatelessWidget {
 
 class SettingTitle extends StatelessWidget {
   final String title;
+
   const SettingTitle({
     required this.title,
     super.key,
