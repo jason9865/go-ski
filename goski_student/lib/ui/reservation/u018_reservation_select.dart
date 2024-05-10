@@ -21,7 +21,7 @@ import 'package:logger/logger.dart';
 
 Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
-final SkiResortViewModel skiResortViewModel = Get.put(SkiResortViewModel());
+final SkiResortViewModel skiResortViewModel = Get.find<SkiResortViewModel>();
 final ReservationViewModel reservationViewModel =
     Get.find<ReservationViewModel>();
 
@@ -86,7 +86,7 @@ class _SkiResortDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // logger.d(skiResortViewModel.skiResortNames);
+    logger.d(skiResortViewModel.skiResortNames);
 
     return Row(
       children: [

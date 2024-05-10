@@ -25,13 +25,29 @@ class SkiResortService extends GetxService {
         ),
       );
       logger.d(response.data);
-      return (response.data as List)
-          .map<SkiResort>(
-              (json) => SkiResort.fromJson(json as Map<String, dynamic>))
-          .toList();
+
+      if (response.statusCode == 200 &&
+          response.data is Map<String, dynamic> &&
+          response.data['data'] is List) {
+        // List<BeginnerResponse> data = (response.data['data'] as List)
+        //     .map<BeginnerResponse>((json) =>
+        //         BeginnerResponse.fromJson(json as Map<String, dynamic>))
+        //     .toList();
+        List<dynamic> dataList = response.data['data'];
+        List<SkiResort> resortList = dataList
+            .map<SkiResort>(
+                (json) => SkiResort.fromJson(json as Map<String, dynamic>))
+            .toList();
+        logger.d('SkiResortService - getSkiResorts - 응답 성공 ${resortList}');
+
+        return resortList;
+      } else {
+        logger.e('SkiResortService - getSkiResorts - 응답 실패 ${response.data}');
+      }
     } on DioError catch (e) {
       logger.e("Failed to fetch ski resorts: ${e.message}");
       return []; // Return an empty list on error or throw a custom exception
     }
+    return [];
   }
 }
