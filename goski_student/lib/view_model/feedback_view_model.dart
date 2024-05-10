@@ -55,12 +55,6 @@ class FeedbackViewModel extends GetxController {
   }
 
   static void downloadCallback(String id, int status, int progress) {
-    print(
-        '======================================================================================');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-    print(
-        '======================================================================================');
     final SendPort send =
         IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);

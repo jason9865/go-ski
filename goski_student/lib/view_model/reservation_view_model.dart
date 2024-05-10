@@ -42,7 +42,7 @@ class LessonTeamListViewModel extends GetxController {
   Future<void> getLessonTeamList(ReservationRequest reservationRequest) async {
     lessonTeams.value = await _reservationRepository
         .getBeginnerLessonTeamInfo(reservationRequest);
-    lessonTeams.value.sort((a, b) => a.cost.compareTo(b.cost));
+    lessonTeams.sort((a, b) => a.cost.compareTo(b.cost));
   }
 }
 

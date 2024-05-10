@@ -10,7 +10,6 @@ import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/reservation/u021_reservation_team_detail.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:logger/logger.dart';

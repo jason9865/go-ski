@@ -5,7 +5,6 @@ import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
-import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
 class ReservationCompleteScreen extends StatefulWidget {
@@ -42,7 +41,6 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
       buttonName: "toMain",
       onConfirm: () {
         //TODO. 예약 취소 기능
-        print("메인으로 가기");
       },
       child: SingleChildScrollView(
         child: Column(
@@ -55,7 +53,7 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
               fit: BoxFit.fitHeight,
             ),
             GoskiText(text: tr('completePayment'), size: goskiFontXLarge),
-            BuildInterval(),
+            const BuildInterval(),
             GoskiCard(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -69,7 +67,7 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
                         isBold: true,
                       )
                     ]),
-                    BuildInterval(),
+                    const BuildInterval(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

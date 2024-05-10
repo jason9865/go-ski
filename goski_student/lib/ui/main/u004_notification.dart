@@ -210,7 +210,7 @@ class FeedbackNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
     return GestureDetector(
-      onTap: () => Get.off(() => LessonListScreen()),
+      onTap: () => Get.off(() => const LessonListScreen()),
       onLongPress: () {
         showDialog(
           context: context,
