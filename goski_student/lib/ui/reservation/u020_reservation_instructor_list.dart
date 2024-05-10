@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
@@ -210,7 +209,7 @@ class _ReservationInstructorListScreenState
                           child: Text(
                             instructor.description,
                             textScaleFactor: 1.0,
-                            style: TextStyle(fontSize: goskiFontLarge),
+                            style: const TextStyle(fontSize: goskiFontLarge),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -226,7 +225,7 @@ class _ReservationInstructorListScreenState
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.star, color: goskiYellow),
+                          const Icon(Icons.star, color: goskiYellow),
                           GoskiText(
                               text:
                                   '${instructor.rating.toStringAsFixed(1)} (${instructor.reviewCount})',

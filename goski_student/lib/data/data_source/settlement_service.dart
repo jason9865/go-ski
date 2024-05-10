@@ -25,14 +25,14 @@ class SettlementService extends GetxService {
             .map<SettlementResponse>((json) =>
             SettlementResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('SettlementService - getSettlementList - 응답 성공 ${data}');
+        logger.d('SettlementService - getSettlementList - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('SettlementService - getSettlementList - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('SettlementService - getSettlementList - 응답 실패 ${e}');
+      logger.e('SettlementService - getSettlementList - 응답 실패 $e');
     }
 
     return [];

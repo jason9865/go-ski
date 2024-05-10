@@ -121,7 +121,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       size: goskiFontSmall,
                       color: goskiDarkGray,
                     ),
-                    GoskiText(
+                    const GoskiText(
                       text: '2024.00.00 (월)\n15:00 ~ 17:00',
                       size: goskiFontMedium,
                     ),
@@ -131,7 +131,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       size: goskiFontSmall,
                       color: goskiDarkGray,
                     ),
-                    GoskiText(
+                    const GoskiText(
                       text: '3명',
                       size: goskiFontMedium,
                     ),

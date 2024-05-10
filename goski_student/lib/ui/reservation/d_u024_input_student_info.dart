@@ -55,7 +55,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
               builder: (context, constraints) {
                 double parentWidth = constraints.maxWidth;
                 return GoskiSwitch(
-                  items: ['남자', '여자'],
+                  items: [tr('MALE'), tr('FEMALE')],
                   width: parentWidth,
                 );
               },
@@ -70,8 +70,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             GoskiSelectGrid(
               items: StudentInfoList().heightList,
               rows: 2,
-              onItemClicked: (int) {
-                print("신장 ${int + 1}번째 아이템 클릭 됨");
+              onItemClicked: (index) {
               },
             ),
             SizedBox(height: contentPadding),
@@ -84,8 +83,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             GoskiSelectGrid(
               items: StudentInfoList().ageList,
               rows: 2,
-              onItemClicked: (int) {
-                print("나이 ${int + 1}번째 아이템 클릭 됨");
+              onItemClicked: (index) {
               },
             ),
             SizedBox(height: contentPadding),
@@ -98,8 +96,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             GoskiSelectGrid(
               items: StudentInfoList().weightList,
               rows: 2,
-              onItemClicked: (int) {
-                print("체중 ${int + 1}번째 아이템 클릭 됨");
+              onItemClicked: (index) {
               },
             ),
             SizedBox(height: contentPadding),

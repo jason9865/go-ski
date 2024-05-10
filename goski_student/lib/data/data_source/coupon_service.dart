@@ -22,14 +22,14 @@ class CouponService extends GetxService {
             .map<CouponResponse>((json) =>
             CouponResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('CouponService - getCouponList - 응답 성공 ${data}');
+        logger.d('CouponService - getCouponList - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('CouponService - getCouponList - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('CouponService - getCouponList - 응답 실패 ${e}');
+      logger.e('CouponService - getCouponList - 응답 실패 $e');
     }
 
     return [];
