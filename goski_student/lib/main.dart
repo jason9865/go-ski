@@ -32,6 +32,7 @@ import 'package:goski_student/data/repository/reservation_repository.dart';
 import 'package:goski_student/data/repository/review_repository.dart';
 import 'package:goski_student/data/repository/settlement_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
+import 'package:goski_student/data/repository/user_repository.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
@@ -49,6 +50,7 @@ import 'package:goski_student/view_model/review_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
+import 'package:goski_student/view_model/use_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 
@@ -75,6 +77,7 @@ void initDependencies() {
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(SkiResortRepository(), permanent: true);
+  Get.put(UserRepository(), permanent: true);
   Get.put(NotificationRepository(), permanent: true);
   Get.put(MainRepository(), permanent: true);
   Get.put(LessonListRepository(), permanent: true);
@@ -88,6 +91,7 @@ void initDependencies() {
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
+  Get.put(UserViewModel(), permanent: true);
   Get.put(SkiResortViewModel(), permanent: true);
   Get.put(NotificationViewModel(), permanent: true);
   Get.put(MainViewModel(), permanent: true);

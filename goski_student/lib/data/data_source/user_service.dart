@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
+import 'package:goski_student/data/model/default_dto.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
@@ -30,5 +31,26 @@ class UserService extends GetxService {
     } catch (e) {
       logger.e('Error sending FCMToken to the server: $e');
     }
+  }
+
+  Future<DefaultDTO?> requestResign() async {
+    try {
+      dynamic response = await CustomDio.dio.delete(
+          '$baseUrl/user/resign',
+      );
+
+      if (response.data['status'] == "success") {
+        logger.d('UserService - requestResign - 응답 성공');
+        DefaultDTO defaultDTO =
+        DefaultDTO.fromJson(response.data as Map<String, dynamic>);
+        return defaultDTO;
+      } else {
+        logger.e('UserService - requestResign - 응답 실패 ${response.body}');
+      }
+    } catch (e) {
+      logger.e('UserService - requestResign - 응답 실패 $e');
+    }
+
+    return null;
   }
 }
