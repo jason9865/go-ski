@@ -21,7 +21,7 @@ class ReservationRequest {
     this.lessonDate = '',
     this.startTime = '',
     this.duration = 0,
-    this.level = '',
+    this.level = 'BEGINNER',
   });
 
   bool isValid() {

@@ -14,11 +14,16 @@ class ReservationViewModel extends GetxController {
   }
 
   void setLessonDate(String date) {
-    reservation.value.lessonDate = date;
+    reservation.update((val) {
+      val?.lessonDate = date;
+    });
+    // reservation.value.lessonDate = date;
   }
 
   void setStartTime(String time) {
-    reservation.value.startTime = time;
+    reservation.update((val) {
+      val?.startTime = time;
+    });
   }
 
   void submitReservation() {
