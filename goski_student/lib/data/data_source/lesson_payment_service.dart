@@ -1,0 +1,73 @@
+import 'dart:math';
+
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:goski_student/const/util/custom_dio.dart';
+import 'package:goski_student/data/model/default_dto.dart';
+import 'package:goski_student/data/model/lesson_payment.dart';
+
+import '../../main.dart';
+
+class LessonPaymentService extends GetxService {
+  final baseUrl = dotenv.env['BASE_URL'];
+
+  Future<DefaultDTO?> teamLessonPayment(
+      Map<String, dynamic> teamLessonPaymentRequest) async {
+    try {
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/payment/reserve/prepare',
+        data: teamLessonPaymentRequest,
+        options: Options(
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        ),
+      );
+
+      logger.d(response.data);
+      if (response.data['status'] == 'success') {
+        logger.d('LessonPaymentService - teamLessonPayment - 응답 성공');
+        DefaultDTO defaultDTO =
+            DefaultDTO.fromJson(response.data as Map<String, dynamic>);
+        return defaultDTO;
+      } else {
+        logger.e(
+            'LessonPaymentService - teamLessonPayment - 응답 실패 ${response.data}');
+      }
+    } catch (e) {
+      logger.e('LessonPaymentService - teamLessonPayment - 응답 실패 ${e}');
+    }
+
+    return null;
+  }
+
+  Future<DefaultDTO?> instLessonPayment(
+      InstLessonPaymentRequest instLessonPaymentRequest) async {
+    try {
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/payment/reserve/prepare',
+        data: instLessonPaymentRequest,
+        options: Options(
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        ),
+      );
+
+      if (response.data['status'] == 'success') {
+        logger.d('LessonPaymentService - teamLessonPayment - 응답 성공');
+        DefaultDTO defaultDTO =
+            DefaultDTO.fromJson(response.data as Map<String, dynamic>);
+        return defaultDTO;
+      } else {
+        logger.e(
+            'LessonPaymentService - teamLessonPayment - 응답 실패 ${response.data}');
+      }
+    } catch (e) {
+      logger.e('LessonPaymentService - teamLessonPayment - 응답 실패 ${e}');
+    }
+
+    return null;
+  }
+}
