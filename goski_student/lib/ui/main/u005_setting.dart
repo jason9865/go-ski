@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/route_manager.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
@@ -18,8 +16,10 @@ final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
 class SettingScreen extends StatelessWidget {
-  SettingScreen({super.key});
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
+  const SettingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {

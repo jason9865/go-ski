@@ -2,16 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/ui/component/goski_basic_info_container.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
 class GoskiDifficultySwitch extends StatefulWidget {
   final Function(String) onSelected;
 
   const GoskiDifficultySwitch({
-    Key? key,
+    super.key,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   _DifficultySwitchState createState() => _DifficultySwitchState();
@@ -35,7 +34,7 @@ class _DifficultySwitchState extends State<GoskiDifficultySwitch> {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: ChoiceChip(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 labelPadding: EdgeInsets.zero,
                 backgroundColor:
                     selectedIndex == index ? goskiButtonBlack : goskiWhite,

@@ -42,13 +42,13 @@ class ReservationSelectScreen extends StatelessWidget {
           if (reservationViewModel.reservation.value.isValid() &&
               reservationViewModel.reservation.value.level == 'beginner') {
             reservationViewModel.submitReservation();
-            Get.to(() => ReservationTeamSelectScreen(),
+            Get.to(() => const ReservationTeamSelectScreen(),
                 binding: BindingsBuilder(() {
               Get.lazyPut(() => LessonTeamListViewModel());
             }));
           } else if (reservationViewModel.reservation.value.isValid()) {
             reservationViewModel.submitReservation();
-            Get.to(() => ReservationInstructorListScreen());
+            Get.to(() => const ReservationInstructorListScreen());
           } else {
             logger.d("전부 입력 x");
             reservationViewModel.submitReservation();
@@ -66,7 +66,7 @@ class ReservationSelectScreen extends StatelessWidget {
                   SizedBox(height: contentPadding),
                   _DateTimeSelectors(),
                   SizedBox(height: contentPadding),
-                  _DifficultyLevelSwitch(),
+                  const _DifficultyLevelSwitch(),
                   SizedBox(height: contentPadding),
                   // Add more widgets as needed
                 ],
@@ -80,10 +80,6 @@ class ReservationSelectScreen extends StatelessWidget {
 }
 
 class _SkiResortDropdown extends StatelessWidget {
-  _SkiResortDropdown({
-    super.key,
-  });
-
   @override
   Widget build(BuildContext context) {
     logger.d(skiResortViewModel.skiResortNames);
@@ -171,9 +167,7 @@ class _StudentNumberField extends StatelessWidget {
 }
 
 class _DateTimeSelectors extends StatelessWidget {
-  _DateTimeSelectors({
-    super.key,
-  });
+  _DateTimeSelectors();
 
   final List<String> goskiLessonType = [
     tr('ski'),
@@ -287,9 +281,7 @@ class _DateTimeSelectors extends StatelessWidget {
 }
 
 class _DifficultyLevelSwitch extends StatelessWidget {
-  const _DifficultyLevelSwitch({
-    super.key,
-  });
+  const _DifficultyLevelSwitch();
 
   @override
   Widget build(BuildContext context) {
@@ -309,9 +301,8 @@ class _DifficultyLevelSwitch extends StatelessWidget {
         ),
         SizedBox(height: contentPadding),
         GoskiDifficultySwitch(
-          onSelected: (_selectedDifficulty) {
-            print(_selectedDifficulty);
-            reservationViewModel.reservation.value.level = _selectedDifficulty;
+          onSelected: (selectedDifficulty) {
+            reservationViewModel.reservation.value.level = selectedDifficulty;
           },
         ),
       ],

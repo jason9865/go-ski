@@ -30,7 +30,7 @@ class InstructorProfileService extends GetxService {
         logger.e('InstructorProfileService - getInstructorProfile - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('InstructorProfileService - getInstructorProfile - 응답 실패 ${e}');
+      logger.e('InstructorProfileService - getInstructorProfile - 응답 실패 $e');
     }
 
     return null;
@@ -51,14 +51,14 @@ class InstructorProfileService extends GetxService {
             .map<ReviewResponse>((json) =>
             ReviewResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('InstructorProfileService - getInstructorReview - 응답 성공 ${data}');
+        logger.d('InstructorProfileService - getInstructorReview - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('InstructorProfileService - getInstructorReview - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('InstructorProfileService - getInstructorReview - 응답 실패 ${e}');
+      logger.e('InstructorProfileService - getInstructorReview - 응답 실패 $e');
     }
 
     return [];

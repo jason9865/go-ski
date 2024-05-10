@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goski_student/main.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
 
 import '../../const/color.dart';
