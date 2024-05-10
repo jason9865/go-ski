@@ -19,5 +19,5 @@ public class SignupInstructorRequestDTO extends InstructorImagesDTO {
     private Role role;
     private String lessonType;
     private String domainUserKey;
-    private String profileUrl;
+    private String kakaoProfileUrl;
 }
