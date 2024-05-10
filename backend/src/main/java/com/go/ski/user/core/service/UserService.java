@@ -79,7 +79,8 @@ public class UserService {
     }
 
     @Transactional
-    public User signupInstructor(SignupInstructorRequestDTO signupInstructorRequestDTO) {
+    public User signupInstructor(SignupInstructorRequestDTO signupInstructorRequestDTO,
+                                 MultipartFile profileImage) {
         User user = User.builder()
                 .domain(new Domain(signupInstructorRequestDTO.getDomainUserKey(), OauthServerType.kakao))
                 .userName(signupInstructorRequestDTO.getUserName())
@@ -91,7 +92,9 @@ public class UserService {
                 .build();
 
         // 프로필 이미지 업로드 후 save
-        uploadProfileImage(user, signupInstructorRequestDTO);
+//        uploadProfileImage(user, signupInstructorRequestDTO);
+        log.info("instructor profileImage - {}", signupInstructorRequestDTO.getProfileImage());
+        uploadProfileImage(user, profileImage);
 
         Instructor instructor = new Instructor(user, signupInstructorRequestDTO.getLessonType());
         instructorRepository.save(instructor);
@@ -196,8 +199,22 @@ public class UserService {
         response.setHeader("refreshToken", refreshToken);
     }
 
+    private void uploadProfileImage(User user, MultipartFile profileImage) {
+        log.info("instructor profile Image - {}",profileImage.getOriginalFilename());
+        if (profileImage != null && !profileImage.isEmpty()) {
+            if (user.getProfileUrl() != null) {
+                s3Uploader.deleteFile(user.getProfileUrl());
+            }
+            String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
+            log.info("profileUrl: {}", profileUrl);
+
+            user.setProfileUrl(profileUrl);
+        }
+        userRepository.save(user);
+    }
+
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
-        log.info("instructor profileImage - {}", profileImageDTO.getProfileImage().getOriginalFilename());
+        log.info("instructor profileImage - {}", profileImageDTO.getProfileImage());
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
             if (user.getProfileUrl() != null) {
