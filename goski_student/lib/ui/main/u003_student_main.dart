@@ -15,6 +15,7 @@ import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/ui/lesson/u017_settlement.dart';
+import 'package:goski_student/ui/main/b_u028_select_resort.dart';
 import 'package:goski_student/ui/main/u026_coupon.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
@@ -28,10 +29,14 @@ final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
 class StudentMainScreen extends StatelessWidget {
+  // TODO: 추후에 API에서 광고 이미지 링크와 클릭시 이동 링크를 받아오도록 수정 필요
   final List<String> advList = [
-    'assets/images/adv.jpg',
-    'assets/images/adv.jpg',
-    'assets/images/adv.jpg',
+    'https://adnet21.co.kr/data/file/b0301/thumb-3717079066_0ksWLuKg_1EC9588_EC9790EB8DB4EBB0B8EBA6AC_20ECB488.mov_000017462_1000x563.png',
+    'https://imagescdn.gettyimagesbank.com/500/202111/jv12498198.jpg',
+    'https://i.ytimg.com/vi/uNYg8av06Ow/maxresdefault.jpg',
+    'https://www.greened.kr/news/photo/202212/299330_329087_4332.png',
+    'https://cdn.gpkorea.com/news/photo/202212/96211_210544_551.jpg',
+    'https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F276A8A3651D3914524',
   ];
   final mainViewModel = Get.find<MainViewModel>();
   final lessonListViewModel = Get.find<LessonListViewModel>();
@@ -41,21 +46,23 @@ class StudentMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const GoskiMainHeader(),
-      body: GoskiContainer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              buildProfileCard(),
-              const BuildInterval(),
-              buildAdvertisement(),
-              const BuildInterval(),
-              buildResortInfo(context),
-              const BuildInterval(),
-              const BuildInterval(),
-              buildManual(),
-            ],
+    return Obx(
+      () => Scaffold(
+        appBar: const GoskiMainHeader(),
+        body: GoskiContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                buildProfileCard(),
+                const BuildInterval(),
+                buildAdvertisement(),
+                const BuildInterval(),
+                buildResortInfo(context),
+                const BuildInterval(),
+                const BuildInterval(),
+                buildManual(),
+              ],
+            ),
           ),
         ),
       ),
@@ -170,7 +177,7 @@ class StudentMainScreen extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
+                  child: Image.network(
                     item,
                     fit: BoxFit.cover,
                     width: screenSizeController.getWidthByRatio(1),
@@ -195,20 +202,16 @@ class StudentMainScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => showGoskiBottomSheet(
-                        context: context,
-                        child: const SizedBox(
-                          height: 300,
-                          child: Center(
-                            child: Text('리조트리스트 바텀시트'),
-                          ),
-                        )),
-                    child: const Row(
+                      context: context,
+                      child: SelectResortBottomSheet()
+                    ),
+                    child: Row(
                       children: [
                         GoskiText(
-                          text: '지산리조트',
+                          text: mainViewModel.selectedSkiResort.value.resortName,
                           size: goskiFontXLarge,
                         ),
-                        Icon(
+                        const Icon(
                           size: 35,
                           Icons.keyboard_arrow_down,
                         ),
@@ -232,26 +235,39 @@ class StudentMainScreen extends StatelessWidget {
 
   Widget buildWeather() {
     return SizedBox(
-      width: screenSizeController.getWidthByRatio(0.21),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(
-            size: 30,
-            Icons.wb_sunny_outlined,
-          ),
-          Row(
-            children: [
-              const GoskiText(
-                text: '-3',
-                size: goskiFontXLarge,
+          if (mainViewModel.isWeatherLoading.value) ...[
+            const SizedBox(
+              height: 30,
+              width: 30,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: goskiBlack,
+                ),
               ),
-              Image.asset(
-                height: 20,
-                'assets/images/celsius.png',
-              ),
-            ],
-          ),
+            )
+          ]
+          else ...[
+            Image.network(
+              mainViewModel.weather.value.iconUrl,
+              height: 30,
+              width: 30,
+            ),
+            Row(
+              children: [
+                GoskiText(
+                  text: mainViewModel.weather.value.temp.toString(),
+                  size: goskiFontXLarge,
+                ),
+                Image.asset(
+                  height: 20,
+                  'assets/images/celsius.png',
+                ),
+              ],
+            ),
+          ]
         ],
       ),
     );
