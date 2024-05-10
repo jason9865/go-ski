@@ -228,7 +228,6 @@ public class UserService {
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
-        log.info("instructor Certificates size - {}", instructorImagesDTO.getCertificateImageVOs().size());
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
                 log.info("certificateID - {}",certificateImageVO.getCertificateId());
