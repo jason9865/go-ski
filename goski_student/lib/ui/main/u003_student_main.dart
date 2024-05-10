@@ -202,13 +202,12 @@ class StudentMainScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => showGoskiBottomSheet(
-                      context: context,
-                      child: SelectResortBottomSheet()
-                    ),
+                        context: context, child: SelectResortBottomSheet()),
                     child: Row(
                       children: [
                         GoskiText(
-                          text: mainViewModel.selectedSkiResort.value.resortName,
+                          text:
+                              mainViewModel.selectedSkiResort.value.resortName,
                           size: goskiFontXLarge,
                         ),
                         const Icon(
@@ -223,7 +222,10 @@ class StudentMainScreen extends StatelessWidget {
               ),
               const Expanded(
                 child: Center(
-                  child: Text('ResortInfo'),
+                  child: GoskiText(
+                    text: "24/25 시즌에 만나요!",
+                    size: goskiFontXXLarge,
+                  ),
                 ),
               )
             ],
@@ -248,8 +250,7 @@ class StudentMainScreen extends StatelessWidget {
                 ),
               ),
             )
-          ]
-          else ...[
+          ] else ...[
             Image.network(
               mainViewModel.weather.value.iconUrl,
               height: 30,
