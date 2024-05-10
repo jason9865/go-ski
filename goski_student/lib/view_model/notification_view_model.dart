@@ -28,10 +28,10 @@ class NotificationViewModel extends GetxController {
     isLoading.value = true;
     List<Noti> fetchedNotifications =
         await notificationRepository.getNotificationList();
+
     isLoading.value = false;
     if (fetchedNotifications.isNotEmpty) {
       notificationList.assignAll(fetchedNotifications);
-      readAllNoti();
     } else {
       notificationList.clear();
       hasUnread.value = false;
