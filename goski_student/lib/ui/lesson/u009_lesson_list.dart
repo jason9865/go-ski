@@ -121,7 +121,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
                 }
                 if (lesson.startTime
                         .isBefore(now.add(const Duration(minutes: 30))) &&
-                    lesson.endTime.isAfter(now)) {
+                    lesson.endTime.isAfter(now) && lessonStatus != 'cancelLesson') {
                   buttons.add(createButton(
                     screenSizeController,
                     'sendMessage',
