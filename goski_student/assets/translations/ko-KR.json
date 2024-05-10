@@ -191,7 +191,9 @@
   "enterAccountHolder": "예금주명을 입력해주세요.",
   "enterAccountNumber": "계좌번호를 입력해주세요.",
   "both": "모두",
-  "deleteUser": "회원탈퇴",
+  "deleteUser": "회원 탈퇴",
+  "resign": "탈퇴",
+  "deleteUserHint": "정말로 회원을 탈퇴하겠습니까?\n회원 탈퇴 시 모든 정보는 삭제되며\n 재가입이 불가능합니다.",
   "notification": "알림",
   "userInfo": "개인정보",
   "updateUserInfo": "개인정보 수정",
@@ -285,5 +287,6 @@
   "WEIGHT_80KG_TO_89KG": "80kg ~ 89kg",
   "WEIGHT_90KG_TO_99KG": "90kg ~ 99kg",
   "WEIGHT_ABOVE_100KG": "100kg 이상",
-  "footSize": "{}mm"
+  "footSize": "{}mm",
+  "selectTime" : "시간 선택"
 }

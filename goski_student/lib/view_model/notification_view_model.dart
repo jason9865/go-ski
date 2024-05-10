@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:goski_student/const/util/dio_interceptor.dart';
 import 'package:goski_student/data/model/notification.dart';
 import 'package:goski_student/data/model/notification_setting.dart';
 import 'package:goski_student/data/repository/notification_repository.dart';
@@ -29,10 +28,10 @@ class NotificationViewModel extends GetxController {
     isLoading.value = true;
     List<Noti> fetchedNotifications =
         await notificationRepository.getNotificationList();
+
     isLoading.value = false;
     if (fetchedNotifications.isNotEmpty) {
       notificationList.assignAll(fetchedNotifications);
-      readAllNoti();
     } else {
       notificationList.clear();
       hasUnread.value = false;

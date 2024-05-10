@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -21,7 +19,7 @@ class ReservationRequest {
     this.lessonDate = '',
     this.startTime = '',
     this.duration = 0,
-    this.level = '',
+    this.level = 'BEGINNER',
   });
 
   bool isValid() {
@@ -33,7 +31,7 @@ class ReservationRequest {
         level != '';
   }
 
-  Map<String, dynamic> ReservationRequestToJson() {
+  Map<String, dynamic> reservationRequestToJson() {
     return {
       "resortId": resortId,
       "lessonType": lessonType,

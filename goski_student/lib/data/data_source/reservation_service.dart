@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -15,11 +14,11 @@ class ReservationService extends GetxService {
 
   Future<List<BeginnerResponse>> getBeginnerLessonTeamInfo(
       ReservationRequest reservationRequest) async {
-    logger.e(reservationRequest.ReservationRequestToJson());
+    logger.e(reservationRequest.reservationRequestToJson());
     try {
       dynamic response = await CustomDio.dio.post(
         '$baseUrl/lesson/reserve/novice',
-        data: reservationRequest.ReservationRequestToJson(),
+        data: reservationRequest.reservationRequestToJson(),
       );
       logger.d("ReservationService : \n$response.data");
 
@@ -36,7 +35,7 @@ class ReservationService extends GetxService {
                 BeginnerResponse.fromJson(json as Map<String, dynamic>))
             .toList();
         logger.d(
-            'ReservationService - getBeginnerLessonTeamInfo - 응답 성공 ${teams}');
+            'ReservationService - getBeginnerLessonTeamInfo - 응답 성공 $teams');
 
         return teams;
       } else {
@@ -44,7 +43,7 @@ class ReservationService extends GetxService {
             'ReservationService - getBeginnerLessonTeamInfo - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('ReservationService - getBeginnerLessonTeamInfo - 응답 실패 ${e}');
+      logger.e('ReservationService - getBeginnerLessonTeamInfo - 응답 실패 $e');
     }
     return [];
   }
@@ -54,7 +53,7 @@ class ReservationService extends GetxService {
     logger.e(beginnerInstListRequest);
     try {
       dynamic response = await CustomDio.dio.post(
-        '$baseUrl/lesson/reserve/novice/${teamId}',
+        '$baseUrl/lesson/reserve/novice/$teamId',
         data: beginnerInstListRequest,
       );
       logger.d("ReservationService : \n${response.data['data']}");
@@ -72,7 +71,7 @@ class ReservationService extends GetxService {
                 (json) => Instructor.fromJson(json as Map<String, dynamic>))
             .toList();
         logger.d(
-            'ReservationService - getBeginnerInstructorList - 응답 성공 ${instList}');
+            'ReservationService - getBeginnerInstructorList - 응답 성공 $instList');
 
         return instList;
       } else {
@@ -81,7 +80,7 @@ class ReservationService extends GetxService {
       }
     } catch (e) {
       logger.e(
-          'ReservationService - getBeginnerInstructorList - 응답 실패 CATCH\n ${e}');
+          'ReservationService - getBeginnerInstructorList - 응답 실패 CATCH\n $e');
     }
     return [];
   }
