@@ -7,6 +7,7 @@ import com.go.ski.payment.support.dto.util.StudentInfoDTO;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,7 +43,17 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
     public static LessonCreateInstructorEvent of(LessonInfo lessonInfo, String resortName,
                   Integer receiverId, PaymentCacheDto paymentCacheDto, String deviceType) {
 
+        String month = lessonInfo.getLessonDate().getMonth().getValue() + "월";
+        String day = lessonInfo.getLessonDate().getDayOfMonth() + "일";
+        String startTime = TimeConvertor.calNewStartTime(lessonInfo.getStartTime());
+        String hour = startTime.split(":")[0] + "시";
+        String minute = startTime.split(":")[1] + "분";
+        String lessonOneToN = "1:" + lessonInfo.getStudentCount();
         String lessonType = TimeConvertor.convertFromBitmask(lessonInfo.getLessonType());
+
+        String detail = month + " " + day + " " + hour + " " + minute + " " + resortName + "\n" + lessonOneToN
+                + " 강습이 예약되었습니다";
+
 
         return new LessonCreateInstructorEvent(
                 receiverId,
