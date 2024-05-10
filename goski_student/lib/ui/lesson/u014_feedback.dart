@@ -14,7 +14,8 @@ import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider/path_provider.dart'; // getApplicationDocumentsDirectory 사용하려면 필요한 import
 
 var logger = Logger();
 

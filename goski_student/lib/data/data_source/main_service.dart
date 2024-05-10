@@ -18,7 +18,7 @@ class MainService extends GetxService {
 
       if (response.data['status'] == 'success') {
           MainResponse data = MainResponse.fromJson(response.data['data'] as Map<String, dynamic>);
-          logger.d('UserService - getUserInfo - 응답 성공 ${data}');
+          logger.d('UserService - getUserInfo - 응답 성공 $data');
 
           return data;
       } else {
@@ -26,7 +26,7 @@ class MainService extends GetxService {
       }
 
     } catch (e) {
-      logger.e('UserService - getUserInfo - 응답 실패 ${e}');
+      logger.e('UserService - getUserInfo - 응답 실패 $e');
     }
 
     return null;

@@ -26,14 +26,14 @@ class LessonListService extends GetxService {
             .map<LessonListItemResponse>((json) =>
                 LessonListItemResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('LessonListService - getLessonList - 응답 성공 ${data}');
+        logger.d('LessonListService - getLessonList - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('LessonListService - getLessonList - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('LessonListService - getLessonList - 응답 실패 ${e}');
+      logger.e('LessonListService - getLessonList - 응답 실패 $e');
     }
 
     return [];
@@ -66,7 +66,7 @@ class LessonListService extends GetxService {
         logger.e('LessonListService - sendMessage - 응답 실패 ${response.body}');
       }
     } catch (e) {
-      logger.e('LessonListService - sendMessage - 응답 실패 ${e}');
+      logger.e('LessonListService - sendMessage - 응답 실패 $e');
     }
 
     return null;

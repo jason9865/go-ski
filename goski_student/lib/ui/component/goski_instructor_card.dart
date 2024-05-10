@@ -39,7 +39,7 @@ class GoskiInstructorCard extends StatelessWidget {
           children: [
             // Profile Image
             ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               child: Image.network(
                 imagePath,
                 width: 90,

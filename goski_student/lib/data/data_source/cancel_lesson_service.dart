@@ -28,7 +28,7 @@ class CancelLessonService extends GetxService {
         logger.e('CancelLessonService - getLessonCost - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('CancelLessonService - getLessonCost - 응답 실패 ${e}');
+      logger.e('CancelLessonService - getLessonCost - 응답 실패 $e');
     }
 
     return null;
@@ -56,7 +56,7 @@ class CancelLessonService extends GetxService {
         logger.e('CancelLessonService - cancelLesson - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('CancelLessonService - cancelLesson - 응답 실패 ${e}');
+      logger.e('CancelLessonService - cancelLesson - 응답 실패 $e');
     }
 
     return null;
