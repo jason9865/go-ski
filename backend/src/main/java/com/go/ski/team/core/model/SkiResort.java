@@ -23,4 +23,10 @@ public class SkiResort {
     @Column(nullable = false)
     private String resortLocation;
 
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double hardness;
+
 }
