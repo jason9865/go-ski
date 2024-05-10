@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -38,13 +37,13 @@ class SkiResortService extends GetxService {
             .map<SkiResort>(
                 (json) => SkiResort.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('SkiResortService - getSkiResorts - 응답 성공 ${resortList}');
+        logger.d('SkiResortService - getSkiResorts - 응답 성공 $resortList');
 
         return resortList;
       } else {
         logger.e('SkiResortService - getSkiResorts - 응답 실패 ${response.data}');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       logger.e("Failed to fetch ski resorts: ${e.message}");
       return []; // Return an empty list on error or throw a custom exception
     }

@@ -32,7 +32,7 @@ class ReviewService extends GetxService {
         logger.e('ReviewService - writeReview - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('ReviewService - writeReview - 응답 실패 ${e}');
+      logger.e('ReviewService - writeReview - 응답 실패 $e');
     }
 
     return null;
@@ -51,14 +51,14 @@ class ReviewService extends GetxService {
             .map<ReviewTagResponse>((json) =>
             ReviewTagResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('ReviewService - getReviewTagList - 응답 성공 ${data}');
+        logger.d('ReviewService - getReviewTagList - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('ReviewService - getReviewTagList - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('ReviewService - getReviewTagList - 응답 실패 ${e}');
+      logger.e('ReviewService - getReviewTagList - 응답 실패 $e');
     }
 
     return [];

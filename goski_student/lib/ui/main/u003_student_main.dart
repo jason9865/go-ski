@@ -20,8 +20,8 @@ import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
-import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
+import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -104,7 +104,7 @@ class StudentMainScreen extends StatelessWidget {
                     iconImage: 'assets/images/user.svg',
                     onClick: () => {
                       logger.d("나의 강습"),
-                      Get.to(() => LessonListScreen())
+                      Get.to(() => const LessonListScreen())
                     },
                   ),
                   UserMenu(
@@ -113,7 +113,7 @@ class StudentMainScreen extends StatelessWidget {
                     onClick: () => {
                       logger.d("결제 내역"),
                       settlementViewModel.getSettlementList(),
-                      Get.to(() => SettlementScreen())
+                      Get.to(() => const SettlementScreen())
                     },
                   ),
                   UserMenu(
@@ -123,7 +123,7 @@ class StudentMainScreen extends StatelessWidget {
                         // {logger.d("예약"), Get.toNamed("/reservation")},
                         {
                       logger.d("예약"),
-                      Get.to(() => ReservationSelectScreen(),
+                      Get.to(() => const ReservationSelectScreen(),
                           binding: BindingsBuilder(() {
                         Get.lazyPut<ReservationViewModel>(
                             () => ReservationViewModel());

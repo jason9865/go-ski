@@ -21,14 +21,14 @@ class FeedbackService extends GetxService {
           response.data is Map<String, dynamic>) {
         FeedbackResponse data = FeedbackResponse.fromJson(response.data['data'] as Map<String, dynamic>);
 
-        logger.d('FeedbackService - getFeedback - 응답 성공 ${data}');
+        logger.d('FeedbackService - getFeedback - 응답 성공 $data');
 
         return data;
       } else {
         logger.e('FeedbackService - getFeedback - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('FeedbackService - getFeedback - 응답 실패 ${e}');
+      logger.e('FeedbackService - getFeedback - 응답 실패 $e');
     }
 
     return null;

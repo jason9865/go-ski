@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,6 @@ class _ReservationTeamDetailScreenState
           buttonName: tr('reserveTeam',
               args: [NumberFormat('###,###,###').format(widget.cost)]),
           onConfirm: () {
-            print('예약완료');
           },
           child: SingleChildScrollView(
             child: Column(
@@ -149,7 +147,6 @@ class _ReservationTeamDetailScreenState
                           .asMap()
                           .entries
                           .map((entry) {
-                        int index = entry.key;
                         Instructor instructor = entry.value;
                         String instPosition;
                         Color instbadgeColor;

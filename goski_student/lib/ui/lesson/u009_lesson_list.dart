@@ -26,7 +26,7 @@ import 'package:goski_student/view_model/review_view_model.dart';
 
 class LessonListScreen extends StatefulWidget {
 
-  LessonListScreen({super.key});
+  const LessonListScreen({super.key});
 
   @override
   State<LessonListScreen> createState() => _LessonListScreenState();
@@ -52,8 +52,6 @@ class _LessonListScreenState extends State<LessonListScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
-    cardOnTap() => print("강습 세부정보");
-
     return Obx(() {
       if (lessonListViewModel.isLoadingLessonList.value) {
         return Scaffold(
@@ -179,19 +177,16 @@ class _LessonListScreenState extends State<LessonListScreen> {
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: GestureDetector(
-                    onTap: cardOnTap,
-                    child: GoskiCard(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            badgeRow(lessonStatus, lessonBackgroundColor),
-                            profileRow(lesson, screenSizeController),
-                            buttonRow(buttons, alignment),
-                          ],
-                        ),
+                  child: GoskiCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          badgeRow(lessonStatus, lessonBackgroundColor),
+                          profileRow(lesson, screenSizeController),
+                          buttonRow(buttons, alignment),
+                        ],
                       ),
                     ),
                   ),
