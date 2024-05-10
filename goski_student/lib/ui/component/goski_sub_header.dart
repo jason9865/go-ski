@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
-import 'package:goski_student/ui/component/goski_header_right_icons.dart';
 
 class GoskiSubHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;

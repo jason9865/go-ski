@@ -17,7 +17,7 @@ class GoskiTextField extends StatefulWidget {
   final TextAlign textAlign;
   final void Function(String) onTextChange;
 
-  GoskiTextField({
+  const GoskiTextField({
     super.key,
     this.width = 0,
     this.canEdit = true,

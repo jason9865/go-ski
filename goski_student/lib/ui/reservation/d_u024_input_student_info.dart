@@ -61,9 +61,8 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
               builder: (context, constraints) {
                 double parentWidth = constraints.maxWidth;
                 return GoskiSwitch(
-                  items: ['남자', '여자'],
+                  items: [tr('MALE'), tr('FEMALE')],
                   width: parentWidth,
-                  // TODO : 남자인지 여자인지 저장
                   onToggle: (selectedType) {
                     selectedType == 0
                         ? _studentInfo.gender = 'MALE'
@@ -161,4 +160,13 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
       ),
     );
   }
+}
+
+class DummyStudentInfo {
+  String name = '';
+  int gender = 0; // 0 남성, 1여성
+  int height = 0;
+  int age = 0;
+  int weight = 0;
+  int feetSize = 0;
 }

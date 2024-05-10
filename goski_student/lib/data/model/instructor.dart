@@ -1,4 +1,3 @@
-import 'package:goski_student/main.dart';
 
 import 'certificate_info.dart';
 

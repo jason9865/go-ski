@@ -38,6 +38,9 @@ class ReviewScreen extends StatelessWidget {
                 ? () async {
                     bool result = await reviewViewModel.writeReview(
                         lessonListViewModel.selectedLesson.value.lessonId);
+
+                    await lessonListViewModel.getLessonList();
+
                     if (result) {
                       if (goFeedbackScreen) {
                         Get.off(() => FeedbackScreen());
