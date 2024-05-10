@@ -61,7 +61,11 @@ Future<void> setFCM() async {
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    notificationViewModel.hasUnread.value = true;
+    if (Get.currentRoute == "/NotificationScreen") {
+      notificationViewModel.getNotificationList();
+    } else {
+      notificationViewModel.hasUnread.value = true;
+    }
     await flutterLocalNotificationsPlugin.show(0, '${message.data["title"]}',
         '${message.data["content"]}', notificationDetails,
         payload: 'item x');
