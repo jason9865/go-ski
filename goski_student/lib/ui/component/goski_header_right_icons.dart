@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/ui/main/u004_notification.dart';
@@ -37,7 +36,7 @@ Widget headerRightIcons(BuildContext context) {
       IconButton(
         icon: const Icon(Icons.settings),
         onPressed: () {
-          Get.to(() => SettingScreen());
+          Get.to(() => const SettingScreen());
         },
       ),
     ],

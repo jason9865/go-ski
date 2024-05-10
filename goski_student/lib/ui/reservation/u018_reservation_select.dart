@@ -82,10 +82,6 @@ class ReservationSelectScreen extends StatelessWidget {
 }
 
 class _SkiResortDropdown extends StatelessWidget {
-  const _SkiResortDropdown({
-    super.key,
-  });
-
   @override
   Widget build(BuildContext context) {
     logger.d(skiResortViewModel.skiResortNames);
@@ -176,9 +172,7 @@ class _StudentNumberField extends StatelessWidget {
 }
 
 class _DateTimeSelectors extends StatelessWidget {
-  _DateTimeSelectors({
-    super.key,
-  });
+  _DateTimeSelectors();
 
   final List<String> goskiLessonType = [
     tr('ski'),
@@ -378,9 +372,7 @@ class _DateTimeSelectors extends StatelessWidget {
 }
 
 class _DifficultyLevelSwitch extends StatelessWidget {
-  const _DifficultyLevelSwitch({
-    super.key,
-  });
+  const _DifficultyLevelSwitch();
 
   @override
   Widget build(BuildContext context) {
