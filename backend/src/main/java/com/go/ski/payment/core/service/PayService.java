@@ -131,7 +131,8 @@ public class PayService {
 
 		LessonPaymentInfo lessonPaymentInfo = LessonPaymentInfo
 			.toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee);
-		Integer totalFee = basicFee + designatedFee + peopleOptionFee + levelOptionFee;
+
+		Integer totalFee = (basicFee + peopleOptionFee + levelOptionFee) * request.getDuration() + designatedFee;
 		String itemName = team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 외 " + size + "명";
 
 		//만들어서 KAKAO랑 소통하기
