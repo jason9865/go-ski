@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/data/model/default_dto.dart';
+import 'package:goski_student/data/model/kakao_pay.dart';
 import 'package:goski_student/data/model/lesson_payment.dart';
 
 import '../../main.dart';
@@ -12,7 +13,7 @@ import '../../main.dart';
 class LessonPaymentService extends GetxService {
   final baseUrl = dotenv.env['BASE_URL'];
 
-  Future<DefaultDTO?> teamLessonPayment(
+  Future<KakaoPayPrepareResponse> teamLessonPayment(
       Map<String, dynamic> teamLessonPaymentRequest) async {
     try {
       dynamic response = await CustomDio.dio.post(
@@ -25,12 +26,13 @@ class LessonPaymentService extends GetxService {
         ),
       );
 
-      logger.d(response.data);
+      logger.d(response.data['data']);
       if (response.data['status'] == 'success') {
         logger.d('LessonPaymentService - teamLessonPayment - 응답 성공');
-        DefaultDTO defaultDTO =
-            DefaultDTO.fromJson(response.data as Map<String, dynamic>);
-        return defaultDTO;
+        KakaoPayPrepareResponse kakaoPayPrepareResponse =
+            KakaoPayPrepareResponse.fromJson(
+                response.data['data'] as Map<String, dynamic>);
+        return kakaoPayPrepareResponse;
       } else {
         logger.e(
             'LessonPaymentService - teamLessonPayment - 응답 실패 ${response.data}');
@@ -39,7 +41,14 @@ class LessonPaymentService extends GetxService {
       logger.e('LessonPaymentService - teamLessonPayment - 응답 실패 ${e}');
     }
 
-    return null;
+    return KakaoPayPrepareResponse(
+        tid: '',
+        next_redirect_app_url: '',
+        next_redirect_mobile_url: '',
+        next_redirect_pc_url: '',
+        android_app_scheme: '',
+        ios_app_scheme: '',
+        created_at: '');
   }
 
   Future<DefaultDTO?> instLessonPayment(
