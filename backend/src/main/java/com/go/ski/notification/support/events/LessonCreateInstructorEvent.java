@@ -16,6 +16,7 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
 
     private static final Integer NOTIFICATION_TYPE = 2;
 
+    private final String totalAmount;
     private final String lessonDate;
     private final String lessonTime;
     private final String resortName;
@@ -25,12 +26,13 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
 
     public LessonCreateInstructorEvent(
             Integer receiverId, LocalDateTime createdAt,
-            Integer notificationType, DeviceType deviceType,
-            String title, String lessonDate,
+            Integer notificationType, DeviceType deviceType, String title,
+            String totalAmount,String lessonDate,
             String lessonTime, String resortName,
             String studentCount, String lessonType,
             List<StudentInfoDTO> studentInfos) {
         super(receiverId, createdAt, notificationType, deviceType, title);
+        this.totalAmount = totalAmount;
         this.lessonDate = lessonDate;
         this.lessonTime = lessonTime;
         this.resortName = resortName;
@@ -43,24 +45,20 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
     public static LessonCreateInstructorEvent of(LessonInfo lessonInfo, String resortName,
                   Integer receiverId, PaymentCacheDto paymentCacheDto, String deviceType) {
 
-        String month = lessonInfo.getLessonDate().getMonth().getValue() + "월";
-        String day = lessonInfo.getLessonDate().getDayOfMonth() + "일";
-        String startTime = TimeConvertor.calNewStartTime(lessonInfo.getStartTime());
-        String hour = startTime.split(":")[0] + "시";
-        String minute = startTime.split(":")[1] + "분";
-        String lessonOneToN = "1:" + lessonInfo.getStudentCount();
         String lessonType = TimeConvertor.convertFromBitmask(lessonInfo.getLessonType());
 
-        String detail = month + " " + day + " " + hour + " " + minute + " " + resortName + "\n" + lessonOneToN
-                + " 강습이 예약되었습니다";
-
+        String totalAmount = paymentCacheDto.getLessonPaymentInfo().getBasicFee() +
+                paymentCacheDto.getLessonPaymentInfo().getPeopleOptionFee() +
+                paymentCacheDto.getLessonPaymentInfo().getDesignatedFee() +
+                paymentCacheDto.getLessonPaymentInfo().getLevelOptionFee().toString();
 
         return new LessonCreateInstructorEvent(
                 receiverId,
                 LocalDateTime.now(),
                 NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
-                "강습이 예약되었습니다",
+                "강습이 예약되었습니다", // title
+                totalAmount,
                 lessonInfo.getLessonDate().toString(),
                 TimeConvertor.calLessonTimeInfo(lessonInfo.getStartTime(), lessonInfo.getDuration()),
                 resortName,
