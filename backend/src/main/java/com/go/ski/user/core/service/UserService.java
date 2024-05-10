@@ -87,7 +87,7 @@ public class UserService {
                 .phoneNumber(signupInstructorRequestDTO.getPhoneNumber())
                 .gender(signupInstructorRequestDTO.getGender())
                 .role(signupInstructorRequestDTO.getRole())
-                .profileUrl(signupInstructorRequestDTO.getProfileUrl())
+                .profileUrl(signupInstructorRequestDTO.getKakaoProfileUrl())
                 .build();
 
         // 프로필 이미지 업로드 후 save
@@ -214,6 +214,8 @@ public class UserService {
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
+                log.info("certificateID - {}",certificateImageVO.getCertificateId());
+                log.info("certificateID - {}",certificateImageVO.getCertificateImage().getOriginalFilename());
                 Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateImageVO.getCertificateId());
                 if (optionalCertificate.isPresent()) {
                     String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImageVO.getCertificateImage());
