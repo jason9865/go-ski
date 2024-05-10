@@ -62,7 +62,7 @@ class ReservationSelectScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const _SkiResortDropdown(),
+                  _SkiResortDropdown(),
                   SizedBox(height: contentPadding),
                   _StudentNumberField(),
                   SizedBox(height: contentPadding),
