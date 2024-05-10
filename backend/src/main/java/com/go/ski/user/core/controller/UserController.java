@@ -64,14 +64,13 @@ public class UserController {
 
     @PostMapping("/signup/inst")
     public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletResponse response,
-                                                           @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO,
-                                                           @RequestPart MultipartFile profileImage) {
+                                                           @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
         log.info("강사 회원가입 요청: {}", signupInstructorRequestDTO);
         if (!"INSTRUCTOR".equals(signupInstructorRequestDTO.getRole().toString())) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);
         }
 
-        User user = userService.signupInstructor(signupInstructorRequestDTO, profileImage);
+        User user = userService.signupInstructor(signupInstructorRequestDTO);
 
         log.info("회원가입 성공");
         userService.createTokens(response, user);

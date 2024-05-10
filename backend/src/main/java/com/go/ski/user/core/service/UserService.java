@@ -79,8 +79,7 @@ public class UserService {
     }
 
     @Transactional
-    public User signupInstructor(SignupInstructorRequestDTO signupInstructorRequestDTO,
-                                 MultipartFile profileImage) {
+    public User signupInstructor(SignupInstructorRequestDTO signupInstructorRequestDTO) {
         User user = User.builder()
                 .domain(new Domain(signupInstructorRequestDTO.getDomainUserKey(), OauthServerType.kakao))
                 .userName(signupInstructorRequestDTO.getUserName())
@@ -92,9 +91,8 @@ public class UserService {
                 .build();
 
         // 프로필 이미지 업로드 후 save
-//        uploadProfileImage(user, signupInstructorRequestDTO);
-        log.info("instructor profileImage - {}", signupInstructorRequestDTO.getProfileImage());
-        uploadProfileImage(user, profileImage);
+        uploadProfileImage(user, signupInstructorRequestDTO);
+//        uploadProfileImage(user, profileImage);
 
         Instructor instructor = new Instructor(user, signupInstructorRequestDTO.getLessonType());
         instructorRepository.save(instructor);
