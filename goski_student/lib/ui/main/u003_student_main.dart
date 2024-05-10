@@ -15,6 +15,7 @@ import 'package:goski_student/ui/component/goski_main_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/ui/lesson/u017_settlement.dart';
+import 'package:goski_student/ui/main/b_u028_select_resort.dart';
 import 'package:goski_student/ui/main/u026_coupon.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
@@ -45,21 +46,23 @@ class StudentMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const GoskiMainHeader(),
-      body: GoskiContainer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              buildProfileCard(),
-              const BuildInterval(),
-              buildAdvertisement(),
-              const BuildInterval(),
-              buildResortInfo(context),
-              const BuildInterval(),
-              const BuildInterval(),
-              buildManual(),
-            ],
+    return Obx(
+      () => Scaffold(
+        appBar: const GoskiMainHeader(),
+        body: GoskiContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                buildProfileCard(),
+                const BuildInterval(),
+                buildAdvertisement(),
+                const BuildInterval(),
+                buildResortInfo(context),
+                const BuildInterval(),
+                const BuildInterval(),
+                buildManual(),
+              ],
+            ),
           ),
         ),
       ),
@@ -199,20 +202,16 @@ class StudentMainScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => showGoskiBottomSheet(
-                        context: context,
-                        child: const SizedBox(
-                          height: 300,
-                          child: Center(
-                            child: Text('리조트리스트 바텀시트'),
-                          ),
-                        )),
-                    child: const Row(
+                      context: context,
+                      child: SelectResortBottomSheet()
+                    ),
+                    child: Row(
                       children: [
                         GoskiText(
-                          text: '지산리조트',
+                          text: mainViewModel.selectedSkiResort.value.resortName,
                           size: goskiFontXLarge,
                         ),
-                        Icon(
+                        const Icon(
                           size: 35,
                           Icons.keyboard_arrow_down,
                         ),
@@ -236,26 +235,39 @@ class StudentMainScreen extends StatelessWidget {
 
   Widget buildWeather() {
     return SizedBox(
-      width: screenSizeController.getWidthByRatio(0.21),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(
-            size: 30,
-            Icons.wb_sunny_outlined,
-          ),
-          Row(
-            children: [
-              const GoskiText(
-                text: '-3',
-                size: goskiFontXLarge,
+          if (mainViewModel.isWeatherLoading.value) ...[
+            const SizedBox(
+              height: 30,
+              width: 30,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: goskiBlack,
+                ),
               ),
-              Image.asset(
-                height: 20,
-                'assets/images/celsius.png',
-              ),
-            ],
-          ),
+            )
+          ]
+          else ...[
+            Image.network(
+              mainViewModel.weather.value.iconUrl,
+              height: 30,
+              width: 30,
+            ),
+            Row(
+              children: [
+                GoskiText(
+                  text: mainViewModel.weather.value.temp.toString(),
+                  size: goskiFontXLarge,
+                ),
+                Image.asset(
+                  height: 20,
+                  'assets/images/celsius.png',
+                ),
+              ],
+            ),
+          ]
         ],
       ),
     );
