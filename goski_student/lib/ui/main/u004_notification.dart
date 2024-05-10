@@ -34,6 +34,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     notificationViewModel.getNotificationList();
+    notificationViewModel.readAllNoti();
   }
 
   @override
@@ -63,18 +64,40 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: notificationViewModel.notificationList.length,
-                  itemBuilder: (context, index) {
-                    Noti item = notificationViewModel.notificationList[index];
+                Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: notificationViewModel.notificationList.length,
+                    itemBuilder: (context, index) {
+                      Noti item = notificationViewModel.notificationList[index];
 
-                    switch (item.notificationType) {
-                      case 8:
-                        return FeedbackNotificationCard(
+                      switch (item.notificationType) {
+                        case 8:
+                          return FeedbackNotificationCard(
+                              dateTime: item.createdAt,
+                              title: item.title,
+                              onItemDeleteClicked: () {
+                                notificationViewModel
+                                    .deleteNotification(item.notificationId);
+                                setState(() {
+                                  notificationViewModel.notificationList
+                                      .removeAt(index);
+                                });
+                              });
+                        case 9:
+                          return MessageNotificationCard(
                             dateTime: item.createdAt,
-                            title: item.title,
+                            title: item.senderName!,
+                            subtitle: item.title,
+                            content: item.content,
+                            imageUrl: item.imageUrl,
+                            isExpanded: item.isExpanded,
+                            onExpandBtnClicked: () {
+                              setState(() {
+                                item.isExpanded = !item.isExpanded;
+                              });
+                            },
                             onItemDeleteClicked: () {
                               notificationViewModel
                                   .deleteNotification(item.notificationId);
@@ -82,51 +105,31 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 notificationViewModel.notificationList
                                     .removeAt(index);
                               });
-                            });
-                      case 9:
-                        return MessageNotificationCard(
-                          dateTime: item.createdAt,
-                          title: item.senderName!,
-                          subtitle: item.title,
-                          content: item.content,
-                          imageUrl: item.imageUrl,
-                          isExpanded: item.isExpanded,
-                          onExpandBtnClicked: () {
-                            setState(() {
-                              item.isExpanded = !item.isExpanded;
-                            });
-                          },
-                          onItemDeleteClicked: () {
-                            notificationViewModel
-                                .deleteNotification(item.notificationId);
-                            setState(() {
-                              notificationViewModel.notificationList
-                                  .removeAt(index);
-                            });
-                          },
-                        );
-                      default:
-                        return LessonNotificationCard(
-                          dateTime: item.createdAt,
-                          title: item.title,
-                          content: item.content,
-                          isExpanded: item.isExpanded,
-                          onExpandBtnClicked: () {
-                            setState(() {
-                              item.isExpanded = !item.isExpanded;
-                            });
-                          },
-                          onItemDeleteClicked: () {
-                            notificationViewModel
-                                .deleteNotification(item.notificationId);
-                            setState(() {
-                              notificationViewModel.notificationList
-                                  .removeAt(index);
-                            });
-                          },
-                        );
-                    }
-                  },
+                            },
+                          );
+                        default:
+                          return LessonNotificationCard(
+                            dateTime: item.createdAt,
+                            title: item.title,
+                            content: item.content,
+                            isExpanded: item.isExpanded,
+                            onExpandBtnClicked: () {
+                              setState(() {
+                                item.isExpanded = !item.isExpanded;
+                              });
+                            },
+                            onItemDeleteClicked: () {
+                              notificationViewModel
+                                  .deleteNotification(item.notificationId);
+                              setState(() {
+                                notificationViewModel.notificationList
+                                    .removeAt(index);
+                              });
+                            },
+                          );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
