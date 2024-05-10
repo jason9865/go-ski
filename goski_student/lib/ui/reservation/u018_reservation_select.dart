@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_difficulty_switch.dart';
 import 'package:goski_student/ui/component/goski_dropdown.dart';
+import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
@@ -42,13 +44,13 @@ class ReservationSelectScreen extends StatelessWidget {
           if (reservationViewModel.reservation.value.isValid() &&
               reservationViewModel.reservation.value.level == 'beginner') {
             reservationViewModel.submitReservation();
-            Get.to(() => ReservationTeamSelectScreen(),
+            Get.to(() => const ReservationTeamSelectScreen(),
                 binding: BindingsBuilder(() {
               Get.lazyPut(() => LessonTeamListViewModel());
             }));
           } else if (reservationViewModel.reservation.value.isValid()) {
             reservationViewModel.submitReservation();
-            Get.to(() => ReservationInstructorListScreen());
+            Get.to(() => const ReservationInstructorListScreen());
           } else {
             logger.d("전부 입력 x");
             reservationViewModel.submitReservation();
@@ -60,13 +62,13 @@ class ReservationSelectScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  _SkiResortDropdown(),
+                  const _SkiResortDropdown(),
                   SizedBox(height: contentPadding),
                   _StudentNumberField(),
                   SizedBox(height: contentPadding),
                   _DateTimeSelectors(),
                   SizedBox(height: contentPadding),
-                  _DifficultyLevelSwitch(),
+                  const _DifficultyLevelSwitch(),
                   SizedBox(height: contentPadding),
                   // Add more widgets as needed
                 ],
@@ -80,7 +82,7 @@ class ReservationSelectScreen extends StatelessWidget {
 }
 
 class _SkiResortDropdown extends StatelessWidget {
-  _SkiResortDropdown({
+  const _SkiResortDropdown({
     super.key,
   });
 
@@ -104,6 +106,9 @@ class _SkiResortDropdown extends StatelessWidget {
                 selected: skiResortViewModel.skiResortSelected.value,
                 onSelected: (idx) {
                   skiResortViewModel.setResort(idx);
+                  reservationViewModel.reservation.update((val) =>
+                      val?.duration =
+                          skiResortViewModel.selectedResortLessonTimes[0]);
                   reservationViewModel.reservation.value.resortId = idx + 1;
                   // FIXME. reservationViewModel.resortId를 skiResortName에 해당하는 resortId를 저장하도록 변경
                 },
@@ -208,15 +213,25 @@ class _DateTimeSelectors extends StatelessWidget {
       ),
       SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
       GoskiBorderWhiteContainer(
-        child: TextWithIconRow(
-          text: tr('hintTime'),
+          child: Obx(
+        () => TextWithIconRow(
+          text: reservationViewModel.reservation.value.startTime == ''
+              ? tr('hintDate')
+              : "${reservationViewModel.reservation.value.startTime.substring(0, 2)}:${reservationViewModel.reservation.value.startTime.substring(2, 4)}",
           icon: Icons.access_time_rounded,
           // selectedTime: reservationViewModel.reservation.value.startTime,
           onClicked: () {
-            _selectTime(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => GoskiModal(
+                title: "시간 선택",
+                child: reservationTimePicker(context),
+              ),
+            );
+            // _selectTime(context);
           },
         ),
-      ),
+      )),
       SizedBox(height: screenSizeController.getHeightByRatio(0.005)),
       SizedBox(
         width: double.infinity,
@@ -262,13 +277,89 @@ class _DateTimeSelectors extends StatelessWidget {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (picked != null) {
       reservationViewModel
           .setLessonDate(DateFormat('yyyy-MM-dd').format(picked));
     }
+  }
+
+  Widget reservationTimePicker(BuildContext context) {
+    String selectedHour = "08";
+    String selectedMinute = "00";
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(
+                height: screenSizeController.getHeightByRatio(0.2),
+                child: CupertinoPicker(
+                  itemExtent: 32.0,
+                  onSelectedItemChanged: (int index) {
+                    selectedHour = (8 + index).toString();
+                  },
+                  children: List<Widget>.generate(15, (int index) {
+                    return Center(child: Text('${8 + index}'));
+                  }),
+                ),
+              ),
+            ),
+            const GoskiText(
+              text: ":",
+              size: goskiFontLarge,
+            ),
+            Expanded(
+              child: SizedBox(
+                height: screenSizeController.getHeightByRatio(0.2),
+                child: CupertinoPicker(
+                  itemExtent: 32.0,
+                  onSelectedItemChanged: (int index) {
+                    selectedMinute = (index * 30).toString();
+                  },
+                  children: const <Widget>[
+                    Center(child: Text('00')),
+                    Center(child: Text('30')),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: GoskiText(
+                text: tr('cancel'),
+                size: goskiFontLarge,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                selectedMinute = selectedMinute.length == 1
+                    ? "0$selectedMinute"
+                    : selectedMinute;
+                reservationViewModel
+                    .setStartTime("$selectedHour$selectedMinute");
+                Navigator.of(context).pop();
+              },
+              child: GoskiText(
+                text: tr('confirm'),
+                size: goskiFontLarge,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -309,9 +400,8 @@ class _DifficultyLevelSwitch extends StatelessWidget {
         ),
         SizedBox(height: contentPadding),
         GoskiDifficultySwitch(
-          onSelected: (_selectedDifficulty) {
-            print(_selectedDifficulty);
-            reservationViewModel.reservation.value.level = _selectedDifficulty;
+          onSelected: (selectedDifficulty) {
+            reservationViewModel.reservation.value.level = selectedDifficulty;
           },
         ),
       ],
