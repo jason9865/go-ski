@@ -127,12 +127,7 @@ class _ReservationTeamSelectScreenState
         logger.d("팀 상세 페이지로 이동");
         Get.to(
             ReservationTeamDetailScreen(
-              teamId: team.teamId,
-              teamName: team.teamName,
-              teamImages: team.teamImages,
-              description: team.description,
-              instructors: team.instructors,
-              cost: team.cost,
+              teamInformation: team,
             ), binding: BindingsBuilder(() {
           // Get.put(() => BeginnerInstructorListViewModel(), permanent: true);
           Get.lazyPut(() => BeginnerInstructorListViewModel());
@@ -178,6 +173,24 @@ class _ReservationTeamSelectScreenState
                                 text: team.teamName,
                                 size: goskiFontLarge,
                               ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: GoskiText(
+                                    text: team.description,
+                                    size: goskiFontMedium,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Row(
                                 children: [
                                   const Icon(
@@ -195,27 +208,10 @@ class _ReservationTeamSelectScreenState
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          Expanded(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: GoskiText(
-                                    text: team.description,
-                                    size: goskiFontMedium,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
                               GoskiText(
-                                text: tr('moneyUnit',
-                                    args: [team.cost.toString()]),
+                                text: tr('moneyUnit', args: [
+                                  NumberFormat('###,###,###').format(team.cost)
+                                ]),
                                 size: goskiFontLarge,
                               ),
                             ],
