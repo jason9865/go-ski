@@ -27,6 +27,6 @@ public class SkiResort {
     private Double latitude;
 
     @Column(nullable = false)
-    private Double hardness;
+    private Double longitude;
 
 }
