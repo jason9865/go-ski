@@ -15,12 +15,16 @@ public class ResortListDTO {
 	private Integer resortId;
 	private String resortName;
 	private String resortLocation;
+	private Double latitude;
+	private Double hardness;
 	private List<Integer> lessonTime;
 
-	public ResortListDTO(Integer resortId, String resortLocation, String resortName, Object lessonTime) {
+	public ResortListDTO(Integer resortId, String resortLocation, String resortName, Double latitude, Double hardness, Object lessonTime) {
 		this.resortId = resortId;
 		this.resortLocation = resortLocation;
 		this.resortName = resortName;
+		this.latitude = latitude;
+		this.hardness = hardness;
 
 		// lessonTime을 문자열로 변환하고 쉼표(,)로 분할하여 리스트로 변환
 		String lessonTimeString = lessonTime.toString();

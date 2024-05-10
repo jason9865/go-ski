@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface SkiResortRepository extends JpaRepository<SkiResort, Integer> {
 
 	@Query("SELECT new com.go.ski.team.support.dto.ResortListDTO ( "
-		+ "s.resortId, s.resortLocation, s.resortName, GROUP_CONCAT(lt.lessonTime) "
+		+ "s.resortId, s.resortLocation, s.resortName, s.latitude, s.hardness, GROUP_CONCAT(lt.lessonTime) "
 		+ ") "
 		+ "FROM SkiResort s "
 		+ "JOIN LessonTime lt ON s.resortId = lt.skiResort.resortId "
