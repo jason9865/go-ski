@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:goski_student/data/data_source/lesson_payment_service.dart';
 import 'package:goski_student/data/model/default_dto.dart';
+import 'package:goski_student/data/model/kakao_pay.dart';
 import 'package:goski_student/data/model/lesson_payment.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/model/student_info.dart';
@@ -8,7 +9,7 @@ import 'package:goski_student/data/model/student_info.dart';
 class LessonPaymentRepository {
   final lessonPaymentService = Get.find<LessonPaymentService>();
 
-  Future<DefaultDTO?> teamLessonPayment(
+  Future<KakaoPayPrepareResponse> teamLessonPayment(
       ReservationRequest reservationRequest,
       BeginnerResponse beginnerResponse,
       List<StudentInfo> studentInfo,
