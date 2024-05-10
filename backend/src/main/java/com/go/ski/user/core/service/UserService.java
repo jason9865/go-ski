@@ -197,6 +197,7 @@ public class UserService {
     }
 
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
+        log.info("instructor profileImage - {}", profileImageDTO.getProfileImage().getOriginalFilename());
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
             if (user.getProfileUrl() != null) {
@@ -212,6 +213,7 @@ public class UserService {
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
         List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
+        log.info("instructor Certificates size - {}", instructorImagesDTO.getCertificateImageVOs().size());
         if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
             for (CertificateImageVO certificateImageVO : certificateImageVOs) {
                 log.info("certificateID - {}",certificateImageVO.getCertificateId());
