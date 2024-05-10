@@ -20,6 +20,7 @@ import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
+import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -126,6 +127,7 @@ class StudentMainScreen extends StatelessWidget {
                           binding: BindingsBuilder(() {
                         Get.lazyPut<ReservationViewModel>(
                             () => ReservationViewModel());
+                        Get.put(SkiResortViewModel());
                       }))
                     },
                   ),

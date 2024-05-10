@@ -15,14 +15,17 @@ class GoskiInstructorCard extends StatelessWidget {
   final String name;
   final String description;
   final String imagePath;
+  final double badgeFont;
 
-  const GoskiInstructorCard(
-      {super.key,
-      this.imagePath = 'assets/images/penguin.png',
-      required this.position,
-      required this.badgeColor,
-      required this.name,
-      required this.description});
+  const GoskiInstructorCard({
+    super.key,
+    this.imagePath = 'assets/images/penguin.png',
+    required this.position,
+    required this.badgeColor,
+    required this.name,
+    required this.description,
+    this.badgeFont = goskiFontSmall,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class GoskiInstructorCard extends StatelessWidget {
             // Profile Image
             ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              child: Image.asset(
+              child: Image.network(
                 imagePath,
                 width: 90,
                 height: 90,
@@ -63,12 +66,15 @@ class GoskiInstructorCard extends StatelessWidget {
                             children: [
                               GoskiText(
                                 text: tr('position'),
-                                size: goskiFontSmall,
+                                size: goskiFontMedium,
                               ),
                             ],
                           )),
                       GoskiBadge(
-                          text: tr(position), backgroundColor: badgeColor),
+                        text: tr(position),
+                        backgroundColor: badgeColor,
+                        font: badgeFont,
+                      ),
                     ],
                   ),
                 ),
@@ -83,12 +89,12 @@ class GoskiInstructorCard extends StatelessWidget {
                           children: [
                             GoskiText(
                               text: tr('name'),
-                              size: goskiFontSmall,
+                              size: goskiFontMedium,
                             ),
                           ],
                         ),
                       ),
-                      GoskiText(text: tr(name), size: goskiFontSmall),
+                      GoskiText(text: tr(name), size: goskiFontMedium),
                     ],
                   ),
                 ),
@@ -100,12 +106,12 @@ class GoskiInstructorCard extends StatelessWidget {
                         width: 80,
                         child: GoskiText(
                           text: tr('selfIntroduction'),
-                          size: goskiFontSmall,
+                          size: goskiFontMedium,
                         ),
                       ),
                       Expanded(
                           child: GoskiText(
-                              text: tr(description), size: goskiFontSmall)),
+                              text: tr(description), size: goskiFontMedium)),
                     ],
                   ),
                 ),
