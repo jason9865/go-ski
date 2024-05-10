@@ -29,9 +29,12 @@ final screenSizeController = Get.find<ScreenSizeController>();
 
 class StudentMainScreen extends StatelessWidget {
   final List<String> advList = [
-    'assets/images/adv.jpg',
-    'assets/images/adv.jpg',
-    'assets/images/adv.jpg',
+    'https://adnet21.co.kr/data/file/b0301/thumb-3717079066_0ksWLuKg_1EC9588_EC9790EB8DB4EBB0B8EBA6AC_20ECB488.mov_000017462_1000x563.png',
+    'https://imagescdn.gettyimagesbank.com/500/202111/jv12498198.jpg',
+    'https://i.ytimg.com/vi/uNYg8av06Ow/maxresdefault.jpg',
+    'https://www.greened.kr/news/photo/202212/299330_329087_4332.png',
+    'https://cdn.gpkorea.com/news/photo/202212/96211_210544_551.jpg',
+    'https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F276A8A3651D3914524',
   ];
   final mainViewModel = Get.find<MainViewModel>();
   final lessonListViewModel = Get.find<LessonListViewModel>();
@@ -170,7 +173,7 @@ class StudentMainScreen extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
+                  child: Image.network(
                     item,
                     fit: BoxFit.cover,
                     width: screenSizeController.getWidthByRatio(1),
