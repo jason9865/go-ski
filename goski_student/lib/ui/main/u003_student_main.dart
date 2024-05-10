@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/const/util/url_launch_util.dart';
 import 'package:goski_student/ui/component/goski_bottomsheet.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
@@ -163,24 +164,30 @@ class StudentMainScreen extends StatelessWidget {
         enlargeCenterPage: true,
       ),
       items: advList
-          .map((item) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: goskiDashGray,
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(0, 1),
+          .map((item) => GestureDetector(
+                onTap: () {
+                  // TODO: 추후에 광고 클릭시 이동 링크로 변경 필요
+                  UrlLaunchUtil.launch('https://ssafy.com/');
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: goskiDashGray,
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      item,
+                      fit: BoxFit.cover,
+                      width: screenSizeController.getWidthByRatio(1),
                     ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    item,
-                    fit: BoxFit.cover,
-                    width: screenSizeController.getWidthByRatio(1),
                   ),
                 ),
               ))
@@ -202,13 +209,12 @@ class StudentMainScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => showGoskiBottomSheet(
-                      context: context,
-                      child: SelectResortBottomSheet()
-                    ),
+                        context: context, child: SelectResortBottomSheet()),
                     child: Row(
                       children: [
                         GoskiText(
-                          text: mainViewModel.selectedSkiResort.value.resortName,
+                          text:
+                              mainViewModel.selectedSkiResort.value.resortName,
                           size: goskiFontXLarge,
                         ),
                         const Icon(
@@ -248,8 +254,7 @@ class StudentMainScreen extends StatelessWidget {
                 ),
               ),
             )
-          ]
-          else ...[
+          ] else ...[
             Image.network(
               mainViewModel.weather.value.iconUrl,
               height: 30,
