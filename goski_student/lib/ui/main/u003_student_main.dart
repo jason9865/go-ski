@@ -229,7 +229,10 @@ class StudentMainScreen extends StatelessWidget {
               ),
               const Expanded(
                 child: Center(
-                  child: Text('ResortInfo'),
+                  child: GoskiText(
+                    text: "24/25 시즌에 만나요!",
+                    size: goskiFontXXLarge,
+                  ),
                 ),
               )
             ],
