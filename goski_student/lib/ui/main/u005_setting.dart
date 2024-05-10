@@ -9,6 +9,9 @@ import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/main/d_u007_notification_setting.dart';
+import 'package:goski_student/ui/main/u029_term.dart';
+import 'package:goski_student/ui/main/u030_guide.dart';
+import 'package:goski_student/ui/main/u031_ask.dart';
 import 'package:goski_student/ui/user/d_u032_resign.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/use_view_model.dart';
@@ -68,17 +71,17 @@ class SettingScreen extends StatelessWidget {
                         ),
                         SettingContent(
                           content: tr('term'),
-                          onConfirm: () => logger.d("약관"),
+                          onConfirm: () => Get.to(() => const TermScreen()),
                         ),
                         buildDivider(),
                         SettingContent(
                           content: tr('guide'),
-                          onConfirm: () => logger.d("도움말"),
+                          onConfirm: () => Get.to(() => const GuideScreen()),
                         ),
                         buildDivider(),
                         SettingContent(
                           content: tr('ask'),
-                          onConfirm: () => logger.d("문의"),
+                          onConfirm: () => Get.to(() => const AskScreen()),
                         ),
                       ],
                     ),
