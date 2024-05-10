@@ -57,7 +57,7 @@ class LessonListService extends GetxService {
         )
       );
 
-      if (response.statusCode == 200) {
+      if (response.data['status'] == 'success') {
         logger.d('LessonListService - sendMessage - 응답 성공');
         DefaultDTO defaultDTO =
             DefaultDTO.fromJson(response.data as Map<String, dynamic>);
