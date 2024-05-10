@@ -57,7 +57,10 @@ public class LessonService {
                 // 팀 가격 설정
                 if (reserveInfoVO.getStudentCount() > 0) {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
-                    int teamCost = calculateTeamCost(team.getTeamCost(), oneToNOption, reserveInfoVO.getStudentCount());
+                    int oneToNOptionFee = getOneToNOption(oneToNOption, reserveInfoVO.getStudentCount());
+                    int teamCost = oneToNOptionFee + team.getTeamCost();
+                    reserveNoviceResponseDTO.setBasicFee(teamCost);
+                    reserveNoviceResponseDTO.setPeopleOptionFee(oneToNOptionFee);
                     reserveNoviceResponseDTO.setCost(teamCost * reserveInfoVO.getDuration());
                 }
                 // 별점 설정
@@ -125,8 +128,12 @@ public class LessonService {
                     int teamCost = calculateTeamCost(team.getTeamCost(), optionalOneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
                     Optional<LevelOption> optionalLevelOption = levelOptionRepository.findById(teamId);
                     int levelCost = calculateLevelCost(optionalLevelOption, reserveNoviceTeamRequestDTO.getLevel());
+                    Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
+                    int oneToNOptionFee = getOneToNOption(oneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
 
                     reserveAdvancedResponseDTO.setCost(teamCost * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setBasicFee(teamCost);
+                    reserveAdvancedResponseDTO.setPeopleOptionFee(oneToNOptionFee);
                     reserveAdvancedResponseDTO.setDesignatedFee(permission.getDesignatedCost() * reserveNoviceTeamRequestDTO.getDuration());
                     reserveAdvancedResponseDTO.setLevelOptionFee(levelCost * reserveNoviceTeamRequestDTO.getDuration());
                 }
@@ -312,6 +319,16 @@ public class LessonService {
             case 4 -> teamCost + option.getOneFourFee();
             default -> teamCost + option.getOneNFee();
         }).orElse(teamCost);
+    }
+
+    private int getOneToNOption(Optional<OneToNOption> optionalOneToNOption, int studentCount) {
+        return optionalOneToNOption.map(option -> switch (studentCount) {
+            case 1 -> 0;
+            case 2 -> option.getOneTwoFee();
+            case 3 -> option.getOneThreeFee();
+            case 4 -> option.getOneFourFee();
+            default -> option.getOneNFee();
+        }).orElse(0);
     }
 
     private int calculateLevelCost(Optional<LevelOption> optionalLevelOption, String level) {

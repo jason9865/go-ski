@@ -14,6 +14,8 @@ import java.util.List;
 @ToString
 public class ReserveResponseDTO {
     private Integer cost;
+    private Integer basicFee;
+    private Integer peopleOptionFee;
     private Integer designatedFee;
     private Integer levelOptionFee;
     private Double rating;
