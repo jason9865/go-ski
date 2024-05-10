@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
@@ -36,23 +37,39 @@ class SelectResortBottomSheet extends StatelessWidget {
                   return GoskiCard(
                     child: InkWell(
                       onTap: () {
-                        mainViewModel.selectedSkiResort.value = resortList[index];
+                        mainViewModel.selectedSkiResort.value =
+                            resortList[index];
                         mainViewModel.getWeather();
                         Navigator.pop(context);
                       },
                       child: Container(
                         alignment: Alignment.center,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: screenSizeController
-                                      .getHeightByRatio(0.025)),
-                              child: GoskiText(
-                                text: resortList[index].resortName,
-                                size: goskiFontMedium,
-                                isBold: true,
+                              padding: EdgeInsets.all(
+                                screenSizeController.getHeightByRatio(0.025),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GoskiText(
+                                    text: resortList[index].resortName,
+                                    size: goskiFontMedium,
+                                    isBold: true,
+                                  ),
+                                  SizedBox(
+                                    height: screenSizeController
+                                        .getHeightByRatio(0.005),
+                                  ),
+                                  GoskiText(
+                                    text: resortList[index].resortLocation,
+                                    size: goskiFontSmall,
+                                    isBold: false,
+                                    color: goskiDarkGray,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
