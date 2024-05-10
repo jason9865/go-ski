@@ -48,11 +48,8 @@ class SelectResortBottomSheet extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: screenSizeController
-                                    .getHeightByRatio(0.025),
-                                horizontal:
-                                    screenSizeController.getWidthByRatio(0.1),
+                              padding: EdgeInsets.all(
+                                screenSizeController.getHeightByRatio(0.025),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
