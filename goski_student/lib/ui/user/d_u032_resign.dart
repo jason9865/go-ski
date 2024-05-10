@@ -48,7 +48,7 @@ class ResignConfirmDialog extends StatelessWidget {
                 ),
                 GoskiSmallsizeButton(
                   width: screenSizeController.getWidthByRatio(1),
-                  text: tr('delete'),
+                  text: tr('resign'),
                   onTap: onConfirm,
                 )
               ],
