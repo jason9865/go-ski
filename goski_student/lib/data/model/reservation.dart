@@ -54,6 +54,10 @@ class BeginnerResponse {
   double? rating;
   int? reviewCount;
   int cost;
+  int basicFee;
+  int designatedFee;
+  int peopleOptionFee;
+  int levelOptionFee;
 
   BeginnerResponse({
     this.teamId = 0,
@@ -65,6 +69,10 @@ class BeginnerResponse {
     this.rating = 0.0,
     this.reviewCount = 0,
     this.cost = 0,
+    this.basicFee = 0,
+    this.designatedFee = 0,
+    this.peopleOptionFee = 0,
+    this.levelOptionFee = 0,
   });
 
   factory BeginnerResponse.fromJson(Map<String, dynamic> json) {
@@ -88,6 +96,10 @@ class BeginnerResponse {
       rating: json['rating'] as double? ?? 0.0,
       reviewCount: json['reviewCount'] as int? ?? 0,
       cost: json['cost'] as int,
+      basicFee: json['basicFee'] as int? ?? 0,
+      designatedFee: json['designatedFee'] as int? ?? 0,
+      peopleOptionFee: json['peopleOptionFee'] as int? ?? 0,
+      levelOptionFee: json['levelOptionFee'] as int? ?? 0,
     );
   }
 }
