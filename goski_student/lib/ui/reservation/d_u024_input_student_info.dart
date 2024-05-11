@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/data/model/student_info.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_select_grid.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
+import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
 
 import '../../const/font_size.dart';
 import '../../const/util/screen_size_controller.dart';
@@ -19,11 +22,14 @@ class InputStudentInfoDialog extends StatefulWidget {
 }
 
 class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
+  final studentInfoSelectList = StudentInfoSelectList();
+
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.005);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
+    var _studentInfo = StudentInfo();
 
     return Flexible(
       flex: 1,
@@ -41,7 +47,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             GoskiTextField(
               hintText: tr('hintName'),
               onTextChange: (text) {
-                // TODO: 로직 추가 필요
+                _studentInfo.name = text;
               },
             ),
             SizedBox(height: contentPadding),
@@ -57,6 +63,11 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
                 return GoskiSwitch(
                   items: [tr('MALE'), tr('FEMALE')],
                   width: parentWidth,
+                  onToggle: (selectedType) {
+                    selectedType == 0
+                        ? _studentInfo.gender = 'MALE'
+                        : _studentInfo.gender = 'FEMALE';
+                  },
                 );
               },
             ),
@@ -68,9 +79,11 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             ),
             SizedBox(height: titlePadding),
             GoskiSelectGrid(
-              items: StudentInfoList().heightList,
+              items: studentInfoSelectList.heightList,
               rows: 2,
               onItemClicked: (index) {
+                _studentInfo.height =
+                    studentInfoSelectList.heightList[index].name;
               },
             ),
             SizedBox(height: contentPadding),
@@ -81,9 +94,10 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             ),
             SizedBox(height: titlePadding),
             GoskiSelectGrid(
-              items: StudentInfoList().ageList,
+              items: studentInfoSelectList.ageList,
               rows: 2,
               onItemClicked: (index) {
+                _studentInfo.age = studentInfoSelectList.ageList[index].name;
               },
             ),
             SizedBox(height: contentPadding),
@@ -94,9 +108,11 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
             ),
             SizedBox(height: titlePadding),
             GoskiSelectGrid(
-              items: StudentInfoList().weightList,
+              items: studentInfoSelectList.weightList,
               rows: 2,
               onItemClicked: (index) {
+                _studentInfo.weight =
+                    studentInfoSelectList.weightList[index].name;
               },
             ),
             SizedBox(height: contentPadding),
@@ -110,7 +126,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
               hintText: tr('hintFeetSize'),
               isDigitOnly: true,
               onTextChange: (text) {
-                // TODO: 로직 추가 필요
+                _studentInfo.footSize = int.parse(text);
               },
             ),
             SizedBox(height: contentPadding * 2),
@@ -129,7 +145,12 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
                   text: tr('confirm'),
                   onTap: () {
                     // TODO. 보내기 버튼 동작 추가 필요
-                    Navigator.pop(context);
+                    if (_studentInfo.isValid()) {
+                      logger.d(_studentInfo.toString());
+                      studentInfoViewModel.addStudentInfo(_studentInfo);
+                      Navigator.pop(context);
+                    } else
+                      logger.e("전체 작성 미완료 ${_studentInfo.toString()}");
                   },
                 )
               ],

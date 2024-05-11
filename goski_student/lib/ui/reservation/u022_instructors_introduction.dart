@@ -7,12 +7,12 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:logger/logger.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class InstructorsIntroductionScreen extends StatefulWidget {
   const InstructorsIntroductionScreen({super.key});
@@ -24,7 +24,7 @@ class InstructorsIntroductionScreen extends StatefulWidget {
 
 class _InstructorsIntroductionScreen
     extends State<InstructorsIntroductionScreen> {
-  Instructor? instructor;
+  _Instructor? instructor;
   final PageController _pageController = PageController();
 
   @override
@@ -35,82 +35,88 @@ class _InstructorsIntroductionScreen
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      onConfirm: () => logger.d("지정강사 예약"),
-      buttonName: "180,000원 - 지정강사 예약",
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: screenSizeController.getHeightByRatio(0.8),
-              child: PageView.builder(
-                itemCount: 4,
-                itemBuilder: (context, index) => GoskiCard(
-                  child: Container(
-                    color: goskiWhite,
-                    child: Column(
-                      children: [
-                        Container(
-                          color: goskiLightGray,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: screenSizeController
-                                    .getHeightByRatio(0.01)),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GoskiText(
-                                  text: 'OO리조트',
-                                  size: goskiFontXLarge,
-                                ),
-                                GoskiText(
-                                  text: ' - ',
-                                  size: goskiFontXLarge,
-                                ),
-                                GoskiText(
-                                  text: '팀이름1',
-                                  size: goskiFontXLarge,
-                                ),
-                              ],
+    return Scaffold(
+      appBar: GoskiSubHeader(
+        title: tr('designatedReserve',
+            args: [NumberFormat('###,###,###').format(180000)]),
+      ),
+      body: GoskiContainer(
+        onConfirm: () => logger.d("지정강사 예약"),
+        buttonName: "180,000원 - 지정강사 예약",
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: screenSizeController.getHeightByRatio(0.8),
+                child: PageView.builder(
+                  itemCount: 4,
+                  itemBuilder: (context, index) => GoskiCard(
+                    child: Container(
+                      color: goskiWhite,
+                      child: Column(
+                        children: [
+                          Container(
+                            color: goskiLightGray,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: screenSizeController
+                                      .getHeightByRatio(0.01)),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GoskiText(
+                                    text: 'OO리조트',
+                                    size: goskiFontXLarge,
+                                  ),
+                                  GoskiText(
+                                    text: ' - ',
+                                    size: goskiFontXLarge,
+                                  ),
+                                  GoskiText(
+                                    text: '팀이름1',
+                                    size: goskiFontXLarge,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildProfile(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildSelfIntroduction(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildCertificateImages(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildReviews(),
-                      ],
+                          const Divider(
+                            height: 0,
+                          ),
+                          buildProfile(),
+                          const Divider(
+                            height: 0,
+                          ),
+                          buildSelfIntroduction(),
+                          const Divider(
+                            height: 0,
+                          ),
+                          buildCertificateImages(),
+                          const Divider(
+                            height: 0,
+                          ),
+                          buildReviews(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const BuildInterval(),
-            SmoothPageIndicator(
-              controller: _pageController,
-              count: 4,
-              effect: const WormEffect(),
-            ),
-          ],
+              const BuildInterval(),
+              SmoothPageIndicator(
+                controller: _pageController,
+                count: 4,
+                effect: const WormEffect(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void fetchData() {
-    instructor = Instructor(
+    instructor = _Instructor(
       resort: dummy["resort"],
       teamName: dummy["teamName"],
       instructorName: dummy["instructorName"],
@@ -462,7 +468,7 @@ Map<String, dynamic> dummy = {
   ],
 };
 
-class Instructor {
+class _Instructor {
   final String resort;
   final String teamName;
   final String instructorName;
@@ -473,7 +479,7 @@ class Instructor {
   final double? rating;
   final List<Map<String, dynamic>>? reviewList;
 
-  Instructor({
+  _Instructor({
     required this.resort,
     required this.teamName,
     required this.instructorName,
