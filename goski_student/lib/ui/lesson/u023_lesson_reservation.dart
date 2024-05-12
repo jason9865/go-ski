@@ -31,7 +31,7 @@ class LessonReservationScreen extends StatefulWidget {
   bool isCouponSelected = false;
 
   final List<_DummyPolicy> policyList = [
-    _DummyPolicy(title: '필수 약관 전체 동의', isChecked: false),
+    _DummyPolicy(title: '약관 전체 동의', isChecked: false),
     _DummyPolicy(title: '[필수] 개인정보 수집 및 이용', isChecked: false),
     _DummyPolicy(title: '[필수] 개인정보 제 3자 제공', isChecked: false),
     _DummyPolicy(title: '[선택] 마케팅 수신 동의', isChecked: false),
@@ -108,8 +108,31 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
       body: GoskiContainer(
         buttonName: tr('letReservation'),
         onConfirm: () {
-          lessonPaymentViewModel.teamLessonPayment(reservationInfo, teamInfo,
-              studentInfoViewModel.studentInfoList, requestComplain);
+          if (widget.policyList[1].isChecked &&
+              widget.policyList[2].isChecked &&
+              studentInfoViewModel.studentInfoList.length ==
+                  reservationInfo.studentCount) {
+            if (widget.instructor != null) {
+              lessonPaymentViewModel.instLessonPayment(
+                  reservationInfo,
+                  teamInfo,
+                  widget.instructor!,
+                  studentInfoViewModel.studentInfoList,
+                  requestComplain);
+            } else {
+              lessonPaymentViewModel.teamLessonPayment(
+                  reservationInfo,
+                  teamInfo,
+                  studentInfoViewModel.studentInfoList,
+                  requestComplain);
+            }
+          } else if (!widget.policyList[1].isChecked ||
+              !widget.policyList[2].isChecked) {
+            //TODO. 필수약관 동의해주세요 Dialog
+          } else if (studentInfoViewModel.studentInfoList.length !=
+              reservationInfo.studentCount) {
+            //TODO. 강습생 정보를 모두 입력해주세요 Dialog
+          }
         },
         child: SingleChildScrollView(
           child: Column(
