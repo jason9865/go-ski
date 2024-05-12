@@ -34,8 +34,8 @@ class ReservationService extends GetxService {
             .map<BeginnerResponse>((json) =>
                 BeginnerResponse.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d(
-            'ReservationService - getBeginnerLessonTeamInfo - 응답 성공 $teams');
+        logger
+            .d('ReservationService - getBeginnerLessonTeamInfo - 응답 성공 $teams');
 
         return teams;
       } else {
@@ -81,6 +81,42 @@ class ReservationService extends GetxService {
     } catch (e) {
       logger.e(
           'ReservationService - getBeginnerInstructorList - 응답 실패 CATCH\n $e');
+    }
+    return [];
+  }
+
+  Future<List<Instructor>> getAdvancedInstructorList(
+      ReservationRequest reservationRequest) async {
+    logger.e(reservationRequest.reservationRequestToJson());
+    try {
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/lesson/reserve/advanced',
+        data: reservationRequest.reservationRequestToJson(),
+      );
+      logger.d("ReservationService : \n$response.data");
+
+      if (response.statusCode == 200 &&
+          response.data is Map<String, dynamic> &&
+          response.data['data'] is List) {
+        // List<BeginnerResponse> data = (response.data['data'] as List)
+        //     .map<BeginnerResponse>((json) =>
+        //         BeginnerResponse.fromJson(json as Map<String, dynamic>))
+        //     .toList();
+        List<dynamic> dataList = response.data['data'];
+        List<Instructor> instructors = dataList
+            .map<Instructor>(
+                (json) => Instructor.fromJson(json as Map<String, dynamic>))
+            .toList();
+        logger.d(
+            'ReservationService - getAdvancedInstructorList - 응답 성공 $instructors');
+
+        return instructors;
+      } else {
+        logger.e(
+            'ReservationService - getAdvancedInstructorList - 응답 실패 ${response.data}');
+      }
+    } catch (e) {
+      logger.e('ReservationService - getAdvancedInstructorList - 응답 실패 $e');
     }
     return [];
   }

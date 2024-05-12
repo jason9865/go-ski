@@ -50,7 +50,10 @@ class ReservationSelectScreen extends StatelessWidget {
             }));
           } else if (reservationViewModel.reservation.value.isValid()) {
             reservationViewModel.submitReservation();
-            Get.to(() => const ReservationInstructorListScreen());
+            Get.to(() => const ReservationInstructorListScreen(),
+                binding: BindingsBuilder(() {
+              Get.lazyPut(() => LessonInstructorListViewModel());
+            }));
           } else {
             logger.d("전부 입력 x");
             reservationViewModel.submitReservation();
