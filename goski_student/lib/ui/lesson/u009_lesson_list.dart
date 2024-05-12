@@ -134,13 +134,14 @@ class _LessonListScreenState extends State<LessonListScreen> {
                 }
                 if (lesson.endTime.isBefore(now)) {
                   buttons.addAll([
-                    createButton(
-                      screenSizeController,
-                      'reLesson',
-                      tr('reLessonRequest'),
-                      lesson,
-                      () {},
-                    ),
+                    // TODO: 추후에 재강습 버튼 추가 필요
+                    // createButton(
+                    //   screenSizeController,
+                    //   'reLesson',
+                    //   tr('reLessonRequest'),
+                    //   lesson,
+                    //   () {},
+                    // ),
                     createButton(
                       screenSizeController,
                       'feedback',
