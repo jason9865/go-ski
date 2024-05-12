@@ -4,18 +4,33 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/data/data_source/lesson_payment_service.dart';
+import 'package:goski_student/data/model/instructor.dart';
+import 'package:goski_student/data/model/reservation.dart';
+import 'package:goski_student/data/repository/lesson_payment_repository.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
+import 'package:goski_student/view_model/lesson_payment_view_model.dart';
+import 'package:goski_student/view_model/student_info_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 final Logger logger = Logger();
 
 class InstructorsIntroductionScreen extends StatefulWidget {
-  const InstructorsIntroductionScreen({super.key});
+  BeginnerResponse teamInfo;
+  List<Instructor> instructorList;
+  int index;
+
+  InstructorsIntroductionScreen(
+      {super.key,
+      required this.teamInfo,
+      required this.instructorList,
+      required this.index});
 
   @override
   State<InstructorsIntroductionScreen> createState() =>
@@ -24,12 +39,11 @@ class InstructorsIntroductionScreen extends StatefulWidget {
 
 class _InstructorsIntroductionScreen
     extends State<InstructorsIntroductionScreen> {
-  _Instructor? instructor;
   final PageController _pageController = PageController();
 
   @override
   void initState() {
-    fetchData();
+    // fetchData();
     super.initState();
   }
 
@@ -38,18 +52,34 @@ class _InstructorsIntroductionScreen
     return Scaffold(
       appBar: GoskiSubHeader(
         title: tr('designatedReserve',
-            args: [NumberFormat('###,###,###').format(180000)]),
+            args: [NumberFormat('###,###,###').format(widget.teamInfo.cost)]),
       ),
       body: GoskiContainer(
-        onConfirm: () => logger.d("지정강사 예약"),
-        buttonName: "180,000원 - 지정강사 예약",
+        onConfirm: () {
+          logger.d("지정강사 예약");
+          Get.to(
+              LessonReservationScreen(
+                teamInformation: widget.teamInfo,
+                instructor: widget.instructorList[widget.index],
+              ), binding: BindingsBuilder(() {
+            Get.lazyPut(() => LessonPaymentService());
+            Get.lazyPut(() => LessonPaymentRepository());
+            // Get.put(() => StudentInfoViewModel());
+            Get.lazyPut(() => StudentInfoViewModel());
+            Get.lazyPut(() => LessonPaymentViewModel());
+          }));
+        },
+        buttonName: tr('designatedReserve', args: [
+          NumberFormat('###,###,###')
+              .format(widget.instructorList[widget.index].designatedFee)
+        ]),
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
-                height: screenSizeController.getHeightByRatio(0.8),
+                height: screenSizeController.getHeightByRatio(0.9),
                 child: PageView.builder(
-                  itemCount: 4,
+                  itemCount: widget.instructorList.length,
                   itemBuilder: (context, index) => GoskiCard(
                     child: Container(
                       color: goskiWhite,
@@ -61,21 +91,21 @@ class _InstructorsIntroductionScreen
                               padding: EdgeInsets.symmetric(
                                   vertical: screenSizeController
                                       .getHeightByRatio(0.01)),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GoskiText(
-                                    text: 'OO리조트',
+                                    text: tr(widget.teamInfo.teamName),
                                     size: goskiFontXLarge,
                                   ),
-                                  GoskiText(
-                                    text: ' - ',
-                                    size: goskiFontXLarge,
-                                  ),
-                                  GoskiText(
-                                    text: '팀이름1',
-                                    size: goskiFontXLarge,
-                                  ),
+                                  // GoskiText(
+                                  //   text: ' - ',
+                                  //   size: goskiFontXLarge,
+                                  // ),
+                                  // GoskiText(
+                                  //   text: '팀이름1',
+                                  //   size: goskiFontXLarge,
+                                  // ),
                                 ],
                               ),
                             ),
@@ -83,19 +113,19 @@ class _InstructorsIntroductionScreen
                           const Divider(
                             height: 0,
                           ),
-                          buildProfile(),
+                          buildProfile(index),
                           const Divider(
                             height: 0,
                           ),
-                          buildSelfIntroduction(),
+                          buildSelfIntroduction(index),
                           const Divider(
                             height: 0,
                           ),
-                          buildCertificateImages(),
+                          buildCertificateImages(index),
                           const Divider(
                             height: 0,
                           ),
-                          buildReviews(),
+                          buildReviews(index),
                         ],
                       ),
                     ),
@@ -105,7 +135,7 @@ class _InstructorsIntroductionScreen
               const BuildInterval(),
               SmoothPageIndicator(
                 controller: _pageController,
-                count: 4,
+                count: widget.instructorList.length,
                 effect: const WormEffect(),
               ),
             ],
@@ -115,21 +145,21 @@ class _InstructorsIntroductionScreen
     );
   }
 
-  void fetchData() {
-    instructor = _Instructor(
-      resort: dummy["resort"],
-      teamName: dummy["teamName"],
-      instructorName: dummy["instructorName"],
-      gender: dummy["gender"],
-      certificateList: dummy["certificateList"],
-      selfIntroduction: dummy["selfIntroduction"],
-      certificateImageList: dummy["certificateImageList"],
-      rating: dummy["rating"],
-      reviewList: dummy["reviewList"],
-    );
-  }
+  // void fetchData() {
+  //   instructor = _Instructor(
+  //     resort: dummy["resort"],
+  //     teamName: dummy["teamName"],
+  //     instructorName: dummy["instructorName"],
+  //     gender: dummy["gender"],
+  //     certificateList: dummy["certificateList"],
+  //     selfIntroduction: dummy["selfIntroduction"],
+  //     certificateImageList: dummy["certificateImageList"],
+  //     rating: dummy["rating"],
+  //     reviewList: dummy["reviewList"],
+  //   );
+  // }
 
-  Widget buildProfile() {
+  Widget buildProfile(int index) {
     return Padding(
       padding: EdgeInsets.all(
         screenSizeController.getWidthByRatio(0.03),
@@ -140,8 +170,8 @@ class _InstructorsIntroductionScreen
             width: screenSizeController.getWidthByRatio(0.25),
             height: screenSizeController.getWidthByRatio(0.3),
             decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: AssetImage("assets/images/person1.png"),
+              image: DecorationImage(
+                image: NetworkImage(widget.instructorList[index].instructorUrl),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(15),
@@ -152,15 +182,15 @@ class _InstructorsIntroductionScreen
               children: [
                 buildBasicInfoRow(
                   tr('name'),
-                  const GoskiText(
-                    text: '임종율',
+                  GoskiText(
+                    text: widget.instructorList[index].userName,
                     size: goskiFontLarge,
                   ),
                 ),
                 buildBasicInfoRow(
                   tr('gender'),
                   GoskiText(
-                    text: tr('male'),
+                    text: tr(widget.instructorList[index].gender),
                     size: goskiFontLarge,
                   ),
                 ),
@@ -241,7 +271,7 @@ class _InstructorsIntroductionScreen
     );
   }
 
-  Widget buildSelfIntroduction() {
+  Widget buildSelfIntroduction(int index) {
     return Padding(
       padding: EdgeInsets.all(
         screenSizeController.getWidthByRatio(0.03),
@@ -262,13 +292,12 @@ class _InstructorsIntroductionScreen
           ),
           Padding(
             padding: EdgeInsets.all(screenSizeController.getWidthByRatio(0.01)),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
                   child: GoskiText(
-                    text:
-                        '안녕하세요, 저는 임종율입니다. 스키와 보드에 대한 열정을 가지고 있어요. 스키장에서 만나 뵐 수 있기를 기대합니다. 함께 멋진 겨울 스포츠의 추억을 만들어 가요!',
+                    text: tr(widget.instructorList[index].description),
                     size: goskiFontMedium,
                   ),
                 ),
@@ -280,7 +309,7 @@ class _InstructorsIntroductionScreen
     );
   }
 
-  Widget buildCertificateImages() {
+  Widget buildCertificateImages(int index) {
     return Padding(
       padding: EdgeInsets.all(
         screenSizeController.getWidthByRatio(0.03),
@@ -305,20 +334,22 @@ class _InstructorsIntroductionScreen
             ),
             child: Card(
               color: goskiWhite,
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              margin: EdgeInsets.symmetric(vertical: 10),
               child: SizedBox(
                 height: screenSizeController.getHeightByRatio(0.15),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
+                  itemCount:
+                      widget.instructorList[index].certificateList.length,
+                  itemBuilder: (context, idx) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: 200,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.asset(
-                          "assets/images/certificate.png",
+                        child: Image.network(
+                          widget.instructorList[index].certificateList[idx]
+                              .certificateImageUrl,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -333,7 +364,7 @@ class _InstructorsIntroductionScreen
     );
   }
 
-  Widget buildReviews() {
+  Widget buildReviews(int index) {
     return Padding(
       padding: EdgeInsets.all(
         screenSizeController.getWidthByRatio(0.03),
@@ -353,21 +384,21 @@ class _InstructorsIntroductionScreen
                       text: tr('review'),
                       size: goskiFontLarge,
                     ),
-                    const GoskiText(
-                      text: ' (3개)',
+                    GoskiText(
+                      text: ' ${widget.instructorList[index].reviewCount}개',
                       size: goskiFontMedium,
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.star,
                       color: goskiYellow,
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' 4.5',
+                      text: ' ${widget.instructorList[index].rating}',
                       size: goskiFontMedium,
                     ),
                   ],
@@ -375,15 +406,24 @@ class _InstructorsIntroductionScreen
               ],
             ),
           ),
-          buildReview(),
-          buildReview(),
-          buildReview(),
+          SizedBox(
+            height: 150,
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: widget.instructorList[index].reviews!.length < 3
+                    ? widget.instructorList[index].reviews?.length
+                    : 3,
+                itemBuilder: (context, idx) {
+                  return buildReview(
+                      widget.instructorList[index].reviews![idx]);
+                }),
+          ),
         ],
       ),
     );
   }
 
-  Widget buildReview() {
+  Widget buildReview(LessonReview lessonReview) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: screenSizeController.getWidthByRatio(0.03),
@@ -394,17 +434,15 @@ class _InstructorsIntroductionScreen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const GoskiText(
-                text: '리뷰1 내용 ...',
+              GoskiText(
+                text: lessonReview.reviewContent,
                 size: goskiFontMedium,
               ),
               Row(
                 children: [
-                  buildStar(),
-                  buildStar(),
-                  buildStar(),
-                  buildStar(),
-                  buildStar(),
+                  for (int i = 0; i < lessonReview.rating; i++) buildStar(),
+                  for (int i = lessonReview.rating; i < 5; i++)
+                    buildEmptyStar(),
                 ],
               ),
             ],
@@ -421,73 +459,12 @@ class _InstructorsIntroductionScreen
       size: 18,
     );
   }
-}
 
-Map<String, dynamic> dummy = {
-  "resort": "OO리조트",
-  "teamName": "팀이름1",
-  "instructorName": "송준석",
-  "gender": "male",
-  "certificateList": [
-    {
-      "ski": [
-        "Level1",
-        "Teaching1",
-      ],
-    },
-    {
-      "board": [
-        "Level1",
-      ],
-    },
-  ],
-  "selfIntroduction": "자기소개입니다.",
-  "certificateImageList": [
-    "assets/images/certificate.png",
-    "assets/images/certificate.png",
-    "assets/images/certificate.png",
-  ],
-  "rating": 4.5,
-  "reviewList": [
-    {
-      "star": 3,
-      "reviewContent": "리뷰1",
-    },
-    {
-      "star": 4.5,
-      "reviewContent": "리뷰2",
-    },
-    {
-      "star": 4,
-      "reviewContent": "리뷰3",
-    },
-    {
-      "star": 5,
-      "reviewContent": "리뷰4",
-    },
-  ],
-};
-
-class _Instructor {
-  final String resort;
-  final String teamName;
-  final String instructorName;
-  final String gender;
-  final List<Map<String, List<String>>> certificateList;
-  final String? selfIntroduction;
-  final List<String> certificateImageList;
-  final double? rating;
-  final List<Map<String, dynamic>>? reviewList;
-
-  _Instructor({
-    required this.resort,
-    required this.teamName,
-    required this.instructorName,
-    required this.gender,
-    required this.certificateList,
-    this.selfIntroduction,
-    required this.certificateImageList,
-    this.rating,
-    this.reviewList,
-  });
+  Widget buildEmptyStar() {
+    return const Icon(
+      Icons.star_border,
+      color: goskiYellow,
+      size: 18,
+    );
+  }
 }

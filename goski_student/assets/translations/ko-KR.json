@@ -31,7 +31,7 @@
   "teamSchedule": "팀 스케쥴",
   "updateTeamInfo": "팀 정보\n수정",
   "reserveTeam": "{}원 - 팀 예약하기",
-  "designatedReserve": "{}원 - 팀 예약하기",
+  "designatedReserve": "{}원 - 지정강사 예약",
   "sortByLowPrice": "낮은가격순",
   "sortByHighPrice": "높은가격순",
   "sortByRating": "별점순",
@@ -288,5 +288,5 @@
   "WEIGHT_90KG_TO_99KG": "90kg ~ 99kg",
   "WEIGHT_ABOVE_100KG": "100kg 이상",
   "footSize": "{}mm",
-  "selectTime" : "시간 선택"
+  "selectTime": "시간 선택"
 }

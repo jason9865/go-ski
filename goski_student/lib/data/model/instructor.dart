@@ -1,4 +1,3 @@
-
 import 'certificate_info.dart';
 
 class Instructor {
@@ -14,6 +13,7 @@ class Instructor {
   int designatedFee;
   int levelOptionFee;
   List<CertificateInfo> certificateList;
+  List<LessonReview>? reviews;
 
   Instructor({
     required this.instructorId,
@@ -28,15 +28,23 @@ class Instructor {
     required this.designatedFee,
     required this.levelOptionFee,
     required this.certificateList,
+    this.reviews,
   });
 
   factory Instructor.fromJson(Map<String, dynamic> json) {
     List<CertificateInfo> certList = [];
+    List<LessonReview> reviews = [];
     if (json['certificateInfoVOs'] != null) {
       certList = (json['certificateInfoVOs'] as List)
           .map((item) => CertificateInfo.fromJson(item as Map<String, dynamic>))
           .toList();
     }
+    if (json['reviews'] != null) {
+      reviews = (json['reviews'] as List)
+          .map((item) => LessonReview.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+
     return Instructor(
       instructorId: json['instructorId'] as int,
       userName: json['userName'] as String,
@@ -50,6 +58,24 @@ class Instructor {
       designatedFee: json['designatedFee'] as int,
       levelOptionFee: json['levelOptionFee'] as int,
       certificateList: certList,
+      reviews: reviews,
+    );
+  }
+}
+
+class LessonReview {
+  String reviewContent;
+  int rating;
+
+  LessonReview({
+    required this.reviewContent,
+    required this.rating,
+  });
+
+  factory LessonReview.fromJson(Map<String, dynamic> json) {
+    return LessonReview(
+      reviewContent: json['content'] as String,
+      rating: json['rating'] as int,
     );
   }
 }
