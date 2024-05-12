@@ -209,12 +209,9 @@ class _InstructorsIntroductionScreen
                             text: tr(' : '),
                             size: goskiFontMedium,
                           ),
-                          const GoskiText(
-                            text: 'Teaching 1, ',
-                            size: goskiFontMedium,
-                          ),
-                          const GoskiText(
-                            text: 'Level 1',
+                          GoskiText(
+                            text: widget.instructorList[index].skiCertificate
+                                .join(', '),
                             size: goskiFontMedium,
                           ),
                         ],
@@ -229,8 +226,9 @@ class _InstructorsIntroductionScreen
                             text: tr(' : '),
                             size: goskiFontMedium,
                           ),
-                          const GoskiText(
-                            text: 'Level 1',
+                          GoskiText(
+                            text: widget.instructorList[index].boardCertificate
+                                .join(', '),
                             size: goskiFontMedium,
                           ),
                         ],
