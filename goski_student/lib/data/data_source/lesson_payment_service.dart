@@ -51,8 +51,8 @@ class LessonPaymentService extends GetxService {
         created_at: '');
   }
 
-  Future<DefaultDTO?> instLessonPayment(
-      InstLessonPaymentRequest instLessonPaymentRequest) async {
+  Future<KakaoPayPrepareResponse> instLessonPayment(
+      Map<String, dynamic> instLessonPaymentRequest) async {
     try {
       dynamic response = await CustomDio.dio.post(
         '$baseUrl/payment/reserve/prepare',
@@ -64,19 +64,28 @@ class LessonPaymentService extends GetxService {
         ),
       );
 
+      logger.d(response.data['data']);
       if (response.data['status'] == 'success') {
-        logger.d('LessonPaymentService - teamLessonPayment - 응답 성공');
-        DefaultDTO defaultDTO =
-            DefaultDTO.fromJson(response.data as Map<String, dynamic>);
-        return defaultDTO;
+        logger.d('LessonPaymentService - instLessonPayment - 응답 성공');
+        KakaoPayPrepareResponse kakaoPayPrepareResponse =
+            KakaoPayPrepareResponse.fromJson(
+                response.data['data'] as Map<String, dynamic>);
+        return kakaoPayPrepareResponse;
       } else {
         logger.e(
-            'LessonPaymentService - teamLessonPayment - 응답 실패 ${response.data}');
+            'LessonPaymentService - instLessonPayment - 응답 실패 ${response.data}');
       }
     } catch (e) {
-      logger.e('LessonPaymentService - teamLessonPayment - 응답 실패 ${e}');
+      logger.e('LessonPaymentService - instLessonPayment - 응답 실패 ${e}');
     }
 
-    return null;
+    return KakaoPayPrepareResponse(
+        tid: '',
+        next_redirect_app_url: '',
+        next_redirect_mobile_url: '',
+        next_redirect_pc_url: '',
+        android_app_scheme: '',
+        ios_app_scheme: '',
+        created_at: '');
   }
 }

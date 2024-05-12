@@ -1,13 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
+
+final ReservationViewModel reservationViewModel =
+    Get.find<ReservationViewModel>();
+final LessonInstructorListViewModel lessonInstructorListViewModel =
+    Get.find<LessonInstructorListViewModel>();
 
 class ReservationInstructorListScreen extends StatefulWidget {
   const ReservationInstructorListScreen({super.key});
@@ -19,95 +27,27 @@ class ReservationInstructorListScreen extends StatefulWidget {
 
 class _ReservationInstructorListScreenState
     extends State<ReservationInstructorListScreen> {
-  List<_Instructor> instructors = [
-    _Instructor(
-      position: '교육팀장',
-      name: '고승민',
-      description:
-          '안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.안녕하세요, 고승민입니다.',
-      certificateName: 'Level3',
-      rating: 4.0,
-      imagePath: 'assets/images/adv.jpg',
-      reviewCount: 30,
-      cost: 300000,
-    ),
-    _Instructor(
-      position: '팀장',
-      name: '임종율',
-      description: '안녕하세요, 임종율입니다.안녕하세요, 임종율입니다',
-      certificateName: 'Level3',
-      imagePath: 'assets/images/person1.png',
-      rating: 4.9,
-      reviewCount: 30,
-      cost: 250000,
-    ),
-    _Instructor(
-      position: '코치',
-      name: '김태훈',
-      description: '안녕하세요, 김태훈입니다.',
-      certificateName: 'Level2',
-      imagePath: 'assets/images/person2.png',
-      rating: 4.8,
-      reviewCount: 30,
-      cost: 180000,
-    ),
-    _Instructor(
-      position: '코치',
-      name: '김태훈',
-      description: '안녕하세요, 김태훈입니다.',
-      certificateName: 'Level2',
-      imagePath: 'assets/images/person2.png',
-      rating: 4.7,
-      reviewCount: 30,
-      cost: 180000,
-    ),
-    _Instructor(
-      position: '코치',
-      name: '김태훈',
-      description: '안녕하세요, 김태훈입니다.',
-      certificateName: 'Level2',
-      imagePath: 'assets/images/person2.png',
-      rating: 4.7,
-      reviewCount: 29,
-      cost: 180000,
-    ),
-    _Instructor(
-      position: '코치',
-      name: '김태훈',
-      description: '안녕하세요, 김태훈입니다.',
-      certificateName: 'Level2',
-      imagePath: 'assets/images/person2.png',
-      rating: 4.7,
-      reviewCount: 31,
-      cost: 150000,
-    ),
-    _Instructor(
-      position: '코치',
-      name: '김태훈',
-      description: '안녕하세요, 김태훈입니다.',
-      certificateName: 'Level2',
-      imagePath: 'assets/images/person2.png',
-      rating: 4.88564576234154,
-      reviewCount: 30,
-      cost: 160000,
-    ),
-  ];
+  List<Instructor> instructorList =
+      lessonInstructorListViewModel.lessonInstructors;
+
   int currentSort = 0;
 
   void sortInstructors(int sortBy) {
     setState(() {
       if (sortBy == 0) {
-        instructors.sort((a, b) => a.cost.compareTo(b.cost));
+        instructorList.sort((a, b) => a.cost.compareTo(b.cost));
       } else if (sortBy == 1) {
-        instructors.sort((a, b) => b.cost.compareTo(a.cost));
+        instructorList.sort((a, b) => b.cost.compareTo(a.cost));
       } else if (sortBy == 2) {
-        instructors.sort((a, b) => b.rating.compareTo(a.rating));
+        instructorList.sort((a, b) => b.rating!.compareTo(a.rating!));
       }
     });
   }
 
   @override
   void initState() {
+    lessonInstructorListViewModel
+        .getLessonInstructorList(reservationViewModel.reservation.value);
     super.initState();
     sortInstructors(currentSort);
   }
@@ -141,9 +81,9 @@ class _ReservationInstructorListScreenState
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: instructors.length,
+                itemCount: instructorList.length,
                 itemBuilder: (context, index) {
-                  final instructor = instructors[index];
+                  final instructor = instructorList[index];
                   return instructorCard(instructor);
                 },
               ),
@@ -154,7 +94,7 @@ class _ReservationInstructorListScreenState
     );
   }
 
-  Widget instructorCard(_Instructor instructor) {
+  Widget instructorCard(Instructor instructor) {
     return GoskiCard(
       child: Container(
         height: screenSizeController.getHeightByRatio(0.2),
@@ -164,8 +104,8 @@ class _ReservationInstructorListScreenState
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                instructor.imagePath,
+              child: Image.network(
+                instructor.instructorUrl,
                 width: 120,
                 height: 160,
                 fit: BoxFit.fitHeight,
@@ -185,16 +125,18 @@ class _ReservationInstructorListScreenState
                       children: [
                         GoskiText(
                             text: tr('dynamicInstructor',
-                                args: [instructor.name]),
+                                args: [instructor.userName]),
                             size: goskiFontXLarge),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: GoskiText(
-                            text: instructor.certificateName,
-                            size: goskiFontLarge,
-                            color: goskiDarkGray,
-                          ),
-                        )
+                        if (instructor.skiCertificate.length > 0)
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: GoskiText(
+                              text: instructor.skiCertificate.first,
+                              size: goskiFontLarge,
+                              color: goskiDarkGray,
+                            ),
+                          )
                       ],
                     ),
                   ),
@@ -228,7 +170,7 @@ class _ReservationInstructorListScreenState
                           const Icon(Icons.star, color: goskiYellow),
                           GoskiText(
                               text:
-                                  '${instructor.rating.toStringAsFixed(1)} (${instructor.reviewCount})',
+                                  '${instructor.rating?.toStringAsFixed(1)} (${instructor.reviewCount})',
                               size: goskiFontMedium)
                         ],
                       ),
@@ -252,26 +194,4 @@ class _ReservationInstructorListScreenState
       ),
     );
   }
-}
-
-class _Instructor {
-  final String name;
-  final String position;
-  final String certificateName;
-  final String description;
-  final double rating;
-  final int reviewCount;
-  final String imagePath;
-  final int cost;
-
-  _Instructor({
-    required this.name,
-    required this.position,
-    required this.certificateName,
-    required this.description,
-    required this.rating,
-    required this.reviewCount,
-    required this.imagePath,
-    required this.cost,
-  });
 }

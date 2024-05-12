@@ -151,6 +151,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
                       Navigator.pop(context);
                     } else
                       logger.e("전체 작성 미완료 ${_studentInfo.toString()}");
+                    //TODO. 강습생 정보를 모두 입력해주세요 Dialog
                   },
                 )
               ],

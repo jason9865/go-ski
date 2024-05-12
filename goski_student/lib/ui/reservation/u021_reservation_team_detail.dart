@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -177,10 +176,17 @@ class _ReservationTeamDetailScreenState
                                 instbadgeColor = goskiDarkGray;
                             }
                             return GestureDetector(
+                              // FIXME : 강사카드를 누르면 해당 강사 Detail부터 보여질 수 있도록 수정
                               onTap: () {
                                 print(
                                     "강사 : ${instructor.userName}, index : $index");
-                                Get.to(InstructorsIntroductionScreen());
+                                Get.to(InstructorsIntroductionScreen(
+                                  teamInfo: widget.teamInformation,
+                                  instructorList:
+                                      beginnerInstructorListViewModel
+                                          .instructors,
+                                  index: index,
+                                ));
                               },
                               child: GoskiInstructorCard(
                                 name: instructor.userName,

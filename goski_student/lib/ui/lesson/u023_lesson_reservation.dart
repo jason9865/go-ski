@@ -31,17 +31,17 @@ class LessonReservationScreen extends StatefulWidget {
   bool isCouponSelected = false;
 
   final List<_DummyPolicy> policyList = [
-    _DummyPolicy(title: '필수 약관 전체 동의', isChecked: false),
+    _DummyPolicy(title: '약관 전체 동의', isChecked: false),
     _DummyPolicy(title: '[필수] 개인정보 수집 및 이용', isChecked: false),
     _DummyPolicy(title: '[필수] 개인정보 제 3자 제공', isChecked: false),
     _DummyPolicy(title: '[선택] 마케팅 수신 동의', isChecked: false),
   ];
 
-  BeginnerResponse teamInformation;
+  BeginnerResponse? teamInformation;
   Instructor? instructor;
 
   LessonReservationScreen({
-    required this.teamInformation,
+    this.teamInformation,
     this.instructor,
     super.key,
   });
@@ -85,12 +85,12 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     String requestComplain = '';
     final List<_AmountOfPayment> amountOfPaymentList = widget.instructor != null
         ? [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation.cost),
+            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
             _AmountOfPayment(
                 name: '강사 지정료', price: widget.instructor!.designatedFee),
           ]
         : [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation.cost),
+            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
           ];
     int sum() {
       int sum = 0;
@@ -108,8 +108,38 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
       body: GoskiContainer(
         buttonName: tr('letReservation'),
         onConfirm: () {
-          lessonPaymentViewModel.teamLessonPayment(reservationInfo, teamInfo,
-              studentInfoViewModel.studentInfoList, requestComplain);
+          if (widget.policyList[1].isChecked &&
+              widget.policyList[2].isChecked &&
+              studentInfoViewModel.studentInfoList.length ==
+                  reservationInfo.studentCount) {
+            if (widget.instructor != null && widget.teamInformation != null) {
+              // 팀, 지정강사 다 있는경우 -> 초급, 지정강사 강습
+              lessonPaymentViewModel.instLessonPayment(
+                  reservationInfo,
+                  teamInfo,
+                  widget.instructor!,
+                  studentInfoViewModel.studentInfoList,
+                  requestComplain);
+            } else if (widget.instructor == null &&
+                widget.teamInformation != null) {
+              // 팀만 있고, 지정강사는 없는경우 -> 초급, 팀 강습
+              lessonPaymentViewModel.teamLessonPayment(
+                  reservationInfo,
+                  teamInfo,
+                  studentInfoViewModel.studentInfoList,
+                  requestComplain);
+            } else if (widget.instructor != null &&
+                widget.teamInformation == null) {
+              // 팀은 없고, 강사만 있는 경우 -> 중급, 고급 지정 강습
+              // TODO. 중,고급 강습 결제
+            }
+          } else if (!widget.policyList[1].isChecked ||
+              !widget.policyList[2].isChecked) {
+            //TODO. 필수약관 동의해주세요 Dialog
+          } else if (studentInfoViewModel.studentInfoList.length !=
+              reservationInfo.studentCount) {
+            //TODO. 강습생 정보를 모두 입력해주세요 Dialog
+          }
         },
         child: SingleChildScrollView(
           child: Column(
@@ -142,7 +172,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       ),
                       SizedBox(height: contentPadding),
                       GoskiText(
-                        text: tr(teamInfo.teamName),
+                        text: tr(teamInfo!.teamName),
                         size: goskiFontMedium,
                       ),
                       if (widget.instructor != null)
