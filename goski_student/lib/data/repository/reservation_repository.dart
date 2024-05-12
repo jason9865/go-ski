@@ -27,4 +27,10 @@ class ReservationRepository {
     return await reservationService.getBeginnerInstructorList(
         beginnerInstListRequest, teamId);
   }
+
+  Future<List<Instructor>> getAdvancedInstructorList(
+      ReservationRequest reservationRequest) async {
+    return await reservationService
+        .getAdvancedInstructorList(reservationRequest);
+  }
 }
