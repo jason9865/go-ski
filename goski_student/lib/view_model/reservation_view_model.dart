@@ -1,7 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:goski_student/const/enum/gender.dart';
+import 'package:goski_student/data/model/certificate_info.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
+import 'package:goski_student/ui/reservation/u020_reservation_instructor_list.dart';
 import 'package:logger/logger.dart';
 
 final ReservationRepository _reservationRepository = ReservationRepository();
@@ -58,5 +63,18 @@ class BeginnerInstructorListViewModel extends GetxController {
       int studentCount, int duration, String level, int teamId) async {
     instructors.value = await _reservationRepository.getBeginnerInstructorList(
         instructorsId, studentCount, duration, level, teamId);
+  }
+}
+
+class LessonInstructorListViewModel extends GetxController {
+  var lessonInstructors = <Instructor>[].obs;
+  RxList<String> skiCertificate = <String>[].obs;
+  RxList<String> boardCertificate = <String>[].obs;
+
+  Future<void> getLessonInstructorList(
+      ReservationRequest reservationRequest) async {
+    lessonInstructors.value = await _reservationRepository
+        .getAdvancedInstructorList(reservationRequest);
+    lessonInstructors.sort((a, b) => a.cost.compareTo(b.cost));
   }
 }

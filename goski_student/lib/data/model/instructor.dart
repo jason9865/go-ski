@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import 'certificate_info.dart';
 
 class Instructor {
@@ -14,6 +16,8 @@ class Instructor {
   int levelOptionFee;
   List<CertificateInfo> certificateList;
   List<LessonReview>? reviews;
+  List<String> skiCertificate = [];
+  List<String> boardCertificate = [];
 
   Instructor({
     required this.instructorId,
@@ -29,16 +33,84 @@ class Instructor {
     required this.levelOptionFee,
     required this.certificateList,
     this.reviews,
+    required this.skiCertificate,
+    required this.boardCertificate,
   });
 
-  factory Instructor.fromJson(Map<String, dynamic> json) {
-    List<CertificateInfo> certList = [];
-    List<LessonReview> reviews = [];
-    if (json['certificateInfoVOs'] != null) {
-      certList = (json['certificateInfoVOs'] as List)
-          .map((item) => CertificateInfo.fromJson(item as Map<String, dynamic>))
-          .toList();
+  static List<String> createSkiCertificateList(
+      List<CertificateInfo> certificateList) {
+    List<String> certList = [];
+    for (CertificateInfo certificate in certificateList) {
+      switch (certificate.certificateId) {
+        case 1:
+          certList.add(tr('level1'));
+          break;
+        case 2:
+          certList.add(tr('level2'));
+          break;
+        case 3:
+          certList.add(tr('level3'));
+          break;
+        case 4:
+          certList.add(tr('teaching1'));
+          break;
+        case 5:
+          certList.add(tr('teaching2'));
+          break;
+        case 6:
+          certList.add(tr('teaching3'));
+          break;
+        case 7:
+          certList.add(tr('demonstrator'));
+          break;
+        default:
+          break;
+      }
     }
+    return certList;
+  }
+
+  static List<String> createBoardCertificateList(
+      List<CertificateInfo> certificateList) {
+    List<String> certList = [];
+    for (CertificateInfo certificate in certificateList) {
+      switch (certificate.certificateId) {
+        case 8:
+          certList.add(tr('level1'));
+          break;
+        case 9:
+          certList.add(tr('level2'));
+          break;
+        case 10:
+          certList.add(tr('level3'));
+          break;
+        case 11:
+          certList.add(tr('teaching1'));
+          break;
+        case 12:
+          certList.add(tr('teaching2'));
+          break;
+        case 13:
+          certList.add(tr('teaching3'));
+          break;
+        case 14:
+          certList.add(tr('demonstrator'));
+          break;
+        default:
+          break;
+      }
+    }
+    return certList;
+  }
+
+  factory Instructor.fromJson(Map<String, dynamic> json) {
+    List<CertificateInfo> certList = (json['certificateInfoVOs'] as List)
+        .map((item) => CertificateInfo.fromJson(item as Map<String, dynamic>))
+        .toList();
+    List<String> skiCert = createSkiCertificateList(certList);
+    List<String> boardCert = createBoardCertificateList(certList);
+
+    List<LessonReview> reviews = [];
     if (json['reviews'] != null) {
       reviews = (json['reviews'] as List)
           .map((item) => LessonReview.fromJson(item as Map<String, dynamic>))
@@ -59,6 +131,8 @@ class Instructor {
       levelOptionFee: json['levelOptionFee'] as int,
       certificateList: certList,
       reviews: reviews,
+      skiCertificate: skiCert,
+      boardCertificate: boardCert,
     );
   }
 }
