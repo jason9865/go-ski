@@ -32,7 +32,15 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-class StudentMainScreen extends StatelessWidget {
+class StudentMainScreen extends StatefulWidget {
+
+  const StudentMainScreen({super.key});
+
+  @override
+  State<StudentMainScreen> createState() => _StudentMainScreenState();
+}
+
+class _StudentMainScreenState extends State<StudentMainScreen> {
   // TODO: 추후에 API에서 광고 이미지 링크와 클릭시 이동 링크를 받아오도록 수정 필요
   final List<String> advList = [
     'https://adnet21.co.kr/data/file/b0301/thumb-3717079066_0ksWLuKg_1EC9588_EC9790EB8DB4EBB0B8EBA6AC_20ECB488.mov_000017462_1000x563.png',
@@ -42,11 +50,19 @@ class StudentMainScreen extends StatelessWidget {
     'https://cdn.gpkorea.com/news/photo/202212/96211_210544_551.jpg',
     'https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F276A8A3651D3914524',
   ];
+
   final mainViewModel = Get.find<MainViewModel>();
+
   final lessonListViewModel = Get.find<LessonListViewModel>();
+
   final settlementViewModel = Get.find<SettlementViewModel>();
 
-  StudentMainScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    mainViewModel.getUserInfo();
+    mainViewModel.getSkiResortList();
+  }
 
   @override
   Widget build(BuildContext context) {
