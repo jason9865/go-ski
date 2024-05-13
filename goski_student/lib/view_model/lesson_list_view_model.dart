@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/lesson_list_response.dart';
-import 'package:goski_student/data/model/sned_message_request.dart';
+import 'package:goski_student/data/model/send_message_request.dart';
 import 'package:logger/logger.dart';
 
 import '../data/repository/lesson_list_repository.dart';
