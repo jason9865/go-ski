@@ -100,7 +100,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                       visible:
                                           list[index].instructorName != null,
                                       child: GoskiText(
-                                        text: list[index].instructorName ?? '이름없음',
+                                        text: list[index].instructorName ?? tr('noName'),
                                         size: goskiFontSmall,
                                         color: goskiDarkGray,
                                       ),
