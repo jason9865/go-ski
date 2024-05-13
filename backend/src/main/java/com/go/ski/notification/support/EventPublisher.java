@@ -88,9 +88,9 @@ public class EventPublisher {
         receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach( // LessonCreateInstructor 이벤트로 바뀌어야 함 -> 사장, 강사용
                 receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateInstructorEvent.of(lessonInfo, resortName, receiverId, paymentCache, deviceType))
+                        LessonCreateStudentEvent.of(lessonInfo, resortName, receiverId, deviceType))
         );
-//        applicationEventPublisher.publishEvent(LessonCreateInstructorEvent.of());
+//        applicationEventPublisher.publishEvent(LessonCreateInstructorEvent.of(lessonInfo, resortName, receiverId, paymentCache, deviceType));
     }
 
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
