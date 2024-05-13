@@ -8,6 +8,8 @@ class GoskiText extends StatelessWidget {
   final bool isBold, isExpanded;
   final TextAlign textAlign;
   final TextDecoration textDecoration;
+  final int? maxLine;
+  final TextOverflow? overflow;
 
   const GoskiText({
     super.key,
@@ -18,6 +20,8 @@ class GoskiText extends StatelessWidget {
     this.isExpanded = false,
     this.textAlign = TextAlign.start,
     this.textDecoration = TextDecoration.none,
+    this.maxLine,
+    this.overflow,
   });
 
   @override
@@ -31,6 +35,8 @@ class GoskiText extends StatelessWidget {
         text: text,
         textAlign: textAlign,
         textDecoration: textDecoration,
+        maxLine: maxLine,
+        overflow: overflow,
       ));
     } else {
       return GoskiTextBody(
@@ -40,6 +46,8 @@ class GoskiText extends StatelessWidget {
         text: text,
         textAlign: textAlign,
         textDecoration: textDecoration,
+        maxLine: maxLine,
+        overflow: overflow,
       );
     }
   }
@@ -52,6 +60,8 @@ class GoskiTextBody extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final TextDecoration textDecoration;
+  final int? maxLine;
+  final TextOverflow? overflow;
 
   const GoskiTextBody({
     super.key,
@@ -61,6 +71,8 @@ class GoskiTextBody extends StatelessWidget {
     required this.text,
     required this.textAlign,
     required this.textDecoration,
+    this.maxLine,
+    this.overflow,
   });
 
   @override
@@ -75,6 +87,8 @@ class GoskiTextBody extends StatelessWidget {
         decoration: textDecoration,
       ),
       text,
+      maxLines: maxLine,
+      overflow: overflow,
     );
   }
 }

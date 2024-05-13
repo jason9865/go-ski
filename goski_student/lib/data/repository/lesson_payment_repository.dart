@@ -22,6 +22,7 @@ class LessonPaymentRepository {
             startTime: reservationRequest.startTime,
             duration: reservationRequest.duration,
             peopleNumber: reservationRequest.studentCount,
+            lessonType: beginnerResponse.lessonType,
             studentInfo: studentInfo,
             requestComplain: requestComplain,
             basicFee: beginnerResponse.basicFee,
@@ -47,6 +48,7 @@ class LessonPaymentRepository {
             startTime: reservationRequest.startTime,
             duration: reservationRequest.duration,
             peopleNumber: reservationRequest.studentCount,
+            lessonType: instructor.lessonType,
             studentInfo: studentInfo,
             requestComplain: requestComplain,
             basicFee: beginnerResponse.basicFee,
@@ -56,5 +58,36 @@ class LessonPaymentRepository {
 
     return lessonPaymentService
         .instLessonPayment(instLessonPaymentRequest.toJson());
+  }
+
+  Future<KakaoPayPrepareResponse> advancedLessonPayment(
+      ReservationRequest reservationRequest,
+      Instructor instructor,
+      List<StudentInfo> studentInfo,
+      String requestComplain) async {
+    InstLessonPaymentRequest instLessonPaymentRequest =
+        InstLessonPaymentRequest(
+            teamId: instructor.teamId,
+            instId: instructor.instructorId,
+            lessonDate: reservationRequest.lessonDate,
+            startTime: reservationRequest.startTime,
+            duration: reservationRequest.duration,
+            peopleNumber: reservationRequest.studentCount,
+            lessonType: instructor.lessonType,
+            studentInfo: studentInfo,
+            requestComplain: requestComplain,
+            basicFee: instructor.basicFee,
+            designatedFee: instructor.designatedFee,
+            peopleOptionFee: instructor.peopleOptionFee,
+            levelOptionFee: instructor.levelOptionFee);
+
+    return lessonPaymentService
+        .instLessonPayment(instLessonPaymentRequest.toJson());
+  }
+
+  Future<bool> approvePayment(String tid, String pgToken) {
+    ApprovePaymentRequest approvePaymentRequest =
+        ApprovePaymentRequest(tid: tid, pgToken: pgToken);
+    return lessonPaymentService.approvePayment(approvePaymentRequest.toJson());
   }
 }

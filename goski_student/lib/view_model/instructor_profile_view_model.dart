@@ -109,7 +109,7 @@ class InstructorProfileViewModel extends GetxController {
     initInstructorProfile();
 
     InstructorProfile? response =
-    await instructorProfileRepository.getInstructorProfile(instructorId);
+        await instructorProfileRepository.getInstructorProfile(instructorId);
 
     if (response != null) {
       createCertificateList(response);
@@ -120,7 +120,8 @@ class InstructorProfileViewModel extends GetxController {
   Future<void> getInstructorReview(int instructorId) async {
     reviewList.clear();
 
-    List<ReviewResponse> response = await instructorProfileRepository.getInstructorReview(instructorId);
+    List<ReviewResponse> response =
+        await instructorProfileRepository.getInstructorReview(instructorId);
 
     reviewList.addAll(response);
   }

@@ -81,17 +81,37 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     final cardPadding = screenSizeController.getWidthByRatio(0.03);
     final checkboxSize = screenSizeController.getWidthByRatio(0.05);
     final reservationInfo = reservationViewModel.reservation.value;
-    final teamInfo = widget.teamInformation;
     String requestComplain = '';
-    final List<_AmountOfPayment> amountOfPaymentList = widget.instructor != null
-        ? [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
-            _AmountOfPayment(
-                name: '강사 지정료', price: widget.instructor!.designatedFee),
-          ]
-        : [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
-          ];
+    // final List<_AmountOfPayment> amountOfPaymentList = widget.instructor !=
+    //             null &&
+    //         widget.teamInformation != null
+    //     ? [
+    //         _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+    //         _AmountOfPayment(
+    //             name: '강사 지정료', price: widget.instructor!.designatedFee),
+    //       ]
+    //     : [
+    //         _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+    //       ];
+    List<AmountOfPayment> amountOfPaymentList = [];
+    if (widget.instructor != null && widget.teamInformation != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+        AmountOfPayment(
+            name: '강사 지정료', price: widget.instructor!.designatedFee),
+      ];
+    } else if (widget.teamInformation != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+      ];
+    } else if (widget.teamInformation == null && widget.instructor != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(
+            name: '강습료',
+            price: widget.instructor!.cost - widget.instructor!.designatedFee),
+        AmountOfPayment(name: '강사 지정료', price: widget.instructor!.designatedFee)
+      ];
+    }
     int sum() {
       int sum = 0;
       for (int i = 0; i < amountOfPaymentList.length; i++) {
@@ -116,7 +136,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
               // 팀, 지정강사 다 있는경우 -> 초급, 지정강사 강습
               lessonPaymentViewModel.instLessonPayment(
                   reservationInfo,
-                  teamInfo,
+                  widget.teamInformation!,
                   widget.instructor!,
                   studentInfoViewModel.studentInfoList,
                   requestComplain);
@@ -125,20 +145,24 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
               // 팀만 있고, 지정강사는 없는경우 -> 초급, 팀 강습
               lessonPaymentViewModel.teamLessonPayment(
                   reservationInfo,
-                  teamInfo,
+                  widget.teamInformation!,
                   studentInfoViewModel.studentInfoList,
                   requestComplain);
             } else if (widget.instructor != null &&
                 widget.teamInformation == null) {
               // 팀은 없고, 강사만 있는 경우 -> 중급, 고급 지정 강습
-              // TODO. 중,고급 강습 결제
+              lessonPaymentViewModel.advancedLessonPayment(
+                  reservationInfo,
+                  widget.instructor!,
+                  studentInfoViewModel.studentInfoList,
+                  requestComplain);
             }
-          } else if (!widget.policyList[1].isChecked ||
-              !widget.policyList[2].isChecked) {
-            //TODO. 필수약관 동의해주세요 Dialog
           } else if (studentInfoViewModel.studentInfoList.length !=
               reservationInfo.studentCount) {
-            //TODO. 강습생 정보를 모두 입력해주세요 Dialog
+            showCompleteStudentInfoDialog(context);
+          } else if (!widget.policyList[1].isChecked ||
+              !widget.policyList[2].isChecked) {
+            showPolicyAgreementDialog(context);
           }
         },
         child: SingleChildScrollView(
@@ -171,14 +195,21 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         ],
                       ),
                       SizedBox(height: contentPadding),
-                      GoskiText(
-                        text: tr(teamInfo!.teamName),
-                        size: goskiFontMedium,
-                      ),
+                      if (widget.teamInformation != null)
+                        GoskiText(
+                          text: tr(widget.teamInformation!.teamName),
+                          size: goskiFontMedium,
+                        ),
+                      if (widget.teamInformation == null &&
+                          widget.instructor != null)
+                        GoskiText(
+                          text: tr(widget.instructor!.teamName),
+                          size: goskiFontMedium,
+                        ),
                       if (widget.instructor != null)
                         GoskiText(
                           text: tr('designatedInstructor',
-                              args: [widget.instructor!.userName ?? '']),
+                              args: [widget.instructor!.userName]),
                           size: goskiFontMedium,
                         ),
                       SizedBox(height: contentPadding),
@@ -188,9 +219,11 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         color: goskiDarkGray,
                       ),
                       GoskiText(
-                        //TODO. 일자, 시간 이쁘게 나오게 수정
-                        text:
-                            '${reservationInfo.lessonDate}\n${reservationInfo.startTime} ~ 17:00',
+                        text: formatSessionTime(
+                          reservationInfo.lessonDate,
+                          reservationInfo.startTime,
+                          reservationInfo.duration,
+                        ),
                         size: goskiFontMedium,
                       ),
                       SizedBox(height: contentPadding),
@@ -208,13 +241,25 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GoskiText(
-                            text: tr('price', args: [
-                              NumberFormat('###,###,###').format(teamInfo.cost)
-                            ]),
-                            size: goskiFontMedium,
-                            isBold: true,
-                          ),
+                          if (widget.teamInformation != null)
+                            GoskiText(
+                              text: tr('price', args: [
+                                NumberFormat('###,###,###')
+                                    .format(widget.teamInformation!.cost)
+                              ]),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
+                          if (widget.teamInformation == null &&
+                              widget.instructor != null)
+                            GoskiText(
+                              text: tr('price', args: [
+                                NumberFormat('###,###,###')
+                                    .format(widget.instructor!.cost)
+                              ]),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
                         ],
                       ),
                     ],
@@ -448,7 +493,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         shrinkWrap: true,
                         itemCount: amountOfPaymentList.length,
                         itemBuilder: (context, index) {
-                          _AmountOfPayment item = amountOfPaymentList[index];
+                          AmountOfPayment item = amountOfPaymentList[index];
 
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -516,8 +561,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       GoskiPaymentButton(
                         width: screenSizeController.getWidthByRatio(1),
                         text: tr('kakaoPay'),
-                        imagePath: 'assets/images/person1.png',
-                        // TODO. 카카오페이 버튼으로 변경 필요
+                        imagePath:
+                            'https://go-ski.s3.ap-northeast-2.amazonaws.com/basic/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4_CI_logotype.png',
                         backgroundColor: kakaoYellow,
                         foregroundColor: goskiBlack,
                         onTap: () {},
@@ -526,8 +571,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       // GoskiPaymentButton(
                       //   width: screenSizeController.getWidthByRatio(1),
                       //   text: tr('naverPay'),
-                      //   imagePath: 'assets/images/person2.png',
                       //   // TODO. 네이버페이 버튼으로 변경 필요
+                      //   imagePath: 'assets/images/person2.png',
                       //   backgroundColor: naverPayGreen,
                       //   foregroundColor: goskiWhite,
                       //   onTap: () {},
@@ -630,11 +675,11 @@ class TextWithIconRow extends StatelessWidget {
   }
 }
 
-class _AmountOfPayment {
+class AmountOfPayment {
   final String name;
   final int price;
 
-  _AmountOfPayment({
+  AmountOfPayment({
     required this.name,
     required this.price,
   });
@@ -648,4 +693,81 @@ class _DummyPolicy {
     required this.title,
     required this.isChecked,
   });
+}
+
+String formatSessionTime(String lessonDate, String startTime, int duration) {
+  int hour = int.parse(startTime.substring(0, 2));
+  int minute = int.parse(startTime.substring(2, 4));
+  DateTime startDateTime = DateTime(0, 0, 0, hour, minute);
+
+  // Calculate end time by adding the duration in hours
+  DateTime endDateTime = startDateTime.add(Duration(hours: duration));
+
+  // Formatter for time in hh:mm format
+  DateFormat timeFormatter = DateFormat('HH:mm');
+
+  // Format the start and end time
+  String formattedStartTime = timeFormatter.format(startDateTime);
+  String formattedEndTime = timeFormatter.format(endDateTime);
+
+  // Return the formatted string
+  return '$lessonDate\n$formattedStartTime ~ $formattedEndTime';
+}
+
+void showPolicyAgreementDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: GoskiText(
+          text: tr('policyAgreementRequire'),
+          size: goskiFontLarge,
+        ),
+        content: GoskiText(
+          text: tr('pleaseCheckPolicy'),
+          size: goskiFontMedium,
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: GoskiText(
+              text: tr('confirm'),
+              size: goskiFontMedium,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void showCompleteStudentInfoDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: GoskiText(
+          text: tr('incompleteInformation'),
+          size: goskiFontLarge,
+        ),
+        content: GoskiText(
+          text: tr('pleaseEnterStudentInfo'),
+          size: goskiFontMedium,
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: GoskiText(
+              text: tr('confirm'),
+              size: goskiFontMedium,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
