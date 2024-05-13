@@ -18,6 +18,9 @@ import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/ui/lesson/u017_settlement.dart';
 import 'package:goski_student/ui/main/b_u028_select_resort.dart';
 import 'package:goski_student/ui/main/u026_coupon.dart';
+import 'package:goski_student/ui/main/u029_term.dart';
+import 'package:goski_student/ui/main/u033_privacy_policy.dart';
+import 'package:goski_student/ui/main/u034_refund_policy.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
@@ -28,9 +31,15 @@ import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 
-class StudentMainScreen extends StatelessWidget {
-  final screenSizeController = Get.find<ScreenSizeController>();
+class StudentMainScreen extends StatefulWidget {
 
+  const StudentMainScreen({super.key});
+
+  @override
+  State<StudentMainScreen> createState() => _StudentMainScreenState();
+}
+
+class _StudentMainScreenState extends State<StudentMainScreen> {
   // TODO: 추후에 API에서 광고 이미지 링크와 클릭시 이동 링크를 받아오도록 수정 필요
   final List<String> advList = [
     'https://adnet21.co.kr/data/file/b0301/thumb-3717079066_0ksWLuKg_1EC9588_EC9790EB8DB4EBB0B8EBA6AC_20ECB488.mov_000017462_1000x563.png',
@@ -40,11 +49,19 @@ class StudentMainScreen extends StatelessWidget {
     'https://cdn.gpkorea.com/news/photo/202212/96211_210544_551.jpg',
     'https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F276A8A3651D3914524',
   ];
+
   final mainViewModel = Get.find<MainViewModel>();
+
   final lessonListViewModel = Get.find<LessonListViewModel>();
+
   final settlementViewModel = Get.find<SettlementViewModel>();
 
-  StudentMainScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    mainViewModel.getUserInfo();
+    mainViewModel.getSkiResortList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,13 +308,11 @@ class StudentMainScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildManualButton('termsOfUse', () => logger.d("이용약관")),
+                buildManualButton('termsOfUse', () => Get.to(() => const TermScreen())),
                 const Text(' | '),
-                buildManualButton('privacyPolicy', () => logger.d("개인정보처리방침")),
+                buildManualButton('privacyPolicy', () => Get.to(() => const PrivacyPolicyScreen())),
                 const Text(' | '),
-                buildManualButton('businessInfo', () => logger.d("사업자 정보")),
-                const Text(' | '),
-                buildManualButton('refundPolicy2', () => logger.d("환불 정책	")),
+                buildManualButton('refundPolicy2', () => Get.to(() => const RefundPolicyScreen())),
               ],
             ),
             SizedBox(
@@ -376,7 +391,7 @@ class UserMenu extends StatelessWidget {
             text: tr(
               iconName,
             ),
-            size: goskiFontLarge,
+            size: goskiFontMedium,
           )
         ],
       ),

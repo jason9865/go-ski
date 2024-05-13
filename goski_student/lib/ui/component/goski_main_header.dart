@@ -19,6 +19,7 @@ class GoskiMainHeader extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         headerRightIcons(context),
       ],
+      scrolledUnderElevation: 0,
     );
   }
 

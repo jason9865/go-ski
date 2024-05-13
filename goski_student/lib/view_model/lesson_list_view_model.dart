@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/lesson_list_response.dart';
-import 'package:goski_student/data/model/sned_message_request.dart';
+import 'package:goski_student/data/model/send_message_request.dart';
 import 'package:logger/logger.dart';
 
 import '../data/repository/lesson_list_repository.dart';
@@ -47,7 +47,7 @@ class LessonListViewModel extends GetxController {
     isLoadingLessonList.value = true;
     List<LessonListItem> response = await lessonListRepository.getLessonList();
 
-    lessonList.value = response;
+    lessonList.value = response.where((settlement) => settlement.lessonStatus != 'cancelLesson').toList();
     isLoadingLessonList.value = false;
   }
 

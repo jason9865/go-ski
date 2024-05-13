@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:goski_student/const/enum/gender.dart';
 import 'package:goski_student/const/enum/role.dart';
 
@@ -8,7 +9,7 @@ class InstructorProfileResponse {
   String? profileUrl;
   Gender gender;
   Role role;
-  String description;
+  String? description;
   int dayoff;
   String available;
   List<CertificateResponse> certificates;
@@ -39,7 +40,7 @@ class InstructorProfileResponse {
       phoneNumber: json['phoneNumber'] as String,
       gender: json['gender'] == 'MALE' ? Gender.MALE : Gender.FEMALE,
       role: Role.INSTRUCTOR,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       dayoff: json['dayoff'] as int,
       available: json['available'] as String,
       certificates: certificates,
@@ -93,7 +94,7 @@ extension InstructorProfileResponseToInstructorProfile
       phoneNumber: phoneNumber,
       gender: gender,
       role: role,
-      description: description,
+      description: description ?? tr('noInstructorDescription'),
       dayoff: dayoff,
       available: available,
       certificates: certificates.map<Certificate>((response) => response.toCertificate()).toList(),
