@@ -39,11 +39,13 @@ class _ReservationTeamDetailScreenState
   @override
   void initState() {
     beginnerInstructorListViewModel.getBeginnerInstructorList(
-        widget.teamInformation.instructors,
-        reservationViewModel.reservation.value.studentCount,
-        reservationViewModel.reservation.value.duration,
-        reservationViewModel.reservation.value.level,
-        widget.teamInformation.teamId);
+      widget.teamInformation.instructors,
+      reservationViewModel.reservation.value.studentCount,
+      reservationViewModel.reservation.value.duration,
+      reservationViewModel.reservation.value.level,
+      widget.teamInformation.teamId,
+      widget.teamInformation.lessonType,
+    );
     super.initState();
   }
 
