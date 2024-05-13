@@ -166,7 +166,7 @@ public class TeamService {
     @Transactional
     public List<TeamResponseDTO> getInstTeamList(User user) {
         log.info("유저 ID = {}",user.getUserId());
-        return teamRepository.findInstTeamList(113);
+        return teamRepository.findInstTeamList(user.getUserId());
     }
 
     @Transactional
