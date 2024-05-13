@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
+
 import '../../const/enum/gender.dart';
 import '../../const/enum/role.dart';
 
 class OwnerRequest {
   int domainUserKey;
-  File? profileImage;
+  XFile? profileImage;
   String kakaoProfileUrl;
   String userName;
   Gender gender;
