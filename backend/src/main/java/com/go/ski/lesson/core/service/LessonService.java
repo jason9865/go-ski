@@ -59,9 +59,10 @@ public class LessonService {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
                     int oneToNOptionFee = getOneToNOption(oneToNOption, reserveInfoVO.getStudentCount());
                     int teamCost = oneToNOptionFee + team.getTeamCost();
+
+                    reserveNoviceResponseDTO.setCost((teamCost + oneToNOptionFee) * reserveInfoVO.getDuration());
                     reserveNoviceResponseDTO.setBasicFee(teamCost);
                     reserveNoviceResponseDTO.setPeopleOptionFee(oneToNOptionFee);
-                    reserveNoviceResponseDTO.setCost(teamCost * reserveInfoVO.getDuration());
                 }
                 // 별점 설정
                 List<ReviewResponseDTO> reviews = reviewRepository.findByLessonTeam(team).stream().map(ReviewResponseDTO::new).toList();
@@ -108,9 +109,9 @@ public class LessonService {
         }
 
         List<Integer> sortedInstructorsByPosition = instructorPositionMap.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue())
-            .map(Map.Entry::getKey)
-            .toList();
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .toList();
 
         for (int instructorId : sortedInstructorsByPosition) {
             try {
@@ -121,7 +122,7 @@ public class LessonService {
                 List<CertificateInfoVO> certificateInfoVOs = instructorCertRepository.findByInstructor(instructor)
                         .stream().map(CertificateInfoVO::new).collect(Collectors.toList());
 
-                ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(instructor, permission, certificateInfoVOs);
+                ReserveAdvancedResponseDTO reserveAdvancedResponseDTO = new ReserveAdvancedResponseDTO(instructor, team, permission, certificateInfoVOs);
                 // 가격 설정
                 if (reserveNoviceTeamRequestDTO.getStudentCount() > 0) {
                     Optional<OneToNOption> optionalOneToNOption = oneToNOptionRepository.findById(teamId);
@@ -131,11 +132,11 @@ public class LessonService {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
                     int oneToNOptionFee = getOneToNOption(oneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
 
-                    reserveAdvancedResponseDTO.setCost(teamCost * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setCost((teamCost + oneToNOptionFee) * reserveNoviceTeamRequestDTO.getDuration());
                     reserveAdvancedResponseDTO.setBasicFee(teamCost);
                     reserveAdvancedResponseDTO.setPeopleOptionFee(oneToNOptionFee);
-                    reserveAdvancedResponseDTO.setDesignatedFee(permission.getDesignatedCost() * reserveNoviceTeamRequestDTO.getDuration());
-                    reserveAdvancedResponseDTO.setLevelOptionFee(levelCost * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setDesignatedFee(permission.getDesignatedCost());
+                    reserveAdvancedResponseDTO.setLevelOptionFee(levelCost);
                 }
                 // 별점 설정
                 List<ReviewResponseDTO> reviews = reviewRepository.findByLessonInstructor(instructor).stream().map(ReviewResponseDTO::new).toList();
