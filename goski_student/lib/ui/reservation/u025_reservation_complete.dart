@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/default_image.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
@@ -16,6 +17,8 @@ import 'package:goski_student/view_model/reservation_view_model.dart';
 
 final ReservationViewModel reservationViewModel =
     Get.find<ReservationViewModel>();
+final ScreenSizeController screenSizeController =
+    Get.find<ScreenSizeController>();
 
 class ReservationCompleteScreen extends StatefulWidget {
   BeginnerResponse? teamInformation;
