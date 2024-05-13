@@ -10,7 +10,7 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/notification.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
-import 'package:goski_student/ui/component/goski_smallsize_button.dart';
+import 'package:goski_student/ui/component/goski_image_dialog.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
@@ -213,7 +213,7 @@ class FeedbackNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
     return GestureDetector(
-      onTap: () => Get.off(() => const LessonListScreen()),
+      onTap: () => Get.to(() => const LessonListScreen()),
       onLongPress: () {
         showDialog(
           context: context,
@@ -415,16 +415,16 @@ class LessonNotificationCard extends StatelessWidget {
     String inputLessonDate = data["lessonDate"];
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
     DateTime dateTime = inputFormat.parse(inputLessonDate);
-    DateFormat outputFormat = DateFormat('M월 d일', 'ko_KR');
+    DateFormat outputFormat = DateFormat(tr('lessonNotificationOutputFormat'), 'ko_KR');
 
     String lessonDate = outputFormat.format(dateTime);
     String lessonTime =
-        "${data["lessonTime"].substring(0, 2)}시 ${data["lessonTime"].substring(3, 5)}분";
+        tr('lessonNotificationLessonTime', args: [data["lessonTime"].substring(0, 2), data["lessonTime"].substring(3, 5)]);
     String resortName = data["resortName"];
     String studentCount = data["studentCount"];
     String lessonType = data["lessonType"];
 
-    return "$lessonDate $lessonTime $resortName\n1:$studentCount $lessonType 강습이 예약되었습니다.";
+    return tr('lessonNotificationContent', args: [lessonDate, lessonTime, resortName, studentCount, lessonType]);
   }
 }
 
@@ -483,7 +483,7 @@ class MessageNotificationCard extends StatelessWidget {
             Row(
               children: [
                 GoskiText(
-                  text: "$title 님으로부터 쪽지가 도착하였습니다.\n$subtitle",
+                  text: tr('messageNotificationContent', args: [title, subtitle]),
                   size: goskiFontMedium,
                   isBold: true,
                 ),
@@ -508,23 +508,9 @@ class MessageNotificationCard extends StatelessWidget {
                             builder: (context) {
                               return GoskiModal(
                                 title: tr('feedbackImage'),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                        width: double.infinity, imageUrl!),
-                                    SizedBox(
-                                      height: screenSizeController
-                                          .getHeightByRatio(0.025),
-                                    ),
-                                    GoskiSmallsizeButton(
-                                      width: screenSizeController
-                                          .getWidthByRatio(3),
-                                      text: tr('confirm'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
+                                child: GoskiImageDialog(
+                                  isLocalImage: false,
+                                  imageUrl: imageUrl!,
                                 ),
                               );
                             },

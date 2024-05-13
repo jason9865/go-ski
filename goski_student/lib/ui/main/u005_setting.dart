@@ -12,7 +12,7 @@ import 'package:goski_student/ui/main/d_u007_notification_setting.dart';
 import 'package:goski_student/ui/main/u029_term.dart';
 import 'package:goski_student/ui/main/u030_guide.dart';
 import 'package:goski_student/ui/main/u031_ask.dart';
-import 'package:goski_student/ui/user/d_u032_resign.dart';
+import 'package:goski_student/ui/user/d_u035_resign.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/use_view_model.dart';
 import 'package:logger/logger.dart';
@@ -70,7 +70,7 @@ class SettingScreen extends StatelessWidget {
                           title: tr('etc'),
                         ),
                         SettingContent(
-                          content: tr('term'),
+                          content: tr('termsOfUse'),
                           onConfirm: () => Get.to(() => const TermScreen()),
                         ),
                         buildDivider(),

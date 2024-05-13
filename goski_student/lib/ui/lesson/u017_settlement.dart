@@ -26,176 +26,222 @@ class _SettlementScreenState extends State<SettlementScreen> {
   Widget build(BuildContext context) {
     final list = settlementViewModel.settlementList;
 
-    return Obx(
-      () => Scaffold(
-        appBar: GoskiSubHeader(title: tr('paymentHistory')),
-        body: GoskiContainer(
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  // shrinkWrap: true,
-                  itemCount: settlementViewModel.settlementList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SettlementExpansionCard(
-                      dateTime: Row(
-                        children: [
-                          GoskiText(
-                            text: DateTimeUtil.getDateTime(
-                                list[index].paymentDate),
-                            size: goskiFontSmall,
-                          ),
-                          const GoskiText(
-                            text: " / ",
-                            size: goskiFontSmall,
-                          ),
-                          GoskiText(
-                            text: list[index].chargeName,
-                            size: goskiFontSmall,
-                            color: list[index].paymentStatus == 0
-                                ? goskiBlack
-                                : goskiRed,
-                          )
-                        ],
-                      ),
-                      title: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
+    return Obx(() {
+      if (settlementViewModel.isLoading.value) {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('paymentHistory')),
+          body: const GoskiContainer(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
+              ),
+            ),
+          ),
+        );
+      } else if (list.isEmpty) {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('paymentHistory')),
+          body: GoskiContainer(
+            child: Center(
+              child: GoskiText(
+                text: tr('noSettlement'),
+                size: goskiFontLarge,
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Scaffold(
+          appBar: GoskiSubHeader(title: tr('paymentHistory')),
+          body: GoskiContainer(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    // shrinkWrap: true,
+                    itemCount: settlementViewModel.settlementList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SettlementExpansionCard(
+                        dateTime: Row(
+                          children: [
+                            GoskiText(
+                              text: DateTimeUtil.getDateTime(
+                                  list[index].paymentDate),
+                              size: goskiFontSmall,
+                            ),
+                            const GoskiText(
+                              text: " / ",
+                              size: goskiFontSmall,
+                            ),
+                            GoskiText(
+                              text: list[index].chargeName,
+                              size: goskiFontSmall,
+                              color: list[index].paymentStatus == 0
+                                  ? goskiBlack
+                                  : goskiRed,
+                            )
+                          ],
+                        ),
+                        title: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GoskiText(
+                                      text: list[index].teamName,
+                                      size: goskiFontMedium,
+                                    ),
+                                    Visibility(
+                                      visible:
+                                          list[index].instructorName != null,
+                                      child: GoskiText(
+                                        text: list[index].instructorName ?? '이름없음',
+                                        size: goskiFontSmall,
+                                        color: goskiDarkGray,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                GoskiText(
+                                  text: list[index].paymentStatus == 0
+                                      ? formatFromInt(list[index].totalAmount)
+                                      : '+ ${formatFromInt(list[index].totalAmount)}',
+                                  size: goskiFontMedium,
+                                  color: list[index].paymentStatus == 0
+                                      ? goskiBlack
+                                      : goskiRed,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        subTitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(
+                              color: goskiDashGray,
+                            ),
+                            Visibility(
+                              visible: list[index].basicFee > 0,
+                              child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
-                                    text: list[index].teamName,
-                                    size: goskiFontMedium,
+                                    text: list[index].paymentStatus == 0
+                                        ? tr('basicFee')
+                                        : tr('paymentAmount'),
+                                    size: goskiFontSmall,
                                   ),
-                                  Visibility(
-                                    visible:
-                                    list[index].instructorName != null,
-                                    child: GoskiText(
-                                      text:
-                                      list[index].instructorName != null
-                                          ? list[index].instructorName!
-                                          : '',
-                                      size: goskiFontSmall,
-                                      color: goskiDarkGray,
-                                    ),
+                                  GoskiText(
+                                    text: formatFromInt(
+                                        list[index].paymentStatus == 0
+                                            ? list[index].basicFee
+                                            : list[index].basicFee +
+                                                list[index].designatedFee +
+                                                list[index].peopleOptionFee +
+                                                list[index].levelOptionFee),
+                                    size: goskiFontSmall,
                                   ),
                                 ],
                               ),
-                              GoskiText(
-                                text: list[index].paymentStatus == 0
-                                    ? formatFromInt(list[index].totalAmount)
-                                    : '+ ${formatFromInt(list[index].totalAmount)}',
-                                size: goskiFontMedium,
-                                color: list[index].paymentStatus == 0
-                                    ? goskiBlack
-                                    : goskiRed,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      subTitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Divider(
-                            color: goskiDashGray,
-                          ),
-                          Visibility(
-                            visible: list[index].basicFee > 0,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoskiText(
-                                  text: tr('basicFee'),
-                                  size: goskiFontSmall,
-                                ),
-                                GoskiText(
-                                  text: formatFromInt(
-                                      list[index].basicFee),
-                                  size: goskiFontSmall,
-                                ),
-                              ],
                             ),
-                          ),
-                          Visibility(
-                            visible: list[index].designatedFee > 0,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoskiText(
-                                  text: tr('designatedFee'),
-                                  size: goskiFontSmall,
-                                ),
-                                GoskiText(
-                                  text:
-                                  '+ ${formatFromInt(list[index].designatedFee)}',
-                                  size: goskiFontSmall,
-                                ),
-                              ],
+                            Visibility(
+                              visible: list[index].designatedFee > 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('designatedFee'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                        '+ ${formatFromInt(list[index].designatedFee)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Visibility(
-                            visible: list[index].peopleOptionFee > 0,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoskiText(
-                                  text: tr('peopleOptionFee'),
-                                  size: goskiFontSmall,
-                                ),
-                                GoskiText(
-                                  text:
-                                  '+ ${formatFromInt(list[index].peopleOptionFee)}',
-                                  size: goskiFontSmall,
-                                ),
-                              ],
+                            Visibility(
+                              visible: list[index].peopleOptionFee > 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('peopleOptionFee'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                        '+ ${formatFromInt(list[index].peopleOptionFee)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Visibility(
-                            visible: list[index].levelOptionFee > 0,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoskiText(
-                                  text: tr('peopleOptionFee'),
-                                  size: goskiFontSmall,
-                                ),
-                                GoskiText(
-                                  text:
-                                  '+ ${formatFromInt(list[index].levelOptionFee)}',
-                                  size: goskiFontSmall,
-                                ),
-                              ],
+                            Visibility(
+                              visible: list[index].levelOptionFee > 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('levelOptionFee'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                        '+ ${formatFromInt(list[index].levelOptionFee)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          // TODO: 쿠폰 등 할인 관련 처리 필요
-                        ],
-                      ),
-                      onExpandBtnClicked: () {
-                        setState(() {
-                          list[index].isExpanded = !list[index].isExpanded;
-                        });
-                      },
-                      isExpanded: list[index].isExpanded,
-                    );
-                  },
+                            Visibility(
+                              visible: list[index].paymentStatus != 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('refundCharge'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                        '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // TODO: 쿠폰 등 할인 관련 처리 필요
+                          ],
+                        ),
+                        onExpandBtnClicked: () {
+                          setState(() {
+                            list[index].isExpanded = !list[index].isExpanded;
+                          });
+                        },
+                        isExpanded: list[index].isExpanded,
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      }
+    });
   }
 }
 

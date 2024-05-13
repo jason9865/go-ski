@@ -40,6 +40,7 @@
   "feedback": "피드백",
   "feedbackCheck": "피드백 확인",
   "noFeedback": "피드백 미작성",
+  "noInstructorDescription": "자기소개 없음",
   "yesFeedback": "피드백 작성 완료",
   "lessonFinished": "강습 완료",
   "sendMessage": "쪽지보내기",
@@ -259,7 +260,8 @@
   "unDesignated": "강사 미지정",
   "noLessonHistory": "강습 내역이 존재하지 않습니다",
   "noCoupon": "보유하신 쿠폰이 없습니다",
-  "noNotificationIndicator": "수신한 알림이 없습니다.",
+  "noNotificationIndicator" : "수신한 알림이 없습니다.",
+  "noSettlement" : "결제 내역이 없습니다.",
   "skip": "건너뛰기",
   "reviewHint": "리뷰 내용을 입력하세요.",
   "policyAgreementRequire": "이용 약관 동의",
@@ -292,5 +294,9 @@
   "WEIGHT_90KG_TO_99KG": "90kg ~ 99kg",
   "WEIGHT_ABOVE_100KG": "100kg 이상",
   "footSize": "{}mm",
-  "selectTime": "시간 선택"
+  "selectTime": "시간 선택",
+  "messageNotificationContent": "{} 님으로부터 쪽지가 도착하였습니다.\n{}",
+  "lessonNotificationContent": "{} {} {}\n1:{} {} 강습이 예약되었습니다.",
+  "lessonNotificationOutputFormat": "M월 d일",
+  "lessonNotificationLessonTime": "{}시 {}분"
 }
