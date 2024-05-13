@@ -132,7 +132,7 @@ public class LessonService {
                     Optional<OneToNOption> oneToNOption = oneToNOptionRepository.findById(team.getTeamId());
                     int oneToNOptionFee = getOneToNOption(oneToNOption, reserveNoviceTeamRequestDTO.getStudentCount());
 
-                    reserveAdvancedResponseDTO.setCost((teamCost + oneToNOptionFee) * reserveNoviceTeamRequestDTO.getDuration());
+                    reserveAdvancedResponseDTO.setCost((teamCost + oneToNOptionFee + levelCost) * reserveNoviceTeamRequestDTO.getDuration() + permission.getDesignatedCost());
                     reserveAdvancedResponseDTO.setBasicFee(teamCost);
                     reserveAdvancedResponseDTO.setPeopleOptionFee(oneToNOptionFee);
                     reserveAdvancedResponseDTO.setDesignatedFee(permission.getDesignatedCost());
