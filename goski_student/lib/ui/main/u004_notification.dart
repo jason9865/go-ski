@@ -510,8 +510,10 @@ class MessageNotificationCard extends StatelessWidget {
                                 title: tr('feedbackImage'),
                                 child: Column(
                                   children: [
-                                    Image.network(
-                                        width: double.infinity, imageUrl!),
+                                    InteractiveViewer(
+                                      child: Image.network(
+                                          width: double.infinity, imageUrl!),
+                                    ),
                                     SizedBox(
                                       height: screenSizeController
                                           .getHeightByRatio(0.025),
