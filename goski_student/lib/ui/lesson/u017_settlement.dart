@@ -135,11 +135,19 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
-                                    text: tr('basicFee'),
+                                    text: list[index].paymentStatus == 0
+                                        ? tr('basicFee')
+                                        : tr('paymentAmount'),
                                     size: goskiFontSmall,
                                   ),
                                   GoskiText(
-                                    text: formatFromInt(list[index].basicFee),
+                                    text: formatFromInt(
+                                        list[index].paymentStatus == 0
+                                            ? list[index].basicFee
+                                            : list[index].basicFee +
+                                                list[index].designatedFee +
+                                                list[index].peopleOptionFee +
+                                                list[index].levelOptionFee),
                                     size: goskiFontSmall,
                                   ),
                                 ],
@@ -188,7 +196,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
-                                    text: tr('peopleOptionFee'),
+                                    text: tr('levelOptionFee'),
                                     size: goskiFontSmall,
                                   ),
                                   GoskiText(
@@ -203,7 +211,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                               visible: list[index].paymentStatus != 0,
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
                                     text: tr('refundCharge'),
@@ -211,7 +219,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                   ),
                                   GoskiText(
                                     text:
-                                    '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
+                                        '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
                                     size: goskiFontSmall,
                                   ),
                                 ],
