@@ -1,30 +1,30 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/default_image.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/data/model/instructor.dart';
+import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
+import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
+import 'package:goski_student/ui/main/u003_student_main.dart';
+import 'package:goski_student/view_model/reservation_view_model.dart';
+
+final ReservationViewModel reservationViewModel =
+    Get.find<ReservationViewModel>();
 
 class ReservationCompleteScreen extends StatefulWidget {
-  final String resortName;
-  final String teamName;
-  final String instructorName;
-  final DateTime startTime;
-  final DateTime endTime;
-  final int numberOfStudents;
-  final int payment;
+  BeginnerResponse? teamInformation;
+  Instructor? instructor;
 
-  const ReservationCompleteScreen({
+  ReservationCompleteScreen({
     super.key,
-    required this.resortName,
-    required this.teamName,
-    required this.instructorName,
-    required this.startTime,
-    required this.endTime,
-    required this.numberOfStudents,
-    required this.payment,
+    this.teamInformation,
+    this.instructor,
   });
 
   @override
@@ -37,145 +37,148 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reservationInfo = reservationViewModel.reservation.value;
+
     return GoskiContainer(
       buttonName: "toMain",
       onConfirm: () {
-        //TODO. 예약 취소 기능
+        Get.offAll(StudentMainScreen());
       },
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/penguin.png",
-              width: imageWidth,
-              height: imageWidth,
-              fit: BoxFit.fitHeight,
-            ),
-            GoskiText(text: tr('completePayment'), size: goskiFontXLarge),
-            const BuildInterval(),
-            GoskiCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      GoskiText(
-                        text: tr('reservationInfo'),
-                        size: goskiFontLarge,
-                        isBold: true,
-                      )
-                    ]),
-                    const BuildInterval(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.network(
+            s3Penguin,
+            width: imageWidth,
+            height: imageWidth,
+            fit: BoxFit.fitHeight,
+          ),
+          GoskiText(text: tr('completePayment'), size: goskiFontXXLarge),
+          const BuildInterval(),
+          GoskiCard(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    GoskiText(
+                      text: tr('reservationInfo'),
+                      size: goskiFontXLarge,
+                      isBold: true,
+                    )
+                  ]),
+                  const BuildInterval(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            if (widget.teamInformation != null)
                               GoskiText(
-                                  text: tr(widget.resortName),
-                                  size: goskiFontMedium),
-                              GoskiText(text: tr(' - '), size: goskiFontMedium),
+                                text: tr(widget.teamInformation!.teamName),
+                                size: goskiFontLarge,
+                              ),
+                            if (widget.teamInformation == null &&
+                                widget.instructor != null)
                               GoskiText(
-                                  text: tr(widget.teamName),
-                                  size: goskiFontMedium),
-                            ],
-                          ),
-                          Row(
-                            children: [
+                                text: tr(widget.instructor!.teamName),
+                                size: goskiFontLarge,
+                              ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            if (widget.instructor != null)
                               GoskiText(
-                                  text: tr('designatedInstructor',
-                                      args: [widget.instructorName]),
-                                  size: goskiFontMedium),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GoskiText(
-                            text: tr('date'),
-                            size: goskiFontSmall,
-                            color: goskiDarkGray,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GoskiText(
-                                text: DateFormat('yyyy.MM.dd (E)')
-                                    .format(widget.startTime)
-                                    .toString(),
+                                text: tr('designatedInstructor',
+                                    args: [widget.instructor!.userName]),
                                 size: goskiFontMedium,
                               ),
-                              Row(
-                                children: [
-                                  GoskiText(
-                                    text: DateFormat('HH:mm')
-                                        .format(widget.startTime)
-                                        .toString(),
-                                    size: goskiFontMedium,
-                                  ),
-                                  GoskiText(
-                                    text: DateFormat('~HH:mm')
-                                        .format(widget.endTime)
-                                        .toString(),
-                                    size: goskiFontMedium,
-                                  ),
-                                ],
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GoskiText(
-                            text: tr('studentNumber'),
-                            size: goskiFontSmall,
-                            color: goskiDarkGray,
-                          ),
-                          GoskiText(
-                              text:
-                                  tr('${widget.numberOfStudents.toString()} 명'),
-                              size: goskiFontMedium),
-                        ],
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GoskiText(
+                              text: tr('date'),
+                              size: goskiFontMedium,
+                              color: goskiDarkGray,
+                            ),
+                            GoskiText(
+                              text: formatSessionTime(
+                                reservationInfo.lessonDate,
+                                reservationInfo.startTime,
+                                reservationInfo.duration,
+                              ),
+                              size: goskiFontLarge,
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoskiText(
+                          text: tr('studentNumber'),
+                          size: goskiFontMedium,
+                          color: goskiDarkGray,
+                        ),
+                        GoskiText(
+                          text: tr('hintStudentCount',
+                              args: [reservationInfo.studentCount.toString()]),
+                          size: goskiFontLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (widget.teamInformation != null)
                           GoskiText(
-                            text: tr('paymentAmount'),
-                            size: goskiFontMedium,
-                          ),
-                          GoskiText(
-                            text: tr('moneyUnit', args: [
-                              NumberFormat('#,###').format(widget.payment)
+                            text: tr('price', args: [
+                              NumberFormat('###,###,###')
+                                  .format(widget.teamInformation!.cost)
                             ]),
-                            size: goskiFontMedium,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                            size: goskiFontLarge,
+                            isBold: true,
+                          ),
+                        if (widget.teamInformation == null &&
+                            widget.instructor != null)
+                          GoskiText(
+                            text: tr('price', args: [
+                              NumberFormat('###,###,###')
+                                  .format(widget.instructor!.cost)
+                            ]),
+                            size: goskiFontLarge,
+                            isBold: true,
+                          ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
