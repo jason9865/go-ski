@@ -419,7 +419,7 @@ public class PayService {
 		User user = (User)httpServletRequest.getAttribute("user");
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		//exception 만들기
 		if (dummy.isEmpty())
 			throw new IllegalArgumentException("조회할 수 없습니다.");
@@ -433,7 +433,7 @@ public class PayService {
 		boolean b = false;
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		for (int id = 0; id < dummy.size(); id++) {
 			if (Objects.equals(dummy.get(id).getTeamId(), teamId))
 				b = true;

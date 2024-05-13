@@ -157,8 +157,16 @@ public class TeamService {
     }
 
     @Transactional
-    public List<TeamResponseDTO> getTeamList(User user) {
-        return teamRepository.findTeamList(user.getUserId());
+    public List<TeamResponseDTO> getOwnerTeamList(User user) {
+        log.info("유저 ID = {}",user.getUserId());
+        return teamRepository.findOwnerTeamList(user.getUserId());
+    }
+
+
+    @Transactional
+    public List<TeamResponseDTO> getInstTeamList(User user) {
+        log.info("유저 ID = {}",user.getUserId());
+        return teamRepository.findInstTeamList(113);
     }
 
     @Transactional
