@@ -81,17 +81,38 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     final cardPadding = screenSizeController.getWidthByRatio(0.03);
     final checkboxSize = screenSizeController.getWidthByRatio(0.05);
     final reservationInfo = reservationViewModel.reservation.value;
-    final teamInfo = widget.teamInformation;
     String requestComplain = '';
-    final List<_AmountOfPayment> amountOfPaymentList = widget.instructor != null
-        ? [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
-            _AmountOfPayment(
-                name: '강사 지정료', price: widget.instructor!.designatedFee),
-          ]
-        : [
-            _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
-          ];
+    // final List<_AmountOfPayment> amountOfPaymentList = widget.instructor !=
+    //             null &&
+    //         widget.teamInformation != null
+    //     ? [
+    //         _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+    //         _AmountOfPayment(
+    //             name: '강사 지정료', price: widget.instructor!.designatedFee),
+    //       ]
+    //     : [
+    //         _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+    //       ];
+    List<_AmountOfPayment> amountOfPaymentList = [];
+    if (widget.instructor != null && widget.teamInformation != null) {
+      amountOfPaymentList = [
+        _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+        _AmountOfPayment(
+            name: '강사 지정료', price: widget.instructor!.designatedFee),
+      ];
+    } else if (widget.teamInformation != null) {
+      amountOfPaymentList = [
+        _AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+      ];
+    } else if (widget.teamInformation == null && widget.instructor != null) {
+      amountOfPaymentList = [
+        _AmountOfPayment(
+            name: '강습료',
+            price: widget.instructor!.cost - widget.instructor!.designatedFee),
+        _AmountOfPayment(
+            name: '강사 지정료', price: widget.instructor!.designatedFee)
+      ];
+    }
     int sum() {
       int sum = 0;
       for (int i = 0; i < amountOfPaymentList.length; i++) {
@@ -116,7 +137,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
               // 팀, 지정강사 다 있는경우 -> 초급, 지정강사 강습
               lessonPaymentViewModel.instLessonPayment(
                   reservationInfo,
-                  teamInfo,
+                  widget.teamInformation!,
                   widget.instructor!,
                   studentInfoViewModel.studentInfoList,
                   requestComplain);
@@ -125,7 +146,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
               // 팀만 있고, 지정강사는 없는경우 -> 초급, 팀 강습
               lessonPaymentViewModel.teamLessonPayment(
                   reservationInfo,
-                  teamInfo,
+                  widget.teamInformation!,
                   studentInfoViewModel.studentInfoList,
                   requestComplain);
             } else if (widget.instructor != null &&
@@ -171,10 +192,17 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         ],
                       ),
                       SizedBox(height: contentPadding),
-                      GoskiText(
-                        text: tr(teamInfo!.teamName),
-                        size: goskiFontMedium,
-                      ),
+                      if (widget.teamInformation != null)
+                        GoskiText(
+                          text: tr(widget.teamInformation!.teamName),
+                          size: goskiFontMedium,
+                        ),
+                      if (widget.teamInformation == null &&
+                          widget.instructor != null)
+                        GoskiText(
+                          text: tr(widget.instructor!.teamName),
+                          size: goskiFontMedium,
+                        ),
                       if (widget.instructor != null)
                         GoskiText(
                           text: tr('designatedInstructor',
@@ -208,13 +236,25 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GoskiText(
-                            text: tr('price', args: [
-                              NumberFormat('###,###,###').format(teamInfo.cost)
-                            ]),
-                            size: goskiFontMedium,
-                            isBold: true,
-                          ),
+                          if (widget.teamInformation != null)
+                            GoskiText(
+                              text: tr('price', args: [
+                                NumberFormat('###,###,###')
+                                    .format(widget.teamInformation!.cost)
+                              ]),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
+                          if (widget.teamInformation == null &&
+                              widget.instructor != null)
+                            GoskiText(
+                              text: tr('price', args: [
+                                NumberFormat('###,###,###')
+                                    .format(widget.instructor!.cost)
+                              ]),
+                              size: goskiFontMedium,
+                              isBold: true,
+                            ),
                         ],
                       ),
                     ],

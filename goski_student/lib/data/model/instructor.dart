@@ -5,6 +5,8 @@ import 'certificate_info.dart';
 class Instructor {
   int instructorId;
   String userName;
+  int teamId;
+  String teamName;
   String instructorUrl;
   String gender;
   int position;
@@ -22,6 +24,8 @@ class Instructor {
   Instructor({
     required this.instructorId,
     required this.userName,
+    required this.teamId,
+    required this.teamName,
     required this.instructorUrl,
     required this.gender,
     required this.position,
@@ -120,6 +124,8 @@ class Instructor {
     return Instructor(
       instructorId: json['instructorId'] as int,
       userName: json['userName'] as String,
+      teamId: json['teamId'] as int,
+      teamName: json['teamName'] as String,
       instructorUrl: json['instructorUrl'] as String,
       gender: json['gender'] as String,
       position: json['position'] as int,
