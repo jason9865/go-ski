@@ -9,6 +9,8 @@ import 'package:goski_student/data/repository/lesson_payment_repository.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_image_dialog.dart';
+import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
@@ -325,13 +327,30 @@ class _InstructorsIntroductionScreen
                   itemBuilder: (context, idx) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 200,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.network(
-                          widget.instructor.certificateList[idx]
-                              .certificateImageUrl,
-                          fit: BoxFit.fill,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GoskiModal(
+                                title: tr('feedbackImage'),
+                                child: GoskiImageDialog(
+                                  isLocalImage: false,
+                                  imageUrl: widget.instructor
+                                      .certificateList[idx].certificateImageUrl,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 200,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Image.network(
+                            widget.instructor.certificateList[idx]
+                                .certificateImageUrl,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     );

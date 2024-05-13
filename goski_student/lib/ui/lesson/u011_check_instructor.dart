@@ -147,10 +147,13 @@ class CheckInstructorScreen extends StatelessWidget {
                             text: tr(' : '),
                             size: goskiFontMedium,
                           ),
-                          GoskiText(
-                            text: instructorProfileViewModel.skiCertificate
-                                .join(', '),
-                            size: goskiFontMedium,
+                          SizedBox(
+                            width: screenSizeController.getWidthByRatio(0.3),
+                            child: GoskiText(
+                              text: instructorProfileViewModel.skiCertificate
+                                  .join(', '),
+                              size: goskiFontMedium,
+                            ),
                           ),
                         ],
                       ),
@@ -164,10 +167,13 @@ class CheckInstructorScreen extends StatelessWidget {
                             text: tr(' : '),
                             size: goskiFontMedium,
                           ),
-                          GoskiText(
-                            text: instructorProfileViewModel.boardCertificate
-                                .join(', '),
-                            size: goskiFontMedium,
+                          SizedBox(
+                            width: screenSizeController.getWidthByRatio(0.3),
+                            child: GoskiText(
+                              text: instructorProfileViewModel.boardCertificate
+                                  .join(', '),
+                              size: goskiFontMedium,
+                            ),
                           ),
                         ],
                       ),
