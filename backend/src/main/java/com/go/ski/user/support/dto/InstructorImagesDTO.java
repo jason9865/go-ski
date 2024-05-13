@@ -1,9 +1,9 @@
 package com.go.ski.user.support.dto;
 
-import com.go.ski.user.support.vo.CertificateImageVO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -11,5 +11,6 @@ import java.util.List;
 @Setter
 @ToString
 public class InstructorImagesDTO extends ProfileImageDTO {
-    private List<CertificateImageVO> certificateImageVOs;
+    private List<String> certificateIds;
+    private List<MultipartFile> certificateImages;
 }

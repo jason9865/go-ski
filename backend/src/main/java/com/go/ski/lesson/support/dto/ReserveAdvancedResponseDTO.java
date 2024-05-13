@@ -19,6 +19,8 @@ import java.util.List;
 public class ReserveAdvancedResponseDTO extends ReserveResponseDTO {
     private Integer instructorId;
     private String userName;
+    private Integer teamId;
+    private String teamName;
     private Integer position;
     private String description;
     private String instructorUrl;
