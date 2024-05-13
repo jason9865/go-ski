@@ -17,6 +17,7 @@ public class ReserveNoviceTeamRequestDTO {
     private String level;
     private Integer duration;
     private List<Integer> instructorsList;
+    private String lessonType;
 
     public  ReserveNoviceTeamRequestDTO(ReserveInfoVO reserveInfoVO) {
         studentCount = reserveInfoVO.getStudentCount();
@@ -26,5 +27,6 @@ public class ReserveNoviceTeamRequestDTO {
             case "1010011", "1101100" -> "ADVANCED";
             default -> null;
         };
+        lessonType = reserveInfoVO.getLessonType();
     }
 }
