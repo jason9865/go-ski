@@ -31,6 +31,7 @@ public class Instructor {
 
     public Instructor(User user, String lessonType) {
         instructorId = user.getUserId();
+        dayoff = 0;
         this.user = user;
         switch (lessonType) {
             case "ALL" -> isInstructAvailable = "1110000";
