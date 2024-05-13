@@ -29,14 +29,14 @@ class _SettlementScreenState extends State<SettlementScreen> {
     return Obx(() {
       if (settlementViewModel.isLoading.value) {
         return Scaffold(
-            appBar: GoskiSubHeader(title: tr('paymentHistory')),
-            body: const GoskiContainer(
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: goskiBlack,
-                ),
+          appBar: GoskiSubHeader(title: tr('paymentHistory')),
+          body: const GoskiContainer(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
               ),
             ),
+          ),
         );
       } else if (list.isEmpty) {
         return Scaffold(
@@ -194,6 +194,24 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                   GoskiText(
                                     text:
                                         '+ ${formatFromInt(list[index].levelOptionFee)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: list[index].paymentStatus != 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('refundCharge'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                    '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
                                     size: goskiFontSmall,
                                   ),
                                 ],
