@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
+import 'package:goski_instructor/const/util/base64_encoder.dart';
+import 'package:goski_instructor/const/util/custom_dio.dart';
 import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
 import 'package:goski_instructor/data/model/owner.dart';
@@ -56,11 +59,13 @@ class AuthService extends GetxService {
       );
       if (response.statusCode == 200) {
         logger.d('Token successfully sent to the server');
-        if (response.headers['accessToken'] == null) {
+        logger.w(response.headers['accesstoken']);
+        if (response.headers['accesstoken'] == null) {
           return AuthStatus.first;
         }
-        final String? serverAccessToken = response.headers['accessToken'];
-        final String? serverRefreshToken = response.headers['refreshToken'];
+
+        String? serverAccessToken = response.headers['accesstoken'];
+        String? serverRefreshToken = response.headers['refreshtoken'];
 
         if (serverAccessToken != null && serverRefreshToken != null) {
           await secureStorage.write(
@@ -114,48 +119,56 @@ class AuthService extends GetxService {
   Future<bool> instructorSignUp(InstructorRequest instructor) async {
     FormData formData = FormData();
 
-    var uri = Uri.parse('$baseUrl/user/signup/inst');
-    var request = http.MultipartRequest('POST', uri);
     String? domainUserKey = await secureStorage.read(key: "domainUserKey");
     String? kakaoProfileImage = await secureStorage.read(key: "profileUrl");
-
-    request.fields['domainuserKey'] = domainUserKey!;
-    request.fields['kakaoProfileImage'] = kakaoProfileImage!;
+    formData.fields.add(MapEntry('domainUserKey', domainUserKey!));
+    formData.fields.add(MapEntry('kakaoProfilUrl', kakaoProfileImage!));
+    formData.fields.add(MapEntry('userName', instructor.userName));
+    formData.fields.add(MapEntry('gender', instructor.gender.name));
+    formData.fields
+        .add(MapEntry('birthDate', dateTimeToString(instructor.birthDate!)));
+    formData.fields.add(MapEntry('role', instructor.role.name));
+    formData.fields.add(
+        MapEntry('phoneNumber', phoneNumberParser(instructor.phoneNumber)));
+    formData.fields.add(const MapEntry('lessonType', "SKI"));
+    var profileImage =
+        await MultipartFile.fromFile(instructor.profileImage!.path);
     if (instructor.profileImage != null) {
-      // profileImage를 등록한 경우만
-      var bytes = await instructor.profileImage!.readAsBytes();
-      var profileImage = http.MultipartFile.fromBytes(
-        'profileImage',
-        bytes,
-      );
-      request.files.add(profileImage);
+      formData.files.add(MapEntry('profileImage', profileImage));
     }
-    request.fields['userName'] = instructor.userName;
-    request.fields['gender'] = instructor.gender.toString();
-    request.fields['birthDate'] = dateTimeToString(instructor.birthDate!);
-    request.fields['role'] = instructor.role.toString();
-    request.fields['phoneNumber'] = phoneNumberParser(instructor.phoneNumber);
-    request.fields['lessonType'] = instructor.lessonType;
+    for (int i = 0; i < instructor.certificates.length; i++) {
+      formData.fields.add(MapEntry('certificateIds',
+          instructor.certificates[i].certificateId.toString()));
+      formData.files.add(MapEntry(
+          'certificateImages',
+          await MultipartFile.fromFile(
+              instructor.certificates[i].certificateImage.path)));
+    }
 
-    for (var certificate in instructor.certificates) {
-      var bytes = await certificate.certificateImage.readAsBytes();
-      var certificateImage = http.MultipartFile.fromBytes(
-        'certificates',
-        bytes,
-        filename: certificate.certificateId.toString(),
-      );
-      request.files.add(certificateImage);
-    }
     try {
-      var response = await request.send();
-      if (response.statusCode == 200) {
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/user/signup/inst',
+        data: formData,
+        options: Options(
+          headers: <String, String>{
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+
+      logger.d(response.data);
+
+      if (response.data['status'] == 'success') {
         logger.d("Succeed in SignUp!");
         return true;
       } else {
         logger.e("Failed to SignUp...");
       }
+    } on DioException catch (e) {
+      logger.e('DioError: ${e.response?.statusCode} - ${e.message}');
+      logger.e('Full error: $e');
     } catch (e) {
-      logger.e('Failed to send SignUp Request');
+      logger.e('Unexpected error: $e');
     }
     return false;
   }

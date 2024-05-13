@@ -18,6 +18,7 @@ import 'package:goski_instructor/ui/component/goski_container.dart';
 import 'package:goski_instructor/ui/component/goski_switch.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
+import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
 import 'package:goski_instructor/view_model/signup_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -47,10 +48,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onConfirm: () {
                   if (signupViewModel.user.value.isValid()) {
                     if (signupViewModel.user.value.isOwner) {
-                      signupViewModel.ownerSignup(signupViewModel.user.value);
+                      Get.snackbar("지원하지 않는 기능입니다.", "사장 가입은 후추 구현 예정입니다.");
+                      // signupViewModel.ownerSignup(signupViewModel.user.value);
                     } else {
                       signupViewModel
-                          .instructorSignup(signupViewModel.user.value);
+                          .instructorSignup(signupViewModel.user.value)
+                          .then((value) => {
+                                if (value)
+                                  {
+                                    Get.offAll(
+                                        () => const InstructorMainScreen())
+                                  }
+                                else
+                                  {Get.snackbar("회원 가입 실패", "잠시 후 다시 시도해주세요.")}
+                              });
                     }
                   }
                 },

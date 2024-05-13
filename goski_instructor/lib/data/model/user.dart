@@ -97,6 +97,7 @@ extension UserToDTO on User {
     return OwnerRequest(
       domainUserKey: domainUserKey,
       kakaoProfileUrl: kakaoProfileUrl,
+      profileImage: profileImage,
       userName: userName,
       gender: gender,
       birthDate: birthDate,
@@ -109,6 +110,7 @@ extension UserToDTO on User {
     return InstructorRequest(
       domainUserKey: domainUserKey,
       kakaoProfileUrl: kakaoProfileUrl,
+      profileImage: profileImage,
       userName: userName,
       gender: gender,
       birthDate: birthDate,

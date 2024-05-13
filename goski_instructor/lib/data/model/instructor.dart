@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:goski_instructor/data/model/certificate.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../const/enum/gender.dart';
 import '../../const/enum/role.dart';
 
 class InstructorRequest {
   int domainUserKey;
-  File? profileImage;
+  XFile? profileImage;
   String kakaoProfileUrl;
   String userName;
   Gender gender;
