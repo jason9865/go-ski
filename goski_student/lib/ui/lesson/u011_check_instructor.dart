@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/const/default_image.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/instructor_profile_response.dart';
@@ -96,6 +97,7 @@ class CheckInstructorScreen extends StatelessWidget {
   Widget buildProfile() {
     Rx<InstructorProfile> profile =
         instructorProfileViewModel.instructorProfile;
+    logger.d(profile);
 
     return Padding(
       padding: EdgeInsets.all(
@@ -109,7 +111,7 @@ class CheckInstructorScreen extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Image.network(profile.value.profileUrl!),
+            child: Image.network(profile.value.profileUrl ?? s3Penguin),
           ),
           Expanded(
             child: Column(
