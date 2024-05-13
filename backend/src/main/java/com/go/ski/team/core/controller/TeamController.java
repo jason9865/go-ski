@@ -61,11 +61,19 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ApiResponse<?>> searchTeamList(HttpServletRequest request) {
-        log.info("====TeamController.searchTeamList====");
+    @GetMapping("/list/owner")
+    public ResponseEntity<ApiResponse<?>> searchOwnerTeamList(HttpServletRequest request) {
+        log.info("====TeamController.searchOwnerTeamList====");
         User user = (User) request.getAttribute("user");
-        List<TeamResponseDTO> response = teamService.getTeamList(user);
+        List<TeamResponseDTO> response = teamService.getOwnerTeamList(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @GetMapping("/list/inst")
+    public ResponseEntity<ApiResponse<?>> searchInstTeamList(HttpServletRequest request) {
+        log.info("====TeamController.searchInstTeamList====");
+        User user = (User) request.getAttribute("user");
+        List<TeamResponseDTO> response = teamService.getInstTeamList(user);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
