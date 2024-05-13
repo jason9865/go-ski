@@ -7,8 +7,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
@@ -33,5 +31,12 @@ public class Review {
         this.createdAt = LocalDateTime.now();
     }
 
+    @Builder
+    public Review(Lesson lesson, String contents, Integer rating, LocalDateTime createdAt) {
+        this.lesson = lesson;
+        this.contents = contents;
+        this.rating = rating;
+        this.createdAt = createdAt;
+    }
 
 }

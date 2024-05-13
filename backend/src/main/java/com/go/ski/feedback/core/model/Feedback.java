@@ -9,8 +9,6 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
@@ -31,5 +29,12 @@ public class Feedback {
 
     public void updateContent(FeedbackUpdateRequestDTO dto) {
         this.content = dto.getContent();
+    }
+
+    @Builder
+    public Feedback(Lesson lesson, String content, List<FeedbackMedia> feedbackMedia){
+        this.lesson = lesson;
+        this.content = content;
+        this.feedbackMedia = feedbackMedia;
     }
 }
