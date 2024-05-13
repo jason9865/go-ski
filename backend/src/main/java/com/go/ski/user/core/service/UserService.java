@@ -226,6 +226,8 @@ public class UserService {
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
         List<String> certificateIds = instructorImagesDTO.getCertificateIds();
         List<MultipartFile> certificateImages = instructorImagesDTO.getCertificateImages();
+        log.info("certificateIds: {}", certificateIds);
+        log.info("certificateImages: {}", certificateImages);
 
         if (certificateIds != null && !certificateIds.isEmpty() && certificateImages != null && !certificateImages.isEmpty()) {
             for (int i = 0; i < certificateIds.size(); i++) {
