@@ -12,6 +12,8 @@ import 'package:goski_student/data/model/lesson_list_response.dart';
 import 'package:goski_student/data/model/review_response.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
+import 'package:goski_student/ui/component/goski_image_dialog.dart';
+import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/instructor_profile_view_model.dart';
@@ -283,12 +285,30 @@ class CheckInstructorScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 200,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Image.network(
-                          profile.value.certificates[index].certificateImageUrl,
-                          fit: BoxFit.fill,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GoskiModal(
+                                title: tr('feedbackImage'),
+                                child: GoskiImageDialog(
+                                  isLocalImage: false,
+                                  imageUrl: profile.value.certificates[index]
+                                      .certificateImageUrl,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 200,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Image.network(
+                            profile
+                                .value.certificates[index].certificateImageUrl,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     );
