@@ -111,6 +111,8 @@ class InstructorProfileViewModel extends GetxController {
     InstructorProfile? response =
     await instructorProfileRepository.getInstructorProfile(instructorId);
 
+    logger.d(response);
+
     if (response != null) {
       createCertificateList(response);
       instructorProfile.value = response;
