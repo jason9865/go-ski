@@ -7,8 +7,6 @@ import lombok.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @ToString
@@ -29,5 +27,13 @@ public class TeamInstructor {
     @Setter
     @Column(nullable = false)
     private boolean isInviteAccepted;
+
+    @Builder
+    public TeamInstructor(Integer teamInstructorId, Instructor instructor, Team team, boolean isInviteAccepted){
+        this.teamInstructorId = teamInstructorId;
+        this.instructor = instructor;
+        this.team = team;
+        this.isInviteAccepted = isInviteAccepted;
+    }
 
 }

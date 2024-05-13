@@ -3,6 +3,7 @@ package com.go.ski.team.core.service;
 import com.go.ski.common.constant.FileUploadPath;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
+import com.go.ski.notification.core.domain.Notification;
 import com.go.ski.team.core.model.*;
 import com.go.ski.team.core.repository.*;
 import com.go.ski.team.support.dto.TeamCreateRequestDTO;
@@ -72,12 +73,12 @@ public class TeamService {
         }
 
         // 3. 중고급 옵션 생성
-        LevelOption levelOption = LevelOption.createLevelOption(savedTeam, request);
+        LevelOption levelOption = LevelOption.of(savedTeam, request);
         levelOptionRepository.save(levelOption);
         log.info("중 고급 옵션 저장 성공");
 
         // 4. 1:N 옵션 생성
-        OneToNOption oneToNOption = OneToNOption.createOneToNOption(savedTeam, request);
+        OneToNOption oneToNOption = OneToNOption.of(savedTeam, request);
         oneToNOptionRepository.save(oneToNOption);
         log.info("1:N 옵션 저장 성공");
     }

@@ -7,7 +7,7 @@ server:
       charset: UTF-8
       enabled: true
   tomcat:
-    max-http-form-post-size: 10GB
+    max-http-form-post-size: 2000MB
 
 spring:
   # MySQL
@@ -41,8 +41,8 @@ spring:
       ddl-auto: none
   servlet:
     multipart:
-      max-request-size: 10GB
-      max-file-size: 10GB
+      max-request-size: 2000MB
+      max-file-size: 2000MB
 
   profiles:
     include: jwt, oauth, s3, pay, fcm

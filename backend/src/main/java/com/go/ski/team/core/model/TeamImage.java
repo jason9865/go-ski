@@ -6,8 +6,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED )
 public class TeamImage {
@@ -26,6 +24,12 @@ public class TeamImage {
 
     public void updateTeamImage(String teamImageUrl) {
         this.imageUrl = teamImageUrl;
+    }
+
+    @Builder
+    public TeamImage(Team team, String imageUrl) {
+        this.team = team;
+        this.imageUrl = imageUrl;
     }
 
 }
