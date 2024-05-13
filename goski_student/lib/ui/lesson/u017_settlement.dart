@@ -29,14 +29,14 @@ class _SettlementScreenState extends State<SettlementScreen> {
     return Obx(() {
       if (settlementViewModel.isLoading.value) {
         return Scaffold(
-            appBar: GoskiSubHeader(title: tr('paymentHistory')),
-            body: const GoskiContainer(
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: goskiBlack,
-                ),
+          appBar: GoskiSubHeader(title: tr('paymentHistory')),
+          body: const GoskiContainer(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
               ),
             ),
+          ),
         );
       } else if (list.isEmpty) {
         return Scaffold(
@@ -135,11 +135,19 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
-                                    text: tr('basicFee'),
+                                    text: list[index].paymentStatus == 0
+                                        ? tr('basicFee')
+                                        : tr('paymentAmount'),
                                     size: goskiFontSmall,
                                   ),
                                   GoskiText(
-                                    text: formatFromInt(list[index].basicFee),
+                                    text: formatFromInt(
+                                        list[index].paymentStatus == 0
+                                            ? list[index].basicFee
+                                            : list[index].basicFee +
+                                                list[index].designatedFee +
+                                                list[index].peopleOptionFee +
+                                                list[index].levelOptionFee),
                                     size: goskiFontSmall,
                                   ),
                                 ],
@@ -188,12 +196,30 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GoskiText(
-                                    text: tr('peopleOptionFee'),
+                                    text: tr('levelOptionFee'),
                                     size: goskiFontSmall,
                                   ),
                                   GoskiText(
                                     text:
                                         '+ ${formatFromInt(list[index].levelOptionFee)}',
+                                    size: goskiFontSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: list[index].paymentStatus != 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GoskiText(
+                                    text: tr('refundCharge'),
+                                    size: goskiFontSmall,
+                                  ),
+                                  GoskiText(
+                                    text:
+                                        '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
                                     size: goskiFontSmall,
                                   ),
                                 ],

@@ -11,15 +11,16 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
 
-// TODO: 약관 페이지  추가 필요
-class TermScreen extends StatelessWidget {
-  const TermScreen({super.key});
+// TODO: 환불 정책 페이지  추가 필요
+class RefundPolicyScreen extends StatelessWidget {
+
+  const RefundPolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
-        appBar: GoskiSubHeader(title: tr('termsOfUse')),
+        appBar: GoskiSubHeader(title: tr('refundPolicy2')),
         body: Container(
           decoration: const BoxDecoration(
             color: goskiBackground,
@@ -30,7 +31,7 @@ class TermScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: GoskiText(
-                    text: '이용약관 페이지',
+                    text: '환불 정책 페이지',
                     size: goskiFontXXLarge,
                   ),
                 ),
