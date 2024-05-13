@@ -294,11 +294,17 @@ class CheckInstructorScreen extends StatelessWidget {
                                 title: tr('feedbackImage'),
                                 child: Column(
                                   children: [
-                                    InteractiveViewer(
-                                      child: Image.network(
-                                        width: double.infinity,
-                                        profile.value.certificates[index]
-                                            .certificateImageUrl,
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxHeight: screenSizeController
+                                            .getHeightByRatio(0.5),
+                                      ),
+                                      child: InteractiveViewer(
+                                        child: Image.network(
+                                          width: double.infinity,
+                                          profile.value.certificates[index]
+                                              .certificateImageUrl,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(

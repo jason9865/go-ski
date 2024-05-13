@@ -19,7 +19,6 @@ import '../component/goski_textfield.dart';
 
 var logger = Logger();
 
-
 class SendMessageDialog extends StatefulWidget {
   const SendMessageDialog({
     super.key,
@@ -60,7 +59,6 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
               onTextChange: (text) {
                 lessonListViewModel.message.value.title = text;
               },
-
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -110,8 +108,9 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                               children: [
                                 Container(
                                   constraints: BoxConstraints(
-                                      maxHeight: screenSizeController
-                                          .getHeightByRatio(0.5)),
+                                    maxHeight: screenSizeController
+                                        .getHeightByRatio(0.5),
+                                  ),
                                   child: InteractiveViewer(
                                     child: Image.file(
                                       File(lessonListViewModel
