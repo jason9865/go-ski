@@ -69,9 +69,9 @@ class AuthService extends GetxService {
 
         if (serverAccessToken != null && serverRefreshToken != null) {
           await secureStorage.write(
-              key: "accessToken", value: serverAccessToken);
+              key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
           await secureStorage.write(
-              key: "refreshToken", value: serverRefreshToken);
+              key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
 
           logger.d('New Tokens from server stored successfully');
           return AuthStatus.already;
@@ -130,7 +130,7 @@ class AuthService extends GetxService {
     formData.fields.add(MapEntry('role', instructor.role.name));
     formData.fields.add(
         MapEntry('phoneNumber', phoneNumberParser(instructor.phoneNumber)));
-    formData.fields.add(const MapEntry('lessonType', "SKI"));
+    formData.fields.add(MapEntry('lessonType', instructor.lessonType));
     var profileImage =
         await MultipartFile.fromFile(instructor.profileImage!.path);
     if (instructor.profileImage != null) {

@@ -65,8 +65,9 @@ class _CertificateBottomSheetState extends State<CertificateBottomSheet> {
                     certificateType: signupViewModel
                         .certificateChoiceList[index].certificateType,
                   );
-                  signupViewModel.addCertificate(certificate);
-                  logger.w(certificate.certificateImage);
+                  if (certificate.certificateImage != null) {
+                    signupViewModel.addCertificate(certificate);
+                  }
                   Navigator.pop(context);
                 },
                 child: GoskiCard(
