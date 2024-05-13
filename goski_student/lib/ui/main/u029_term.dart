@@ -19,7 +19,7 @@ class TermScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
-        appBar: GoskiSubHeader(title: tr('term')),
+        appBar: GoskiSubHeader(title: tr('termsOfUse')),
         body: Container(
           decoration: const BoxDecoration(
             color: goskiBackground,
@@ -30,7 +30,7 @@ class TermScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: GoskiText(
-                    text: '약관 페이지',
+                    text: '이용약관 페이지',
                     size: goskiFontXXLarge,
                   ),
                 ),
