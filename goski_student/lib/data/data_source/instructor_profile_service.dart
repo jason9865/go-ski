@@ -17,8 +17,6 @@ class InstructorProfileService extends GetxService {
         '$baseUrl/user/profile/inst/$instructorId',
       );
 
-      logger.d(response.data);
-
       if (response.data['status'] == 'success' &&
           response.data is Map<String, dynamic>) {
         InstructorProfileResponse data = InstructorProfileResponse.fromJson(response.data['data'] as Map<String, dynamic>);
@@ -41,8 +39,6 @@ class InstructorProfileService extends GetxService {
       dynamic response = await CustomDio.dio.get(
         '$baseUrl/lesson/review/list/$instructorId',
       );
-
-      logger.d(response.data['data']);
 
       if (response.data['status'] == 'success' &&
           response.data is Map<String, dynamic> &&
