@@ -29,13 +29,6 @@ class MainViewModel extends GetxController {
     iconUrl: '',
   ).obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    getUserInfo();
-    getSkiResortList();
-  }
-
   void getUserInfo() async {
     Main? response = await mainRepository.getUserInfo();
 
