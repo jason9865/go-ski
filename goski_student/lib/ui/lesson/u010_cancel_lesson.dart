@@ -80,7 +80,7 @@ class CancelLessonScreen extends StatelessWidget {
                                 children: [
                                   GoskiText(
                                       text: tr('designatedInstructor',
-                                          args: [lesson.instructorName ?? '이름 없음']),
+                                          args: [lesson.instructorName ?? tr('noName')]),
                                       size: goskiFontMedium),
                                 ],
                               ),

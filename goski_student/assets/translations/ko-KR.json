@@ -294,5 +294,6 @@
   "messageNotificationContent": "{} 님으로부터 쪽지가 도착하였습니다.\n{}",
   "lessonNotificationContent": "{} {} {}\n1:{} {} 강습이 예약되었습니다.",
   "lessonNotificationOutputFormat": "M월 d일",
-  "lessonNotificationLessonTime": "{}시 {}분"
+  "lessonNotificationLessonTime": "{}시 {}분",
+  "noName": "이름 없음"
 }
