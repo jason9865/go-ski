@@ -10,7 +10,7 @@ import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/notification.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
-import 'package:goski_student/ui/component/goski_smallsize_button.dart';
+import 'package:goski_student/ui/component/goski_image_dialog.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
@@ -213,7 +213,7 @@ class FeedbackNotificationCard extends StatelessWidget {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
     return GestureDetector(
-      onTap: () => Get.off(() => const LessonListScreen()),
+      onTap: () => Get.to(() => const LessonListScreen()),
       onLongPress: () {
         showDialog(
           context: context,
@@ -508,23 +508,9 @@ class MessageNotificationCard extends StatelessWidget {
                             builder: (context) {
                               return GoskiModal(
                                 title: tr('feedbackImage'),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                        width: double.infinity, imageUrl!),
-                                    SizedBox(
-                                      height: screenSizeController
-                                          .getHeightByRatio(0.025),
-                                    ),
-                                    GoskiSmallsizeButton(
-                                      width: screenSizeController
-                                          .getWidthByRatio(3),
-                                      text: tr('confirm'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
+                                child: GoskiImageDialog(
+                                  isLocalImage: false,
+                                  imageUrl: imageUrl!,
                                 ),
                               );
                             },

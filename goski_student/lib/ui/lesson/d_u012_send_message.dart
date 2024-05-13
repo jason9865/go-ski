@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/ui/component/goski_image_dialog.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -18,7 +17,6 @@ import '../component/goski_text.dart';
 import '../component/goski_textfield.dart';
 
 var logger = Logger();
-
 
 class SendMessageDialog extends StatefulWidget {
   const SendMessageDialog({
@@ -60,7 +58,6 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
               onTextChange: (text) {
                 lessonListViewModel.message.value.title = text;
               },
-
             ),
             SizedBox(height: contentPadding),
             GoskiText(
@@ -106,31 +103,10 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                                     15
                                 ? lessonListViewModel.message.value.image!.name
                                 : '${lessonListViewModel.message.value.image!.name.split('.')[0].substring(0, 14)}···.${lessonListViewModel.message.value.image!.name.split('.')[1]}',
-                            child: Column(
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                      maxHeight: screenSizeController
-                                          .getHeightByRatio(0.5)),
-                                  child: Image.file(
-                                    File(lessonListViewModel
-                                        .message.value.image!.path),
-                                    width: double.infinity,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenSizeController
-                                      .getHeightByRatio(0.025),
-                                ),
-                                GoskiSmallsizeButton(
-                                  width:
-                                      screenSizeController.getWidthByRatio(3),
-                                  text: tr('confirm'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                            child: GoskiImageDialog(
+                              isLocalImage: true,
+                              imageUrl: lessonListViewModel
+                                  .message.value.image!.path,
                             ),
                           );
                         });
