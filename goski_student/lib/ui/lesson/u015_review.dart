@@ -196,25 +196,47 @@ class StarRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        5,
-        (index) {
-          return IconButton(
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            icon: Icon(
-              index < value ? Icons.star : Icons.star_border,
-            ),
-            color: goskiYellow,
-            iconSize: 40,
-            onPressed: () {
-              onChanged(index + 1);
+    return Stack(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            5,
+            (index) {
+              return IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.star,
+                ),
+                color: goskiWhite,
+                iconSize: 40,
+                onPressed: () {},
+              );
             },
-          );
-        },
-      ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            5,
+            (index) {
+              return IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: Icon(
+                  index < value ? Icons.star : Icons.star_border,
+                ),
+                color: goskiYellow,
+                iconSize: 40,
+                onPressed: () {
+                  onChanged(index + 1);
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
