@@ -26,7 +26,7 @@ public class LevelOption {
     @Column(nullable = false)
     private Integer advancedFee;
 
-    public static LevelOption createLevelOption(Team team, TeamCreateRequestDTO requestDTO) {
+    public static LevelOption of(Team team, TeamCreateRequestDTO requestDTO) {
         LevelOption levelOption = new LevelOption();
         levelOption.team = team;
         levelOption.intermediateFee = requestDTO.getIntermediateFee();

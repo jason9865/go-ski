@@ -32,7 +32,7 @@ public class OneToNOption {
     @Column(name="one_n_fee",nullable = false)
     private Integer oneNFee;
 
-    public static OneToNOption createOneToNOption(Team team, TeamCreateRequestDTO requestDTO) {
+    public static OneToNOption of(Team team, TeamCreateRequestDTO requestDTO) {
         OneToNOption oneToNOption = new OneToNOption();
         oneToNOption.team = team;
         oneToNOption.oneTwoFee = requestDTO.getOneTwoFee();

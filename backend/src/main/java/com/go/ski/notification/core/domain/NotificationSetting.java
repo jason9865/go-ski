@@ -7,8 +7,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class NotificationSetting {
@@ -27,5 +25,12 @@ public class NotificationSetting {
     private User user;
 
     private boolean notificationStatus;
+
+    @Builder
+    public NotificationSetting(NotificationType notificationType, User user, boolean notificationStatus){
+        this.notificationType = notificationType;
+        this.user = user;
+        this.notificationStatus = notificationStatus;
+    }
 
 }

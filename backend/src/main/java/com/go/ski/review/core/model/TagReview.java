@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
@@ -19,6 +17,12 @@ public class TagReview {
     private Integer tagReviewId;
 
     private String tagName;
+
+    @Builder
+    public TagReview(Integer tagReviewId, String tagName) {
+        this.tagReviewId = tagReviewId;
+        this.tagName = tagName;
+    }
 
 
 }
