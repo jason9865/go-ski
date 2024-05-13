@@ -44,7 +44,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
   @override
   void initState() {
     super.initState();
-    updateScheduleList(dummy);
+    // updateScheduleList(dummy);
   }
 
   @override
