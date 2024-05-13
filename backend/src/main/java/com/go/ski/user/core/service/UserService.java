@@ -150,7 +150,7 @@ public class UserService {
     }
 
     public ProfileInstructorResponseDTO getInstructor(User user, ProfileUserResponseDTO profileUserResponseDTO) {
-        Instructor instructor = Instructor.builder().instructorId(user.getUserId()).build();
+        Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
         List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
 
         List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
@@ -160,7 +160,7 @@ public class UserService {
                     .certificateImageUrl(instructorCert.getCertificateImageUrl())
                     .build());
         }
-        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs);
+        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs, instructor);
     }
 
     public ProfileInstructorResponseDTO getInstructorById(Integer instructorId) {
