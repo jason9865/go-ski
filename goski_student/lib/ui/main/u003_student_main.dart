@@ -27,9 +27,10 @@ import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class StudentMainScreen extends StatelessWidget {
+  final screenSizeController = Get.find<ScreenSizeController>();
+
   // TODO: 추후에 API에서 광고 이미지 링크와 클릭시 이동 링크를 받아오도록 수정 필요
   final List<String> advList = [
     'https://adnet21.co.kr/data/file/b0301/thumb-3717079066_0ksWLuKg_1EC9588_EC9790EB8DB4EBB0B8EBA6AC_20ECB488.mov_000017462_1000x563.png',

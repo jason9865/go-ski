@@ -154,11 +154,17 @@ class _ReservationInstructorListScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: Text(
-                              instructor.description,
-                              textScaleFactor: 1.0,
-                              style: const TextStyle(fontSize: goskiFontLarge),
-                              maxLines: 3,
+                            // child: Text(
+                            //   instructor.description,
+                            //   textScaleFactor: 1.0,
+                            //   style: const TextStyle(fontSize: goskiFontLarge),
+                            //   maxLines: 3,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                            child: GoskiText(
+                              text: instructor.description,
+                              size: goskiFontLarge,
+                              maxLine: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
