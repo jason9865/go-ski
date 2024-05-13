@@ -153,7 +153,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             () => ClipRRect(
               borderRadius:
                   BorderRadius.circular(14), // Container borderRadius - 1
-              child: !signupViewModel.hasProfileImage.value
+              child: !signupViewModel.hasProfileImage.value ||
+                      signupViewModel.user.value.profileImage == null
                   ? const Icon(Icons.photo, size: 50, color: Colors.grey)
                   : Image.file(
                       File(signupViewModel.user.value.profileImage!.path),
@@ -215,6 +216,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
             tr('ski'),
             tr('board'),
           ],
+          onToggle: (index) {
+            signupViewModel.user.update((val) {
+              val?.lessonType = index == 0
+                  ? "ALL"
+                  : index == 1
+                      ? "SKI"
+                      : "BOARD";
+            });
+          },
           width: screenSizeController.getWidthByRatio(0.5),
         ),
       ],
