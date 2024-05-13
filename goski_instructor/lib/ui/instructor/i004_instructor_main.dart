@@ -9,7 +9,9 @@ import 'package:goski_instructor/const/util/week_day_parser.dart';
 import 'package:goski_instructor/ui/component/goski_build_interval.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
+import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
+import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
@@ -40,32 +42,36 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
   // 좌측 타임라인 생성을 위한 리스트
   final List<String> timeList = List.generate(17, (index) => '${8 + index}시');
   List<Schedule> scheduleList = [];
+  final instructorMainViewModel = Get.find<InstructorMainViewModel>();
 
   @override
   void initState() {
     super.initState();
-    // updateScheduleList(dummy);
+    instructorMainViewModel.getInstructorInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildProfileCard(),
-            const BuildInterval(),
-            buildTeamPageView(),
-            const BuildInterval(),
-            GoskiCard(
-              child: Row(
-                children: [
-                  buildTimeLine(),
-                  buildScheduleView(),
-                ],
-              ),
-            )
-          ],
+    return Scaffold(
+      appBar: const GoskiMainHeader(),
+      body: GoskiContainer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildProfileCard(),
+              const BuildInterval(),
+              buildTeamPageView(),
+              const BuildInterval(),
+              GoskiCard(
+                child: Row(
+                  children: [
+                    buildTimeLine(),
+                    buildScheduleView(),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -73,69 +79,82 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
 
   Widget buildProfileCard() {
     final profileSize = screenSizeController.getWidthByRatio(0.25);
-    return GoskiCard(
-      child: Container(
-        color: goskiWhite,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: screenSizeController.getHeightByRatio(0.02),
-            horizontal: screenSizeController.getWidthByRatio(0.07),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: profileSize,
-                    height: profileSize,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/person1.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
+    return Obx(
+      () => GoskiCard(
+        child: Container(
+          color: goskiWhite,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: screenSizeController.getHeightByRatio(0.02),
+              horizontal: screenSizeController.getWidthByRatio(0.07),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    instructorMainViewModel
+                            .instructorInfo.value.profileUrl.isNotEmpty
+                        ? Container(
+                            width: profileSize,
+                            height: profileSize,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(instructorMainViewModel
+                                    .instructorInfo.value.profileUrl),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          )
+                        : SizedBox(
+                            width: profileSize,
+                            height: profileSize,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        GoskiText(
+                          text: instructorMainViewModel
+                              .instructorInfo.value.userName,
+                          size: goskiFontXXLarge,
+                        ),
+                        GoskiText(
+                          text: tr('dynamicInstructor', args: ['']),
+                          size: goskiFontXLarge,
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      GoskiText(
-                        text: tr('임종율'),
-                        size: goskiFontXXLarge,
-                      ),
-                      GoskiText(
-                        text: tr('dynamicInstructor', args: ['']),
-                        size: goskiFontXLarge,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: screenSizeController.getHeightByRatio(0.03),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  UserMenu(
-                    iconName: 'couponBox',
-                    iconImage: 'assets/images/couponBox.svg',
-                    onClick: () => logger.d("쿠폰함"),
-                  ),
-                  UserMenu(
-                    iconName: 'reviewHistory',
-                    iconImage: 'assets/images/reviewHistory.svg',
-                    onClick: () => logger.d("리뷰 내역"),
-                  ),
-                  UserMenu(
-                    iconName: 'lessonHistory',
-                    iconImage: 'assets/images/lessonHistory.svg',
-                    onClick: () => logger.d("강습"),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: screenSizeController.getHeightByRatio(0.03),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    UserMenu(
+                      iconName: 'couponBox',
+                      iconImage: 'assets/images/couponBox.svg',
+                      onClick: () => logger.d("쿠폰함"),
+                    ),
+                    UserMenu(
+                      iconName: 'reviewHistory',
+                      iconImage: 'assets/images/reviewHistory.svg',
+                      onClick: () => logger.d("리뷰 내역"),
+                    ),
+                    UserMenu(
+                      iconName: 'lessonHistory',
+                      iconImage: 'assets/images/lessonHistory.svg',
+                      onClick: () => logger.d("강습"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -251,7 +270,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
         color: goskiWhite,
       ),
       height: screenSizeController.getHeightByRatio(0.925),
-      width: screenSizeController.getWidthByRatio(0.13),
+      width: screenSizeController.getWidthByRatio(0.115),
       child: Column(
         children: [
           SizedBox(

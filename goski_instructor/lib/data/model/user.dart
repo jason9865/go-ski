@@ -41,7 +41,7 @@ class User {
   String userName;
   Gender gender;
   DateTime? birthDate;
-  Role role = Role.INSTRUCTOR;
+  Role role;
   String phoneNumber;
   List<Certificate> certificates;
   String lessonType;
@@ -57,7 +57,7 @@ class User {
     this.role = Role.INSTRUCTOR,
     this.phoneNumber = '',
     required this.certificates,
-    this.lessonType = '',
+    this.lessonType = 'ALL',
     this.isOwner = false,
   }) : birthDate = birthDate ?? DateTime.now();
 
