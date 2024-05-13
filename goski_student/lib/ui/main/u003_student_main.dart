@@ -118,6 +118,7 @@ class StudentMainScreen extends StatelessWidget {
                       Get.to(() => const LessonListScreen())
                     },
                   ),
+                  const Expanded(child: SizedBox()),
                   UserMenu(
                     iconName: 'paymentHistory',
                     iconImage: 'assets/images/receipt.svg',
@@ -127,6 +128,7 @@ class StudentMainScreen extends StatelessWidget {
                       Get.to(() => const SettlementScreen())
                     },
                   ),
+                  const Expanded(child: SizedBox()),
                   UserMenu(
                     iconName: 'reservation',
                     iconImage: 'assets/images/calendar.svg',
@@ -142,6 +144,7 @@ class StudentMainScreen extends StatelessWidget {
                       }))
                     },
                   ),
+                  const Expanded(child: SizedBox()),
                   UserMenu(
                     iconName: 'couponBox',
                     iconImage: 'assets/images/couponBox.svg',
@@ -376,7 +379,7 @@ class UserMenu extends StatelessWidget {
             text: tr(
               iconName,
             ),
-            size: goskiFontLarge,
+            size: goskiFontMedium,
           )
         ],
       ),
