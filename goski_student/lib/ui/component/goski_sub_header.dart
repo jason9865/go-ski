@@ -18,6 +18,7 @@ class GoskiSubHeader extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: Text(title, style: Theme.of(context).textTheme.displayMedium),
       centerTitle: false,
+      scrolledUnderElevation: 0,
     );
   }
 
