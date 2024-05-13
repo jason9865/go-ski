@@ -25,14 +25,14 @@ class RefundPolicyScreen extends StatelessWidget {
           decoration: const BoxDecoration(
             color: goskiBackground,
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Center(
                   child: GoskiText(
-                    text: '환불 정책 페이지',
-                    size: goskiFontXXLarge,
+                    text: tr('refundPolicyDetail'),
+                    size: goskiFontLarge,
                   ),
                 ),
               )
