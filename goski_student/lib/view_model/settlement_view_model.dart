@@ -9,6 +9,6 @@ class SettlementViewModel extends GetxController {
   void getSettlementList() async {
     List<Settlement> response = await settlementRepository.getSettlementList();
 
-    settlementList.value = response.where((settlement) => settlement.chargeName != '예약취소').toList();
+    settlementList.value = response;
   }
 }
