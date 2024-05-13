@@ -47,7 +47,7 @@ class LessonListViewModel extends GetxController {
     isLoadingLessonList.value = true;
     List<LessonListItem> response = await lessonListRepository.getLessonList();
 
-    lessonList.value = response;
+    lessonList.value = response.where((settlement) => settlement.lessonStatus != 'cancelLesson').toList();
     isLoadingLessonList.value = false;
   }
 
