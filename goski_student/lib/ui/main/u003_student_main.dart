@@ -18,6 +18,9 @@ import 'package:goski_student/ui/lesson/u009_lesson_list.dart';
 import 'package:goski_student/ui/lesson/u017_settlement.dart';
 import 'package:goski_student/ui/main/b_u028_select_resort.dart';
 import 'package:goski_student/ui/main/u026_coupon.dart';
+import 'package:goski_student/ui/main/u029_term.dart';
+import 'package:goski_student/ui/main/u033_privacy_policy.dart';
+import 'package:goski_student/ui/main/u034_refund_policy.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
@@ -290,13 +293,11 @@ class StudentMainScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildManualButton('termsOfUse', () => logger.d("이용약관")),
+                buildManualButton('termsOfUse', () => Get.to(() => const TermScreen())),
                 const Text(' | '),
-                buildManualButton('privacyPolicy', () => logger.d("개인정보처리방침")),
+                buildManualButton('privacyPolicy', () => Get.to(() => const PrivacyPolicyScreen())),
                 const Text(' | '),
-                buildManualButton('businessInfo', () => logger.d("사업자 정보")),
-                const Text(' | '),
-                buildManualButton('refundPolicy2', () => logger.d("환불 정책	")),
+                buildManualButton('refundPolicy2', () => Get.to(() => const RefundPolicyScreen())),
               ],
             ),
             SizedBox(
