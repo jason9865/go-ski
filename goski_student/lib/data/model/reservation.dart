@@ -1,4 +1,3 @@
-
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -48,6 +47,7 @@ class BeginnerResponse {
   int teamId;
   String teamName;
   String description;
+  String lessonType;
   String teamProfileUrl;
   List<int> instructors;
   List<TeamImage> teamImages;
@@ -63,6 +63,7 @@ class BeginnerResponse {
     this.teamId = 0,
     this.teamName = '',
     this.description = '',
+    this.lessonType = '',
     this.teamProfileUrl = '',
     this.instructors = const [],
     this.teamImages = const [],
@@ -90,6 +91,7 @@ class BeginnerResponse {
       teamId: json['teamId'] as int,
       teamName: json['teamName'] as String,
       description: json['description'] as String,
+      lessonType: json['lessonType'] as String,
       teamProfileUrl: json['teamProfileUrl'] as String,
       instructors: instructorsList,
       teamImages: teamImages,

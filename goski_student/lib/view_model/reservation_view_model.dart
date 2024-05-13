@@ -59,10 +59,15 @@ class LessonTeamListViewModel extends GetxController {
 class BeginnerInstructorListViewModel extends GetxController {
   var instructors = <Instructor>[].obs;
 
-  Future<void> getBeginnerInstructorList(List<int> instructorsId,
-      int studentCount, int duration, String level, int teamId) async {
+  Future<void> getBeginnerInstructorList(
+      List<int> instructorsId,
+      int studentCount,
+      int duration,
+      String level,
+      int teamId,
+      String lessonType) async {
     instructors.value = await _reservationRepository.getBeginnerInstructorList(
-        instructorsId, studentCount, duration, level, teamId);
+        instructorsId, studentCount, duration, level, teamId, lessonType);
   }
 }
 
