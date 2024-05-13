@@ -30,9 +30,10 @@ import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
+final ScreenSizeController screenSizeController =
+    Get.find<ScreenSizeController>();
 
 class StudentMainScreen extends StatefulWidget {
-
   const StudentMainScreen({super.key});
 
   @override
@@ -308,11 +309,14 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildManualButton('termsOfUse', () => Get.to(() => const TermScreen())),
+                buildManualButton(
+                    'termsOfUse', () => Get.to(() => const TermScreen())),
                 const Text(' | '),
-                buildManualButton('privacyPolicy', () => Get.to(() => const PrivacyPolicyScreen())),
+                buildManualButton('privacyPolicy',
+                    () => Get.to(() => const PrivacyPolicyScreen())),
                 const Text(' | '),
-                buildManualButton('refundPolicy2', () => Get.to(() => const RefundPolicyScreen())),
+                buildManualButton('refundPolicy2',
+                    () => Get.to(() => const RefundPolicyScreen())),
               ],
             ),
             SizedBox(
