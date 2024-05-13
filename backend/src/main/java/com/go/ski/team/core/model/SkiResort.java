@@ -7,9 +7,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@Builder
 @ToString
 public class SkiResort {
 
@@ -28,5 +26,15 @@ public class SkiResort {
 
     @Column(nullable = false)
     private Double longitude;
+
+    @Builder
+    public SkiResort(Integer resortId, String resortName, String resortLocation,
+                     Double latitude, Double longitude){
+        this.resortId = resortId;
+        this.resortName = resortName;
+        this.resortLocation = resortLocation;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
 }

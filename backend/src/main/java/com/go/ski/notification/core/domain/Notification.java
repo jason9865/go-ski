@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
 public class Notification {
 
@@ -50,38 +48,38 @@ public class Notification {
     }
 
     public static Notification of(NotificationEvent notificationEvent, String jsonContent) {
-        return Notification.builder()
-                .receiverId(notificationEvent.getReceiverId())
-                .notificationType(notificationEvent.getNotificationType())
-                .deviceType(notificationEvent.getDeviceType())
-                .title(notificationEvent.getTitle())
-                .content(jsonContent)
-                .createdAt(notificationEvent.getCreatedAt())
-                .build();
+        Notification notification = new Notification();
+        notification.receiverId = notificationEvent.getReceiverId();
+        notification.notificationType = notificationEvent.getNotificationType();
+        notification.deviceType = notificationEvent.getDeviceType();
+        notification.title = notificationEvent.getTitle();
+        notification.content = jsonContent;
+        notification.createdAt = notificationEvent.getCreatedAt();
+        return notification;
     }
 
     public static Notification of(LessonAlertEvent lessonAlertEvent, String jsonContent) {
-        return Notification.builder()
-                .receiverId(lessonAlertEvent.getReceiverId())
-                .notificationType(lessonAlertEvent.getNotificationType())
-                .deviceType(lessonAlertEvent.getDeviceType())
-                .title(lessonAlertEvent.getTitle())
-                .content(jsonContent)
-                .createdAt(lessonAlertEvent.getCreatedAt())
-                .build();
+        Notification notification = new Notification();
+        notification.receiverId = lessonAlertEvent.getReceiverId();
+        notification.notificationType = lessonAlertEvent.getNotificationType();
+        notification.deviceType = lessonAlertEvent.getDeviceType();
+        notification.title = lessonAlertEvent.getTitle();
+        notification.content = jsonContent;
+        notification.createdAt = lessonAlertEvent.getCreatedAt();
+        return notification;
     }
 
     public static Notification from(MessageEvent messageEvent) {
-        return Notification.builder()
-                .senderId(messageEvent.getSenderId())
-                .receiverId(messageEvent.getReceiverId())
-                .notificationType(messageEvent.getNotificationType())
-                .deviceType(messageEvent.getDeviceType())
-                .title(messageEvent.getTitle())
-                .content(messageEvent.getContent())
-                .imageUrl(messageEvent.getImageUrl())
-                .createdAt(messageEvent.getCreatedAt())
-                .build();
+        Notification notification = new Notification();
+        notification.senderId = messageEvent.getSenderId();
+        notification.receiverId = messageEvent.getReceiverId();
+        notification.notificationType = messageEvent.getNotificationType();
+        notification.deviceType = messageEvent.getDeviceType();
+        notification.title = messageEvent.getTitle();
+        notification.content = messageEvent.getContent();
+        notification.imageUrl = messageEvent.getImageUrl();
+        notification.createdAt = messageEvent.getCreatedAt();
+        return notification;
     }
 
 
