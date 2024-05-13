@@ -99,7 +99,7 @@ class FeedbackScreen extends StatelessWidget {
             GoskiText(
               text: tr('dynamicInstructor', args: [
                 lesson.value.instructorName == null
-                    ? '이름 없음'
+                    ? tr('noName')
                     : lesson.value.instructorName!
               ]),
               size: goskiFontMedium,
