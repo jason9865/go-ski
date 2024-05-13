@@ -238,7 +238,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
       builder: (context) {
         return GoskiModal(
           title: tr('sendMessageTitle', args: [
-            (lesson.instructorName == null ? '이름 없음' : lesson.instructorName!)
+            (lesson.instructorName ?? '이름 없음')
           ]),
           child: const SendMessageDialog(),
         );
@@ -279,7 +279,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
         ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           child: Image.network(
-            lesson.profileUrl != null ? lesson.profileUrl! : s3Penguin,
+            lesson.profileUrl ?? s3Penguin,
             width: 90,
             height: screenSizeController.getHeightByRatio(0.12),
             fit: BoxFit.fitHeight,
