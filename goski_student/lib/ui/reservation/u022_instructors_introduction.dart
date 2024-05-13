@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/data_source/lesson_payment_service.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
@@ -24,15 +23,16 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 final Logger logger = Logger();
 
 class InstructorsIntroductionScreen extends StatefulWidget {
-  BeginnerResponse teamInfo;
-  List<Instructor> instructorList;
-  int index;
+  final BeginnerResponse teamInfo;
+  final List<Instructor> instructorList;
+  final int index;
 
-  InstructorsIntroductionScreen(
-      {super.key,
-      required this.teamInfo,
-      required this.instructorList,
-      required this.index});
+  const InstructorsIntroductionScreen({
+    super.key,
+    required this.teamInfo,
+    required this.instructorList,
+    required this.index,
+  });
 
   @override
   State<InstructorsIntroductionScreen> createState() =>
@@ -41,12 +41,18 @@ class InstructorsIntroductionScreen extends StatefulWidget {
 
 class _InstructorsIntroductionScreen
     extends State<InstructorsIntroductionScreen> {
-  final PageController _pageController = PageController();
+  late PageController _pageController;
 
   @override
   void initState() {
-    // fetchData();
     super.initState();
+    _pageController = PageController(initialPage: widget.index);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -81,6 +87,7 @@ class _InstructorsIntroductionScreen
               SizedBox(
                 height: screenSizeController.getHeightByRatio(0.9),
                 child: PageView.builder(
+                  controller: _pageController,
                   itemCount: widget.instructorList.length,
                   itemBuilder: (context, index) => GoskiCard(
                     child: Container(
@@ -368,12 +375,12 @@ class _InstructorsIntroductionScreen
                           );
                         },
                         child: Container(
-                          width: 200,
+                          constraints: const BoxConstraints(maxWidth: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           child: Image.network(
                             widget.instructorList[index].certificateList[idx]
                                 .certificateImageUrl,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
                       ),
