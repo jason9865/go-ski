@@ -101,16 +101,10 @@ public class EventPublisher {
     
     // 강습 30분 전 알림
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
-        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
-        List<Integer> receiverIds = new ArrayList<>();
-        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-        receiverIds.add(team.getUser().getUserId()); // 사장
-        receiverIds.forEach(
-                receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonAlertEvent.of(lessonInfo, receiverId, "MOBILE"))
-        );
+        applicationEventPublisher.publishEvent(
+                LessonAlertEvent.of(lessonInfo, lesson.getInstructor().getInstructorId(), "MOBILE"));
+
     }
 
 }
