@@ -48,6 +48,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
   void initState() {
     super.initState();
     instructorMainViewModel.getInstructorInfo();
+    instructorMainViewModel.getTeamList();
   }
 
   @override
@@ -216,19 +217,21 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
     return SizedBox(
       height: screenSizeController.getHeightByRatio(0.18),
       child: PageView.builder(
-        itemCount: teamList.length,
+        itemCount: instructorMainViewModel.instructorTeamList.length,
         itemBuilder: (context, index) {
           return GoskiCard(
             child: Container(
               color: goskiWhite,
               child: Row(
                 children: [
+                  SizedBox(width: screenSizeController.getWidthByRatio(0.02)),
                   Container(
                     width: screenSizeController.getWidthByRatio(0.3),
                     height: screenSizeController.getHeightByRatio(0.13),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(teamList[index].teamImage),
+                        image: NetworkImage(instructorMainViewModel
+                            .instructorTeamList[index].profileUrl),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(15),
@@ -241,17 +244,20 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GoskiText(
-                            text: teamList[index].teamName,
+                            text: instructorMainViewModel
+                                .instructorTeamList[index].teamName,
                             size: goskiFontXLarge),
                         SizedBox(
-                          height: screenSizeController.getHeightByRatio(0.02),
+                          height: screenSizeController.getHeightByRatio(0.01),
                         ),
                         GoskiText(
-                            text: teamList[index].teamIntroduction,
+                            text: instructorMainViewModel
+                                .instructorTeamList[index].description,
                             size: goskiFontLarge),
                       ],
                     ),
                   ),
+                  SizedBox(width: screenSizeController.getWidthByRatio(0.02)),
                 ],
               ),
             ),
