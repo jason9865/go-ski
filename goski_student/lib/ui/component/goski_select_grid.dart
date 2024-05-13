@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +9,7 @@ import '../../const/util/student_info_list.dart';
 import 'goski_text.dart';
 
 /// items로 name, isSelected 속성을 가진 리스트가 들어와야 됨
-class GoskiSelectGrid extends StatelessWidget {
+class GoskiSelectGrid extends StatefulWidget {
   final List<GridItem> items;
   final int rows;
   final void Function(int) onItemClicked;
@@ -20,6 +21,11 @@ class GoskiSelectGrid extends StatelessWidget {
     required this.onItemClicked,
   });
 
+  @override
+  State<GoskiSelectGrid> createState() => _GoskiSelectGridState();
+}
+
+class _GoskiSelectGridState extends State<GoskiSelectGrid> {
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
@@ -34,18 +40,27 @@ class GoskiSelectGrid extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: rows,
+          crossAxisCount: widget.rows,
           mainAxisSpacing: space,
           crossAxisSpacing: space,
           childAspectRatio: itemWidth / itemHeight,
         ),
-        itemCount: items.length,
+        itemCount: widget.items.length,
         itemBuilder: (context, index) {
           return GoskiSelectGridItem(
-            title: items[index].name,
-            isSelected: items[index].isSelected,
+            title: widget.items[index].name,
+            isSelected: widget.items[index].isSelected,
             onItemClicked: () {
-              onItemClicked(index);
+              setState(() {
+                for (int i = 0; i < widget.items.length; i++) {
+                  if (i == index) {
+                    widget.items[i].isSelected = true;
+                  } else {
+                    widget.items[i].isSelected = false;
+                  }
+                }
+                widget.onItemClicked(index);
+              });
             },
           );
         },
@@ -80,7 +95,7 @@ class GoskiSelectGridItem extends StatelessWidget {
             border: Border.all(width: 1, color: goskiDarkGray),
             borderRadius: BorderRadius.circular(10)),
         child: GoskiText(
-          text: title,
+          text: tr(title),
           size: goskiFontMedium,
           textAlign: TextAlign.center,
           color: isSelected ? goskiWhite : goskiBlack,
