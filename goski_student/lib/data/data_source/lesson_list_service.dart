@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/lesson_list_response.dart';
-import 'package:goski_student/data/model/sned_message_request.dart';
+import 'package:goski_student/data/model/send_message_request.dart';
 import 'package:logger/logger.dart';
 
 import '../../const/util/custom_dio.dart';
