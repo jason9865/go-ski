@@ -1,0 +1,7 @@
+# flutter pub run flutter_launcher_icons:main 터미널에서 실행 시키면 됨
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/logo.png"
+  remove_alpha_ios: true
