@@ -30,7 +30,6 @@ import 'package:goski_student/view_model/ski_resort_view_model.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class StudentMainScreen extends StatefulWidget {
 

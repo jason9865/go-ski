@@ -7,6 +7,7 @@ class LessonPayment {
   String startTime; // reservationRequest.startTime
   int duration; // reservationRequest.duration
   int peopleNumber; // reservationRequest.studentCount
+  String lessonType;
   List<StudentInfo> studentInfo; // List<studentInfo>
   String requestComplain; //requestComplain
   int basicFee; // beginnerResponse.basicFee
@@ -23,6 +24,7 @@ class LessonPayment {
     required this.startTime,
     required this.duration,
     required this.peopleNumber,
+    required this.lessonType,
     required this.studentInfo,
     required this.requestComplain,
     required this.basicFee,
@@ -38,6 +40,7 @@ class TeamLessonPaymentRequest {
   String startTime; // reservationRequest.startTime
   int duration; // reservationRequest.duration
   int peopleNumber; // reservationRequest.studentCount
+  String lessonType;
   List<StudentInfo> studentInfo; // List<studentInfo>
   String requestComplain; //requestComplain
   int basicFee; // beginnerResponse.basicFee
@@ -51,6 +54,7 @@ class TeamLessonPaymentRequest {
     required this.startTime,
     required this.duration,
     required this.peopleNumber,
+    required this.lessonType,
     required this.studentInfo,
     this.requestComplain = '',
     required this.basicFee,
@@ -66,6 +70,7 @@ class TeamLessonPaymentRequest {
       "startTime": startTime,
       "duration": duration,
       "peopleNumber": peopleNumber,
+      "lessonType": lessonType,
       "studentInfo": studentInfo.map((e) => e.toJson()).toList(),
       "requestComplain": requestComplain,
       "basicFee": basicFee,
@@ -83,6 +88,7 @@ class InstLessonPaymentRequest {
   String startTime; // reservationRequest.startTime
   int duration; // reservationRequest.duration
   int peopleNumber; // reservationRequest.studentCount
+  String lessonType;
   List<StudentInfo> studentInfo; // List<studentInfo>
   String requestComplain; //requestComplain
   int basicFee; // beginnerResponse.basicFee
@@ -97,6 +103,7 @@ class InstLessonPaymentRequest {
     required this.startTime,
     required this.duration,
     required this.peopleNumber,
+    required this.lessonType,
     required this.studentInfo,
     required this.requestComplain,
     required this.basicFee,
@@ -113,6 +120,7 @@ class InstLessonPaymentRequest {
       "startTime": startTime,
       "duration": duration,
       "peopleNumber": peopleNumber,
+      "lessonType": lessonType,
       "studentInfo": studentInfo,
       "requestComplain": requestComplain,
       "basicFee": basicFee,
@@ -131,6 +139,7 @@ extension LessonPaymentToTeamLessonPaymentRequest on LessonPayment {
       startTime: startTime,
       duration: duration,
       peopleNumber: peopleNumber,
+      lessonType: lessonType,
       studentInfo: studentInfo,
       requestComplain: requestComplain,
       basicFee: basicFee,
@@ -150,6 +159,7 @@ extension LessonPaymentToInstLessonPaymentRequest on LessonPayment {
       startTime: startTime,
       duration: duration,
       peopleNumber: peopleNumber,
+      lessonType: lessonType,
       studentInfo: studentInfo,
       requestComplain: requestComplain,
       basicFee: basicFee,
@@ -157,5 +167,28 @@ extension LessonPaymentToInstLessonPaymentRequest on LessonPayment {
       peopleOptionFee: peopleOptionFee,
       levelOptionFee: levelOptionFee,
     );
+  }
+}
+
+class ApprovePaymentRequest {
+  String tid;
+  String pgToken;
+  String partnerOrderId;
+  String partnerUserId;
+
+  ApprovePaymentRequest({
+    required this.tid,
+    required this.pgToken,
+    this.partnerOrderId = '',
+    this.partnerUserId = '',
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "tid": tid,
+      "pgToken": pgToken,
+      "partnerOrderId": partnerOrderId,
+      "partnerUserId": partnerUserId,
+    };
   }
 }

@@ -5,15 +5,20 @@ import 'certificate_info.dart';
 class Instructor {
   int instructorId;
   String userName;
+  int teamId;
+  String teamName;
   String instructorUrl;
   String gender;
   int position;
+  String lessonType;
   String description;
   double? rating;
   int? reviewCount;
   int cost;
+  int basicFee;
   int designatedFee;
   int levelOptionFee;
+  int peopleOptionFee;
   List<CertificateInfo> certificateList;
   List<LessonReview>? reviews;
   List<String> skiCertificate = [];
@@ -22,15 +27,20 @@ class Instructor {
   Instructor({
     required this.instructorId,
     required this.userName,
+    required this.teamId,
+    required this.teamName,
     required this.instructorUrl,
     required this.gender,
     required this.position,
+    required this.lessonType,
     required this.description,
     this.rating = 0.0,
     this.reviewCount = 0,
     required this.cost,
+    required this.basicFee,
     required this.designatedFee,
     required this.levelOptionFee,
+    required this.peopleOptionFee,
     required this.certificateList,
     this.reviews,
     required this.skiCertificate,
@@ -120,15 +130,20 @@ class Instructor {
     return Instructor(
       instructorId: json['instructorId'] as int,
       userName: json['userName'] as String,
+      teamId: json['teamId'] as int,
+      teamName: json['teamName'] as String,
       instructorUrl: json['instructorUrl'] as String,
       gender: json['gender'] as String,
       position: json['position'] as int,
+      lessonType: json['lessonType'] as String,
       description: json['description'] as String,
       rating: json['rating'] ?? 0,
       reviewCount: json['reviewCount'] ?? 0,
       cost: json['cost'] as int,
+      basicFee: json['basicFee'] as int,
       designatedFee: json['designatedFee'] as int,
       levelOptionFee: json['levelOptionFee'] as int,
+      peopleOptionFee: json['levelOptionFee'] as int,
       certificateList: certList,
       reviews: reviews,
       skiCertificate: skiCert,
