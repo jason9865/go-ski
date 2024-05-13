@@ -383,7 +383,7 @@ public class PayService {
 		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
 			requestEntity, KakaopayApproveResponseDTO.class);
 
-//		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
+		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
 
 		// 여기서 결제 정보를 db에 저장
 		return responseEntity.getBody();
