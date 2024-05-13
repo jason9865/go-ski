@@ -67,6 +67,8 @@ public class LessonService {
                 // 별점 설정
                 List<ReviewResponseDTO> reviews = reviewRepository.findByLessonTeam(team).stream().map(ReviewResponseDTO::new).toList();
                 setReviewRating(reviews, reserveNoviceResponseDTO);
+                // lessonType 설정
+                reserveNoviceResponseDTO.setLessonType(reserveInfoVO.getLessonType());
 
                 reserveNoviceResponseDTOs.add(reserveNoviceResponseDTO);
             } else {
@@ -141,6 +143,8 @@ public class LessonService {
                 // 별점 설정
                 List<ReviewResponseDTO> reviews = reviewRepository.findByLessonInstructor(instructor).stream().map(ReviewResponseDTO::new).toList();
                 setReviewRating(reviews, reserveAdvancedResponseDTO);
+                // lessonType 설정
+                reserveAdvancedResponseDTO.setLessonType(reserveNoviceTeamRequestDTO.getLessonType());
 
                 reserveAdvancedResponseDTOs.add(reserveAdvancedResponseDTO);
             } catch (NoSuchElementException ignored) {
