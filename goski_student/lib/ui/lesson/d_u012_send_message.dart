@@ -112,10 +112,12 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                                   constraints: BoxConstraints(
                                       maxHeight: screenSizeController
                                           .getHeightByRatio(0.5)),
-                                  child: Image.file(
-                                    File(lessonListViewModel
-                                        .message.value.image!.path),
-                                    width: double.infinity,
+                                  child: InteractiveViewer(
+                                    child: Image.file(
+                                      File(lessonListViewModel
+                                          .message.value.image!.path),
+                                      width: double.infinity,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
