@@ -51,6 +51,7 @@ dependencies:
   flutter_local_notifications: ^17.1.1
   flutter_native_splash: ^2.4.0
   video_thumbnail: ^0.5.3
+  flutter_config: ^2.0.2
 
 dev_dependencies:
   flutter_test:
