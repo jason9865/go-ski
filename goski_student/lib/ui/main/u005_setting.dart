@@ -70,7 +70,7 @@ class SettingScreen extends StatelessWidget {
                           title: tr('etc'),
                         ),
                         SettingContent(
-                          content: tr('term'),
+                          content: tr('termsOfUse'),
                           onConfirm: () => Get.to(() => const TermScreen()),
                         ),
                         buildDivider(),
