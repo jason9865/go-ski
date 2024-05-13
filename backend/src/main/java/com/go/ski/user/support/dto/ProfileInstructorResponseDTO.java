@@ -17,15 +17,10 @@ public class ProfileInstructorResponseDTO extends ProfileUserResponseDTO {
     private String available;
     private List<CertificateUrlVO> certificates;
 
-    public ProfileInstructorResponseDTO(ProfileUserResponseDTO profileUserResponseDTO, List<CertificateUrlVO> certificateUrlVOs) {
-        super(profileUserResponseDTO);
-        this.certificates = certificateUrlVOs;
-    }
-
     public ProfileInstructorResponseDTO(
             ProfileUserResponseDTO profileUserResponseDTO,
             List<CertificateUrlVO> certificateUrlVOs,
-            Instructor instructor){
+            Instructor instructor) {
         super(profileUserResponseDTO);
         this.description = instructor.getDescription();
         this.dayoff = instructor.getDayoff();
