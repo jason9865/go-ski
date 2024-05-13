@@ -415,16 +415,16 @@ class LessonNotificationCard extends StatelessWidget {
     String inputLessonDate = data["lessonDate"];
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
     DateTime dateTime = inputFormat.parse(inputLessonDate);
-    DateFormat outputFormat = DateFormat('M월 d일', 'ko_KR');
+    DateFormat outputFormat = DateFormat(tr('lessonNotificationOutputFormat'), 'ko_KR');
 
     String lessonDate = outputFormat.format(dateTime);
     String lessonTime =
-        "${data["lessonTime"].substring(0, 2)}시 ${data["lessonTime"].substring(3, 5)}분";
+        tr('lessonNotificationLessonTime', args: [data["lessonTime"].substring(0, 2), data["lessonTime"].substring(3, 5)]);
     String resortName = data["resortName"];
     String studentCount = data["studentCount"];
     String lessonType = data["lessonType"];
 
-    return "$lessonDate $lessonTime $resortName\n1:$studentCount $lessonType 강습이 예약되었습니다.";
+    return tr('lessonNotificationContent', args: [lessonDate, lessonTime, resortName, studentCount, lessonType]);
   }
 }
 
@@ -483,7 +483,7 @@ class MessageNotificationCard extends StatelessWidget {
             Row(
               children: [
                 GoskiText(
-                  text: "$title 님으로부터 쪽지가 도착하였습니다.\n$subtitle",
+                  text: tr('messageNotificationContent', args: [title, subtitle]),
                   size: goskiFontMedium,
                   isBold: true,
                 ),
