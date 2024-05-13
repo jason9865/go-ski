@@ -7,6 +7,7 @@ import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/kakao_pay.dart';
 import 'package:goski_student/data/model/lesson_payment.dart';
+import 'package:goski_student/data/repository/lesson_payment_repository.dart';
 
 import '../../main.dart';
 
@@ -87,5 +88,29 @@ class LessonPaymentService extends GetxService {
         android_app_scheme: '',
         ios_app_scheme: '',
         created_at: '');
+  }
+
+  Future<bool> approvePayment(
+      Map<String, dynamic> approvePaymentRequest) async {
+    logger.d(approvePaymentRequest);
+    try {
+      dynamic response = await CustomDio.dio.post(
+        '$baseUrl/payment/reserve/approve',
+        data: approvePaymentRequest,
+      );
+
+      logger.d(response.data['data']);
+      if (response.data['status'] == 'success') {
+        logger.d('LessonPaymentService - approvePayment - 응답 성공');
+        return true;
+      } else {
+        logger.e(
+            'LessonPaymentService - approvePayment - 응답 실패 ${response.data}');
+      }
+    } catch (e) {
+      logger.e('LessonPaymentService - approvePayment - 응답 실패 ${e}');
+    }
+
+    return false;
   }
 }
