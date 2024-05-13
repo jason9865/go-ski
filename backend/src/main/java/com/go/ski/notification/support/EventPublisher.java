@@ -36,7 +36,7 @@ public class EventPublisher {
     private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
-        log.info("알림 보내기 EventPublisher");
+        log.info("{}에게 DM 보내기",user.getUserName());
         applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl, deviceType));
     }
 
@@ -52,6 +52,7 @@ public class EventPublisher {
     }
 
     private void publishEvent(InviteAcceptRequestDTO inviteAcceptRequestDTO, List<Integer> userIds, Instructor instructor, String deviceType) {
+        log.info("초대 승낙 알림");
         userIds.forEach(
             userId -> applicationEventPublisher.publishEvent(
                     InviteAcceptEvent.of(inviteAcceptRequestDTO, userId, instructor, deviceType)
@@ -61,16 +62,18 @@ public class EventPublisher {
 
 
     public void publish(InviteRequestDTO inviteRequestDTO, Team team, String deviceType) {
+        log.info("초대 요청 알림");
         applicationEventPublisher.publishEvent(InviteEvent.of(inviteRequestDTO, team, deviceType));
-
     }
 
 
     public void publish(FeedbackCreateRequestDTO feedbackCreateRequestDTO, Lesson lesson, String deviceType) {
+        log.info("피드백 생성 알림");
         applicationEventPublisher.publishEvent(FeedbackEvent.of(feedbackCreateRequestDTO,lesson, deviceType));
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, PaymentCacheDto paymentCache, String deviceType){
+        log.info("예약 완료 알림");
         Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
@@ -79,20 +82,24 @@ public class EventPublisher {
         String resortName = skiResortRepository.findById(resortId)
                 .orElseThrow(() -> new RuntimeException("해당 스키장이 존재하지 않습니다.")).getResortName();
 
-        List<Integer> receiverIds = new ArrayList<>();
-        receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
-        if (lesson.getInstructor() != null) {
+        List<Integer> teamMemberIds = new ArrayList<>();
+        if (lesson.getInstructor() != null) {  // 지정 강사가 있는 경우 추가
             log.info("lesson.getInstructor - {}",lesson.getInstructor());
-            receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+            teamMemberIds.add(lesson.getInstructor().getInstructorId());
         }
-        receiverIds.add(team.getUser().getUserId()); // 사장
-        receiverIds.forEach( // LessonCreateInstructor 이벤트로 바뀌어야 함 -> 사장, 강사용
-                receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateStudentEvent.of(lessonInfo, resortName, receiverId, deviceType))
-        );
-//        applicationEventPublisher.publishEvent(LessonCreateInstructorEvent.of(lessonInfo, resortName, receiverId, paymentCache, deviceType));
-    }
+        teamMemberIds.add(team.getUser().getUserId()); // 사장 추가
 
+        teamMemberIds.forEach(
+                teamMemberId ->  applicationEventPublisher.publishEvent(
+                        LessonCreateInstructorEvent.of(lessonInfo, resortName, teamMemberId,paymentCache, deviceType))
+        );
+
+        // 결제 대표자
+        applicationEventPublisher.publishEvent(
+                LessonCreateStudentEvent.of(lessonInfo, resortName, lesson.getUser().getUserId(), deviceType));
+    }
+    
+    // 강습 30분 전 알림
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
         Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
@@ -102,7 +109,7 @@ public class EventPublisher {
         receiverIds.add(team.getUser().getUserId()); // 사장
         receiverIds.forEach(
                 receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonAlertEvent.of(lessonInfo, lesson, receiverId, "MOBILE"))
+                        LessonAlertEvent.of(lessonInfo, receiverId, "MOBILE"))
         );
     }
 

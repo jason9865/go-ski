@@ -27,13 +27,13 @@ public class LessonAlertEvent extends NotificationEvent{
         this.lessonTime = lessonTime;
     }
 
-    public static LessonAlertEvent of(LessonInfo lessonInfo, Lesson lesson, Integer receiverId, String deviceType) {
+    public static LessonAlertEvent of(LessonInfo lessonInfo, Integer receiverId, String deviceType) {
         return new LessonAlertEvent(
                 receiverId,
                 LocalDateTime.now(),
                 NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
-                " 강습 예약 1시간 전입니다",
+                " 강습 예약 30분 전입니다",
                 lessonInfo.getLessonDate().toString(),
                 TimeConvertor.calLessonTimeInfo(lessonInfo.getStartTime(), lessonInfo.getDuration())
         );
