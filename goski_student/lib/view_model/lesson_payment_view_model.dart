@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -187,13 +188,13 @@ class LessonPaymentViewModel {
     try {
       bool result = await lessonPaymentRepository.approvePayment(tid, pgToken);
       if (result) {
-        Get.snackbar('결제 성공', '정상적으로 결제가 완료되었습니다.');
+        Get.snackbar(tr('successPayment'), tr('successPaymentContent'));
         return true;
       } else {
-        Get.snackbar('결제 실패', '결제에 실패하였습니다.\n다시 시도해주세요.');
+        Get.snackbar(tr('failPayment'), tr('failPaymentTryLater'));
       }
     } catch (e) {
-      Get.snackbar('결제 실패', '결제에 실패하였습니다.\n다시 시도해주세요.\n$e');
+      Get.snackbar(tr('failPayment'), '${tr('failPaymentTryLater')}\n$e');
     }
     return false;
   }

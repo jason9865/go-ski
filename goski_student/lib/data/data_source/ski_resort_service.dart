@@ -20,16 +20,11 @@ class SkiResortService extends GetxService {
       if (response.statusCode == 200 &&
           response.data is Map<String, dynamic> &&
           response.data['data'] is List) {
-        // List<BeginnerResponse> data = (response.data['data'] as List)
-        //     .map<BeginnerResponse>((json) =>
-        //         BeginnerResponse.fromJson(json as Map<String, dynamic>))
-        //     .toList();
         List<dynamic> dataList = response.data['data'];
         List<SkiResort> resortList = dataList
             .map<SkiResort>(
                 (json) => SkiResort.fromJson(json as Map<String, dynamic>))
             .toList();
-        // logger.d('SkiResortService - getSkiResorts - 응답 성공 $resortList');
 
         return resortList;
       } else {

@@ -31,10 +31,10 @@ class LessonReservationScreen extends StatefulWidget {
   bool isCouponSelected = false;
 
   final List<_DummyPolicy> policyList = [
-    _DummyPolicy(title: '약관 전체 동의', isChecked: false),
-    _DummyPolicy(title: '[필수] 개인정보 수집 및 이용', isChecked: false),
-    _DummyPolicy(title: '[필수] 개인정보 제 3자 제공', isChecked: false),
-    _DummyPolicy(title: '[선택] 마케팅 수신 동의', isChecked: false),
+    _DummyPolicy(title: tr('policyCheckAll'), isChecked: false),
+    _DummyPolicy(title: tr('policyCheckPrivacyCollectAndUse'), isChecked: false),
+    _DummyPolicy(title: tr('policyCheckProvideOther'), isChecked: false),
+    _DummyPolicy(title: tr('policyMarketing'), isChecked: false),
   ];
 
   BeginnerResponse? teamInformation;
@@ -95,20 +95,20 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     List<AmountOfPayment> amountOfPaymentList = [];
     if (widget.instructor != null && widget.teamInformation != null) {
       amountOfPaymentList = [
-        AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+        AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
         AmountOfPayment(
-            name: '강사 지정료', price: widget.instructor!.designatedFee),
+            name: tr('designatedCost'), price: widget.instructor!.designatedFee),
       ];
     } else if (widget.teamInformation != null) {
       amountOfPaymentList = [
-        AmountOfPayment(name: '강습료', price: widget.teamInformation!.cost),
+        AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
       ];
     } else if (widget.teamInformation == null && widget.instructor != null) {
       amountOfPaymentList = [
         AmountOfPayment(
-            name: '강습료',
+            name: tr('cost'),
             price: widget.instructor!.cost - widget.instructor!.designatedFee),
-        AmountOfPayment(name: '강사 지정료', price: widget.instructor!.designatedFee)
+        AmountOfPayment(name: tr('designatedCost'), price: widget.instructor!.designatedFee)
       ];
     }
     int sum() {
