@@ -7,16 +7,14 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/enum/auth_status.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/parser.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/user.dart';
+import 'package:goski_student/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class AuthService extends GetxService {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<AuthStatus> loginWithKakao() async {
     try {

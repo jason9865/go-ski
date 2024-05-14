@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 
 import 'goski_text.dart';
 
@@ -32,7 +31,6 @@ class GoskiTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.02);
 
     return ChoiceChip(

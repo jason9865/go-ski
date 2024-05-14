@@ -2,14 +2,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/data/model/main_response.dart';
 import 'package:goski_student/data/model/weather_response.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/util/custom_dio.dart';
 
-var logger = Logger();
+final baseUrl = dotenv.env['BASE_URL'];
 
 class MainService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
   final openWeatherApiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
 
   Future<MainResponse?> getUserInfo() async {

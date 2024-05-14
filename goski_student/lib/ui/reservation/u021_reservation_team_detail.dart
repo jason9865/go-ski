@@ -7,7 +7,7 @@ import 'package:goski_student/data/data_source/lesson_payment_service.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/lesson_payment_repository.dart';
-import 'package:goski_student/ui/component/goski_build_interval.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_instructor_card.dart';

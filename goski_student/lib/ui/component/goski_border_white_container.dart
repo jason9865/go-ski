@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 
 class GoskiBorderWhiteContainer extends StatelessWidget {
   final Widget? child;
@@ -13,7 +12,6 @@ class GoskiBorderWhiteContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getWidthByRatio(0.02);
 
     return Container(
