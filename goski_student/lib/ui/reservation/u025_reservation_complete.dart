@@ -16,15 +16,15 @@ import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 
 final ReservationViewModel reservationViewModel =
-    Get.find<ReservationViewModel>();
+Get.find<ReservationViewModel>();
 final ScreenSizeController screenSizeController =
-    Get.find<ScreenSizeController>();
+Get.find<ScreenSizeController>();
 
 class ReservationCompleteScreen extends StatefulWidget {
-  BeginnerResponse? teamInformation;
-  Instructor? instructor;
+  final BeginnerResponse? teamInformation;
+  final Instructor? instructor;
 
-  ReservationCompleteScreen({
+  const ReservationCompleteScreen({
     super.key,
     this.teamInformation,
     this.instructor,
