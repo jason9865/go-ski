@@ -60,12 +60,12 @@ class _InstructorsIntroductionScreen
         },
         buttonName: tr('designatedReserve',
             args: [NumberFormat('###,###,###').format(widget.instructor.cost)]),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: screenSizeController.getHeightByRatio(0.9),
-                child: GoskiCard(
+        child: Column(
+          children: [
+            SizedBox(
+              height: screenSizeController.getHeightByRatio(0.77),
+              child: GoskiCard(
+                child: SingleChildScrollView(
                   child: Container(
                     color: goskiWhite,
                     child: Column(
@@ -116,8 +116,8 @@ class _InstructorsIntroductionScreen
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -395,7 +395,8 @@ class _InstructorsIntroductionScreen
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' ${(widget.instructor.rating ?? 0.0).toStringAsFixed(1)}',
+                      text:
+                          ' ${(widget.instructor.rating ?? 0.0).toStringAsFixed(1)}',
                       size: goskiFontMedium,
                     ),
                   ],
