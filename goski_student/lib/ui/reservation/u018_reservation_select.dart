@@ -225,10 +225,22 @@ class _DateTimeSelectors extends StatelessWidget {
           onClicked: () {
             showDialog(
               context: context,
-              builder: (BuildContext context) => GoskiModal(
-                title: tr('selectTime'),
-                child: reservationTimePicker(context),
-              ),
+              builder: (context) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    colorScheme: const ColorScheme.light(
+                      primary: goskiBlack,
+                      surface: goskiBackground,
+                      surfaceTint: Colors.transparent,
+                    ),
+                    buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                  ),
+                  child: GoskiModal(
+                    title: tr('selectTime'),
+                    child: reservationTimePicker(context),
+                  ),
+                );
+              },
             );
             // _selectTime(context);
           },
@@ -281,6 +293,19 @@ class _DateTimeSelectors extends StatelessWidget {
       initialDate: DateTime.now().add(const Duration(days: 1)),
       firstDate: DateTime.now().add(const Duration(days: 1)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: goskiBlack,
+              surface: goskiBackground,
+              surfaceTint: Colors.transparent,
+            ),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       reservationViewModel
