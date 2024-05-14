@@ -429,7 +429,7 @@ class _InstructorsIntroductionScreen
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' ${widget.instructorList[index].rating}',
+                      text: ' ${(widget.instructorList[index].rating ?? 0.0).toStringAsFixed(1)}',
                       size: goskiFontMedium,
                     ),
                   ],
