@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,7 +22,6 @@ class SkiResortService extends GetxService {
           },
         ),
       );
-      logger.d(response.data);
 
       if (response.statusCode == 200 &&
           response.data is Map<String, dynamic> &&
@@ -37,7 +35,7 @@ class SkiResortService extends GetxService {
             .map<SkiResort>(
                 (json) => SkiResort.fromJson(json as Map<String, dynamic>))
             .toList();
-        logger.d('SkiResortService - getSkiResorts - 응답 성공 $resortList');
+        // logger.d('SkiResortService - getSkiResorts - 응답 성공 $resortList');
 
         return resortList;
       } else {

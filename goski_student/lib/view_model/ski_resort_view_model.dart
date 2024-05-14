@@ -22,6 +22,13 @@ class SkiResortViewModel extends GetxController {
     ever(selectedResortIndex, handleResortChange);
   }
 
+  void clearData() {
+    selectedResortIndex.value = 0;
+    skiResortSelected.value = '';
+    selectedResortLessonTimes.value = [];
+    selectedLessonTimeIndex.value = 0;
+  }
+
   Future<void> getSkiResortList() async {
     skiResorts.value = await _skiResortRepository.getSkiResortList();
   }
