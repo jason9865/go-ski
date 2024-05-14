@@ -57,8 +57,9 @@ public class Team {
     }
 
     @Builder
-    public Team(User user, SkiResort skiResort, String teamName,
+    public Team(Integer teamId, User user, SkiResort skiResort, String teamName,
                 String teamProfileUrl, String description, Integer teamCost, Integer dayoff) {
+        this.teamId = teamId;
         this.user = user;
         this.skiResort = skiResort;
         this.teamName = teamName;
