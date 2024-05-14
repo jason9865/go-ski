@@ -238,7 +238,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
       builder: (context) {
         return GoskiModal(
           title: tr('sendMessageTitle', args: [
-            (lesson.instructorName ?? '이름 없음')
+            (lesson.instructorName ?? tr('noName'))
           ]),
           child: const SendMessageDialog(),
         );
