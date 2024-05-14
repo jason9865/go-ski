@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
@@ -17,7 +16,6 @@ import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/use_view_model.dart';
 
 class SettingScreen extends StatelessWidget {
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   final UserViewModel userViewModel = Get.find();
 
   SettingScreen({super.key});
