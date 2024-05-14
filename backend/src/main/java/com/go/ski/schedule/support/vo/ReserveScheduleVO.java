@@ -30,15 +30,15 @@ public class ReserveScheduleVO extends ReserveInfoVO {
     @Setter
     private Integer instructorId;
 
-    public ReserveScheduleVO(LessonInfo lessonInfo, SkiResort skiResort, List<StudentInfoDTO> studentInfoDTOs, LessonPaymentInfo lessonPaymentInfo) {
-        super(lessonInfo, skiResort);
+    public ReserveScheduleVO(LessonInfo lessonInfo, List<StudentInfoDTO> studentInfoDTOs, LessonPaymentInfo lessonPaymentInfo) {
+        super(lessonInfo);
         Lesson lesson = lessonInfo.getLesson();
         Team team = lesson.getTeam();
 
         lessonId = lesson.getLessonId();
         teamId = team.getTeamId();
         teamName = team.getTeamName();
-        resortName = skiResort.getResortName();
+        resortName = team.getSkiResort().getResortName();
         this.studentInfoDTOs = studentInfoDTOs;
         representativeName = lesson.getRepresentativeName();
         isDesignated = lessonPaymentInfo.getDesignatedFee() != null;
