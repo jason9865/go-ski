@@ -2,9 +2,7 @@ import 'package:get/get.dart';
 import 'package:goski_student/data/data_source/reservation_service.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
-import 'package:logger/logger.dart';
-
-Logger logger = Logger();
+import 'package:goski_student/main.dart';
 
 class ReservationRepository {
   final ReservationService reservationService = Get.find();

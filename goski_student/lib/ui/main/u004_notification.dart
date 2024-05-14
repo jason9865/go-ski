@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/datetime_util.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/notification.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_image_dialog.dart';
@@ -153,7 +153,6 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.03);
 
     return GoskiCard(
@@ -209,7 +208,6 @@ class FeedbackNotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
     return GestureDetector(
@@ -270,7 +268,6 @@ class NotificationExpansionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.03);
     const animationDuration = 200;
 
@@ -342,7 +339,6 @@ class LessonNotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
 
@@ -450,7 +446,6 @@ class MessageNotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
     final imageSize = screenSizeController.getHeightByRatio(0.2);

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/font_size.dart';
 
@@ -24,8 +22,6 @@ onPressed: () {
 };
 */
 
-Logger logger = Logger();
-
 class GoskiModal extends StatelessWidget {
   // 헤더에 들어갈 모달 제목
   final String title;
@@ -45,7 +41,6 @@ class GoskiModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final double horizontalPadding = screenSizeController.getWidthByRatio(0.05);
     return AlertDialog(
       clipBehavior: Clip.hardEdge,

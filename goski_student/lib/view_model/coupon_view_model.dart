@@ -1,9 +1,6 @@
 import 'package:get/get.dart';
 import 'package:goski_student/data/model/coupon_response.dart';
 import 'package:goski_student/data/repository/coupon_repository.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class CouponViewModel extends GetxController {
   final CouponRepository couponRepository = Get.find();

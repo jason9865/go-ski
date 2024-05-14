@@ -1,10 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_bigsize_button.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class GoskiContainer extends StatelessWidget {
   final Widget child;
@@ -20,7 +19,6 @@ class GoskiContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: screenSizeController.getWidthByRatio(0.05),

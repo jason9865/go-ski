@@ -5,16 +5,12 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/enum/auth_status.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
-import 'package:goski_student/ui/component/goski_basic_info_container.dart';
-import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
-import 'package:logger/logger.dart';
 
-Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
+import '../../main.dart';
+
 final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
 
 class LoginScreen extends StatelessWidget {

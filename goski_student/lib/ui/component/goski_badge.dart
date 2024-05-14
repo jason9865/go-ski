@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 
 class GoskiBadge extends StatelessWidget {
   final String text;
@@ -20,7 +19,6 @@ class GoskiBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.01);
 
     return Chip(
