@@ -137,8 +137,7 @@ public class ScheduleService {
                     .map(StudentInfoDTO::new).toList();
             LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElse(null);
             if (!studentInfoDTOs.isEmpty() && lessonPaymentInfo != null) {
-                SkiResort skiResort = lessonInfo.getLesson().getTeam().getSkiResort();
-                reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo,skiResort, studentInfoDTOs, lessonPaymentInfo));
+                reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
             }
         }
 

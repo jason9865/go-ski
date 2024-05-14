@@ -47,8 +47,8 @@ public class ReserveInfoVO extends ReserveRequestFrameDTO {
         }
     }
 
-    public ReserveInfoVO(LessonInfo lessonInfo, SkiResort skiResort) {
-        super(lessonInfo, skiResort);
+    public ReserveInfoVO(LessonInfo lessonInfo) {
+        super(lessonInfo);
         lessonType = lessonInfo.getLessonType();
     }
 }
