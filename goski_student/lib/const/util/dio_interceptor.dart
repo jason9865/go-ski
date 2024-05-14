@@ -1,15 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
+import 'package:goski_student/main.dart';
 
 class DioInterceptor extends Interceptor {
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   final accessTokenKey = dotenv.env['ACCESS_TOKEN_KEY'];
   final refreshTokenKey = dotenv.env['REFRESH_TOKEN_KEY'];
-  final baseUrl = dotenv.env['BASE_URL'];
   Dio dio = Dio(BaseOptions(baseUrl: dotenv.env['BASE_URL']!));
 
   @override

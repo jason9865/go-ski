@@ -1,18 +1,11 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
-import 'package:goski_student/data/model/default_dto.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/kakao_pay.dart';
-import 'package:goski_student/data/model/lesson_payment.dart';
-import 'package:goski_student/data/repository/lesson_payment_repository.dart';
-
-import '../../main.dart';
+import 'package:goski_student/main.dart';
 
 class LessonPaymentService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<KakaoPayPrepareResponse> teamLessonPayment(
       Map<String, dynamic> teamLessonPaymentRequest) async {

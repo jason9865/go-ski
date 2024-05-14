@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
-
-import '../../const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 
 /// 사용방법
 /// 1. showGoskiBottomSheet을 원하는 곳에서 호출
@@ -35,7 +33,6 @@ class GoskiBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getWidthByRatio(0.03);
     final bottomPadding = screenSizeController.getWidthByRatio(0.05);
 

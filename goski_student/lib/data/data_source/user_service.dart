@@ -1,18 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/default_dto.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
+import 'package:goski_student/main.dart';
 
 class UserService extends GetxService {
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  final baseUrl = dotenv.env['BASE_URL'];
-
   Future<void> sendFCMTokenToServer(String fcmToken) async {
     try {
       dynamic response = await CustomDio.dio.post(

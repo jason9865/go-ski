@@ -1,13 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/data/model/student_info.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_select_grid.dart';
 import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
 
 import '../../const/font_size.dart';
-import '../../const/util/screen_size_controller.dart';
 import '../../const/util/student_info_list.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
@@ -25,7 +24,6 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.005);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
     var studentInfo = StudentInfo();

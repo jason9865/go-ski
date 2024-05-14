@@ -2,9 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_badge.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
@@ -29,7 +28,6 @@ class GoskiInstructorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     const double titleWidth = 80;
 
     return GoskiCard(

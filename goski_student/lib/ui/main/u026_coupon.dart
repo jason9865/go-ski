@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/coupon_response.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
@@ -18,7 +18,6 @@ class CouponScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     RxList<Coupon> couponList = couponViewModel.couponList;
 
     return Obx(

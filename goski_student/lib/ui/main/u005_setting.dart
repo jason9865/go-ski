@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_modal.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
@@ -15,13 +14,8 @@ import 'package:goski_student/ui/main/u031_ask.dart';
 import 'package:goski_student/ui/user/d_u035_resign.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/use_view_model.dart';
-import 'package:logger/logger.dart';
-
-final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class SettingScreen extends StatelessWidget {
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   final UserViewModel userViewModel = Get.find();
 
   SettingScreen({super.key});

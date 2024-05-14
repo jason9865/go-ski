@@ -1,16 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/const/util/url_launch_util.dart';
 import 'package:goski_student/ui/component/goski_sub_header.dart';
-import 'package:logger/logger.dart';
-
-final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class AskScreen extends StatelessWidget {
   const AskScreen({super.key});
@@ -30,15 +24,16 @@ class AskScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: RichText(
+                    textAlign: TextAlign.center,
                     text: TextSpan(
                       text: '',
                       style: const TextStyle(
                         height: 2,
                       ),
                       children: [
-                        buildTitleText(tr('GoSeungMin')),
+                        buildTitleText(tr('KoSeungMin')),
                         buildEmailText('smink95@naver.com'),
-                        buildTitleText('\n${tr('GoJungWon')}'),
+                        buildTitleText('\n${tr('GoJeongWon')}'),
                         buildEmailText('7704wjddnjs@gmail.com'),
                         buildTitleText('\n${tr('SongJunSeok')}'),
                         buildEmailText('jswsn1526@naver.com'),
