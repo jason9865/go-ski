@@ -141,12 +141,20 @@ class _StudentNumberField extends StatelessWidget {
           isBold: true,
           isExpanded: true,
         ),
-        SizedBox(
+        Container(
           width: screenSizeController.getWidthByRatio(0.6),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenSizeController.getWidthByRatio(0.02),
+            vertical: screenSizeController.getWidthByRatio(0.025),
+          ),
+          decoration: BoxDecoration(
+              color: goskiWhite,
+              border: Border.all(width: 1, color: goskiDarkGray),
+              borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
             style: const TextStyle(
               color: goskiBlack,
-              fontSize: goskiFontSmall,
+              fontSize: goskiFontMedium,
             ),
             controller: _controller,
             keyboardType: TextInputType.number,
@@ -154,19 +162,14 @@ class _StudentNumberField extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             decoration: InputDecoration(
+              isDense: true,
               hintText: tr('selectStudentNumber'),
               fillColor: goskiWhite,
               filled: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              contentPadding: const EdgeInsets.all(0),
+              border: InputBorder.none,
             ),
+            cursorColor: goskiBlack,
           ),
         ),
       ],
