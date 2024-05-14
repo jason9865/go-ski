@@ -94,7 +94,9 @@ class KakaoLoginButton extends StatelessWidget {
               Get.off(() => const SignUpScreen());
               break;
             case AuthStatus.error:
-              Get.snackbar("Login Failed", "Please try again.");
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar("Login Failed", "Please try again.");
+              }
               break;
           }
         });
