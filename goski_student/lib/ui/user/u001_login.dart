@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/enum/auth_status.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/ui/component/goski_basic_info_container.dart';
+import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/ui/user/u002_signup.dart';
 import 'package:goski_student/view_model/login_view_model.dart';
@@ -53,18 +56,9 @@ class LoginContent extends StatelessWidget {
             height: screenSizeController.getHeightByRatio(0.33),
           ),
           const LogoImage(),
-          const Text(
-            'forInstructor',
-            style: TextStyle(
-              fontFamily: 'RubikGlitch',
-              fontSize: goskiFontMedium,
-              color: goskiBlack,
-              fontWeight: FontWeight.w100,
-            ),
-          ).tr(),
-          Expanded(child: Container()), // 로고와 버튼 사이에 공간
+          Expanded(child: Container()),
           const KakaoLoginButton(),
-          Expanded(child: Container()), // 버튼과 텍스트 사이에 공간
+          Expanded(child: Container()),
           const BottomText(),
           Container(
             height: screenSizeController.getHeightByRatio(0.03),
@@ -82,8 +76,8 @@ class LogoImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       "assets/images/logo.png",
-      width: 220, // 로고의 너비
-      height: 120, // 로고의 높이
+      width: 220,
+      height: 120,
     );
   }
 }
@@ -98,8 +92,7 @@ class KakaoLoginButton extends StatelessWidget {
         loginViewModel.loginWithKakao().then((result) {
           switch (result) {
             case AuthStatus.already:
-              logger.e("다왔냐?");
-              Get.offAll(() => StudentMainScreen());
+              Get.offAll(() => const StudentMainScreen());
               break;
             case AuthStatus.first:
               Get.off(() => const SignUpScreen());
@@ -110,10 +103,54 @@ class KakaoLoginButton extends StatelessWidget {
           }
         });
       },
-      child: Image.asset(
-        "assets/images/kakao_login.png",
-        width: 300,
-        height: 60,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(
+            0xffFEE500,
+          ),
+        ),
+        height: screenSizeController.getHeightByRatio(0.06),
+        width: screenSizeController.getWidthByRatio(0.75),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: screenSizeController.getWidthByRatio(0.035),
+              ),
+              child: SvgPicture.asset(
+                'assets/images/kakao_symbol.svg',
+                height: screenSizeController.getHeightByRatio(0.024),
+                colorFilter: const ColorFilter.mode(
+                  Color(
+                    0xff000000,
+                  ),
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: screenSizeController.getWidthByRatio(0.035),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      tr('kakaoLogin'),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: const Color(0xff000000).withOpacity(0.85),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
