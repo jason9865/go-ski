@@ -133,7 +133,7 @@ public class PayService {
 			.toLessonPaymentInfoForPayment(basicFee, designatedFee, peopleOptionFee, levelOptionFee);
 
 		Integer totalFee = (basicFee + peopleOptionFee + levelOptionFee) * request.getDuration() + designatedFee;
-		String itemName = team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 외 " + size + "명";
+		String itemName = size==1?team.getTeamName() + " 팀, 예약자 : " + user.getUserName():team.getTeamName() + " 팀, 예약자 : " + user.getUserName() + " 등 " + size + "명";
 
 		//만들어서 KAKAO랑 소통하기
 		KakaopayPrepareRequestDTO kakaopayPrepareRequestDTO = KakaopayPrepareRequestDTO.toKakaopayPrepareRequestDTO(
@@ -383,7 +383,7 @@ public class PayService {
 		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
 			requestEntity, KakaopayApproveResponseDTO.class);
 
-//		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
+		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
 
 		// 여기서 결제 정보를 db에 저장
 		return responseEntity.getBody();
@@ -419,7 +419,7 @@ public class PayService {
 		User user = (User)httpServletRequest.getAttribute("user");
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		//exception 만들기
 		if (dummy.isEmpty())
 			throw new IllegalArgumentException("조회할 수 없습니다.");
@@ -433,7 +433,7 @@ public class PayService {
 		boolean b = false;
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		for (int id = 0; id < dummy.size(); id++) {
 			if (Objects.equals(dummy.get(id).getTeamId(), teamId))
 				b = true;
