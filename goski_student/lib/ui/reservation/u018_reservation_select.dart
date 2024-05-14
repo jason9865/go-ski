@@ -33,6 +33,8 @@ class ReservationSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
+    reservationViewModel.clearData();
+    skiResortViewModel.clearData();
 
     return Scaffold(
       appBar: GoskiSubHeader(
@@ -56,7 +58,7 @@ class ReservationSelectScreen extends StatelessWidget {
               Get.lazyPut(() => LessonInstructorListViewModel());
             }));
           } else {
-            logger.d("전부 입력 x");
+            Get.snackbar(tr('reservationInfo'), tr('checkReservationInfo'));
             reservationViewModel.submitReservation();
           }
         },
@@ -88,7 +90,7 @@ class ReservationSelectScreen extends StatelessWidget {
 class _SkiResortDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    logger.d(skiResortViewModel.skiResortNames);
+    // logger.d(skiResortViewModel.skiResortNames);
 
     return Row(
       children: [
@@ -345,9 +347,8 @@ class _DateTimeSelectors extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                selectedHour = selectedHour.length == 1
-                    ? "0$selectedHour"
-                    : selectedHour;
+                selectedHour =
+                    selectedHour.length == 1 ? "0$selectedHour" : selectedHour;
                 reservationViewModel
                     .setStartTime("$selectedHour$selectedMinute");
                 Navigator.of(context).pop();

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
@@ -7,7 +8,11 @@ import 'package:logger/logger.dart';
 final ReservationRepository _reservationRepository = ReservationRepository();
 
 class ReservationViewModel extends GetxController {
-  var reservation = ReservationRequest().obs;
+  final Rx<ReservationRequest> reservation = ReservationRequest().obs;
+
+  void clearData() {
+    reservation.value = ReservationRequest();
+  }
 
   void setTotalStudent(int number) {
     reservation.value.studentCount = number;
