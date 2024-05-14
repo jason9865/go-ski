@@ -302,5 +302,11 @@
   "lessonNotificationOutputFormat": "M월 d일",
   "lessonNotificationLessonTime": "{}시 {}분",
   "noName": "이름 없음",
-  "noTeam": "해당 조건에 맞는 팀이 없습니다"
+  "noTeam": "해당 조건에 맞는 팀이 없습니다",
+  "KoSeungMin": "고승민(사장)",
+  "GoJeongWon": "고정원",
+  "SongJunSeok": "송준석",
+  "ImJongoYoul": "임종율",
+  "JangSeungHo": "장승호",
+  "ChoiJiChan": "최지찬"
 }
