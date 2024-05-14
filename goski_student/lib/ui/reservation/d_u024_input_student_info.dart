@@ -144,8 +144,14 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
                   text: tr('confirm'),
                   onTap: () {
                     if (studentInfo.isValid()) {
-                      studentInfoViewModel.addStudentInfo(studentInfo);
-                      Navigator.pop(context);
+                      if (studentInfo.footSize % 10 == 0 &&
+                          studentInfo.footSize >= 100 &&
+                          studentInfo.footSize <= 350) {
+                        studentInfoViewModel.addStudentInfo(studentInfo);
+                        Navigator.pop(context);
+                      } else {
+                        showCheckFootSizeDialog(context);
+                      }
                     } else {
                       showCompleteStudentInfoDialog(context);
                     }
@@ -171,6 +177,35 @@ void showCompleteStudentInfoDialog(BuildContext context) {
         ),
         content: GoskiText(
           text: tr('pleaseEnterStudentInfo'),
+          size: goskiFontMedium,
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: GoskiText(
+              text: tr('confirm'),
+              size: goskiFontMedium,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void showCheckFootSizeDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: GoskiText(
+          text: tr('rewriteFootSize'),
+          size: goskiFontLarge,
+        ),
+        content: GoskiText(
+          text: tr('hintFeetSize'),
           size: goskiFontMedium,
         ),
         actions: <Widget>[
