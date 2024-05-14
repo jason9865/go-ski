@@ -2,6 +2,7 @@ package com.go.ski.lesson.support.dto;
 
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.redis.dto.PaymentCacheDto;
+import com.go.ski.team.core.model.SkiResort;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,17 +29,8 @@ public class ReserveRequestFrameDTO {
         duration = reserveRequestDTO.getDuration();
     }
 
-    public ReserveRequestFrameDTO(PaymentCacheDto paymentCacheDto) {
-        LessonInfo lessonInfo = paymentCacheDto.getLessonInfo();
-        resortId = paymentCacheDto.getLesson().getTeam().getSkiResort().getResortId();
-        studentCount = lessonInfo.getStudentCount();
-        lessonDate = lessonInfo.getLessonDate();
-        startTime = lessonInfo.getStartTime();
-        duration = lessonInfo.getDuration();
-    }
-
-    public ReserveRequestFrameDTO(LessonInfo lessonInfo) {
-        resortId = lessonInfo.getLesson().getTeam().getSkiResort().getResortId();
+    public ReserveRequestFrameDTO(LessonInfo lessonInfo, SkiResort skiResort) {
+        resortId = skiResort.getResortId();
         studentCount = lessonInfo.getStudentCount();
         lessonDate = lessonInfo.getLessonDate();
         startTime = lessonInfo.getStartTime();
