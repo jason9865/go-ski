@@ -338,6 +338,8 @@ public class PayService {
 			.cancelTaxFreeAmount(0)
 			.build();
 		requestCancelToKakao(kakaopayCancelRequestDTO);
+
+		eventPublisher.publishCancelEvent(lesson, lessonInfo);
 	}
 
 	//카카오 페이에 보내는 준비 요청 메소드

@@ -40,7 +40,7 @@ public class SecurityConfig {
             "/api/v1/user/update/user", "/api/v1/user/profile/user",
             "/api/v1/lesson/reserve/novice/*", "/api/v1/lesson/reserve/advanced", "/api/v1/lesson/list/user",
             "/api/v1/lesson/feedback/*","/api/v1/lesson/review/tags","/api/v1/lesson/review/create",
-            "/api/v1/lesson/review/*"
+            "/api/v1/lesson/review/*","/api/v1/lesson/review/list/*",
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
@@ -49,7 +49,7 @@ public class SecurityConfig {
             "/api/v1/schedule/mine", "/api/v1/schedule/**",
             "/api/v1/lesson/review/list","/api/v1/lesson/review/list/*",
             "/api/v1/notification/invite","/api/v1/notification/accept-invite",
-            "/api/v1/team/member/*","/api/v1/team/list/inst"
+            "/api/v1/team/member/*","/api/v1/team/list/inst",
     };
 
     private static final String[] OWNER_ROUTES = {
