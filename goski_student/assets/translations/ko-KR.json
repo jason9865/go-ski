@@ -51,6 +51,7 @@
   "checkRefund": "환불 예정 금액을 확인해주세요.",
   "expectedRefund": "환불 예정 금액",
   "reservationInfo": "예약 정보",
+  "checkReservationInfo": "예약 정보를 모두 입력해주세요.",
   "reLesson": "재강습",
   "reLessonRequest": "재강습 신청",
   "lessonReview": "강습 리뷰",
