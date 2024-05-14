@@ -37,15 +37,10 @@ class GoskiPaymentButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(
-              width: screenSizeController.getWidthByRatio(0.23),
-              // height: screenSizeController.getWidthByRatio(0.2),
-              imagePath),
-          // SizedBox(width: screenSizeController.getWidthByRatio(0.02)),
-          // Text(
-          //   text,
-          //   style: const TextStyle(fontSize: goskiFontLarge),
-          // ),
+          Image.asset(
+            width: screenSizeController.getWidthByRatio(0.23),
+            'assets/images/kakaopay_button_image.png',
+          ),
         ],
       ),
     );

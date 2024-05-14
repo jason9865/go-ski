@@ -25,6 +25,7 @@ class GuideScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: GoskiText(
+                    // TODO: 진짜 도움말 페이지 추가 필요
                     text: '도움말 페이지',
                     size: goskiFontXXLarge,
                   ),
