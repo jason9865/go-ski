@@ -36,17 +36,17 @@ class AskScreen extends StatelessWidget {
                         height: 2,
                       ),
                       children: [
-                        buildTitleText('고승민(사장)'),
+                        buildTitleText(tr('GoSeungMin')),
                         buildEmailText('smink95@naver.com'),
-                        buildTitleText('\n고정원'),
+                        buildTitleText('\n${tr('GoJungWon')}'),
                         buildEmailText('7704wjddnjs@gmail.com'),
-                        buildTitleText('\n송준석'),
+                        buildTitleText('\n${tr('SongJunSeok')}'),
                         buildEmailText('jswsn1526@naver.com'),
-                        buildTitleText('\n임종율'),
+                        buildTitleText('\n${tr('ImJongoYoul')}'),
                         buildEmailText('dlawhdfbf12@gmail.com'),
-                        buildTitleText('\n장승호'),
+                        buildTitleText('\n${tr('JangSeungHo')}'),
                         buildEmailText('jsh09865@gmail.com'),
-                        buildTitleText('\n최지찬'),
+                        buildTitleText('\n${tr('ChoiJiChan')}'),
                         buildEmailText('pnlkc@naver.com'),
                       ],
                     ),
@@ -62,7 +62,7 @@ class AskScreen extends StatelessWidget {
 
   TextSpan buildTitleText(String text) {
     return TextSpan(
-        text: '$text : ',
+        text: '$text - ',
         style: const TextStyle(
           color: goskiBlack,
           fontSize: goskiFontLarge,
