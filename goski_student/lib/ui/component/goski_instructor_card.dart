@@ -111,7 +111,11 @@ class GoskiInstructorCard extends StatelessWidget {
                       ),
                       Expanded(
                           child: GoskiText(
-                              text: tr(description), size: goskiFontMedium)),
+                        text: tr(description),
+                        size: goskiFontMedium,
+                        maxLine: 3,
+                        overflow: TextOverflow.ellipsis,
+                      )),
                     ],
                   ),
                 ),
