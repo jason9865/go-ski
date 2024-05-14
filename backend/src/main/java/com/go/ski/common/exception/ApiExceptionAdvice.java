@@ -68,6 +68,7 @@ public class ApiExceptionAdvice {
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleException(Exception e) {
          log.error("Exception 에러 메시지: {}", e.getMessage());
+         e.printStackTrace();
         return ResponseEntity
                 .status(CommonExceptionEnum.UNKNOWN_ERROR.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.UNKNOWN_ERROR.getMessage()));
