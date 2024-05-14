@@ -68,14 +68,13 @@ Future<void> setFCM() async {
     }
 
     late String title;
-    if (message.data['notificationType'] == 7) {
+    if (message.data['notificationType'] == "7") {
       title = tr('reservationComplete');
-    } else if (message.data['notificationType'] == 8) {
+    } else if (message.data['notificationType'] == "8") {
       title = tr('feedbackReceived');
     } else {
       title = tr('dmReceived');
     }
-
     await flutterLocalNotificationsPlugin.show(
         0, title, '${message.data["title"]}', notificationDetails,
         payload: 'item x');
