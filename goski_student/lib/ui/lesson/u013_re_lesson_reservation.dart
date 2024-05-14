@@ -12,6 +12,7 @@ import 'package:goski_student/ui/component/goski_textfield.dart';
 import '../component/goski_border_white_container.dart';
 import '../component/goski_payment_button.dart';
 
+// TODO: 재강습 기능 추가시 수정 필요
 class ReLessonReservationScreen extends StatefulWidget {
   final List<_DummyStudentInfo> studentInfoList = [];
   bool isCouponSelected = false;

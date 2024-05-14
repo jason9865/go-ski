@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/main.dart';
@@ -99,7 +100,7 @@ class GoskiModal extends StatelessWidget {
                   // 뒤로 가기
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('취소'),
+                    child: Text(tr('cancel')),
                   ),
                 ],
               ),
