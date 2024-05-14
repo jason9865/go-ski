@@ -36,7 +36,7 @@ public class EventPublisher {
     private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
-        log.info("{}에게 DM 보내기",user.getUserName());
+        log.info("DM 보내기");
         applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl, deviceType));
     }
 
