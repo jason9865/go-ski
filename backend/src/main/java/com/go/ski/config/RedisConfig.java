@@ -33,6 +33,7 @@ public class RedisConfig {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+        System.out.println(redisTemplate);
         return redisTemplate;
     }
 }
