@@ -30,15 +30,16 @@ class AskScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: RichText(
+                    textAlign: TextAlign.center,
                     text: TextSpan(
                       text: '',
                       style: const TextStyle(
                         height: 2,
                       ),
                       children: [
-                        buildTitleText(tr('GoSeungMin')),
+                        buildTitleText(tr('KoSeungMin')),
                         buildEmailText('smink95@naver.com'),
-                        buildTitleText('\n${tr('GoJungWon')}'),
+                        buildTitleText('\n${tr('GoJeongWon')}'),
                         buildEmailText('7704wjddnjs@gmail.com'),
                         buildTitleText('\n${tr('SongJunSeok')}'),
                         buildEmailText('jswsn1526@naver.com'),
