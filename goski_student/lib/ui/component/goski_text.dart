@@ -85,6 +85,7 @@ class GoskiTextBody extends StatelessWidget {
         fontSize: size,
         fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
         decoration: textDecoration,
+        fontFamily: 'Jua',
       ),
       text,
       maxLines: maxLine,

@@ -30,6 +30,7 @@ class GoskiInstructorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSizeController = Get.find<ScreenSizeController>();
+    const double titleWidth = 80;
 
     return GoskiCard(
       child: Padding(
@@ -44,7 +45,7 @@ class GoskiInstructorCard extends StatelessWidget {
                 imagePath,
                 width: 90,
                 height: 90,
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
             SizedBox(
@@ -60,7 +61,7 @@ class GoskiInstructorCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                          width: 80,
+                          width: titleWidth,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -83,7 +84,7 @@ class GoskiInstructorCard extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 80,
+                        width: titleWidth,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -103,7 +104,7 @@ class GoskiInstructorCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 80,
+                        width: titleWidth,
                         child: GoskiText(
                           text: tr('selfIntroduction'),
                           size: goskiFontMedium,
@@ -111,7 +112,11 @@ class GoskiInstructorCard extends StatelessWidget {
                       ),
                       Expanded(
                           child: GoskiText(
-                              text: tr(description), size: goskiFontMedium)),
+                        text: tr(description),
+                        size: goskiFontMedium,
+                        maxLine: 3,
+                        overflow: TextOverflow.ellipsis,
+                      )),
                     ],
                   ),
                 ),

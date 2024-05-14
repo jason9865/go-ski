@@ -308,12 +308,12 @@ class CheckInstructorScreen extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          width: 200,
+                          constraints: const BoxConstraints(maxWidth: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           child: Image.network(
                             profile
                                 .value.certificates[index].certificateImageUrl,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
                       ),

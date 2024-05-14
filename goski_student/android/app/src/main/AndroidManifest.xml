@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:label="goski_student"
+        android:label="GOSKI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <provider
@@ -83,6 +83,7 @@
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />
         </intent>
+        <package android:name="com.kakao.talk" />
     </queries>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>

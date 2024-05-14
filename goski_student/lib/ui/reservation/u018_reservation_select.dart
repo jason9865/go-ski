@@ -33,6 +33,8 @@ class ReservationSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
+    reservationViewModel.clearData();
+    skiResortViewModel.clearData();
 
     return Scaffold(
       appBar: GoskiSubHeader(
@@ -42,7 +44,8 @@ class ReservationSelectScreen extends StatelessWidget {
         buttonName: 'next',
         onConfirm: () {
           if (reservationViewModel.reservation.value.isValid() &&
-              reservationViewModel.reservation.value.level == 'beginner') {
+              (reservationViewModel.reservation.value.level == 'BEGINNER' ||
+                  reservationViewModel.reservation.value.level == 'beginner')) {
             reservationViewModel.submitReservation();
             Get.to(() => const ReservationTeamSelectScreen(),
                 binding: BindingsBuilder(() {
@@ -55,8 +58,10 @@ class ReservationSelectScreen extends StatelessWidget {
               Get.lazyPut(() => LessonInstructorListViewModel());
             }));
           } else {
-            logger.d("전부 입력 x");
-            reservationViewModel.submitReservation();
+            if (!Get.isSnackbarOpen) {
+              Get.snackbar(tr('reservationInfo'), tr('checkReservationInfo'));
+              reservationViewModel.submitReservation();
+            }
           }
         },
         child: SingleChildScrollView(
@@ -87,7 +92,7 @@ class ReservationSelectScreen extends StatelessWidget {
 class _SkiResortDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    logger.d(skiResortViewModel.skiResortNames);
+    // logger.d(skiResortViewModel.skiResortNames);
 
     return Row(
       children: [
@@ -141,12 +146,20 @@ class _StudentNumberField extends StatelessWidget {
           isBold: true,
           isExpanded: true,
         ),
-        SizedBox(
+        Container(
           width: screenSizeController.getWidthByRatio(0.6),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenSizeController.getWidthByRatio(0.02),
+            vertical: screenSizeController.getWidthByRatio(0.025),
+          ),
+          decoration: BoxDecoration(
+              color: goskiWhite,
+              border: Border.all(width: 1, color: goskiDarkGray),
+              borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
             style: const TextStyle(
               color: goskiBlack,
-              fontSize: goskiFontSmall,
+              fontSize: goskiFontMedium,
             ),
             controller: _controller,
             keyboardType: TextInputType.number,
@@ -154,19 +167,14 @@ class _StudentNumberField extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             decoration: InputDecoration(
+              isDense: true,
               hintText: tr('selectStudentNumber'),
               fillColor: goskiWhite,
               filled: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: goskiDarkGray, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              contentPadding: const EdgeInsets.all(0),
+              border: InputBorder.none,
             ),
+            cursorColor: goskiBlack,
           ),
         ),
       ],
@@ -341,9 +349,8 @@ class _DateTimeSelectors extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                selectedMinute = selectedMinute.length == 1
-                    ? "0$selectedMinute"
-                    : selectedMinute;
+                selectedHour =
+                    selectedHour.length == 1 ? "0$selectedHour" : selectedHour;
                 reservationViewModel
                     .setStartTime("$selectedHour$selectedMinute");
                 Navigator.of(context).pop();
@@ -357,20 +364,6 @@ class _DateTimeSelectors extends StatelessWidget {
         )
       ],
     );
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      final now = DateTime.now();
-      final dateTime =
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-      final formattedTime = DateFormat('HHmm').format(dateTime);
-      reservationViewModel.setStartTime(formattedTime);
-    }
   }
 }
 

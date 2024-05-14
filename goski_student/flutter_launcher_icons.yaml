@@ -3,5 +3,6 @@
 flutter_icons:
   ios: true
   android: true
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/penguin.png"
   remove_alpha_ios: true
+  adaptive_icon_background: "#ffffff"
