@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:devicelocale/devicelocale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,12 +8,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/data/data_source/user_service.dart';
 import 'package:goski_student/firebase_options.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/view_model/notification_view_model.dart';
-import 'package:logger/logger.dart';
-import 'package:easy_localization/src/easy_localization_controller.dart';
-import 'package:easy_localization/src/localization.dart';
 
-Logger logger = Logger();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel',

@@ -1,15 +1,11 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/settlement_response.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/util/custom_dio.dart';
 
-var logger = Logger();
-
 class SettlementService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
-
   Future<List<SettlementResponse>> getSettlementList() async {
     try {
       dynamic response = await CustomDio.dio.get(

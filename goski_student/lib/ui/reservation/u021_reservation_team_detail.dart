@@ -7,7 +7,7 @@ import 'package:goski_student/data/data_source/lesson_payment_service.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/lesson_payment_repository.dart';
-import 'package:goski_student/ui/component/goski_build_interval.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_instructor_card.dart';
@@ -158,23 +158,23 @@ class _ReservationTeamDetailScreenState
                             Color instbadgeColor;
                             switch (instructor.position) {
                               case 1:
-                                instPosition = '사장';
+                                instPosition = tr('boss');
                                 instbadgeColor = goskiBlue;
                                 break;
                               case 2:
-                                instPosition = '교육팀장';
+                                instPosition = tr('eduTeamLeader');
                                 instbadgeColor = goskiBlue;
                                 break;
                               case 3:
-                                instPosition = '팀장';
+                                instPosition = tr('teamLeader');
                                 instbadgeColor = goskiDarkPink;
                                 break;
                               case 4:
-                                instPosition = '강사';
+                                instPosition = tr('instructor');
                                 instbadgeColor = goskiDarkGray;
                                 break;
                               default:
-                                instPosition = '강사';
+                                instPosition = tr('instructor');
                                 instbadgeColor = goskiDarkGray;
                             }
                             return GestureDetector(

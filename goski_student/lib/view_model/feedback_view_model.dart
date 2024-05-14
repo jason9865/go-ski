@@ -5,10 +5,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/data/model/feedback_response.dart';
 import 'package:goski_student/data/repository/feedback_repository.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
-var logger = Logger();
 
 class FeedbackViewModel extends GetxController {
   final FeedbackRepository feedbackRepository = Get.find();

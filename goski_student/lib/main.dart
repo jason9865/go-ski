@@ -60,6 +60,8 @@ import 'data/repository/lesson_list_repository.dart';
 import 'firebase_options.dart';
 
 Logger logger = Logger();
+final screenSizeController = Get.put(ScreenSizeController());
+FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
 void initDependencies() {
   Get.put(AuthService(), permanent: true);
@@ -131,8 +133,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {

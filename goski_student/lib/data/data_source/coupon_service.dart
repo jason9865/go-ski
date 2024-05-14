@@ -1,13 +1,10 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/coupon_response.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
+import 'package:goski_student/main.dart';
 
 class CouponService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<List<CouponResponse>> getCouponList() async {
     try {
