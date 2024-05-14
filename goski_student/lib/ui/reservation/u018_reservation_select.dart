@@ -218,7 +218,7 @@ class _DateTimeSelectors extends StatelessWidget {
           child: Obx(
         () => TextWithIconRow(
           text: reservationViewModel.reservation.value.startTime == ''
-              ? tr('hintDate')
+              ? tr('hintTime')
               : "${reservationViewModel.reservation.value.startTime.substring(0, 2)}:${reservationViewModel.reservation.value.startTime.substring(2, 4)}",
           icon: Icons.access_time_rounded,
           // selectedTime: reservationViewModel.reservation.value.startTime,
@@ -226,7 +226,7 @@ class _DateTimeSelectors extends StatelessWidget {
             showDialog(
               context: context,
               builder: (BuildContext context) => GoskiModal(
-                title: "시간 선택",
+                title: tr('selectTime'),
                 child: reservationTimePicker(context),
               ),
             );
@@ -278,8 +278,8 @@ class _DateTimeSelectors extends StatelessWidget {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      initialDate: DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now().add(const Duration(days: 1)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (picked != null) {

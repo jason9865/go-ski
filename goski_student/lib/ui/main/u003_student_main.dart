@@ -242,10 +242,10 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                   buildWeather(),
                 ],
               ),
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: GoskiText(
-                    text: "24/25 시즌에 만나요!",
+                    text: tr('seeYouNext2425'),
                     size: goskiFontXXLarge,
                   ),
                 ),
@@ -340,6 +340,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                 size: goskiFontMedium,
               ),
               children: const [
+                // TODO: 진짜 사업자 정보 입력 필요
                 Text('사업자정보 입력'),
               ],
             ),

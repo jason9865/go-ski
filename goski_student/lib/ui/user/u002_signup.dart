@@ -57,10 +57,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     signupViewModel
                         .userSignup(signupViewModel.user.value)
                         .then((value) => {
-                              if (value)
-                                {Get.offAll(() => StudentMainScreen())}
-                              else
-                                {Get.snackbar("회원 가입 실패", "잠시 후 다시 시도해주세요.")}
+                              if (value) {
+                                Get.offAll(() => const StudentMainScreen())
+                              } else {
+                                if (!Get.isSnackbarOpen) {
+                                  Get.snackbar(tr('failSignup'), tr('tryLater'))
+                                }
+                              }
                             });
                   }
                 },
