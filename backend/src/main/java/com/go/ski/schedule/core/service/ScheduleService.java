@@ -15,6 +15,7 @@ import com.go.ski.redis.repository.ScheduleCacheRepository;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Permission;
+import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
 import com.go.ski.team.core.repository.PermissionRepository;
@@ -53,6 +54,20 @@ public class ScheduleService {
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
         Set<String> keys = redisTemplate.keys("scheduleCache:" + user.getUserId() + ":*");
+        return getReserveScheduleVOS(keys);
+    }
+
+    public List<ReserveScheduleVO> getTeamSchedule(User user, int teamId, LocalDate lessonDate) {
+        Optional<TeamInstructor> optionalTeamInstructor = teamInstructorRepository.findByTeamTeamIdAndInstructorInstructorIdAndIsInviteAccepted(teamId, user.getUserId(), true);
+        if (optionalTeamInstructor.isEmpty()) {
+            throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.NOT_MEMBER_OF_TEAM);
+        }
+
+        Set<String> keys = redisTemplate.keys("scheduleCache:*:" + teamId + ":" + lessonDate);
+        return getReserveScheduleVOS(keys);
+    }
+
+    private List<ReserveScheduleVO> getReserveScheduleVOS(Set<String> keys) {
         log.info("keys: {}", keys);
 
         List<ReserveScheduleVO> result = new ArrayList<>();
@@ -68,22 +83,6 @@ public class ScheduleService {
             }
         }
         return result;
-    }
-
-    public List<ReserveScheduleVO> getTeamSchedule(User user, int teamId, LocalDate lessonDate) {
-        Optional<TeamInstructor> optionalTeamInstructor = teamInstructorRepository.findByTeamTeamIdAndInstructorInstructorIdAndIsInviteAccepted(teamId, user.getUserId(), true);
-        if (optionalTeamInstructor.isEmpty()) {
-            throw ApiExceptionFactory.fromExceptionEnum(ScheduleExceptionEnum.NOT_MEMBER_OF_TEAM);
-        }
-
-        Set<String> keys = redisTemplate.keys("scheduleCache:*:" + teamId + ":" + lessonDate);
-        if (keys != null) {
-            return keys.stream()
-                    .map(key -> scheduleCacheRepository.findById(key.substring(14)).orElse(null))
-                    .filter(Objects::nonNull).map(ScheduleCacheDto::getReserveScheduleVOs) // reserveScheduleVOs 필드만 추출
-                    .flatMap(List::stream).toList();// 각 객체의 List<ReserveScheduleVO>를 하나의 Stream<ReserveScheduleVO>로 펼침
-        }
-        return null;
     }
 
     public boolean checkAddPermission(User user, Integer teamId) {
@@ -138,7 +137,8 @@ public class ScheduleService {
                     .map(StudentInfoDTO::new).toList();
             LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElse(null);
             if (!studentInfoDTOs.isEmpty() && lessonPaymentInfo != null) {
-                reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
+                SkiResort skiResort = lessonInfo.getLesson().getTeam().getSkiResort();
+                reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo,skiResort, studentInfoDTOs, lessonPaymentInfo));
             }
         }
 
