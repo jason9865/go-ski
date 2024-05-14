@@ -42,7 +42,8 @@ class ReservationSelectScreen extends StatelessWidget {
         buttonName: 'next',
         onConfirm: () {
           if (reservationViewModel.reservation.value.isValid() &&
-              reservationViewModel.reservation.value.level == 'beginner') {
+              (reservationViewModel.reservation.value.level == 'BEGINNER' ||
+                  reservationViewModel.reservation.value.level == 'beginner')) {
             reservationViewModel.submitReservation();
             Get.to(() => const ReservationTeamSelectScreen(),
                 binding: BindingsBuilder(() {
@@ -344,9 +345,9 @@ class _DateTimeSelectors extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                selectedMinute = selectedMinute.length == 1
-                    ? "0$selectedMinute"
-                    : selectedMinute;
+                selectedHour = selectedHour.length == 1
+                    ? "0$selectedHour"
+                    : selectedHour;
                 reservationViewModel
                     .setStartTime("$selectedHour$selectedMinute");
                 Navigator.of(context).pop();
