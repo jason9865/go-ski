@@ -29,8 +29,8 @@ public class ReserveRequestFrameDTO {
         duration = reserveRequestDTO.getDuration();
     }
 
-    public ReserveRequestFrameDTO(LessonInfo lessonInfo, SkiResort skiResort) {
-        resortId = skiResort.getResortId();
+    public ReserveRequestFrameDTO(LessonInfo lessonInfo) {
+        resortId = lessonInfo.getLesson().getTeam().getSkiResort().getResortId();
         studentCount = lessonInfo.getStudentCount();
         lessonDate = lessonInfo.getLessonDate();
         startTime = lessonInfo.getStartTime();

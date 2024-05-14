@@ -26,7 +26,7 @@ public class Team {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resort_id",nullable = false)
     private SkiResort skiResort;
 
