@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/color.dart';
 import '../../const/font_size.dart';
-import '../../const/util/screen_size_controller.dart';
 import '../../const/util/student_info_list.dart';
 import 'goski_text.dart';
 
@@ -28,7 +27,6 @@ class GoskiSelectGrid extends StatefulWidget {
 class _GoskiSelectGridState extends State<GoskiSelectGrid> {
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final space = screenSizeController.getWidthByRatio(0.02);
 
     return LayoutBuilder(builder: (context, constraints) {

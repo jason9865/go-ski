@@ -1,15 +1,12 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/instructor_profile_response.dart';
 import 'package:goski_student/data/model/review_response.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/util/custom_dio.dart';
 
-var logger = Logger();
-
 class InstructorProfileService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<InstructorProfileResponse?> getInstructorProfile(int instructorId) async {
     try {

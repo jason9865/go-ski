@@ -3,9 +3,7 @@ import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/review_request.dart';
 import 'package:goski_student/data/model/review_tag_response.dart';
 import 'package:goski_student/data/repository/review_repository.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
+import 'package:goski_student/main.dart';
 
 class ReviewViewModel extends GetxController {
   final reviewRepository = Get.find<ReviewRepository>();

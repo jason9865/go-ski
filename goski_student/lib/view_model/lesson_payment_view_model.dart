@@ -10,6 +10,7 @@ import 'package:goski_student/data/model/kakao_pay.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/model/student_info.dart';
 import 'package:goski_student/data/repository/lesson_payment_repository.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/reservation/u025_reservation_complete.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';

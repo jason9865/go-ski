@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/font_size.dart';
-import '../../const/util/screen_size_controller.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
 
@@ -18,7 +17,6 @@ class DeleteNotificationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getHeightByRatio(0.015);
 
     return Flexible(

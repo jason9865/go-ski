@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/color.dart';
-import '../../const/util/screen_size_controller.dart';
 
 /// verticalPadding 기본값(최솟값)은 -4이고 4까지 가능
 class GoskiExpansionTile extends StatelessWidget {
@@ -22,7 +21,6 @@ class GoskiExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.02);
 
     return Container(

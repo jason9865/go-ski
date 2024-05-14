@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
-
-final screenSizeController = Get.find<ScreenSizeController>();
+import 'package:goski_student/main.dart';
 
 class BuildInterval extends StatelessWidget {
   const BuildInterval({super.key});

@@ -13,8 +13,15 @@ class GoskiMainHeader extends StatelessWidget implements PreferredSizeWidget {
       // backgroundColor: goskiBackground,
       backgroundColor: goskiBackground,
       leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset('assets/images/logo.png'),
+        padding: const EdgeInsets.only(
+          left: 20.0,
+          right: 2.0,
+          top: 11.0,
+          bottom: 11.0,
+        ),
+        child: Image.asset(
+          'assets/images/logo.png',
+        ),
       ),
       actions: [
         headerRightIcons(context),
