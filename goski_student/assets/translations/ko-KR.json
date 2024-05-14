@@ -300,5 +300,8 @@
   "lessonNotificationOutputFormat": "M월 d일",
   "lessonNotificationLessonTime": "{}시 {}분",
   "noName": "이름 없음",
-  "kakaoLogin" : "카카오 로그인"
+  "kakaoLogin" : "카카오 로그인",
+  "reservationComplete" : "강습 예약 완료",
+  "feedbackReceived" : "피드백 등록",
+  "dmReceived" : "쪽지 도착"
 }
