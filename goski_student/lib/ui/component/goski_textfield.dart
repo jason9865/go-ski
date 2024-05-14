@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/main.dart';
 
 import '../../const/font_size.dart';
-import '../../const/util/screen_size_controller.dart';
 import '../../const/util/text_formatter.dart';
 
 /// width를 0으로 입력시 expanded된 textField 생성 가능
@@ -46,7 +45,6 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final padding = screenSizeController.getWidthByRatio(0.02);
 
     return Container(

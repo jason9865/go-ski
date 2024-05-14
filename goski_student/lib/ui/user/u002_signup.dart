@@ -5,7 +5,7 @@ import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/enum/gender.dart';
 import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/const/util/parser.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_basic_info_container.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
@@ -14,10 +14,7 @@ import 'package:goski_student/ui/component/goski_switch.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/view_model/signup_view_model.dart';
-import 'package:logger/logger.dart';
 
-final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 final SignupViewModel signupViewModel = Get.put(SignupViewModel());
 
 // loginController, 추후에 refactoring

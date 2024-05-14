@@ -60,6 +60,7 @@ import 'data/repository/lesson_list_repository.dart';
 import 'firebase_options.dart';
 
 Logger logger = Logger();
+final screenSizeController = Get.put(ScreenSizeController());
 
 void initDependencies() {
   Get.put(AuthService(), permanent: true);

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_border_white_container.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 
 import '../../const/font_size.dart';
-import '../../const/util/screen_size_controller.dart';
 
 class GoskiDropdown extends StatefulWidget {
   final String hint;
@@ -26,7 +25,6 @@ class GoskiDropdown extends StatefulWidget {
 }
 
 class _GoskiDropdownState extends State<GoskiDropdown> {
-  final screenSizeController = Get.find<ScreenSizeController>();
   final OverlayPortalController _tooltipController = OverlayPortalController();
   final _link = LayerLink();
   double? _buttonWidth;

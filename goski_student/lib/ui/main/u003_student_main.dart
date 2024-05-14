@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/const/util/url_launch_util.dart';
 import 'package:goski_student/ui/component/goski_bottomsheet.dart';
 import 'package:goski_student/ui/component/goski_build_interval.dart';
@@ -27,11 +26,8 @@ import 'package:goski_student/view_model/main_view_model.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/settlement_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
-import 'package:logger/logger.dart';
 
-final Logger logger = Logger();
-final ScreenSizeController screenSizeController =
-    Get.find<ScreenSizeController>();
+import '../../main.dart';
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key});

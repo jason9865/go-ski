@@ -4,9 +4,6 @@ import 'package:goski_student/data/model/ski_resort.dart';
 import 'package:goski_student/data/model/weather_response.dart';
 import 'package:goski_student/data/repository/main_repository.dart';
 import 'package:goski_student/data/repository/ski_resort_repository.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class MainViewModel extends GetxController {
   final MainRepository mainRepository = Get.find();

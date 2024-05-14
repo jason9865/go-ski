@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/main_view_model.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class SelectResortBottomSheet extends StatelessWidget {
   final mainViewModel = Get.find<MainViewModel>();
@@ -17,7 +14,6 @@ class SelectResortBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final resortList = mainViewModel.skiResortList;
 
     return Obx(

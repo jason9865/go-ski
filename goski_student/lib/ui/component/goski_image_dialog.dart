@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_smallsize_button.dart';
 
 /// isLocalImage : 로컬 이미지 파일 가져와야 하는지 여부
@@ -20,8 +19,6 @@ class GoskiImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
-
     return Column(
       children: [
         Container(

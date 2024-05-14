@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/default_image.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
 import 'package:goski_student/data/model/instructor_profile_response.dart';
 import 'package:goski_student/data/model/lesson_list_response.dart';
 import 'package:goski_student/data/model/review_response.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_image_dialog.dart';
@@ -18,10 +18,6 @@ import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/instructor_profile_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:logger/logger.dart';
-
-final Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 
 class CheckInstructorScreen extends StatelessWidget {
   final lessonListViewModel = Get.find<LessonListViewModel>();
@@ -99,7 +95,6 @@ class CheckInstructorScreen extends StatelessWidget {
   Widget buildProfile() {
     Rx<InstructorProfile> profile =
         instructorProfileViewModel.instructorProfile;
-    logger.d(profile);
 
     return Padding(
       padding: EdgeInsets.all(

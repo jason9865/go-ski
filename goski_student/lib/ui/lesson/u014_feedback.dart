@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/main.dart'; // getApplicationDocumentsDirectory 사용하려면 필요한 import
 import 'package:goski_student/ui/component/goski_build_interval.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
@@ -13,11 +14,8 @@ import 'package:goski_student/ui/component/goski_sub_header.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/view_model/feedback_view_model.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:logger/logger.dart';
 // ignore: depend_on_referenced_packages
-import 'package:path_provider/path_provider.dart'; // getApplicationDocumentsDirectory 사용하려면 필요한 import
-
-var logger = Logger();
+import 'package:path_provider/path_provider.dart';
 
 class FeedbackScreen extends StatelessWidget {
   final lessonListViewModel = Get.find<LessonListViewModel>();
