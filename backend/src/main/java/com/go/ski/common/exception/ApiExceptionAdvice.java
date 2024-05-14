@@ -21,7 +21,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(ApiException.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleApiException(ApiException e) {
-         log.error("ApiException 에러 메시지: {}", e.getMessage());
+        log.error("ApiException 에러 메시지: {}", e.getMessage());
         return ResponseEntity
                 .status(e.getStatus())
                 .body(ApiResponse.error(e.getMessage()));
@@ -30,7 +30,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleNoSuchElementException(NoSuchElementException e) {
-         log.error("NoSuchElementException 에러 메시지: {}", e.getMessage());
+        log.error("NoSuchElementException 에러 메시지: {}", e.getMessage());
         return ResponseEntity
                 .status(CommonExceptionEnum.NO_SUCH_ELEMENT.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.NO_SUCH_ELEMENT.getMessage()));
@@ -39,7 +39,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleDataException(DataAccessException e) {
-         log.error("DataAccessException 에러 메시지: {}", e.getMessage());
+        log.error("DataAccessException 에러 메시지: {}", e.getMessage());
         return ResponseEntity
                 .status(CommonExceptionEnum.DATA_ACCESS_ERROR.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.DATA_ACCESS_ERROR.getMessage()));
@@ -48,7 +48,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(SQLException.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleSQLException(SQLException e) {
-         log.error("SQLException 에러 메시지: {}", e.getMessage());
+        log.error("SQLException 에러 메시지: {}", e.getMessage());
         return ResponseEntity
                 .status(CommonExceptionEnum.DATA_ACCESS_ERROR.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.DATA_ACCESS_ERROR.getMessage()));
@@ -58,7 +58,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleNoResourceFoundException(NoResourceFoundException e) {
-         log.error("NoResourceFoundException 에러 메시지: {}", e.getMessage());
+        log.error("NoResourceFoundException 에러 메시지: {}", e.getMessage());
         return ResponseEntity
                 .status(CommonExceptionEnum.NO_STATIC_RESOURCE.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.NO_STATIC_RESOURCE.getMessage()));
@@ -67,8 +67,7 @@ public class ApiExceptionAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseStatus
     public ResponseEntity<ApiResponse<?>> handleException(Exception e) {
-         log.error("Exception 에러 메시지: {}", e.getMessage());
-         e.printStackTrace();
+        log.error("Exception 에러 메시지: {}, {}", e, e.getMessage());
         return ResponseEntity
                 .status(CommonExceptionEnum.UNKNOWN_ERROR.getStatus())
                 .body(ApiResponse.error(CommonExceptionEnum.UNKNOWN_ERROR.getMessage()));
