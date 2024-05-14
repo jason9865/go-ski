@@ -30,24 +30,35 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] ALL_USER_ROUTES = {
-            "/api/v1/user/signout", "/api/v1/user/resign"
+            "/api/v1/user/signout", "/api/v1/user/resign",
+            "/api/v1/notification/token","/api/v1/notification","/api/v1/notification/read-all",
+            "/api/v1/notification/delete/*","/api/v1/notification/dm","/api/v1/notification/setting",
+            "/api/v1/team/*"
     };
 
     private static final String[] STUDENT_ROUTES = {
             "/api/v1/user/update/user", "/api/v1/user/profile/user",
-            "/api/v1/lesson/reserve/novice/*", "/api/v1/lesson/reserve/advanced", "/api/v1/lesson/list/user"
+            "/api/v1/lesson/reserve/novice/*", "/api/v1/lesson/reserve/advanced", "/api/v1/lesson/list/user",
+            "/api/v1/lesson/feedback/*","/api/v1/lesson/review/tags","/api/v1/lesson/review/create",
+            "/api/v1/lesson/review/*","/api/v1/lesson/review/list/*",
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
             "/api/v1/user/update/inst", "/api/v1/user/profile/inst",
             "/api/v1/lesson/list/instructor",
-            "/api/v1/schedule/mine", "/api/v1/schedule/**"
+            "/api/v1/schedule/mine", "/api/v1/schedule/**",
+            "/api/v1/lesson/review/list","/api/v1/lesson/review/list/*",
+            "/api/v1/notification/invite","/api/v1/notification/accept-invite",
+            "/api/v1/team/member/*","/api/v1/team/list/inst",
     };
 
     private static final String[] OWNER_ROUTES = {
             "/api/v1/user/update/user", "/api/v1/user/profile/user",
             "/api/v1/lesson/list/head/*",
-            "/api/v1/schedule/**"
+            "/api/v1/schedule/**",
+            "/api/v1/notification/invite",
+            "/api/v1/team/create","/api/v1/team/update/*","/api/v1/team/member/*","/api/v1/team/list/owner",
+            "/api/v1/team/update/member","/api/v1/team/delete/*"
     };
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성

@@ -11,9 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.mutable.Mutable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -61,7 +63,8 @@ public class UserController {
     }
 
     @PostMapping("/signup/inst")
-    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletResponse response, @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
+    public ResponseEntity<ApiResponse<?>> signupInstructor(HttpServletResponse response,
+                                                           @ModelAttribute SignupInstructorRequestDTO signupInstructorRequestDTO) {
         log.info("강사 회원가입 요청: {}", signupInstructorRequestDTO);
         if (!"INSTRUCTOR".equals(signupInstructorRequestDTO.getRole().toString())) {
             throw ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.WRONG_REQUEST);

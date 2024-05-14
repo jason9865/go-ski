@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
@@ -20,5 +18,11 @@ public class FeedbackMedia {
     private Feedback feedback;
 
     private String mediaUrl;
+
+    @Builder
+    public FeedbackMedia(Feedback feedback, String mediaUrl) {
+        this.feedback = feedback;
+        this.mediaUrl = mediaUrl;
+    }
 
 }

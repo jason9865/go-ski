@@ -7,8 +7,6 @@ import com.go.ski.auth.oauth.dto.Domain;
 import com.go.ski.auth.oauth.type.OauthServerType;
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.common.util.S3Uploader;
-import com.go.ski.notification.core.repository.NotificationSettingRepository;
-import com.go.ski.notification.core.repository.NotificationTypeRepository;
 import com.go.ski.notification.support.generators.NotificationSettingGenerator;
 import com.go.ski.user.core.model.Certificate;
 import com.go.ski.user.core.model.Instructor;
@@ -20,7 +18,6 @@ import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.dto.*;
 import com.go.ski.user.support.exception.UserExceptionEnum;
-import com.go.ski.user.support.vo.CertificateImageVO;
 import com.go.ski.user.support.vo.CertificateUrlVO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +56,7 @@ public class UserService {
     }
 
     public User signupUser(SignupUserRequestDTO signupUserRequestDTO) {
-        User user=  User.builder()
+        User user = User.builder()
                 .domain(new Domain(signupUserRequestDTO.getDomainUserKey(), OauthServerType.kakao))
                 .userName(signupUserRequestDTO.getUserName())
                 .birthDate(signupUserRequestDTO.getBirthDate())
@@ -87,11 +84,12 @@ public class UserService {
                 .phoneNumber(signupInstructorRequestDTO.getPhoneNumber())
                 .gender(signupInstructorRequestDTO.getGender())
                 .role(signupInstructorRequestDTO.getRole())
-                .profileUrl(signupInstructorRequestDTO.getProfileUrl())
+                .profileUrl(signupInstructorRequestDTO.getKakaoProfileUrl())
                 .build();
 
         // 프로필 이미지 업로드 후 save
         uploadProfileImage(user, signupInstructorRequestDTO);
+//        uploadProfileImage(user, profileImage);
 
         Instructor instructor = new Instructor(user, signupInstructorRequestDTO.getLessonType());
         instructorRepository.save(instructor);
@@ -152,7 +150,7 @@ public class UserService {
     }
 
     public ProfileInstructorResponseDTO getInstructor(User user, ProfileUserResponseDTO profileUserResponseDTO) {
-        Instructor instructor = Instructor.builder().instructorId(user.getUserId()).build();
+        Instructor instructor = instructorRepository.findById(user.getUserId()).orElseThrow();
         List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
 
         List<CertificateUrlVO> certificateUrlVOs = new ArrayList<>();
@@ -162,7 +160,7 @@ public class UserService {
                     .certificateImageUrl(instructorCert.getCertificateImageUrl())
                     .build());
         }
-        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs);
+        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs, instructor);
     }
 
     public ProfileInstructorResponseDTO getInstructorById(Integer instructorId) {
@@ -172,7 +170,7 @@ public class UserService {
         ProfileUserResponseDTO profileUserResponseDTO = getUser(user);
 
         Instructor instructor = instructorRepository.findById(instructorId)
-                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.INSTRUCTOR_NOT_FOUND));
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.INSTRUCTOR_NOT_FOUND));
         log.info(instructor.getDescription());
         List<InstructorCert> instructorCerts = instructorCertRepository.findByInstructor(instructor);
 
@@ -184,7 +182,7 @@ public class UserService {
                     .build());
         }
 
-        return new ProfileInstructorResponseDTO(profileUserResponseDTO,certificateUrlVOs,instructor);
+        return new ProfileInstructorResponseDTO(profileUserResponseDTO, certificateUrlVOs, instructor);
     }
 
 
@@ -196,7 +194,22 @@ public class UserService {
         response.setHeader("refreshToken", refreshToken);
     }
 
+    private void uploadProfileImage(User user, MultipartFile profileImage) {
+        log.info("instructor profile Image - {}", profileImage.getOriginalFilename());
+        if (profileImage != null && !profileImage.isEmpty()) {
+            if (user.getProfileUrl() != null) {
+                s3Uploader.deleteFile(user.getProfileUrl());
+            }
+            String profileUrl = s3Uploader.uploadFile("user-profile", profileImage);
+            log.info("profileUrl: {}", profileUrl);
+
+            user.setProfileUrl(profileUrl);
+        }
+        userRepository.save(user);
+    }
+
     private void uploadProfileImage(User user, ProfileImageDTO profileImageDTO) {
+        log.info("instructor profileImage - {}", profileImageDTO.getProfileImage());
         MultipartFile profileImage = profileImageDTO.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
             if (user.getProfileUrl() != null) {
@@ -211,12 +224,17 @@ public class UserService {
     }
 
     private void uploadCertificateImages(Instructor instructor, InstructorImagesDTO instructorImagesDTO) {
-        List<CertificateImageVO> certificateImageVOs = instructorImagesDTO.getCertificateImageVOs();
-        if (certificateImageVOs != null && !certificateImageVOs.isEmpty()) {
-            for (CertificateImageVO certificateImageVO : certificateImageVOs) {
-                Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateImageVO.getCertificateId());
+        List<String> certificateIds = instructorImagesDTO.getCertificateIds();
+        List<MultipartFile> certificateImages = instructorImagesDTO.getCertificateImages();
+        log.info("certificateIds: {}", certificateIds);
+        log.info("certificateImages: {}", certificateImages);
+
+        if (certificateIds != null && !certificateIds.isEmpty() && certificateImages != null && !certificateImages.isEmpty()) {
+            for (int i = 0; i < certificateIds.size(); i++) {
+                int certificateId = Integer.parseInt(certificateIds.get(i));
+                Optional<Certificate> optionalCertificate = certificateRepository.findById(certificateId);
                 if (optionalCertificate.isPresent()) {
-                    String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImageVO.getCertificateImage());
+                    String certificateImageUrl = s3Uploader.uploadFile("certificate/" + instructor.getInstructorId(), certificateImages.get(i));
                     log.info("certificateImageUrl: {}", certificateImageUrl);
 
                     InstructorCert instructorCert = InstructorCert.builder()
@@ -227,7 +245,7 @@ public class UserService {
                     instructorCertRepository.save(instructorCert);
 
                     int binaryLevel = Integer.parseInt(instructor.getIsInstructAvailable(), 2);
-                    binaryLevel |= convertIdToBinary(certificateImageVO.getCertificateId());
+                    binaryLevel |= convertIdToBinary(certificateId);
                     instructor.setIsInstructAvailable(Integer.toBinaryString(binaryLevel));
                 }
             }

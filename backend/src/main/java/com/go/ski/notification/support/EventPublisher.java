@@ -36,7 +36,7 @@ public class EventPublisher {
     private final SkiResortRepository skiResortRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
-        log.info("알림 보내기 EventPublisher");
+        log.info("DM 보내기");
         applicationEventPublisher.publishEvent(MessageEvent.of(fcmSendRequestDTO,user, imageUrl, deviceType));
     }
 
@@ -52,6 +52,7 @@ public class EventPublisher {
     }
 
     private void publishEvent(InviteAcceptRequestDTO inviteAcceptRequestDTO, List<Integer> userIds, Instructor instructor, String deviceType) {
+        log.info("초대 승낙 알림");
         userIds.forEach(
             userId -> applicationEventPublisher.publishEvent(
                     InviteAcceptEvent.of(inviteAcceptRequestDTO, userId, instructor, deviceType)
@@ -61,16 +62,18 @@ public class EventPublisher {
 
 
     public void publish(InviteRequestDTO inviteRequestDTO, Team team, String deviceType) {
+        log.info("초대 요청 알림");
         applicationEventPublisher.publishEvent(InviteEvent.of(inviteRequestDTO, team, deviceType));
-
     }
 
 
     public void publish(FeedbackCreateRequestDTO feedbackCreateRequestDTO, Lesson lesson, String deviceType) {
+        log.info("피드백 생성 알림");
         applicationEventPublisher.publishEvent(FeedbackEvent.of(feedbackCreateRequestDTO,lesson, deviceType));
     }
 
     public void publish(Lesson lesson, LessonInfo lessonInfo, PaymentCacheDto paymentCache, String deviceType){
+        log.info("예약 완료 알림");
         Team team = teamRepository.findById(lesson.getTeam().getTeamId())
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
 
@@ -79,31 +82,49 @@ public class EventPublisher {
         String resortName = skiResortRepository.findById(resortId)
                 .orElseThrow(() -> new RuntimeException("해당 스키장이 존재하지 않습니다.")).getResortName();
 
-        List<Integer> receiverIds = new ArrayList<>();
-        receiverIds.add(lesson.getUser().getUserId()); // 결제한 대표자
+        // 지정 강사가 있는 경우만 알림
         if (lesson.getInstructor() != null) {
-            log.info("lesson.getInstructor - {}",lesson.getInstructor());
-            receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
+            applicationEventPublisher.publishEvent(
+                    LessonCreateInstructorEvent.of(
+                            lessonInfo, resortName,
+                            lesson.getInstructor().getInstructorId(),paymentCache, deviceType));
         }
-        receiverIds.add(team.getUser().getUserId()); // 사장
-        receiverIds.forEach( // LessonCreateInstructor 이벤트로 바뀌어야 함 -> 사장, 강사용
-                receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateInstructorEvent.of(lessonInfo, resortName, receiverId, paymentCache, deviceType))
-        );
-//        applicationEventPublisher.publishEvent(LessonCreateInstructorEvent.of());
+
+        // 사장 알림
+        applicationEventPublisher.publishEvent(
+                LessonCreateInstructorEvent.of(
+                        lessonInfo, resortName,
+                        team.getUser().getUserId(),paymentCache, deviceType));
+
+        // 결제 대표자 알림
+        applicationEventPublisher.publishEvent(
+                LessonCreateStudentEvent.of(lessonInfo, resortName, lesson.getUser().getUserId(), deviceType));
     }
 
-    public void publish(LessonInfo lessonInfo, Lesson lesson) {
-        Team team = teamRepository.findById(lesson.getTeam().getTeamId())
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(TeamExceptionEnum.TEAM_NOT_FOUND));
-
+    // 강습 취소 알림
+    public void publishCancelEvent(Lesson lesson, LessonInfo lessonInfo) {
+        // 사장과 강사에게
         List<Integer> receiverIds = new ArrayList<>();
-        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사
-        receiverIds.add(team.getUser().getUserId()); // 사장
+        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사에게
+        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장에게
+
+        publishEvent(lessonInfo, receiverIds);
+    }
+
+    private void publishEvent(LessonInfo lessonInfo, List<Integer> receiverIds) {
+        log.info("강습 취소 알림");
         receiverIds.forEach(
-                receiverId ->  applicationEventPublisher.publishEvent(
-                        LessonAlertEvent.of(lessonInfo, lesson, receiverId, "MOBILE"))
+                receiverId -> {
+                    applicationEventPublisher.publishEvent(
+                            LessonCancelEvent.of(lessonInfo,receiverId,"MOBILE")); // 추후 변경
+                }
         );
+    }
+
+    // 강습 30분 전 알림
+    public void publish(LessonInfo lessonInfo, Lesson lesson) {
+        applicationEventPublisher.publishEvent(
+                LessonAlertEvent.of(lessonInfo, lesson.getInstructor().getInstructorId(), "MOBILE"));
     }
 
 }

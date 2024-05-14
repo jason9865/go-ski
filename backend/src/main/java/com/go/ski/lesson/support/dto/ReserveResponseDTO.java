@@ -21,4 +21,5 @@ public class ReserveResponseDTO {
     private Double rating;
     private Integer reviewCount;
     private List<ReviewResponseDTO> reviews;
+    private String lessonType;
 }

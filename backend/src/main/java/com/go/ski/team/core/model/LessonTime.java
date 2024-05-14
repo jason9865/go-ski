@@ -5,10 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class LessonTime {
 
@@ -22,5 +20,13 @@ public class LessonTime {
 
     @Column(nullable = false)
     private Integer lessonTime;
+
+
+    @Builder
+    public LessonTime(Integer lessonTimeId, SkiResort skiResort, Integer lessonTime) {
+        this.lessonTimeId = lessonTimeId;
+        this.skiResort = skiResort;
+        this.lessonTime = lessonTime;
+    }
 
 }

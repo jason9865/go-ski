@@ -338,6 +338,8 @@ public class PayService {
 			.cancelTaxFreeAmount(0)
 			.build();
 		requestCancelToKakao(kakaopayCancelRequestDTO);
+
+		eventPublisher.publishCancelEvent(lesson, lessonInfo);
 	}
 
 	//카카오 페이에 보내는 준비 요청 메소드
@@ -383,7 +385,7 @@ public class PayService {
 		ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
 			requestEntity, KakaopayApproveResponseDTO.class);
 
-//		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
+		eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
 
 		// 여기서 결제 정보를 db에 저장
 		return responseEntity.getBody();
@@ -419,7 +421,7 @@ public class PayService {
 		User user = (User)httpServletRequest.getAttribute("user");
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		//exception 만들기
 		if (dummy.isEmpty())
 			throw new IllegalArgumentException("조회할 수 없습니다.");
@@ -433,7 +435,7 @@ public class PayService {
 		boolean b = false;
 		//사장인지 확인
 		//내 아래로 팀이 있는지 확인
-		List<TeamResponseDTO> dummy = teamRepository.findTeamList(user.getUserId());
+		List<TeamResponseDTO> dummy = teamRepository.findOwnerTeamList(user.getUserId());
 		for (int id = 0; id < dummy.size(); id++) {
 			if (Objects.equals(dummy.get(id).getTeamId(), teamId))
 				b = true;

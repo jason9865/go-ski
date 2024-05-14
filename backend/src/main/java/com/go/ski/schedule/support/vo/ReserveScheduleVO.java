@@ -5,19 +5,21 @@ import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.model.LessonPaymentInfo;
 import com.go.ski.payment.support.dto.util.StudentInfoDTO;
-import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.schedule.support.dto.CreateScheduleRequestDTO;
+import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.model.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @ToString
+@Slf4j
 public class ReserveScheduleVO extends ReserveInfoVO {
     private Integer lessonId;
     private Integer teamId;
@@ -30,25 +32,11 @@ public class ReserveScheduleVO extends ReserveInfoVO {
     @Setter
     private Integer instructorId;
 
-    public ReserveScheduleVO(PaymentCacheDto paymentCacheDto) {
-        super(paymentCacheDto);
-        Lesson lesson = paymentCacheDto.getLesson();
-        Team team = lesson.getTeam();
-
-        lessonId = lesson.getLessonId();
-        teamId = team.getTeamId();
-        teamName = team.getTeamName();
-        resortName = team.getSkiResort().getResortName();
-        studentInfoDTOs = paymentCacheDto.getStudentInfos();
-        representativeName = lesson.getRepresentativeName();
-        isDesignated = paymentCacheDto.getLessonPaymentInfo().getDesignatedFee() != null;
-        instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
-    }
-
     public ReserveScheduleVO(LessonInfo lessonInfo, List<StudentInfoDTO> studentInfoDTOs, LessonPaymentInfo lessonPaymentInfo) {
         super(lessonInfo);
         Lesson lesson = lessonInfo.getLesson();
         Team team = lesson.getTeam();
+        log.info("SkiResort: {}", team.getSkiResort());
 
         lessonId = lesson.getLessonId();
         teamId = team.getTeamId();

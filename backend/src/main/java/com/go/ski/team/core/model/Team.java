@@ -13,8 +13,6 @@ import static com.go.ski.common.util.TimeConvertor.dayoffListToInteger;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @ToString
@@ -28,7 +26,7 @@ public class Team {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resort_id",nullable = false)
     private SkiResort skiResort;
 
@@ -58,7 +56,18 @@ public class Team {
         this.teamProfileUrl = teamProfileUrl;
     }
 
-
+    @Builder
+    public Team(Integer teamId, User user, SkiResort skiResort, String teamName,
+                String teamProfileUrl, String description, Integer teamCost, Integer dayoff) {
+        this.teamId = teamId;
+        this.user = user;
+        this.skiResort = skiResort;
+        this.teamName = teamName;
+        this.teamProfileUrl = teamProfileUrl;
+        this.description = description;
+        this.teamCost = teamCost;
+        this.dayoff = dayoff;
+    }
 
 
 }

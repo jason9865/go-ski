@@ -15,6 +15,7 @@ import com.go.ski.redis.repository.ScheduleCacheRepository;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Permission;
+import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
 import com.go.ski.team.core.repository.PermissionRepository;
@@ -53,13 +54,7 @@ public class ScheduleService {
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
         Set<String> keys = redisTemplate.keys("scheduleCache:" + user.getUserId() + ":*");
-        if (keys != null) {
-            return keys.stream()
-                    .map(key -> scheduleCacheRepository.findById(key.substring(14)).orElse(null))
-                    .filter(Objects::nonNull).map(ScheduleCacheDto::getReserveScheduleVOs) // reserveScheduleVOs 필드만 추출
-                    .flatMap(List::stream).toList();// 각 객체의 List<ReserveScheduleVO>를 하나의 Stream<ReserveScheduleVO>로 펼침
-        }
-        return null;
+        return getReserveScheduleVOS(keys);
     }
 
     public List<ReserveScheduleVO> getTeamSchedule(User user, int teamId, LocalDate lessonDate) {
@@ -69,13 +64,25 @@ public class ScheduleService {
         }
 
         Set<String> keys = redisTemplate.keys("scheduleCache:*:" + teamId + ":" + lessonDate);
-        if (keys != null) {
-            return keys.stream()
-                    .map(key -> scheduleCacheRepository.findById(key.substring(14)).orElse(null))
-                    .filter(Objects::nonNull).map(ScheduleCacheDto::getReserveScheduleVOs) // reserveScheduleVOs 필드만 추출
-                    .flatMap(List::stream).toList();// 각 객체의 List<ReserveScheduleVO>를 하나의 Stream<ReserveScheduleVO>로 펼침
+        return getReserveScheduleVOS(keys);
+    }
+
+    private List<ReserveScheduleVO> getReserveScheduleVOS(Set<String> keys) {
+        log.info("keys: {}", keys);
+
+        List<ReserveScheduleVO> result = new ArrayList<>();
+        if (keys != null && !keys.isEmpty()) {
+            for (String key : keys) {
+                Optional<ScheduleCacheDto> scheduleCacheDto = scheduleCacheRepository.findById(key.substring(14));
+                if (scheduleCacheDto.isPresent()) {
+                    List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
+                    if (reserveScheduleVOs != null) {
+                        result.addAll(reserveScheduleVOs);
+                    }
+                }
+            }
         }
-        return null;
+        return result;
     }
 
     public boolean checkAddPermission(User user, Integer teamId) {

@@ -59,10 +59,9 @@ public class QuartzJob implements Job {
 
             Duration duration = Duration.between(now,startTime);
 
-            if (duration.toHours() <= 1 && duration.toMinutes() > 30) {
+            if (duration.toMinutes() <= 30 && duration.toMinutes() > 0) {
                 Lesson lesson = lessonInfo.getLesson();
                 eventPublisher.publish(lessonInfo, lesson);
-//                eventPublisher.publish(lesson,lessonInfo,"MOBILE");
             }
         }
     }
