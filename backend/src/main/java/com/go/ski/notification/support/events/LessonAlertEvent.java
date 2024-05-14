@@ -17,7 +17,7 @@ public class LessonAlertEvent extends NotificationEvent{
     private final String lessonDate;
     private final String lessonTime;
 
-    public LessonAlertEvent(
+    private LessonAlertEvent(
             Integer receiverId, LocalDateTime createdAt,
             Integer notificationType, DeviceType deviceType,
             String title, String lessonDate,

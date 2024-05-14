@@ -24,7 +24,7 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
     private final String lessonType;
     private final List<StudentInfoDTO> studentInfos;
 
-    public LessonCreateInstructorEvent(
+    private LessonCreateInstructorEvent(
             Integer receiverId, LocalDateTime createdAt,
             Integer notificationType, DeviceType deviceType, String title,
             String totalAmount,String lessonDate,

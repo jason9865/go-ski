@@ -100,7 +100,27 @@ public class EventPublisher {
         applicationEventPublisher.publishEvent(
                 LessonCreateStudentEvent.of(lessonInfo, resortName, lesson.getUser().getUserId(), deviceType));
     }
-    
+
+    // 강습 취소 알림
+    public void publishCancelEvent(Lesson lesson, LessonInfo lessonInfo) {
+        // 사장과 강사에게
+        List<Integer> receiverIds = new ArrayList<>();
+        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사에게
+        receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장에게
+
+        publishEvent(lessonInfo, receiverIds);
+    }
+
+    private void publishEvent(LessonInfo lessonInfo, List<Integer> receiverIds) {
+        log.info("강습 취소 알림");
+        receiverIds.forEach(
+                receiverId -> {
+                    applicationEventPublisher.publishEvent(
+                            LessonCancelEvent.of(lessonInfo,receiverId,"MOBILE")); // 추후 변경
+                }
+        );
+    }
+
     // 강습 30분 전 알림
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
         applicationEventPublisher.publishEvent(
