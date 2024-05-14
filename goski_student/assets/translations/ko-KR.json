@@ -328,7 +328,7 @@
   "failSignup": "회원 가입 실패",
   "tryLater": "잠시 후 다시 시도해주세요.",
   "failPayment": "결제 실패",
-  "failPaymentTryLater": "결제에 실패하였습니다.\\n다시 시도해주세요.",
+  "failPaymentTryLater": "결제에 실패하였습니다.\n다시 시도해주세요.",
   "successPayment": "결제 성공",
   "successPaymentContent": "정상적으로 결제가 완료되었습니다."
 }
