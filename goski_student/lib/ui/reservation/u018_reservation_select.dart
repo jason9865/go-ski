@@ -58,8 +58,10 @@ class ReservationSelectScreen extends StatelessWidget {
               Get.lazyPut(() => LessonInstructorListViewModel());
             }));
           } else {
-            Get.snackbar(tr('reservationInfo'), tr('checkReservationInfo'));
-            reservationViewModel.submitReservation();
+            if (!Get.isSnackbarOpen) {
+              Get.snackbar(tr('reservationInfo'), tr('checkReservationInfo'));
+              reservationViewModel.submitReservation();
+            }
           }
         },
         child: SingleChildScrollView(
@@ -362,20 +364,6 @@ class _DateTimeSelectors extends StatelessWidget {
         )
       ],
     );
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      final now = DateTime.now();
-      final dateTime =
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-      final formattedTime = DateFormat('HHmm').format(dateTime);
-      reservationViewModel.setStartTime(formattedTime);
-    }
   }
 }
 
