@@ -54,11 +54,15 @@ class LessonPaymentViewModel {
         _showWebView(kakaoPayPrepareResponse,
             beginnerResponse: beginnerResponse);
       } else {
-        Get.snackbar('Payment Error', 'Failed to initiate payment');
+        if (Get.isSnackbarOpen) {
+          Get.snackbar('Payment Error', 'Failed to initiate payment');
+        }
       }
     } catch (e) {
-      Get.snackbar(
-          'Payment Error', 'An error occurred during payment initiation: $e');
+      if (!Get.isSnackbarOpen) {
+        Get.snackbar(
+            'Payment Error', 'An error occurred during payment initiation: $e');
+      }
     }
   }
 
@@ -76,11 +80,15 @@ class LessonPaymentViewModel {
         _showWebView(kakaoPayPrepareResponse,
             beginnerResponse: beginnerResponse, instructor: instructor);
       } else {
-        Get.snackbar('Payment Error', 'Failed to initiate payment');
+        if (!Get.isSnackbarOpen) {
+          Get.snackbar('Payment Error', 'Failed to initiate payment');
+        }
       }
     } catch (e) {
-      Get.snackbar(
-          'Payment Error', 'An error occurred during payment initiation: $e');
+      if (!Get.isSnackbarOpen) {
+        Get.snackbar(
+            'Payment Error', 'An error occurred during payment initiation: $e');
+      }
     }
   }
 
@@ -96,11 +104,15 @@ class LessonPaymentViewModel {
       if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty) {
         _showWebView(kakaoPayPrepareResponse, instructor: instructor);
       } else {
-        Get.snackbar('Payment Error', 'Failed to initiate payment');
+        if (!Get.isSnackbarOpen) {
+          Get.snackbar('Payment Error', 'Failed to initiate payment');
+        }
       }
     } catch (e) {
-      Get.snackbar(
-          'Payment Error', 'An error occurred during payment initiation: $e');
+      if (!Get.isSnackbarOpen) {
+        Get.snackbar(
+            'Payment Error', 'An error occurred during payment initiation: $e');
+      }
     }
   }
 
@@ -188,13 +200,19 @@ class LessonPaymentViewModel {
     try {
       bool result = await lessonPaymentRepository.approvePayment(tid, pgToken);
       if (result) {
-        Get.snackbar(tr('successPayment'), tr('successPaymentContent'));
+        if (!Get.isSnackbarOpen) {
+          Get.snackbar(tr('successPayment'), tr('successPaymentContent'));
+        }
         return true;
       } else {
-        Get.snackbar(tr('failPayment'), tr('failPaymentTryLater'));
+        if (!Get.isSnackbarOpen) {
+          Get.snackbar(tr('failPayment'), tr('failPaymentTryLater'));
+        }
       }
     } catch (e) {
-      Get.snackbar(tr('failPayment'), '${tr('failPaymentTryLater')}\n$e');
+      if (!Get.isSnackbarOpen) {
+        Get.snackbar(tr('failPayment'), '${tr('failPaymentTryLater')}\n$e');
+      }
     }
     return false;
   }
