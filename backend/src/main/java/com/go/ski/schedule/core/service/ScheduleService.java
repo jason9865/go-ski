@@ -53,13 +53,21 @@ public class ScheduleService {
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
         Set<String> keys = redisTemplate.keys("scheduleCache:" + user.getUserId() + ":*");
-        if (keys != null) {
-            return keys.stream()
-                    .map(key -> scheduleCacheRepository.findById(key.substring(14)).orElse(null))
-                    .filter(Objects::nonNull).map(ScheduleCacheDto::getReserveScheduleVOs) // reserveScheduleVOs 필드만 추출
-                    .flatMap(List::stream).toList();// 각 객체의 List<ReserveScheduleVO>를 하나의 Stream<ReserveScheduleVO>로 펼침
+        log.info("keys: {}", keys);
+
+        List<ReserveScheduleVO> result = new ArrayList<>();
+        if (keys != null && !keys.isEmpty()) {
+            for (String key : keys) {
+                Optional<ScheduleCacheDto> scheduleCacheDto = scheduleCacheRepository.findById(key.substring(14));
+                if (scheduleCacheDto.isPresent()) {
+                    List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
+                    if (reserveScheduleVOs != null) {
+                        result.addAll(reserveScheduleVOs);
+                    }
+                }
+            }
         }
-        return null;
+        return result;
     }
 
     public List<ReserveScheduleVO> getTeamSchedule(User user, int teamId, LocalDate lessonDate) {
