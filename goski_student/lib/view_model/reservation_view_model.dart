@@ -1,18 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
-import 'package:goski_student/const/enum/gender.dart';
-import 'package:goski_student/data/model/certificate_info.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
-import 'package:goski_student/ui/reservation/u020_reservation_instructor_list.dart';
 import 'package:logger/logger.dart';
 
 final ReservationRepository _reservationRepository = ReservationRepository();
 
 class ReservationViewModel extends GetxController {
-  var reservation = ReservationRequest().obs;
+  final Rx<ReservationRequest> reservation = ReservationRequest().obs;
+
+  void clearData() {
+    reservation.value = ReservationRequest();
+  }
 
   void setTotalStudent(int number) {
     reservation.value.studentCount = number;
@@ -48,11 +48,16 @@ class ReservationViewModel extends GetxController {
 
 class LessonTeamListViewModel extends GetxController {
   var lessonTeams = <BeginnerResponse>[].obs;
+  RxBool isLoading = true.obs;
 
   Future<void> getLessonTeamList(ReservationRequest reservationRequest) async {
+    isLoading.value = true;
+
     lessonTeams.value = await _reservationRepository
         .getBeginnerLessonTeamInfo(reservationRequest);
     lessonTeams.sort((a, b) => a.cost.compareTo(b.cost));
+
+    isLoading.value = false;
   }
 }
 
