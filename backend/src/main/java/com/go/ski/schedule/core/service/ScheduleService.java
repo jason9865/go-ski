@@ -53,6 +53,7 @@ public class ScheduleService {
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
         Set<String> keys = redisTemplate.keys("scheduleCache:" + user.getUserId() + ":*");
+        log.info("keys: {}", keys);
         if (keys != null) {
             return keys.stream()
                     .map(key -> scheduleCacheRepository.findById(key.substring(14)).orElse(null))
