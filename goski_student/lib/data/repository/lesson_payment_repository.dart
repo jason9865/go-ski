@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:goski_student/data/data_source/lesson_payment_service.dart';
-import 'package:goski_student/data/model/default_dto.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/kakao_pay.dart';
 import 'package:goski_student/data/model/lesson_payment.dart';

@@ -57,8 +57,7 @@ class _InstructorsIntroductionScreen
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GoskiSubHeader(
-        title: tr('designatedReserve',
-            args: [NumberFormat('###,###,###').format(widget.teamInfo.cost)]),
+        title: tr('designatedLesson'),
       ),
       body: GoskiContainer(
         onConfirm: () {
