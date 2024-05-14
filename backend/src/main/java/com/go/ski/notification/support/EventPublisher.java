@@ -82,29 +82,29 @@ public class EventPublisher {
         String resortName = skiResortRepository.findById(resortId)
                 .orElseThrow(() -> new RuntimeException("해당 스키장이 존재하지 않습니다.")).getResortName();
 
-        List<Integer> teamMemberIds = new ArrayList<>();
-        if (lesson.getInstructor() != null) {  // 지정 강사가 있는 경우 추가
-            log.info("lesson.getInstructor - {}",lesson.getInstructor());
-            teamMemberIds.add(lesson.getInstructor().getInstructorId());
+        // 지정 강사가 있는 경우만 알림
+        if (lesson.getInstructor() != null) {
+            applicationEventPublisher.publishEvent(
+                    LessonCreateInstructorEvent.of(
+                            lessonInfo, resortName,
+                            lesson.getInstructor().getInstructorId(),paymentCache, deviceType));
         }
-        teamMemberIds.add(team.getUser().getUserId()); // 사장 추가
 
-        teamMemberIds.forEach(
-                teamMemberId ->  applicationEventPublisher.publishEvent(
-                        LessonCreateInstructorEvent.of(lessonInfo, resortName, teamMemberId,paymentCache, deviceType))
-        );
+        // 사장 알림
+        applicationEventPublisher.publishEvent(
+                LessonCreateInstructorEvent.of(
+                        lessonInfo, resortName,
+                        team.getUser().getUserId(),paymentCache, deviceType));
 
-        // 결제 대표자
+        // 결제 대표자 알림
         applicationEventPublisher.publishEvent(
                 LessonCreateStudentEvent.of(lessonInfo, resortName, lesson.getUser().getUserId(), deviceType));
     }
     
     // 강습 30분 전 알림
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
-
         applicationEventPublisher.publishEvent(
                 LessonAlertEvent.of(lessonInfo, lesson.getInstructor().getInstructorId(), "MOBILE"));
-
     }
 
 }

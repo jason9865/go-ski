@@ -47,7 +47,7 @@ public class QuartzConfig {
         CronTrigger cronTrigger = TriggerBuilder
                 .newTrigger()
                 .withIdentity("LessonAlertEvent Trigger", "go-ski") // Trigger 이름, 그룹 지정
-                .withDescription("현재 시간 기준으로 1시간 남은 강습이 있는지 확인 - 30분 마다 실행 Trigger")  // Trigger 설명
+                .withDescription("현재 시간 기준으로 30분 남은 강습이 있는지 확인 - 30분 마다 실행 Trigger")  // Trigger 설명
                 .startNow()
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * * * ?")).build(); // 30분마다 실행되도록 스케줄링
 
