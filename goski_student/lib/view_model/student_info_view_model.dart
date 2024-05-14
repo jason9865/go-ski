@@ -9,4 +9,8 @@ class StudentInfoViewModel {
   void addStudentInfo(StudentInfo studentInfo) {
     studentInfoList.add(studentInfo);
   }
+
+  void clearData() {
+    studentInfoList.value = [];
+  }
 }
