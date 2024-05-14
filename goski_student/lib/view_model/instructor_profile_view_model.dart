@@ -102,7 +102,11 @@ class InstructorProfileViewModel extends GetxController {
       sum += review.rating;
     }
 
-    return (sum / reviewList.length).toStringAsFixed(1);
+    if (reviewList.isNotEmpty) {
+      return (sum / reviewList.length).toStringAsFixed(1);
+    } else {
+      return '0.0';
+    }
   }
 
   Future<void> getInstructorProfile(int instructorId) async {

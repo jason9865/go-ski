@@ -299,5 +299,6 @@
   "lessonNotificationContent": "{} {} {}\n1:{} {} 강습이 예약되었습니다.",
   "lessonNotificationOutputFormat": "M월 d일",
   "lessonNotificationLessonTime": "{}시 {}분",
-  "noName": "이름 없음"
+  "noName": "이름 없음",
+  "noTeam": "해당 조건에 맞는 팀이 없습니다"
 }

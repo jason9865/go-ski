@@ -43,25 +43,56 @@ class _ReservationTeamSelectScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: GoskiSubHeader(
-        title: tr('selectTeam'),
-      ),
-      body: GoskiContainer(
-        child: Column(
-          children: [
-            buildSwitch(),
-            Obx(() => Expanded(
-                  child: ListView.builder(
-                      itemCount: teamList.length,
-                      itemBuilder: (context, index) {
-                        return buildTeamCard(teamList[index]);
-                      }),
-                )),
-          ],
-        ),
-      ),
-    );
+    return Obx(() {
+      if (lessonTeamListViewModel.isLoading.value) {
+        return Scaffold(
+          appBar: GoskiSubHeader(
+            title: tr('selectTeam'),
+          ),
+          body: const GoskiContainer(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: goskiBlack,
+              ),
+            ),
+          ),
+        );
+      } else if (teamList.isEmpty) {
+        return Scaffold(
+          appBar: GoskiSubHeader(
+            title: tr('selectTeam'),
+          ),
+          body: GoskiContainer(
+            child: Center(
+              child: GoskiText(
+                text: tr('noTeam'),
+                size: goskiFontLarge,
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Scaffold(
+          appBar: GoskiSubHeader(
+            title: tr('selectTeam'),
+          ),
+          body: GoskiContainer(
+            child: Column(
+              children: [
+                buildSwitch(),
+                Obx(() => Expanded(
+                      child: ListView.builder(
+                          itemCount: teamList.length,
+                          itemBuilder: (context, index) {
+                            return buildTeamCard(teamList[index]);
+                          }),
+                    )),
+              ],
+            ),
+          ),
+        );
+      }
+    });
   }
 
   void sortByLowerPrice() {
