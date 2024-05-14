@@ -79,7 +79,7 @@ class _InstructorsIntroductionScreen
         },
         buttonName: tr('designatedReserve', args: [
           NumberFormat('###,###,###')
-              .format(widget.instructorList[widget.index].designatedFee)
+              .format(widget.instructorList[widget.index].cost)
         ]),
         child: SingleChildScrollView(
           child: Column(
@@ -429,7 +429,8 @@ class _InstructorsIntroductionScreen
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' ${(widget.instructorList[index].rating ?? 0.0).toStringAsFixed(1)}',
+                      text:
+                          ' ${(widget.instructorList[index].rating ?? 0.0).toStringAsFixed(1)}',
                       size: goskiFontMedium,
                     ),
                   ],
