@@ -1,15 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:goski_student/const/util/custom_dio.dart';
+import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/cancel_lesson_response.dart';
 import 'package:goski_student/data/model/default_dto.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
+import 'package:goski_student/main.dart';
 
 class CancelLessonService extends GetxService {
-  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<CancelLessonResponse?> getLessonCost(int lessonId) async {
     try {

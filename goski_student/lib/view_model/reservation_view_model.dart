@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/model/reservation.dart';
 import 'package:goski_student/data/repository/reservation_repository.dart';
-import 'package:logger/logger.dart';
+import 'package:goski_student/main.dart';
 
 final ReservationRepository _reservationRepository = ReservationRepository();
 
@@ -32,7 +31,6 @@ class ReservationViewModel extends GetxController {
   }
 
   void submitReservation() {
-    Logger logger = Logger();
     // Implement submission logic
     logger.d('Reservation Data: ${{
       "resortId": reservation.value.resortId,

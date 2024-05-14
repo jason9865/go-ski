@@ -6,7 +6,7 @@ import 'package:goski_student/const/font_size.dart';
 import 'package:goski_student/data/data_source/lesson_payment_service.dart';
 import 'package:goski_student/data/model/instructor.dart';
 import 'package:goski_student/data/repository/lesson_payment_repository.dart';
-import 'package:goski_student/ui/component/goski_build_interval.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_image_dialog.dart';
@@ -16,9 +16,6 @@ import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/lesson/u023_lesson_reservation.dart';
 import 'package:goski_student/view_model/lesson_payment_view_model.dart';
 import 'package:goski_student/view_model/student_info_view_model.dart';
-import 'package:logger/logger.dart';
-
-final Logger logger = Logger();
 
 class AdvancedInstructorsIntroductionScreen extends StatefulWidget {
   Instructor instructor;
@@ -398,7 +395,7 @@ class _InstructorsIntroductionScreen
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' ${widget.instructor.rating}',
+                      text: ' ${(widget.instructor.rating ?? 0.0).toStringAsFixed(1)}',
                       size: goskiFontMedium,
                     ),
                   ],

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
-import 'package:goski_student/const/util/screen_size_controller.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_border_white_container.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
@@ -19,10 +19,7 @@ import 'package:goski_student/ui/reservation/u019_reservation_team_select.dart';
 import 'package:goski_student/ui/reservation/u020_reservation_instructor_list.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 import 'package:goski_student/view_model/ski_resort_view_model.dart';
-import 'package:logger/logger.dart';
 
-Logger logger = Logger();
-final screenSizeController = Get.find<ScreenSizeController>();
 final SkiResortViewModel skiResortViewModel = Get.find<SkiResortViewModel>();
 final ReservationViewModel reservationViewModel =
     Get.find<ReservationViewModel>();

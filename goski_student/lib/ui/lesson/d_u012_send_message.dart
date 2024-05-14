@@ -2,21 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_image_dialog.dart';
 import 'package:goski_student/view_model/lesson_list_view_model.dart';
-import 'package:logger/logger.dart';
 
 import '../../const/color.dart';
 import '../../const/font_size.dart';
 import '../../const/util/image_picker_controller.dart';
-import '../../const/util/screen_size_controller.dart';
 import '../component/goski_border_white_container.dart';
 import '../component/goski_modal.dart';
 import '../component/goski_smallsize_button.dart';
 import '../component/goski_text.dart';
 import '../component/goski_textfield.dart';
-
-var logger = Logger();
 
 class SendMessageDialog extends StatefulWidget {
   const SendMessageDialog({
@@ -35,7 +32,6 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
   @override
   Widget build(BuildContext context) {
     final imagePickerController = Get.put(ImagePickerController());
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.005);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
 

@@ -5,9 +5,6 @@ import 'package:goski_student/const/enum/role.dart';
 import 'package:goski_student/data/model/instructor_profile_response.dart';
 import 'package:goski_student/data/model/review_response.dart';
 import 'package:goski_student/data/repository/instructor_profile_repository.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class InstructorProfileViewModel extends GetxController {
   final InstructorProfileRepository instructorProfileRepository = Get.find();

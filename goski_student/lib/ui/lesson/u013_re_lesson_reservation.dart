@@ -1,15 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
+import 'package:goski_student/main.dart';
 import 'package:goski_student/ui/component/goski_card.dart';
 import 'package:goski_student/ui/component/goski_container.dart';
 import 'package:goski_student/ui/component/goski_expansion_tile.dart';
 import 'package:goski_student/ui/component/goski_text.dart';
 import 'package:goski_student/ui/component/goski_textfield.dart';
 
-import '../../const/util/screen_size_controller.dart';
 import '../component/goski_border_white_container.dart';
 import '../component/goski_payment_button.dart';
 
@@ -90,7 +89,6 @@ class _ReLessonReservationScreenState extends State<ReLessonReservationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
     final cardPadding = screenSizeController.getWidthByRatio(0.03);
