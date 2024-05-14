@@ -35,6 +35,7 @@ import 'package:goski_student/data/repository/ski_resort_repository.dart';
 import 'package:goski_student/data/repository/user_repository.dart';
 import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/ui/main/u003_student_main.dart';
+import 'package:goski_student/ui/main/u004_notification.dart';
 import 'package:goski_student/ui/reservation/u018_reservation_select.dart';
 import 'package:goski_student/ui/user/u001_login.dart';
 import 'package:goski_student/view_model/cancel_lesson_view_model.dart';
@@ -85,7 +86,7 @@ void initDependencies() {
   Get.put(FeedbackRepository(), permanent: true);
   Get.put(ReservationRepository(), permanent: true);
   Get.put(ReviewRepository(), permanent: true);
-  Get.put(CancelLessonRepository() , permanent: true);
+  Get.put(CancelLessonRepository(), permanent: true);
   Get.put(InstructorProfileRepository(), permanent: true);
   Get.put(CouponRepository(), permanent: true);
 
@@ -100,7 +101,7 @@ void initDependencies() {
   Get.put(FeedbackViewModel(), permanent: true);
   Get.put(ReservationViewModel(), permanent: true);
   Get.put(ReviewViewModel(), permanent: true);
-  Get.put(CancelLessonViewModel() , permanent: true);
+  Get.put(CancelLessonViewModel(), permanent: true);
   Get.put(InstructorProfileViewModel(), permanent: true);
   Get.put(CouponViewModel(), permanent: true);
   Get.lazyPut(() => ReservationService());
@@ -143,6 +144,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/reservation',
           page: () => const ReservationSelectScreen(),
+        ),
+        GetPage(
+          name: '/NotificationScreen',
+          page: () => const NotificationScreen(),
         )
       ],
       theme: ThemeData(
@@ -159,7 +164,7 @@ class MyApp extends StatelessWidget {
             mediaQueryData.size.height,
           );
           if (snapshot.data != null) {
-            return StudentMainScreen();
+            return const StudentMainScreen();
           } else {
             return const LoginScreen();
           }
