@@ -165,6 +165,7 @@
   "dynamicInstructor": "{} 강사",
   "couponBox": "쿠폰함",
   "noLessonHistory": "강습 내역이 존재하지 않습니다",
+  "noReviewHistory": "리뷰 내역이 존재하지 않습니다",
   "noCoupon": "보유하신 쿠폰이 없습니다",
   "noNotificationIndicator": "수신한 알림이 없습니다",
   "noSettlement": "결제 내역이 없습니다",
