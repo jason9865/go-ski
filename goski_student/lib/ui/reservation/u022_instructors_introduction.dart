@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
@@ -446,17 +444,15 @@ class _InstructorsIntroductionScreen
               ],
             ),
           ),
-          SizedBox(
-            height: 150,
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: widget.instructorList[index].reviews!.length < 3
-                    ? widget.instructorList[index].reviews?.length
-                    : 3,
-                itemBuilder: (context, idx) {
-                  return buildReview(
-                      widget.instructorList[index].reviews![idx]);
-                }),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.instructorList[index].reviews!.length < 3
+                ? widget.instructorList[index].reviews?.length
+                : 3,
+            itemBuilder: (context, idx) {
+              return buildReview(widget.instructorList[index].reviews![idx]);
+            },
           ),
         ],
       ),
@@ -474,9 +470,13 @@ class _InstructorsIntroductionScreen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GoskiText(
-                text: lessonReview.reviewContent,
-                size: goskiFontMedium,
+              Expanded(
+                child: GoskiText(
+                  text: lessonReview.reviewContent,
+                  size: goskiFontMedium,
+                  maxLine: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               Row(
                 children: [
