@@ -102,7 +102,7 @@ class _ReservationInstructorListScreenState
       },
       child: GoskiCard(
         child: Container(
-          height: screenSizeController.getHeightByRatio(0.2),
+          // height: screenSizeController.getHeightByRatio(0.2),
           padding: const EdgeInsets.all(8.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,8 +111,8 @@ class _ReservationInstructorListScreenState
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
                   instructor.instructorUrl,
-                  width: 120,
-                  height: 160,
+                  width: 90,
+                  height: 120,
                   fit: BoxFit.fitHeight,
                 ),
               ),
@@ -141,7 +141,7 @@ class _ReservationInstructorListScreenState
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: GoskiText(
                                 text: instructor.skiCertificate.first,
-                                size: goskiFontLarge,
+                                size: goskiFontMedium,
                                 color: goskiDarkGray,
                               ),
                             )
