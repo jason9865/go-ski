@@ -1,61 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
-import 'package:goski_instructor/ui/component/goski_modal.dart';
-import 'package:goski_instructor/ui/component/goski_bottomsheet.dart';
+import 'package:goski_instructor/ui/common/i005_notification.dart';
+import 'package:goski_instructor/ui/common/i006_setting.dart';
 
 // 헤더 오른쪽 아이콘들
 Widget headerRightIcons(BuildContext context) {
-  return Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      IconButton(
-        icon: const Icon(Icons.notifications),
-        // onPressed: () {
-        //   // 알림 로직
-        // },
-        onPressed: () {
-          // 설정 페이지로 이동하는 대신 모달을 표시
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => GoskiModal(
-              title: "외부 일정 등록",
-              // 버튼 눌렀을 때 동작할 함수 추가 필요
-              onConfirm: () => Navigator.of(context).pop(),
-              buttonName: "저장",
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: goskiBlue,
-                ),
-                height: 500,
-                child: const Center(
-                    child: Text(
-                  "컨텐츠",
-                  style: TextStyle(fontSize: 50),
-                )),
-              ),
+  // final NotificationViewModel viewModel = Get.find<NotificationViewModel>();
+  return Padding(
+    padding: const EdgeInsets.only(right: 10.0),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                Get.to(() => const NotificationScreen());
+              },
             ),
-          );
-        },
-      ),
-      IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () {
-          showGoskiBottomSheet(
-            context: context,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: goskiDarkPink,
-              ),
-              height: 500,
-              child: const Center(
-                  child: Text(
-                "컨텐츠",
-                style: TextStyle(fontSize: 50),
-              )),
-            ),
-          );
-        },
-      ),
-    ],
+            // Obx(() => viewModel.hasUnread.value
+            //     ? const Positioned(
+            //         top: 10,
+            //         right: 10,
+            //         child: Icon(
+            //           Icons.circle,
+            //           color: goskiRed,
+            //           size: 10,
+            //         ),
+            //       )
+            //     : const SizedBox.shrink())
+          ],
+        ),
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Get.to(() => const SettingScreen());
+          },
+        ),
+      ],
+    ),
   );
 }
