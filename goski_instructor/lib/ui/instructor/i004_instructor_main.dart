@@ -344,15 +344,17 @@ class BuildScheduleContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showDialog(
-        context: context,
-        builder: (BuildContext context) => GoskiModal(
-          title: tr('lessonInfo'),
-          child: LessonDetailDialog(
-            lessonId: scheduleColumnItem.lessonId,
-          ),
-        ),
-      ),
+      onTap: scheduleColumnItem.lessonId != 0
+          ? () => showDialog(
+                context: context,
+                builder: (BuildContext context) => GoskiModal(
+                  title: tr('lessonInfo'),
+                  child: LessonDetailDialog(
+                    lessonId: scheduleColumnItem.lessonId,
+                  ),
+                ),
+              )
+          : () => 0,
       child: Container(
         decoration: BoxDecoration(
           color: scheduleColumnItem.representativeName.isEmpty
@@ -360,7 +362,7 @@ class BuildScheduleContainer extends StatelessWidget {
               : goskiLightGray,
           border: Border.all(
             color: goskiDarkGray,
-            width: 0.03,
+            width: 0.02,
           ),
         ),
         height: screenSizeController
