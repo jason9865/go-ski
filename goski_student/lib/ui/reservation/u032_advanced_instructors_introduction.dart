@@ -41,8 +41,7 @@ class _InstructorsIntroductionScreen
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GoskiSubHeader(
-        title: tr('designatedReserve',
-            args: [NumberFormat('###,###,###').format(widget.instructor.cost)]),
+        title: tr('designatedLesson'),
       ),
       body: GoskiContainer(
         onConfirm: () {
@@ -58,65 +57,66 @@ class _InstructorsIntroductionScreen
             Get.lazyPut(() => LessonPaymentViewModel());
           }));
         },
-        buttonName: tr('designatedReserve',
-            args: [NumberFormat('###,###,###').format(widget.instructor.cost)]),
+        buttonName: tr('designatedReserve', args: [
+          NumberFormat('###,###,###').format((widget.instructor.basicFee +
+                      widget.instructor.levelOptionFee +
+                      widget.instructor.peopleOptionFee) *
+                  reservationViewModel.reservation.value.duration +
+              widget.instructor.designatedFee)
+        ]),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                child: GoskiCard(
-                  child: Container(
-                    color: goskiWhite,
-                    child: Column(
-                      children: [
-                        Container(
-                          color: goskiLightGray,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: screenSizeController
-                                    .getHeightByRatio(0.01)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GoskiText(
-                                  text: tr(widget.instructor.teamName),
-                                  size: goskiFontXLarge,
-                                ),
-                                // GoskiText(
-                                //   text: ' - ',
-                                //   size: goskiFontXLarge,
-                                // ),
-                                // GoskiText(
-                                //   text: '팀이름1',
-                                //   size: goskiFontXLarge,
-                                // ),
-                              ],
+          child: Column(children: [
+            GoskiCard(
+              child: Container(
+                color: goskiWhite,
+                child: Column(
+                  children: [
+                    Container(
+                      color: goskiLightGray,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical:
+                                screenSizeController.getHeightByRatio(0.01)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GoskiText(
+                              text: tr(widget.instructor.teamName),
+                              size: goskiFontXLarge,
                             ),
-                          ),
+                            // GoskiText(
+                            //   text: ' - ',
+                            //   size: goskiFontXLarge,
+                            // ),
+                            // GoskiText(
+                            //   text: '팀이름1',
+                            //   size: goskiFontXLarge,
+                            // ),
+                          ],
                         ),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildProfile(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildSelfIntroduction(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildCertificateImages(),
-                        const Divider(
-                          height: 0,
-                        ),
-                        buildReviews(),
-                      ],
+                      ),
                     ),
-                  ),
+                    const Divider(
+                      height: 0,
+                    ),
+                    buildProfile(),
+                    const Divider(
+                      height: 0,
+                    ),
+                    buildSelfIntroduction(),
+                    const Divider(
+                      height: 0,
+                    ),
+                    buildCertificateImages(),
+                    const Divider(
+                      height: 0,
+                    ),
+                    buildReviews(),
+                  ],
                 ),
               ),
             ),
-          ],
+          ]),
         ),
       ),
     );

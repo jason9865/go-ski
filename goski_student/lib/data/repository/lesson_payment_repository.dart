@@ -51,9 +51,9 @@ class LessonPaymentRepository {
             studentInfo: studentInfo,
             requestComplain: requestComplain,
             basicFee: beginnerResponse.basicFee,
-            designatedFee: beginnerResponse.designatedFee,
+            designatedFee: instructor.designatedFee,
             peopleOptionFee: beginnerResponse.peopleOptionFee,
-            levelOptionFee: beginnerResponse.levelOptionFee);
+            levelOptionFee: instructor.levelOptionFee);
 
     return lessonPaymentService
         .instLessonPayment(instLessonPaymentRequest.toJson());

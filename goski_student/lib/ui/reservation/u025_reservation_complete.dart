@@ -16,9 +16,9 @@ import 'package:goski_student/ui/main/u003_student_main.dart';
 import 'package:goski_student/view_model/reservation_view_model.dart';
 
 final ReservationViewModel reservationViewModel =
-Get.find<ReservationViewModel>();
+    Get.find<ReservationViewModel>();
 final ScreenSizeController screenSizeController =
-Get.find<ScreenSizeController>();
+    Get.find<ScreenSizeController>();
 
 class ReservationCompleteScreen extends StatefulWidget {
   final BeginnerResponse? teamInformation;
@@ -47,7 +47,8 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
       amountOfPaymentList = [
         AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
         AmountOfPayment(
-            name: tr('designatedCost'), price: widget.instructor!.designatedFee),
+            name: tr('designatedCost'),
+            price: widget.instructor!.designatedFee),
       ];
     } else if (widget.teamInformation != null) {
       amountOfPaymentList = [
@@ -57,8 +58,16 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
       amountOfPaymentList = [
         AmountOfPayment(
             name: tr('cost'),
-            price: widget.instructor!.cost - widget.instructor!.designatedFee),
-        AmountOfPayment(name: tr('designatedCost'), price: widget.instructor!.designatedFee)
+            price: (widget.instructor!.basicFee +
+                    widget.instructor!.peopleOptionFee) *
+                reservationViewModel.reservation.value.duration),
+        AmountOfPayment(
+            name: tr('designatedCost'),
+            price: widget.instructor!.designatedFee),
+        AmountOfPayment(
+            name: tr('levelOptionCost'),
+            price: widget.instructor!.levelOptionFee *
+                reservationViewModel.reservation.value.duration),
       ];
     }
     int sum() {
@@ -183,14 +192,13 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                          GoskiText(
-                            text: tr('price', args: [
-                              NumberFormat('###,###,###')
-                                  .format(sum())
-                            ]),
-                            size: goskiFontLarge,
-                            isBold: true,
-                          ),
+                        GoskiText(
+                          text: tr('price', args: [
+                            NumberFormat('###,###,###').format(sum())
+                          ]),
+                          size: goskiFontLarge,
+                          isBold: true,
+                        ),
                       ],
                     ),
                   )
