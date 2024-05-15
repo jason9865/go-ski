@@ -205,8 +205,13 @@ class _ReservationInstructorListScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: GoskiText(
                             text: tr('moneyUnit', args: [
-                              NumberFormat('###,###,###')
-                                  .format(instructor.cost)
+                              NumberFormat('###,###,###').format(
+                                  (instructor.basicFee +
+                                              instructor.levelOptionFee +
+                                              instructor.peopleOptionFee) *
+                                          reservationViewModel
+                                              .reservation.value.duration +
+                                      instructor.designatedFee)
                             ]),
                             size: goskiFontLarge,
                             isBold: true,
