@@ -110,9 +110,16 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
       amountOfPaymentList = [
         AmountOfPayment(
             name: tr('cost'),
-            price: widget.instructor!.cost - widget.instructor!.designatedFee),
+            price: (widget.instructor!.basicFee +
+                    widget.instructor!.peopleOptionFee) *
+                reservationViewModel.reservation.value.duration),
         AmountOfPayment(
-            name: tr('designatedCost'), price: widget.instructor!.designatedFee)
+            name: tr('designatedCost'),
+            price: widget.instructor!.designatedFee),
+        AmountOfPayment(
+            name: tr('levelOptionCost'),
+            price: widget.instructor!.levelOptionFee *
+                reservationViewModel.reservation.value.duration),
       ];
     }
     int sum() {
@@ -247,8 +254,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                           if (widget.teamInformation != null)
                             GoskiText(
                               text: tr('price', args: [
-                                NumberFormat('###,###,###')
-                                    .format(sum())
+                                NumberFormat('###,###,###').format(sum())
                               ]),
                               size: goskiFontMedium,
                               isBold: true,
@@ -257,8 +263,12 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                               widget.instructor != null)
                             GoskiText(
                               text: tr('price', args: [
-                                NumberFormat('###,###,###')
-                                    .format(widget.instructor!.cost)
+                                NumberFormat('###,###,###').format((widget
+                                                .instructor!.basicFee +
+                                            widget.instructor!.peopleOptionFee +
+                                            widget.instructor!.levelOptionFee) *
+                                        reservationInfo.duration +
+                                    widget.instructor!.designatedFee)
                               ]),
                               size: goskiFontMedium,
                               isBold: true,
@@ -564,8 +574,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                       GoskiPaymentButton(
                         width: screenSizeController.getWidthByRatio(1),
                         text: tr('kakaoPay'),
-                        imagePath:
-                            'https://go-ski.s3.ap-northeast-2.amazonaws.com/basic/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4_CI_logotype.png',
+                        imagePath: 'assets/images/kakaopay_button_image.png',
                         backgroundColor: kakaoYellow,
                         foregroundColor: goskiBlack,
                         onTap: () {},
