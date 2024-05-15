@@ -44,6 +44,10 @@ public class LessonInfo {
 	@Column
 	private Integer lessonStatus;
 
+	public void updateLessonStatus() {
+		this.lessonStatus = 1;
+	}
+
 	public static LessonInfo toLessonInfoForPayment (ReserveLessonPaymentRequestDTO reserveLessonPaymentRequestDTO) {
 		return LessonInfo.builder()
 			.lessonDate(reserveLessonPaymentRequestDTO.getLessonDate())
