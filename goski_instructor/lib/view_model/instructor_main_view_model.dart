@@ -17,6 +17,7 @@ class InstructorMainViewModel extends GetxController {
   RxList<Team> instructorTeamList = <Team>[].obs;
   RxList<Schedule> scheduleList = <Schedule>[].obs;
   RxList<ScheduleColumn> scheduleColumnList = <ScheduleColumn>[].obs;
+  late Schedule lesson;
 
   void getInstructorInfo() async {
     var response = await userRespository.getInstructorInfo();
@@ -42,6 +43,10 @@ class InstructorMainViewModel extends GetxController {
       }
       updateScheduleList();
     }
+  }
+
+  void getLesson(int lessonId) {
+    lesson = scheduleList.firstWhere((item) => item.lessonId == lessonId);
   }
 
   void updateScheduleList() {
@@ -74,6 +79,7 @@ class InstructorMainViewModel extends GetxController {
           .startTime); // scheduleList.startTime을 ScheduleColumn.items의 index로 parsing
       target[startTimeIndex].duration = scheduleList[i].duration.toDouble();
       target[startTimeIndex].studentCount = scheduleList[i].studentCount;
+      target[startTimeIndex].lessonId = scheduleList[i].lessonId;
       target[startTimeIndex].representativeName =
           scheduleList[i].representativeName;
       target[startTimeIndex].lessonType = scheduleList[i].lessonType;
@@ -84,7 +90,6 @@ class InstructorMainViewModel extends GetxController {
         }
       }
     }
-    // asdf
   }
 
   // 시간String을 index로 parsing, ex. "0800" => 0
@@ -104,6 +109,7 @@ class ScheduleColumnItem {
   String representativeName;
   String lessonType;
   bool isDesignated;
+  int lessonId;
 
   ScheduleColumnItem({
     this.duration = 0.5,
@@ -111,6 +117,7 @@ class ScheduleColumnItem {
     this.representativeName = '',
     this.lessonType = '',
     this.isDesignated = false,
+    this.lessonId = 0,
   });
 }
 

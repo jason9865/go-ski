@@ -6,7 +6,7 @@ import 'package:goski_instructor/data/model/student_info.dart';
 import 'package:goski_instructor/main.dart';
 
 class Schedule {
-  // int resortId;
+  int resortId;
   int studentCount;
   String lessonDate;
   String startTime;
@@ -15,15 +15,15 @@ class Schedule {
   int lessonId;
   int teamId;
   String teamName;
-  // String resortName;
+  String resortName;
   List<StudentInfo> studentInfos = [];
   String representativeName;
   String? requestComplain;
   bool isDesignated;
   int instructorId;
   Schedule({
-    // this.resortId = 0,
-    // this.resortName = '',
+    this.resortId = 0,
+    this.resortName = '',
     this.studentCount = 0,
     this.lessonDate = '',
     this.startTime = '',
@@ -83,7 +83,7 @@ class Schedule {
 }
 
 class ScheduleResponse {
-  // int resortId;
+  int resortId;
   int studentCount;
   String lessonDate;
   String startTime;
@@ -92,14 +92,14 @@ class ScheduleResponse {
   int lessonId;
   int teamId;
   String teamName;
-  // String resortName;
+  String resortName;
   List<StudentInfoResponse> studentInfos;
   String representativeName;
   String? requestComplain;
   bool isDesignated;
   int instructorId;
   ScheduleResponse({
-    // required this.resortId,
+    required this.resortId,
     required this.studentCount,
     required this.lessonDate,
     required this.startTime,
@@ -108,7 +108,7 @@ class ScheduleResponse {
     required this.lessonId,
     required this.teamId,
     required this.teamName,
-    // required this.resortName,
+    required this.resortName,
     required this.studentInfos,
     required this.representativeName,
     this.requestComplain,
@@ -118,7 +118,7 @@ class ScheduleResponse {
 
   factory ScheduleResponse.fromJson(Map<String, dynamic> json) {
     return ScheduleResponse(
-      // resortId: json['resortId'] as int,
+      resortId: json['resortId'] ?? 0,
       studentCount: json['studentCount'] as int,
       lessonDate: json['lessonDate'],
       startTime: json['startTime'],
@@ -127,7 +127,7 @@ class ScheduleResponse {
       lessonId: json['lessonId'] as int,
       teamId: json['teamId'] as int,
       teamName: json['teamName'],
-      // resortName: json['resortName'],
+      resortName: json['resortName'] ?? '',
       studentInfos:
           List<StudentInfoResponse>.from(json['studentInfoDTOs'].map((item) {
         return StudentInfoResponse.fromJson(item);
@@ -148,7 +148,7 @@ extension ScheduleResponseToSchedule on ScheduleResponse {
       lessonType = "board";
     }
     return Schedule(
-      // resortId: resortId,
+      resortId: resortId,
       studentCount: studentCount,
       lessonDate: lessonDate,
       startTime: startTime,
@@ -157,7 +157,7 @@ extension ScheduleResponseToSchedule on ScheduleResponse {
       lessonId: lessonId,
       teamId: teamId,
       teamName: teamName,
-      // resortName: resortName,
+      resortName: resortName,
       studentInfos: List<StudentInfo>.from(studentInfos.map((item) {
         return item.toStudentInfo();
       })),

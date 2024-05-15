@@ -4,14 +4,29 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
+import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
 
 import '../../const/util/screen_size_controller.dart';
 import '../component/goski_border_white_container.dart';
 
-class LessonDetailDialog extends StatelessWidget {
-  final LessonDetailData data;
+class LessonDetailDialog extends StatefulWidget {
+  final int lessonId;
+  const LessonDetailDialog({
+    super.key,
+    required this.lessonId,
+  });
 
-  const LessonDetailDialog({super.key, required this.data});
+  @override
+  State<LessonDetailDialog> createState() => _LessonDetailDialogState();
+}
+
+class _LessonDetailDialogState extends State<LessonDetailDialog> {
+  final instructorMainViewModel = Get.find<InstructorMainViewModel>();
+  @override
+  void initState() {
+    super.initState();
+    instructorMainViewModel.getLesson(widget.lessonId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +45,7 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: titlePadding),
         GoskiBorderWhiteContainer(
           child: GoskiText(
-            text: data.date,
+            text: instructorMainViewModel.lesson.lessonDate,
             size: goskiFontMedium,
           ),
         ),
@@ -43,7 +58,7 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: titlePadding),
         GoskiBorderWhiteContainer(
           child: GoskiText(
-            text: data.location,
+            text: instructorMainViewModel.lesson.resortName,
             size: goskiFontMedium,
           ),
         ),
@@ -56,7 +71,7 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: titlePadding),
         GoskiBorderWhiteContainer(
           child: GoskiText(
-            text: data.reservationPerson,
+            text: instructorMainViewModel.lesson.representativeName,
             size: goskiFontMedium,
           ),
         ),
@@ -76,16 +91,18 @@ class LessonDetailDialog extends StatelessWidget {
                 ),
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: data.studentInfo.length,
+                  itemCount: instructorMainViewModel.lesson.studentInfos.length,
                   itemBuilder: (context, index) {
                     return BackgroundContainer(
                       title: GoskiText(
-                        text: data.studentInfo[index][0],
+                        text:
+                            "${index + 1}. ${instructorMainViewModel.lesson.studentInfos[index].name}",
                         size: goskiFontMedium,
                       ),
                       children: [
                         GoskiText(
-                          text: data.studentInfo[index][1],
+                          text: instructorMainViewModel
+                              .lesson.studentInfos[index].gender,
                           size: goskiFontMedium,
                         )
                       ],
@@ -110,7 +127,7 @@ class LessonDetailDialog extends StatelessWidget {
         SizedBox(height: titlePadding),
         GoskiBorderWhiteContainer(
           child: GoskiText(
-            text: data.requestMessage,
+            text: instructorMainViewModel.lesson.requestComplain ?? '',
             size: goskiFontMedium,
           ),
         ),
@@ -158,17 +175,4 @@ class BackgroundContainer extends StatelessWidget {
       ),
     );
   }
-}
-
-// TODO. 추후 삭제 필요 더미 DTO
-class LessonDetailData {
-  final String date, location, reservationPerson, requestMessage;
-  final List studentInfo;
-
-  LessonDetailData(
-      {required this.date,
-      required this.location,
-      required this.reservationPerson,
-      required this.requestMessage,
-      required this.studentInfo});
 }

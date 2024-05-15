@@ -348,7 +348,9 @@ class BuildScheduleContainer extends StatelessWidget {
         context: context,
         builder: (BuildContext context) => GoskiModal(
           title: tr('lessonInfo'),
-          child: const LessonDetailDialog(),
+          child: LessonDetailDialog(
+            lessonId: scheduleColumnItem.lessonId,
+          ),
         ),
       ),
       child: Container(
