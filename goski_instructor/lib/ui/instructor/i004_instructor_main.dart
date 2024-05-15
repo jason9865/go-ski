@@ -39,6 +39,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
         teamImage: 'assets/images/penguin.png',
         teamIntroduction: '3팀소개입니다.'),
   ];
+
   // 좌측 타임라인 생성을 위한 리스트
   final List<String> timeList = List.generate(17, (index) => '${8 + index}시');
   List<Schedule> scheduleList = [];
@@ -140,17 +141,23 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
                     UserMenu(
                       iconName: 'couponBox',
                       iconImage: 'assets/images/couponBox.svg',
-                      onClick: () => logger.d("쿠폰함"),
+                      onClick: () {
+                        Get.toNamed('/coupon');
+                      },
                     ),
                     UserMenu(
                       iconName: 'reviewHistory',
                       iconImage: 'assets/images/reviewHistory.svg',
-                      onClick: () => logger.d("리뷰 내역"),
+                      onClick: () {
+                        Get.toNamed('/reviewList');
+                      },
                     ),
                     UserMenu(
                       iconName: 'lessonHistory',
                       iconImage: 'assets/images/lessonHistory.svg',
-                      onClick: () => logger.d("강습"),
+                      onClick: () {
+                        Get.toNamed('/lessonList');
+                      },
                     ),
                   ],
                 ),
@@ -352,6 +359,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
 
 class BuildTimeContainer extends StatelessWidget {
   final String hour;
+
   const BuildTimeContainer({
     super.key,
     required this.hour,
@@ -435,24 +443,27 @@ class UserMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          iconImage,
-          width: 45,
-          height: 45,
-          colorFilter: const ColorFilter.mode(
-            goskiBlack,
-            BlendMode.srcIn,
+    return GestureDetector(
+      onTap: onClick,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            iconImage,
+            width: 45,
+            height: 45,
+            colorFilter: const ColorFilter.mode(
+              goskiBlack,
+              BlendMode.srcIn,
+            ),
           ),
-        ),
-        GoskiText(
-          text: tr(
-            iconName,
-          ),
-          size: goskiFontLarge,
-        )
-      ],
+          GoskiText(
+            text: tr(
+              iconName,
+            ),
+            size: goskiFontLarge,
+          )
+        ],
+      ),
     );
   }
 }
