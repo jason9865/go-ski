@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/font_size.dart';
@@ -40,11 +42,13 @@ class InstructorsIntroductionScreen extends StatefulWidget {
 class _InstructorsIntroductionScreen
     extends State<InstructorsIntroductionScreen> {
   late PageController _pageController;
+  late var cost = 0;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: widget.index);
+    cost = widget.instructorList[widget.index].cost;
   }
 
   @override
@@ -74,19 +78,22 @@ class _InstructorsIntroductionScreen
             Get.lazyPut(() => LessonPaymentViewModel());
           }));
         },
-        buttonName: tr('designatedReserve', args: [
-          NumberFormat('###,###,###')
-              .format(widget.instructorList[widget.index].cost)
-        ]),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: screenSizeController.getHeightByRatio(0.9),
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: widget.instructorList.length,
-                  itemBuilder: (context, index) => GoskiCard(
+        buttonName: tr('designatedReserve',
+            args: [NumberFormat('###,###,###').format(cost)]),
+        child: Column(
+          children: [
+            SizedBox(
+              height: screenSizeController.getHeightByRatio(0.73),
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    cost = widget.instructorList[index].cost;
+                  });
+                },
+                itemCount: widget.instructorList.length,
+                itemBuilder: (context, index) => GoskiCard(
+                  child: SingleChildScrollView(
                     child: Container(
                       color: goskiWhite,
                       child: Column(
@@ -116,36 +123,40 @@ class _InstructorsIntroductionScreen
                               ),
                             ),
                           ),
-                          const Divider(
-                            height: 0,
+                          Column(
+                            children: [
+                              const Divider(
+                                height: 0,
+                              ),
+                              buildProfile(index),
+                              const Divider(
+                                height: 0,
+                              ),
+                              buildSelfIntroduction(index),
+                              const Divider(
+                                height: 0,
+                              ),
+                              buildCertificateImages(index),
+                              const Divider(
+                                height: 0,
+                              ),
+                              buildReviews(index),
+                            ],
                           ),
-                          buildProfile(index),
-                          const Divider(
-                            height: 0,
-                          ),
-                          buildSelfIntroduction(index),
-                          const Divider(
-                            height: 0,
-                          ),
-                          buildCertificateImages(index),
-                          const Divider(
-                            height: 0,
-                          ),
-                          buildReviews(index),
                         ],
                       ),
                     ),
                   ),
                 ),
               ),
-              const BuildInterval(),
-              SmoothPageIndicator(
-                controller: _pageController,
-                count: widget.instructorList.length,
-                effect: const WormEffect(),
-              ),
-            ],
-          ),
+            ),
+            const BuildInterval(),
+            SmoothPageIndicator(
+              controller: _pageController,
+              count: widget.instructorList.length,
+              effect: const WormEffect(),
+            ),
+          ],
         ),
       ),
     );

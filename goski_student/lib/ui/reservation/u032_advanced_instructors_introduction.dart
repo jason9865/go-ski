@@ -115,8 +115,8 @@ class _InstructorsIntroductionScreen
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -394,7 +394,8 @@ class _InstructorsIntroductionScreen
                       size: 20,
                     ),
                     GoskiText(
-                      text: ' ${(widget.instructor.rating ?? 0.0).toStringAsFixed(1)}',
+                      text:
+                          ' ${(widget.instructor.rating ?? 0.0).toStringAsFixed(1)}',
                       size: goskiFontMedium,
                     ),
                   ],

@@ -35,10 +35,10 @@ class CheckInstructorScreen extends StatelessWidget {
           title: tr('instructorProfile'),
         ),
         body: GoskiContainer(
-          child: SingleChildScrollView(
-            child: GoskiCard(
-              child: Container(
-                color: goskiWhite,
+          child: GoskiCard(
+            child: Container(
+              color: goskiWhite,
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
