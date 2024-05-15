@@ -187,10 +187,10 @@ public class PayService {
 		LessonPaymentInfo tmpLessonPaymentInfo = LessonPaymentInfo.builder()
 			.lessonId(tmpLesson.getLessonId())
 			.lesson(tmpLesson)
-			.basicFee(paymentCache.getLessonPaymentInfo().getBasicFee())
+			.basicFee(paymentCache.getLessonPaymentInfo().getBasicFee() * tmpLessonInfo.getDuration()) //기존 금액에 duration 곱함
 			.designatedFee(paymentCache.getLessonPaymentInfo().getDesignatedFee())
-			.levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee())
-			.peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee())
+			.levelOptionFee(paymentCache.getLessonPaymentInfo().getLevelOptionFee() * tmpLessonInfo.getDuration()) //기존 금액에 duration 곱함
+			.peopleOptionFee(paymentCache.getLessonPaymentInfo().getPeopleOptionFee() * tmpLessonInfo.getDuration()) //기존 금액에 duration 곱함
 			.build();
 		lessonPaymentInfoRepository.save(tmpLessonPaymentInfo);
 
