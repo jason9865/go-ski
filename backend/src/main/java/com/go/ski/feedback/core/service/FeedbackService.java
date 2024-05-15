@@ -14,6 +14,8 @@ import com.go.ski.feedback.support.exception.FeedbackExceptionEnum;
 import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.notification.support.EventPublisher;
 import com.go.ski.payment.core.model.Lesson;
+import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.repository.LessonInfoRepository;
 import com.go.ski.payment.core.repository.LessonRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final FeedbackMediaRepository feedbackMediaRepository;
     private final LessonRepository lessonRepository;
+    private final LessonInfoRepository lessonInfoRepository;
     private final EventPublisher eventPublisher;
     private final S3Uploader s3Uploader;
 
@@ -52,6 +55,9 @@ public class FeedbackService {
 
         Lesson lesson = getLesson(feedbackCreateRequestDTO.getLessonId());
 
+        LessonInfo lessonInfo = lessonInfoRepository.findByLesson(lesson)
+                        .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.NO_PARAM));
+
         validateAlreadyExist(lesson);
 
         Feedback feedback = Feedback.builder()
@@ -62,6 +68,9 @@ public class FeedbackService {
         
         Feedback savedFeedback = feedbackRepository.save(feedback);
         saveMediaFiles(images,videos,savedFeedback);
+        
+        lessonInfo.updateLessonStatus();
+
         eventPublisher.publish(feedbackCreateRequestDTO,lesson, deviceType);
     }
 
