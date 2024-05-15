@@ -32,7 +32,8 @@ class LessonReservationScreen extends StatefulWidget {
 
   final List<_DummyPolicy> policyList = [
     _DummyPolicy(title: tr('policyCheckAll'), isChecked: false),
-    _DummyPolicy(title: tr('policyCheckPrivacyCollectAndUse'), isChecked: false),
+    _DummyPolicy(
+        title: tr('policyCheckPrivacyCollectAndUse'), isChecked: false),
     _DummyPolicy(title: tr('policyCheckProvideOther'), isChecked: false),
     _DummyPolicy(title: tr('policyMarketing'), isChecked: false),
   ];
@@ -81,6 +82,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     final checkboxSize = screenSizeController.getWidthByRatio(0.05);
     final reservationInfo = reservationViewModel.reservation.value;
     String requestComplain = '';
+    studentInfoViewModel.clearData();
     // final List<_AmountOfPayment> amountOfPaymentList = widget.instructor !=
     //             null &&
     //         widget.teamInformation != null
@@ -97,7 +99,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
       amountOfPaymentList = [
         AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
         AmountOfPayment(
-            name: tr('designatedCost'), price: widget.instructor!.designatedFee),
+            name: tr('designatedCost'),
+            price: widget.instructor!.designatedFee),
       ];
     } else if (widget.teamInformation != null) {
       amountOfPaymentList = [
@@ -108,7 +111,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
         AmountOfPayment(
             name: tr('cost'),
             price: widget.instructor!.cost - widget.instructor!.designatedFee),
-        AmountOfPayment(name: tr('designatedCost'), price: widget.instructor!.designatedFee)
+        AmountOfPayment(
+            name: tr('designatedCost'), price: widget.instructor!.designatedFee)
       ];
     }
     int sum() {

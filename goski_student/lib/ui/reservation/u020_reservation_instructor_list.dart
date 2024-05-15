@@ -132,13 +132,29 @@ class _ReservationInstructorListScreenState
                               text: tr('dynamicInstructor',
                                   args: [instructor.userName]),
                               size: goskiFontXLarge),
-                          if (instructor.skiCertificate.isNotEmpty)
+                          if (reservationViewModel
+                                      .reservation.value.lessonType ==
+                                  'SKI' &&
+                              instructor.skiCertificate.length > 0)
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: GoskiText(
                                 text: instructor.skiCertificate.first,
                                 size: goskiFontMedium,
+                                color: goskiDarkGray,
+                              ),
+                            )
+                          else if (reservationViewModel
+                                      .reservation.value.lessonType ==
+                                  'BOARD' &&
+                              instructor.boardCertificate.length > 0)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: GoskiText(
+                                text: instructor.boardCertificate.first,
+                                size: goskiFontLarge,
                                 color: goskiDarkGray,
                               ),
                             )
