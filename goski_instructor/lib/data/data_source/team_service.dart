@@ -14,7 +14,6 @@ class TeamService extends GetxService {
     try {
       dynamic response = await CustomDio.dio.get('$baseUrl/team/list/inst');
       if (response.data['status'] == "success") {
-        logger.w("fetchedInstructorTeamList : ${response.data['data']}");
         var data = response.data['data'];
         List<TeamResponse> instructorTeamResponse = List<TeamResponse>.from(
             data.map((item) => TeamResponse.fromJson(item)));
