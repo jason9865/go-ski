@@ -85,16 +85,14 @@ public class EventPublisher {
         // 지정 강사가 있는 경우만 알림
         if (lesson.getInstructor() != null) {
             applicationEventPublisher.publishEvent(
-                    LessonCreateInstructorEvent.of(
-                            lessonInfo, resortName,
-                            lesson.getInstructor().getInstructorId(),paymentCache, deviceType));
+                LessonCreateInstructorEvent.of(
+                        lesson, lesson.getInstructor().getInstructorId(),deviceType));
         }
 
         // 사장 알림
         applicationEventPublisher.publishEvent(
                 LessonCreateInstructorEvent.of(
-                        lessonInfo, resortName,
-                        team.getUser().getUserId(),paymentCache, deviceType));
+                        lesson, team.getUser().getUserId(), deviceType));
 
         // 결제 대표자 알림
         applicationEventPublisher.publishEvent(
