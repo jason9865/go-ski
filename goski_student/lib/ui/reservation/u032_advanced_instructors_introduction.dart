@@ -403,16 +403,15 @@ class _InstructorsIntroductionScreen
               ],
             ),
           ),
-          SizedBox(
-            height: 150,
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: widget.instructor.reviews!.length < 3
-                    ? widget.instructor.reviews?.length
-                    : 3,
-                itemBuilder: (context, idx) {
-                  return buildReview(widget.instructor.reviews![idx]);
-                }),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.instructor.reviews!.length < 3
+                ? widget.instructor.reviews?.length
+                : 3,
+            itemBuilder: (context, idx) {
+              return buildReview(widget.instructor.reviews![idx]);
+            },
           ),
         ],
       ),
@@ -430,9 +429,13 @@ class _InstructorsIntroductionScreen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GoskiText(
-                text: lessonReview.reviewContent,
-                size: goskiFontMedium,
+              Expanded(
+                child: GoskiText(
+                  text: lessonReview.reviewContent,
+                  size: goskiFontMedium,
+                  maxLine: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               Row(
                 children: [
