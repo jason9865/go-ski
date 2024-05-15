@@ -39,7 +39,7 @@ class GoskiPaymentButton extends StatelessWidget {
         children: [
           Image.asset(
             width: screenSizeController.getWidthByRatio(0.23),
-            'assets/images/kakaopay_button_image.png',
+            imagePath,
           ),
         ],
       ),
