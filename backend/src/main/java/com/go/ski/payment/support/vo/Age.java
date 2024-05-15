@@ -7,6 +7,6 @@ public enum Age {
 	TWENTIES,
 	THIRTIES,
 	FORTIES,
-	FIVTIES,
+	FIFTIES,
 	SIXTIES_OVER;
 }
