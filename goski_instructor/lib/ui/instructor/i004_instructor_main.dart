@@ -129,17 +129,23 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
                     UserMenu(
                       iconName: 'couponBox',
                       iconImage: 'assets/images/couponBox.svg',
-                      onClick: () => logger.d("쿠폰함"),
+                      onClick: () {
+                        Get.toNamed('/coupon');
+                      },
                     ),
                     UserMenu(
                       iconName: 'reviewHistory',
                       iconImage: 'assets/images/reviewHistory.svg',
-                      onClick: () => logger.d("리뷰 내역"),
+                      onClick: () {
+                        Get.toNamed('/reviewList');
+                      },
                     ),
                     UserMenu(
                       iconName: 'lessonHistory',
                       iconImage: 'assets/images/lessonHistory.svg',
-                      onClick: () => logger.d("강습"),
+                      onClick: () {
+                        Get.toNamed('/lessonList');
+                      },
                     ),
                   ],
                 ),
