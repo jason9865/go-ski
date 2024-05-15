@@ -60,12 +60,11 @@ class _InstructorsIntroductionScreen
         },
         buttonName: tr('designatedReserve',
             args: [NumberFormat('###,###,###').format(widget.instructor.cost)]),
-        child: Column(
-          children: [
-            SizedBox(
-              height: screenSizeController.getHeightByRatio(0.77),
-              child: GoskiCard(
-                child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                child: GoskiCard(
                   child: Container(
                     color: goskiWhite,
                     child: Column(

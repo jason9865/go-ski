@@ -42,6 +42,34 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
   Widget build(BuildContext context) {
     final reservationInfo = reservationViewModel.reservation.value;
 
+    List<AmountOfPayment> amountOfPaymentList = [];
+    if (widget.instructor != null && widget.teamInformation != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
+        AmountOfPayment(
+            name: tr('designatedCost'), price: widget.instructor!.designatedFee),
+      ];
+    } else if (widget.teamInformation != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(name: tr('cost'), price: widget.teamInformation!.cost),
+      ];
+    } else if (widget.teamInformation == null && widget.instructor != null) {
+      amountOfPaymentList = [
+        AmountOfPayment(
+            name: tr('cost'),
+            price: widget.instructor!.cost - widget.instructor!.designatedFee),
+        AmountOfPayment(name: tr('designatedCost'), price: widget.instructor!.designatedFee)
+      ];
+    }
+    int sum() {
+      int sum = 0;
+      for (int i = 0; i < amountOfPaymentList.length; i++) {
+        sum += amountOfPaymentList[i].price;
+      }
+
+      return sum;
+    }
+
     return GoskiContainer(
       buttonName: "toMain",
       onConfirm: () {
@@ -155,21 +183,10 @@ class _ReservationCompleteScreenState extends State<ReservationCompleteScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if (widget.teamInformation != null)
                           GoskiText(
                             text: tr('price', args: [
                               NumberFormat('###,###,###')
-                                  .format(widget.teamInformation!.cost)
-                            ]),
-                            size: goskiFontLarge,
-                            isBold: true,
-                          ),
-                        if (widget.teamInformation == null &&
-                            widget.instructor != null)
-                          GoskiText(
-                            text: tr('price', args: [
-                              NumberFormat('###,###,###')
-                                  .format(widget.instructor!.cost)
+                                  .format(sum())
                             ]),
                             size: goskiFontLarge,
                             isBold: true,

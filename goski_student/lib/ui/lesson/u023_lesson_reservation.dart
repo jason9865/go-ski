@@ -248,7 +248,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                             GoskiText(
                               text: tr('price', args: [
                                 NumberFormat('###,###,###')
-                                    .format(widget.teamInformation!.cost)
+                                    .format(sum())
                               ]),
                               size: goskiFontMedium,
                               isBold: true,
