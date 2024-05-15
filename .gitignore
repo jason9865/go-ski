@@ -200,3 +200,5 @@ gradle-app.setting
 **/.DS_Store
 **/._.DS_Store
 .env
+.keystore
+google-services.json
