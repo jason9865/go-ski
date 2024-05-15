@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,10 +7,14 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/datetime_util.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/data/model/notification.dart';
+import 'package:goski_instructor/main.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
-import 'package:goski_instructor/ui/component/goski_smallsize_button.dart';
+import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
+import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
+import 'package:goski_instructor/view_model/notification_view_model.dart';
 
 import '../component/goski_modal.dart';
 import 'd_i042_delete_notification.dart';
@@ -21,97 +27,115 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  List<_DummyNotification> list = [
-    _DummyNotification(
-      type: Notification.INVITE,
-      dateTime: DateTime.now(),
-      teamName: '고승민 스키교실',
-    ),
-    _DummyNotification(
-      type: Notification.LESSON_ADD,
-      dateTime: DateTime.now(),
-      title: '4월 25일 (목) 15:00 ~ 17:00\n강습이 예약되었습니다',
-      content:
-          '스키 1:2\n송준석 외 1명\n수강 종목 : 스키\n수강생 정보\n송준석, 170~179cm, 70~79kg\n최지찬, 170~179cm, 60~69kg',
-    ),
-    _DummyNotification(
-      type: Notification.LESSON_CANCEL,
-      dateTime: DateTime.now(),
-      title: '4월 25일 (목) 15:00 ~ 17:00\n강습이 취소되었습니다',
-      content:
-          '스키 1:2\n송준석 외 1명\n수강 종목 : 스키\n수강생 정보\n송준석, 170~179cm, 70~79kg\n최지찬, 170~179cm, 60~69kg',
-    ),
-    _DummyNotification(
-      type: Notification.MESSAGE,
-      dateTime: DateTime.now(),
-      title: 'OOO님에세 쪽지가 왔습니다',
-      content: '안녕하세요!\n쪽지 내용입니다',
-      imageUrl:
-          'https://i.namu.wiki/i/YdF0mzBNYXPmpP7XhQ-gEo5I80Xtpwq6zu_L0phHbAjioCCyzj9OgmwER-5Fxjo73P7C9AyAtK6L2u4XQxc9fw.webp',
-    ),
-  ];
+  final NotificationViewModel notificationViewModel =
+      Get.find<NotificationViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    notificationViewModel.getNotificationList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                _DummyNotification item = list[index];
-
-                switch (item.type) {
-                  case Notification.INVITE:
-                    return InviteNotificationCard(
-                      dateTime: DateTime.now(),
-                      teamName: item.teamName,
-                    );
-                  case Notification.MESSAGE:
-                    return MessageNotificationCard(
-                      dateTime: DateTime.now(),
-                      title: item.title,
-                      content: item.content,
-                      imageUrl: item.imageUrl,
-                      isExpanded: item.isExpanded,
-                      onExpandBtnClicked: () {
-                        setState(() {
-                          item.isExpanded = !item.isExpanded;
-                        });
-                      },
-                      onItemDeleteClicked: () {
-                        setState(() {
-                          list.removeAt(index);
-                        });
-                      },
-                    );
-                  default:
-                    return LessonNotificationCard(
-                      dateTime: DateTime.now(),
-                      title: item.title,
-                      content: item.content,
-                      isExpanded: item.isExpanded,
-                      onExpandBtnClicked: () {
-                        setState(() {
-                          item.isExpanded = !item.isExpanded;
-                        });
-                      },
-                      onItemDeleteClicked: () {
-                        setState(() {
-                          list.removeAt(index);
-                        });
-                      },
-                    );
-                }
-              },
+    return Scaffold(
+      appBar: GoskiSubHeader(title: tr('notification')),
+      body: Obx(() {
+        if (notificationViewModel.isLoading.value) {
+          return Container(
+            color: goskiBackground,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (notificationViewModel.notificationList.isEmpty) {
+          return Container(
+            color: goskiBackground,
+            child: Center(
+              child: GoskiText(
+                text: tr('noNotificationIndicator'),
+                size: goskiFontXLarge,
+              ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+        return GoskiContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: notificationViewModel.notificationList.length,
+                    itemBuilder: (context, index) {
+                      Noti item = notificationViewModel.notificationList[index];
+
+                      switch (item.notificationType) {
+                        case 2:
+                          return ReservationNotificationCard(
+                              dateTime: item.createdAt,
+                              title: item.title,
+                              content: item.content,
+                              onItemDeleteClicked: () {
+                                notificationViewModel
+                                    .deleteNotification(item.notificationId);
+                                setState(() {
+                                  notificationViewModel.notificationList
+                                      .removeAt(index);
+                                });
+                              });
+                        case 9:
+                          return MessageNotificationCard(
+                            dateTime: item.createdAt,
+                            title: item.senderName!,
+                            subtitle: item.title,
+                            content: item.content,
+                            imageUrl: item.imageUrl,
+                            isExpanded: item.isExpanded,
+                            onExpandBtnClicked: () {
+                              setState(() {
+                                item.isExpanded = !item.isExpanded;
+                              });
+                            },
+                            onItemDeleteClicked: () {
+                              notificationViewModel
+                                  .deleteNotification(item.notificationId);
+                              setState(() {
+                                notificationViewModel.notificationList
+                                    .removeAt(index);
+                              });
+                            },
+                          );
+                        default:
+                          return LessonNotificationCard(
+                            dateTime: item.createdAt,
+                            title: item.title,
+                            content: item.content,
+                            isExpanded: item.isExpanded,
+                            onExpandBtnClicked: () {
+                              setState(() {
+                                item.isExpanded = !item.isExpanded;
+                              });
+                            },
+                            onItemDeleteClicked: () {
+                              notificationViewModel
+                                  .deleteNotification(item.notificationId);
+                              setState(() {
+                                notificationViewModel.notificationList
+                                    .removeAt(index);
+                              });
+                            },
+                          );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -129,7 +153,6 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.03);
 
     return GoskiCard(
@@ -170,57 +193,68 @@ class NotificationCard extends StatelessWidget {
   }
 }
 
-/// 팀 초대 알림
-class InviteNotificationCard extends StatelessWidget {
+/// 강습예약
+class ReservationNotificationCard extends StatelessWidget {
   final DateTime dateTime;
-  final String teamName;
+  final String title, content;
+  final VoidCallback onItemDeleteClicked;
 
-  const InviteNotificationCard({
+  const ReservationNotificationCard({
     super.key,
     required this.dateTime,
-    required this.teamName,
+    required this.title,
+    required this.content,
+    required this.onItemDeleteClicked,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
 
-    return NotificationCard(
-      dateTime: dateTime,
-      child: Column(
-        children: [
-          SizedBox(height: titlePadding),
-          Row(
-            children: [
-              GoskiText(
-                text: tr('inviteNotification', args: [teamName]),
-                size: goskiFontMedium,
-                isBold: true,
-              ),
-            ],
+    return GestureDetector(
+      onTap: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => GoskiModal(
+          title: tr('lessonInfo'),
+          child: LessonDetailDialog(
+            lessonId: jsonDecode(content)['lessonId'],
           ),
-          SizedBox(height: titlePadding),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GoskiSmallsizeButton(
-                width: screenSizeController.getWidthByRatio(1),
-                height: screenSizeController.getHeightByRatio(0.04),
-                text: tr('reject'),
-                backgroundColor: goskiDarkPink,
-                onTap: () {},
+        ),
+      ),
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return GoskiModal(
+              title: tr('deleteNotification'),
+              child: DeleteNotificationDialog(
+                onCancel: () => Navigator.pop(context),
+                onConfirm: () {
+                  onItemDeleteClicked();
+                  Navigator.pop(context);
+                },
               ),
-              GoskiSmallsizeButton(
-                width: screenSizeController.getWidthByRatio(1),
-                height: screenSizeController.getHeightByRatio(0.04),
-                text: tr('accept'),
-                backgroundColor: goskiGreen,
-                onTap: () {},
-              ),
-            ],
-          )
-        ],
+            );
+          },
+        );
+      },
+      child: NotificationCard(
+        dateTime: dateTime,
+        child: Column(
+          children: [
+            SizedBox(height: titlePadding),
+            Row(
+              children: [
+                GoskiText(
+                  text: title,
+                  size: goskiFontMedium,
+                  isBold: true,
+                ),
+              ],
+            ),
+            SizedBox(height: titlePadding),
+          ],
+        ),
       ),
     );
   }
@@ -231,7 +265,6 @@ class NotificationExpansionCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
   final VoidCallback onExpandBtnClicked;
-  final String title, content;
   final Widget? child;
 
   const NotificationExpansionCard({
@@ -239,14 +272,11 @@ class NotificationExpansionCard extends StatelessWidget {
     required this.dateTime,
     required this.isExpanded,
     required this.onExpandBtnClicked,
-    required this.title,
-    required this.content,
     required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final horizontalPadding = screenSizeController.getWidthByRatio(0.03);
     const animationDuration = 200;
 
@@ -299,7 +329,7 @@ class NotificationExpansionCard extends StatelessWidget {
   }
 }
 
-/// 강습 추가, 삭제, 변경, 30분 전 알림
+/// 강습 예약 완료 알림
 class LessonNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
@@ -318,7 +348,6 @@ class LessonNotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
 
@@ -344,8 +373,6 @@ class LessonNotificationCard extends StatelessWidget {
         dateTime: dateTime,
         isExpanded: isExpanded,
         onExpandBtnClicked: onExpandBtnClicked,
-        title: title,
-        content: content,
         child: Column(
           children: [
             SizedBox(height: titlePadding),
@@ -371,7 +398,7 @@ class LessonNotificationCard extends StatelessWidget {
                     Row(
                       children: [
                         GoskiText(
-                          text: content,
+                          text: parsingReservationNoti(content),
                           size: goskiFontMedium,
                         ),
                       ],
@@ -386,6 +413,28 @@ class LessonNotificationCard extends StatelessWidget {
       ),
     );
   }
+
+  String parsingReservationNoti(dynamic content) {
+    Map<String, dynamic> data = jsonDecode(content);
+
+    String inputLessonDate = data["lessonDate"];
+    DateFormat inputFormat = DateFormat('yyyy-MM-dd');
+    DateTime dateTime = inputFormat.parse(inputLessonDate);
+    DateFormat outputFormat =
+        DateFormat(tr('lessonNotificationOutputFormat'), 'ko_KR');
+
+    String lessonDate = outputFormat.format(dateTime);
+    String lessonTime = tr('lessonNotificationLessonTime', args: [
+      data["lessonTime"].substring(0, 2),
+      data["lessonTime"].substring(3, 5)
+    ]);
+    String resortName = data["resortName"];
+    String studentCount = data["studentCount"];
+    String lessonType = data["lessonType"];
+
+    return tr('lessonNotificationContent',
+        args: [lessonDate, lessonTime, resortName, studentCount, lessonType]);
+  }
 }
 
 /// 쪽지 알림
@@ -393,7 +442,7 @@ class MessageNotificationCard extends StatelessWidget {
   final DateTime dateTime;
   final bool isExpanded;
   final VoidCallback onExpandBtnClicked, onItemDeleteClicked;
-  final String title, content;
+  final String title, subtitle, content;
   final String? imageUrl;
 
   const MessageNotificationCard({
@@ -403,13 +452,13 @@ class MessageNotificationCard extends StatelessWidget {
     required this.onExpandBtnClicked,
     required this.onItemDeleteClicked,
     required this.title,
+    required this.subtitle,
     required this.content,
     this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenSizeController = Get.find<ScreenSizeController>();
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     const animationDuration = 200;
     final imageSize = screenSizeController.getHeightByRatio(0.2);
@@ -436,15 +485,14 @@ class MessageNotificationCard extends StatelessWidget {
         dateTime: dateTime,
         isExpanded: isExpanded,
         onExpandBtnClicked: onExpandBtnClicked,
-        title: title,
-        content: content,
         child: Column(
           children: [
             SizedBox(height: titlePadding),
             Row(
               children: [
                 GoskiText(
-                  text: title,
+                  text:
+                      tr('messageNotificationContent', args: [title, subtitle]),
                   size: goskiFontMedium,
                   isBold: true,
                 ),
@@ -469,24 +517,12 @@ class MessageNotificationCard extends StatelessWidget {
                             builder: (context) {
                               return GoskiModal(
                                 title: tr('feedbackImage'),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                        width: double.infinity, imageUrl!),
-                                    SizedBox(
-                                      height: screenSizeController
-                                          .getHeightByRatio(0.025),
-                                    ),
-                                    GoskiSmallsizeButton(
-                                      width: screenSizeController
-                                          .getWidthByRatio(3),
-                                      text: tr('confirm'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                child: Container(),
+                                // TODO: 쪽지 이미지
+                                // GoskiImageDialog(
+                                //   isLocalImage: false,
+                                //   imageUrl: imageUrl!,
+                                // ),
                               );
                             },
                           );
@@ -518,31 +554,4 @@ class MessageNotificationCard extends StatelessWidget {
       ),
     );
   }
-}
-
-enum Notification {
-  INVITE,
-  LESSON_ADD,
-  LESSON_CANCEL,
-  LESSON_CHANGE,
-  LESSON_PRE_ALARM,
-  SETTLEMENT,
-  MESSAGE,
-}
-
-class _DummyNotification {
-  final Notification type;
-  final DateTime dateTime;
-  final String teamName, title, content;
-  final String? imageUrl;
-  bool isExpanded = false;
-
-  _DummyNotification({
-    required this.type,
-    required this.dateTime,
-    this.teamName = '',
-    this.title = '',
-    this.content = '',
-    this.imageUrl,
-  });
 }

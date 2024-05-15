@@ -38,7 +38,7 @@ class StudentInfoResponse {
       age: json['age'],
       height: json['height'],
       weight: json['weight'],
-      footSize: json['footSize'],
+      footSize: json['footSize'] as int,
     );
   }
 }
