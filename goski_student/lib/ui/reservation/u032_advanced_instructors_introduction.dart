@@ -64,7 +64,6 @@ class _InstructorsIntroductionScreen
           child: Column(
             children: [
               SizedBox(
-                height: screenSizeController.getHeightByRatio(0.9),
                 child: GoskiCard(
                   child: Container(
                     color: goskiWhite,
