@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,6 +15,8 @@ import 'package:goski_instructor/data/repository/auth_repository.dart';
 import 'package:goski_instructor/data/repository/schedule_repository.dart';
 import 'package:goski_instructor/data/repository/team_repository.dart';
 import 'package:goski_instructor/data/repository/user_repository.dart';
+import 'package:goski_instructor/fcm/fcm_config.dart';
+import 'package:goski_instructor/firebase_options.dart';
 import 'package:goski_instructor/test.dart';
 
 // import 'package:goski_instructor/ui/I004.dart';
@@ -58,6 +61,8 @@ void main() async {
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   initDependencies();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setFCM();
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',
