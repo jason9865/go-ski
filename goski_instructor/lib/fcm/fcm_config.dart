@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:goski_instructor/data/data_source/user_service.dart';
 import 'package:goski_instructor/firebase_options.dart';
 import 'package:goski_instructor/main.dart';
+import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
+import 'package:goski_instructor/view_model/notification_view_model.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -20,6 +22,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 final UserService userService = Get.find();
+final NotificationViewModel notificationViewModel = Get.find();
+final InstructorMainViewModel instructorMainViewModel = Get.find();
 
 Future<void> setFCM() async {
   // Handling background messages
@@ -59,23 +63,20 @@ Future<void> setFCM() async {
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    // if (Get.currentRoute == "/NotificationScreen") {
-    //   notificationViewModel.getNotificationList();
-    // } else {
-    //   notificationViewModel.hasUnread.value = true;
-    // }
+    if (Get.currentRoute == "/NotificationScreen") {
+      notificationViewModel.getNotificationList();
+    } else {
+      notificationViewModel.hasUnread.value = true;
+    }
 
-    // late String title;
-    // if (message.data['notificationType'] == "7") {
-    //   title = tr('reservationComplete');
-    // } else if (message.data['notificationType'] == "8") {
-    //   title = tr('feedbackReceived');
-    // } else {
-    //   title = tr('dmReceived');
-    // }
-    // await flutterLocalNotificationsPlugin.show(
-    //     0, title, '${message.data["title"]}', notificationDetails,
-    //     payload: 'item x');
+    late String title;
+    if (message.data['notificationType'] == "2") {
+      title = tr('lessonAdded');
+      instructorMainViewModel.getScheduleList();
+    }
+    await flutterLocalNotificationsPlugin.show(
+        0, title, '${message.data["title"]}', notificationDetails,
+        payload: 'item x');
   });
 
   // Send FCMToken to server

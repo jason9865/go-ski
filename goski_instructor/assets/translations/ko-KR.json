@@ -203,5 +203,6 @@
   "ALL" : "모두",
   "lessonInfo" : "강습 정보",
   "termsOfUse": "이용약관",
-  "ask": "문의"
+  "ask": "문의",
+  "lessonAdded" : "강습이 예약되었습니다."
 }

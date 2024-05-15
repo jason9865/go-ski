@@ -8,10 +8,12 @@ import 'package:goski_instructor/const/text_theme.dart';
 import 'package:goski_instructor/const/util/custom_dio.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
 import 'package:goski_instructor/data/data_source/auth_service.dart';
+import 'package:goski_instructor/data/data_source/notification_service.dart';
 import 'package:goski_instructor/data/data_source/schedule_service.dart';
 import 'package:goski_instructor/data/data_source/team_service.dart';
 import 'package:goski_instructor/data/data_source/user_service.dart';
 import 'package:goski_instructor/data/repository/auth_repository.dart';
+import 'package:goski_instructor/data/repository/notification_repository.dart';
 import 'package:goski_instructor/data/repository/schedule_repository.dart';
 import 'package:goski_instructor/data/repository/team_repository.dart';
 import 'package:goski_instructor/data/repository/user_repository.dart';
@@ -19,36 +21,38 @@ import 'package:goski_instructor/fcm/fcm_config.dart';
 import 'package:goski_instructor/firebase_options.dart';
 import 'package:goski_instructor/test.dart';
 
-// import 'package:goski_instructor/ui/I004.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
-import 'package:goski_instructor/ui/common/i002_signup.dart';
-import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
 import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
 import 'package:goski_instructor/view_model/login_view_model.dart';
+import 'package:goski_instructor/view_model/notification_view_model.dart';
 import 'package:goski_instructor/view_model/signup_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-// import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+final screenSizeController = Get.put(ScreenSizeController());
+FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
 void initDependencies() {
   Get.put(AuthService(), permanent: true);
   Get.put(UserService(), permanent: true);
   Get.put(TeamService(), permanent: true);
   Get.put(ScheduleService(), permanent: true);
+  Get.put(NotificationService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(UserRespository(), permanent: true);
   Get.put(TeamRepository(), permanent: true);
   Get.put(ScheduleRepository(), permanent: true);
+  Get.put(NotificationRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
   Get.put(InstructorMainViewModel(), permanent: true);
+  Get.put(NotificationViewModel(), permanent: true);
 }
 
 void main() async {

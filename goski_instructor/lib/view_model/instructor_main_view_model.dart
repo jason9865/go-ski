@@ -5,9 +5,8 @@ import 'package:goski_instructor/data/model/team.dart';
 import 'package:goski_instructor/data/repository/schedule_repository.dart';
 import 'package:goski_instructor/data/repository/team_repository.dart';
 import 'package:goski_instructor/data/repository/user_repository.dart';
+import 'package:goski_instructor/main.dart';
 import 'package:logger/logger.dart';
-
-var logger = Logger();
 
 class InstructorMainViewModel extends GetxController {
   final UserRespository userRespository = Get.find();
