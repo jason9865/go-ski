@@ -16,6 +16,7 @@ class Instructor {
   String description;
   int dayoff;
   String available;
+
   Instructor({
     this.userName = '',
     this.birthDate = '',
@@ -36,9 +37,10 @@ class InstructorResponse {
   String profileUrl;
   String gender;
   String role;
-  String description;
+  String? description;
   int dayoff;
   String available;
+
   InstructorResponse({
     required this.userName,
     required this.birthDate,
@@ -101,7 +103,7 @@ extension InstructorResponseToInstructor on InstructorResponse {
       profileUrl: profileUrl,
       gender: gender,
       role: role,
-      description: description,
+      description: description ?? '',
       dayoff: dayoff,
       available: available,
     );
