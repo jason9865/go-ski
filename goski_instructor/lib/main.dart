@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,14 +13,23 @@ import 'package:goski_instructor/data/data_source/auth_service.dart';
 import 'package:goski_instructor/data/data_source/coupon_service.dart';
 import 'package:goski_instructor/data/data_source/lesson_list_service.dart';
 import 'package:goski_instructor/data/data_source/review_service.dart';
+import 'package:goski_instructor/data/data_source/notification_service.dart';
+import 'package:goski_instructor/data/data_source/schedule_service.dart';
 import 'package:goski_instructor/data/data_source/team_service.dart';
 import 'package:goski_instructor/data/data_source/user_service.dart';
 import 'package:goski_instructor/data/repository/auth_repository.dart';
 import 'package:goski_instructor/data/repository/coupon_repository.dart';
 import 'package:goski_instructor/data/repository/lesson_list_repository.dart';
 import 'package:goski_instructor/data/repository/review_repository.dart';
+import 'package:goski_instructor/data/repository/notification_repository.dart';
+import 'package:goski_instructor/data/repository/schedule_repository.dart';
 import 'package:goski_instructor/data/repository/team_repository.dart';
 import 'package:goski_instructor/data/repository/user_repository.dart';
+import 'package:goski_instructor/fcm/fcm_config.dart';
+import 'package:goski_instructor/firebase_options.dart';
+import 'package:goski_instructor/test.dart';
+
+import 'package:get/get.dart';
 import 'package:goski_instructor/ui/common/i001_login.dart';
 import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
 import 'package:goski_instructor/ui/instructor/i010_coupon.dart';
@@ -30,8 +40,10 @@ import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
 import 'package:goski_instructor/view_model/lesson_list_view_model.dart';
 import 'package:goski_instructor/view_model/login_view_model.dart';
 import 'package:goski_instructor/view_model/review_view_model.dart';
+import 'package:goski_instructor/view_model/notification_view_model.dart';
 import 'package:goski_instructor/view_model/signup_view_model.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+
 // import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:logger/logger.dart';
 
@@ -43,14 +55,19 @@ void initDependencies() {
   Get.put(AuthService(), permanent: true);
   Get.put(UserService(), permanent: true);
   Get.put(TeamService(), permanent: true);
+  Get.put(ScheduleService(), permanent: true);
+  Get.put(NotificationService(), permanent: true);
 
   Get.put(AuthRepository(), permanent: true);
   Get.put(UserRespository(), permanent: true);
   Get.put(TeamRepository(), permanent: true);
+  Get.put(ScheduleRepository(), permanent: true);
+  Get.put(NotificationRepository(), permanent: true);
 
   Get.put(LoginViewModel(), permanent: true);
   Get.put(SignupViewModel(), permanent: true);
   Get.put(InstructorMainViewModel(), permanent: true);
+  Get.put(NotificationViewModel(), permanent: true);
 }
 
 void main() async {
@@ -63,6 +80,8 @@ void main() async {
   final kakaoApiKey = dotenv.env['KAKAO_API_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoApiKey);
   initDependencies();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setFCM();
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
       path: 'assets/translations',

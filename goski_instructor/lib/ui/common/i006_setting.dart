@@ -1,100 +1,136 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
+import 'package:goski_instructor/ui/common/i001_login.dart';
+import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:logger/logger.dart';
 
 final Logger logger = Logger();
 final screenSizeController = Get.find<ScreenSizeController>();
+FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: goskiBackground,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return Builder(builder: (context) {
+      return Scaffold(
+        appBar: GoskiSubHeader(title: tr('setting')),
+        body: Container(
+          decoration: const BoxDecoration(
+            color: goskiBackground,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SettingTitle(
+                          title: tr('notification'),
+                        ),
+                        SettingContent(
+                          content: tr('notificationSetting'),
+                          onConfirm: () => 0,
+                          // () => showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) => GoskiModal(
+                          //     title: tr('notificationSetting'),
+                          //     child: const NotificationSettingDialog(),
+                          //   ),
+                          // ),
+                        ),
+                        SettingTitle(
+                          title: tr('userInfo'),
+                        ),
+                        SettingContent(
+                          content: tr('logout'),
+                          onConfirm: () => {
+                            secureStorage.deleteAll(),
+                            Get.offAll(() => const LoginScreen())
+                          },
+                        ),
+                        SettingTitle(
+                          title: tr('etc'),
+                        ),
+                        SettingContent(
+                          content: tr('termsOfUse'),
+                          onConfirm: () => 0,
+                          // onConfirm: () => Get.to(() => const TermScreen()),
+                        ),
+                        buildDivider(),
+                        SettingContent(
+                          content: tr('guide'),
+                          onConfirm: () => 0,
+                          // onConfirm: () => Get.to(() => const GuideScreen()),
+                        ),
+                        buildDivider(),
+                        SettingContent(
+                          content: tr('ask'),
+                          onConfirm: () => 0,
+                          // onConfirm: () => Get.to(() => const AskScreen()),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: goskiWhite,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SettingTitle(
-                      title: tr('notification'),
-                    ),
-                    SettingContent(
-                      content: tr('notificationSetting'),
-                      onConfirm: () => logger.d("알림 설정"),
-                    ),
-                    SettingTitle(
-                      title: tr('userInfo'),
-                    ),
-                    SettingContent(
-                      content: tr('updateUserInfo'),
-                      onConfirm: () => logger.d("개인 정보 수정"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('logout'),
-                      onConfirm: () => logger.d("록아웃"),
-                    ),
-                    SettingTitle(
-                      title: tr('etc'),
-                    ),
-                    SettingContent(
-                      content: tr('term'),
-                      onConfirm: () => logger.d("약관"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('guide'),
-                      onConfirm: () => logger.d("도움말"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('askTeamRegistration'),
-                      onConfirm: () => logger.d("팀 등록 문의"),
-                    ),
-                    buildDivider(),
-                    SettingContent(
-                      content: tr('askAdvertisement'),
-                      onConfirm: () => logger.d("광고 문의"),
-                    ),
+                    GestureDetector(
+                      onTap: () => 0,
+                      // () {
+                      //   showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return GoskiModal(
+                      //         title: tr('deleteUser'),
+                      //         child: ResignConfirmDialog(
+                      //           onCancel: () {
+                      //             Navigator.pop(context);
+                      //           },
+                      //           onConfirm: () async {
+                      //             await userViewModel.requestResign();
+                      //             if (context.mounted) Navigator.pop(context);
+                      //             secureStorage.deleteAll();
+                      //             Get.offAll(() => const LoginScreen());
+                      //           },
+                      //         ),
+                      //       );
+                      //     },
+                      //   );
+                      // },
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            screenSizeController.getWidthByRatio(0.03)),
+                        child: GoskiText(
+                          text: tr('deleteUser'),
+                          size: goskiFontMedium,
+                          color: goskiDarkGray,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
             ],
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: goskiWhite,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(
-                      screenSizeController.getWidthByRatio(0.03)),
-                  child: GoskiText(
-                    text: tr('deleteUser'),
-                    size: goskiFontMedium,
-                    color: goskiDarkGray,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget buildDivider() {
@@ -108,6 +144,7 @@ class SettingScreen extends StatelessWidget {
 class SettingContent extends StatelessWidget {
   final String content;
   final VoidCallback? onConfirm;
+
   const SettingContent({
     required this.content,
     required this.onConfirm,
@@ -143,6 +180,7 @@ class SettingContent extends StatelessWidget {
 
 class SettingTitle extends StatelessWidget {
   final String title;
+
   const SettingTitle({
     required this.title,
     super.key,
