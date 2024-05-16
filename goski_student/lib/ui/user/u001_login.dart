@@ -27,14 +27,16 @@ class BackgroundContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/splash.jpg"),
-          fit: BoxFit.cover,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/splash.jpg"),
+            fit: BoxFit.cover,
+          ),
         ),
+        child: const LoginContent(),
       ),
-      child: const LoginContent(),
     );
   }
 }
@@ -138,6 +140,7 @@ class KakaoLoginButton extends StatelessWidget {
                     Text(
                       tr('kakaoLogin'),
                       style: TextStyle(
+                        fontFamily: "NotoSansKR",
                         fontSize: 20,
                         color: const Color(0xff000000).withOpacity(0.85),
                         fontWeight: FontWeight.w400,
