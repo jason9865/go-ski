@@ -42,9 +42,9 @@ class LessonListViewModel extends GetxController {
 
   Future<void> getLessonList() async {
     isLoadingLessonList.value = true;
-    List<LessonListItem> response = await lessonListRepository.getLessonList();
-
-    lessonList.value = response.where((settlement) => settlement.lessonStatus != 'cancelLesson').toList();
+    List<LessonListItem> response = (await lessonListRepository.getLessonList()).where((settlement) => settlement.lessonStatus != 'cancelLesson').toList();
+    response.sort((a, b) => a.startTime.compareTo(b.startTime));
+    lessonList.value = response;
     isLoadingLessonList.value = false;
   }
 
