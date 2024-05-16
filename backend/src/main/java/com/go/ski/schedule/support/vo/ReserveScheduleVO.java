@@ -42,8 +42,8 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         resortName = team.getSkiResort().getResortName();
         this.studentInfoDTOs = studentInfoDTOs;
         representativeName = lesson.getRepresentativeName();
-        isDesignated = lessonPaymentInfo.getDesignatedFee() != null;
         instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
+        isDesignated = instructorId != null;
     }
 
     public ReserveScheduleVO(CreateScheduleRequestDTO createScheduleRequestDTO) {
