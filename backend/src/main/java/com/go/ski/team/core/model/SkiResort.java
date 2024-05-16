@@ -1,5 +1,6 @@
 package com.go.ski.team.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SkiResort {
 
     @Id

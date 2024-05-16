@@ -195,6 +195,7 @@ public class LessonService {
                 List<StudentInfo> studentInfos = studentInfoRepository.findByLessonInfo(lessonInfo);
                 boolean isDesignated = lessonPaymentInfoRepository.findById(lesson.getLessonId())
                         .map(LessonPaymentInfo::getDesignatedFee).isPresent();
+                log.info("isDesignated: {}", isDesignated);
                 instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfos, isDesignated));
             } catch (NoSuchElementException ignored) {
             }
