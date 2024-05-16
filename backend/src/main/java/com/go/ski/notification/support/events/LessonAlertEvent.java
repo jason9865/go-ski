@@ -33,7 +33,7 @@ public class LessonAlertEvent extends NotificationEvent{
                 LocalDateTime.now(),
                 NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
-                " 강습 예약 30분 전입니다",
+                "강습 예약 30분 전입니다",
                 lessonInfo.getLessonDate().toString(),
                 TimeConvertor.calLessonTimeInfo(lessonInfo.getStartTime(), lessonInfo.getDuration())
         );

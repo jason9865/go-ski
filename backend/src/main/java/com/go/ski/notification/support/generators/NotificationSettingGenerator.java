@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationSettingGenerator {
 
-    private final static List<Integer> OWNER_NOTIFICATION_TYPES = Arrays.asList(1,2,3,4);
-    private final static List<Integer> INSTRUCTOR_NOTIFICATION_TYPES = Arrays.asList(2,3,4,5,6);
+    private final static List<Integer> OWNER_NOTIFICATION_TYPES = Arrays.asList(1,2,3,4,9);
+    private final static List<Integer> INSTRUCTOR_NOTIFICATION_TYPES = Arrays.asList(2,3,4,5,6,9);
     private final static List<Integer> STUDENT_NOTIFICATION_TYPES = Arrays.asList(7,8,9);
 
     private final NotificationTypeRepository notificationTypeRepository;
