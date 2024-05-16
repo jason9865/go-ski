@@ -29,4 +29,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findByLessonTeam(Team team);
     List<Review> findByLessonInstructor(Instructor instructor);
 
+    boolean existsByLesson(Lesson lesson);
+
 }
