@@ -48,7 +48,6 @@ public class SecurityConfig {
             "/api/v1/user/update/inst", "/api/v1/user/profile/inst",
             "/api/v1/lesson/list/instructor",
             "/api/v1/schedule/mine", "/api/v1/schedule/**",
-            "/api/v1/lesson/review/list","/api/v1/lesson/review/list/*",
             "/api/v1/notification/invite","/api/v1/notification/accept-invite",
             "/api/v1/team/member/*","/api/v1/team/list/inst",
     };
