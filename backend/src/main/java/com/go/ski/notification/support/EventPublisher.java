@@ -2,12 +2,14 @@ package com.go.ski.notification.support;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.feedback.support.dto.FeedbackCreateRequestDTO;
+import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.notification.support.events.*;
 import com.go.ski.notification.support.dto.FcmSendRequestDTO;
 import com.go.ski.notification.support.dto.InviteAcceptRequestDTO;
 import com.go.ski.notification.support.dto.InviteRequestDTO;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.redis.dto.PaymentCacheDto;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.repository.SkiResortRepository;
@@ -34,6 +36,7 @@ public class EventPublisher {
     private final TeamInstructorRepository teamInstructorRepository;
     private final TeamRepository teamRepository;
     private final SkiResortRepository skiResortRepository;
+    private final LessonRepository lessonRepository;
 
     public void publish(FcmSendRequestDTO fcmSendRequestDTO, User user, String imageUrl, String deviceType) {
         log.info("DM 보내기");
@@ -123,6 +126,18 @@ public class EventPublisher {
     public void publish(LessonInfo lessonInfo, Lesson lesson) {
         applicationEventPublisher.publishEvent(
                 LessonAlertEvent.of(lessonInfo, lesson.getInstructor().getInstructorId(), "MOBILE"));
+    }
+
+    // 미지정 -> 지정 강습으로 변하는 경우 알림
+    public void publishDesignatedEvent(Integer lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.NO_PARAM));
+
+        applicationEventPublisher.publishEvent(
+                LessonCreateInstructorEvent.of(
+                        lesson, lesson.getInstructor().getInstructorId(),"Mobile")// 추후변경 예정
+        );
+
     }
 
 }
