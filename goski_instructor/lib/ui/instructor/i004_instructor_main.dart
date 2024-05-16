@@ -417,24 +417,27 @@ class UserMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          iconImage,
-          width: 45,
-          height: 45,
-          colorFilter: const ColorFilter.mode(
-            goskiBlack,
-            BlendMode.srcIn,
+    return GestureDetector(
+      onTap: onClick,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            iconImage,
+            width: 45,
+            height: 45,
+            colorFilter: const ColorFilter.mode(
+              goskiBlack,
+              BlendMode.srcIn,
+            ),
           ),
-        ),
-        GoskiText(
-          text: tr(
-            iconName,
-          ),
-          size: goskiFontLarge,
-        )
-      ],
+          GoskiText(
+            text: tr(
+              iconName,
+            ),
+            size: goskiFontLarge,
+          )
+        ],
+      ),
     );
   }
 }
