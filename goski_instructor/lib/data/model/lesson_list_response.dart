@@ -43,7 +43,8 @@ class LessonListResponse {
     String combinedDateTimeString = "$formattedDate $formattedTimeString";
     DateTime dateTime =
         DateFormat("yyyy-MM-dd HH:mm").parse(combinedDateTimeString);
-    List<dynamic> studentInfo = json['studentInfo'] as List<dynamic>;
+    List<dynamic> studentInfo =
+        json['studentInfoResponseDTOs'] as List<dynamic>;
     List<StudentInfoResponse> studentInfos =
         studentInfo.map((json) => StudentInfoResponse.fromJson(json)).toList();
 

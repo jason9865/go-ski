@@ -1,9 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:goski_instructor/data/model/student_info.dart';
-import 'package:goski_instructor/main.dart';
 
 class Schedule {
   int resortId;
@@ -21,6 +18,7 @@ class Schedule {
   String? requestComplain;
   bool isDesignated;
   int instructorId;
+
   Schedule({
     this.resortId = 0,
     this.resortName = '',
@@ -98,6 +96,7 @@ class ScheduleResponse {
   String? requestComplain;
   bool isDesignated;
   int instructorId;
+
   ScheduleResponse({
     required this.resortId,
     required this.studentCount,
@@ -142,9 +141,9 @@ class ScheduleResponse {
 
 extension ScheduleResponseToSchedule on ScheduleResponse {
   Schedule toSchedule() {
-    if (lessonType == '1010000') {
+    if (lessonType.substring(1, 3) == '01') {
       lessonType = "ski";
-    } else if (lessonType == '1100000') {
+    } else if (lessonType.substring(1, 3) == '10') {
       lessonType = "board";
     }
     return Schedule(
