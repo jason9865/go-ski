@@ -32,9 +32,11 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> writeReview(@RequestBody ReviewCreateRequestDTO requestDTO) {
+    public ResponseEntity<ApiResponse<?>> writeReview(HttpServletRequest request,
+                                                      @RequestBody ReviewCreateRequestDTO requestDTO) {
         log.info("====ReviewController.writeReview====");
-        reviewService.createReview(requestDTO);
+        User user = (User) request.getAttribute("user");
+        reviewService.createReview(user, requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
 
