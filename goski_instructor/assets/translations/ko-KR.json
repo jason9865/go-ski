@@ -186,7 +186,7 @@
   "WEIGHT_70KG_TO_79KG": "70kg~79kg",
   "WEIGHT_80KG_TO_89KG": "80kg~89kg",
   "WEIGHT_90KG_TO_99KG": "90kg~99kg",
-  "WEIGHT_OVER_100KG": "100kg 초과",
+  "WEIGHT_ABOVE_100KG": "100kg 초과",
   "HEIGHT_UNDER_140CM": "140cm 미만",
   "HEIGHT_140CM_TO_149CM": "140cm~149cm",
   "HEIGHT_150CM_TO_159CM": "150cm~159cm",
@@ -209,5 +209,6 @@
   "lessonInfo" : "강습 정보",
   "termsOfUse": "이용약관",
   "ask": "문의",
-  "lessonAdded" : "강습이 예약되었습니다."
+  "lessonAdded" : "강습이 예약되었습니다.",
+  "footSize": "{}mm"
 }

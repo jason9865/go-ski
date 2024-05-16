@@ -11,6 +11,7 @@ import 'package:goski_instructor/const/util/custom_dio.dart';
 import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
 import 'package:goski_instructor/data/model/owner.dart';
+import 'package:goski_instructor/fcm/fcm_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
@@ -72,7 +73,7 @@ class AuthService extends GetxService {
               key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
           await secureStorage.write(
               key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
-
+          setFCM();
           logger.d('New Tokens from server stored successfully');
           return AuthStatus.already;
         } else {
@@ -159,6 +160,18 @@ class AuthService extends GetxService {
       logger.d(response.data);
 
       if (response.data['status'] == 'success') {
+        String? serverAccessToken = response.headers['accesstoken'];
+        String? serverRefreshToken = response.headers['refreshtoken'];
+        if (serverAccessToken != null && serverRefreshToken != null) {
+          await secureStorage.write(
+              key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
+          await secureStorage.write(
+              key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
+          setFCM();
+          logger.w('Succeed in write tokens after signup');
+        } else {
+          logger.e('Failed to write tokens after signup');
+        }
         logger.d("Succeed in SignUp!");
         return true;
       } else {
@@ -173,6 +186,7 @@ class AuthService extends GetxService {
     return false;
   }
 
+  // TODO: 사장 로그인 로직 수정 필요
   Future<bool> ownerSignUp(OwnerRequest owner) async {
     var uri = Uri.parse('$baseUrl/user/signup/user');
     var request = http.MultipartRequest('POST', uri);
