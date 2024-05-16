@@ -37,15 +37,18 @@ class InstructorMainViewModel extends GetxController {
     if (response != null) {
       scheduleList.clear();
       scheduleList.assignAll(response);
-      for (Schedule schedule in scheduleList) {
-        logger.w(schedule.toString());
-      }
+      sortScheduleListByLessonDate();
       updateScheduleList();
     }
   }
 
   void getLesson(int lessonId) {
     lesson = scheduleList.firstWhere((item) => item.lessonId == lessonId);
+  }
+
+  void sortScheduleListByLessonDate() {
+    scheduleList.sort((a, b) =>
+        DateTime.parse(a.lessonDate).compareTo(DateTime.parse(b.lessonDate)));
   }
 
   void updateScheduleList() {
@@ -57,7 +60,7 @@ class InstructorMainViewModel extends GetxController {
       DateTime lessonDate = DateTime.parse(schedule.lessonDate);
       return lessonDate.isBefore(DateTime(now.year, now.month, now.day));
     });
-
+    if (scheduleList.isEmpty) return;
     DateTime firstLessonDate = DateTime.parse(scheduleList.first.lessonDate);
     DateTime lastLessonDate = DateTime.parse(scheduleList.last.lessonDate);
     int length = lastLessonDate.difference(firstLessonDate).inDays + 1;
