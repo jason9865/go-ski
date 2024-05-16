@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-    // secureStorage.delete(key: "isLoggedIn");
+    secureStorage.delete(key: "isLoggedIn");
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
