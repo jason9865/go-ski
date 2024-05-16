@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @ToString
-@Slf4j
 public class ReserveScheduleVO extends ReserveInfoVO {
     private Integer lessonId;
     private Integer teamId;
@@ -36,7 +35,6 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         super(lessonInfo);
         Lesson lesson = lessonInfo.getLesson();
         Team team = lesson.getTeam();
-        log.info("SkiResort: {}", team.getSkiResort());
 
         lessonId = lesson.getLessonId();
         teamId = team.getTeamId();

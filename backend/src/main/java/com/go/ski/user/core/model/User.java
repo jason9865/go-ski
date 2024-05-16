@@ -1,5 +1,6 @@
 package com.go.ski.user.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.go.ski.notification.core.domain.NotificationSetting;
 import com.go.ski.user.support.vo.Gender;
 import com.go.ski.user.support.vo.Role;
@@ -21,6 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
