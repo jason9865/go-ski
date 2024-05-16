@@ -234,7 +234,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
         color: goskiWhite,
       ),
       height: screenSizeController.getHeightByRatio(0.925),
-      width: screenSizeController.getWidthByRatio(0.13),
+      width: screenSizeController.getWidthByRatio(0.15) - 8,
       child: Column(
         children: [
           SizedBox(
@@ -365,11 +365,13 @@ class BuildScheduleContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: scheduleColumnItem.representativeName.isEmpty
               ? goskiWhite
-              : goskiLightGray,
-          border: Border.all(
-            color: goskiDarkGray,
-            width: 0.02,
-          ),
+              : goskiBackground,
+          border: scheduleColumnItem.representativeName.isEmpty
+              ? const Border.symmetric(
+                  horizontal: BorderSide(color: goskiDarkGray, width: 0.02),
+                  vertical: BorderSide(color: goskiDarkGray, width: 0.02),
+                )
+              : Border.all(color: goskiDarkGray, width: 0.1),
         ),
         height: screenSizeController
             .getHeightByRatio(0.05 * scheduleColumnItem.duration),
@@ -389,10 +391,11 @@ class BuildScheduleContainer extends StatelessWidget {
             ),
             if (scheduleColumnItem.isDesignated)
               const Positioned(
-                top: -8,
+                top: 0,
+                right: 0,
                 child: Icon(
-                  Icons.push_pin_rounded,
-                  color: goskiRed,
+                  Icons.check,
+                  color: goskiDarkPink,
                   size: 20,
                 ),
               ),
