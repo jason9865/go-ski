@@ -25,6 +25,16 @@ class FeedbackViewModel extends GetxController {
   }
 
   Future<void> getFeedback(int lessonId) async {
+    videoThumbnailList.clear();
+    feedback.update((val) {
+      val = Feedback(
+        feedbackId: 0,
+        content: '',
+        images: <MediaData>[],
+        videos: <MediaData>[],
+      );
+    });
+
     Feedback? response = await feedbackRepository.getFeedback(lessonId);
 
     if (response != null) {

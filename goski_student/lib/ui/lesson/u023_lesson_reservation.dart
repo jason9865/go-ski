@@ -300,8 +300,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                           SizedBox(height: titlePadding),
                           GoskiText(
                             text: tr('reservationPeopleCount', args: [
-                              studentInfoViewModel.studentInfoList.length
-                                  .toString()
+                              studentInfoViewModel.studentInfoList.length.toString(), reservationInfo.studentCount.toString()
                             ]),
                             size: goskiFontMedium,
                             isBold: true,
@@ -435,6 +434,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         onTextChange: (text) {
                           requestComplain = text;
                         },
+                        isNewLine: true,
                       ),
                     ],
                   ),
