@@ -84,10 +84,12 @@ class ReviewScreen extends StatelessWidget {
                             ),
                             GoskiTextField(
                               hintText: tr('reviewHint'),
-                              maxLines: 2,
+                              minLines: 2,
+                              maxLines: 5,
                               onTextChange: (text) {
                                 reviewViewModel.content.value = text;
                               },
+                              isNewLine: true,
                             ),
                             const BuildInterval(),
                             GoskiText(

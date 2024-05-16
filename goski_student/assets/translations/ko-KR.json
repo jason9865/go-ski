@@ -227,7 +227,7 @@
   "confirmAmountOfPayment": "결제금액을 확인해주세요",
   "paymentType": "결제 수단",
   "refundPolicy": "환불 규정 안내",
-  "reservationPeopleCount": "예약인원 {}명",
+  "reservationPeopleCount": "입력인원 {}명 (총 {}명 필요)",
   "discount": "{}원 할인됨",
   "couponSelectCount": "{}장 보유",
   "amountOfPayment": "결제예정금액",
