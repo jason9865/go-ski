@@ -75,6 +75,12 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
   }
 
   @override
+  void initState() {
+    studentInfoViewModel.clearData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final titlePadding = screenSizeController.getHeightByRatio(0.010);
     final contentPadding = screenSizeController.getHeightByRatio(0.015);
@@ -82,7 +88,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     final checkboxSize = screenSizeController.getWidthByRatio(0.05);
     final reservationInfo = reservationViewModel.reservation.value;
     String requestComplain = '';
-    studentInfoViewModel.clearData();
+
     // final List<_AmountOfPayment> amountOfPaymentList = widget.instructor !=
     //             null &&
     //         widget.teamInformation != null
