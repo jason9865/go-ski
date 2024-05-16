@@ -9,7 +9,7 @@ class Review {
   int rating;
   String content;
   DateTime createdAt;
-  List<TagResponse> instructorTags;
+  List<TagResponse>? instructorTags;
 
   Review({
     required this.reviewId,
@@ -33,7 +33,7 @@ class ReviewResponse {
   int rating;
   String content;
   DateTime createdAt;
-  List<TagResponse> instructorTags;
+  List<TagResponse>? instructorTags;
 
   ReviewResponse({
     required this.reviewId,
@@ -57,7 +57,7 @@ class ReviewResponse {
       reviewId: json['reviewId'] as int,
       lessonId: json['lessonId'] as int,
       lessonDate: DateFormat("yyyy-MM-dd").parse(json['lessonDate'] as String),
-      lessonTime: json['lessonTime'] as String,
+      lessonTime: json['lessonTimeInfo'] as String,
       representativeName: json['representativeName'] as String,
       rating: json['rating'] as int,
       content: json['content'] as String,

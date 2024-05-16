@@ -13,7 +13,6 @@ import 'package:goski_instructor/ui/component/goski_main_header.dart';
 import 'package:goski_instructor/ui/component/goski_modal.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/instructor/d_i013_lesson_detail.dart';
-import 'package:goski_instructor/ui/instructor/i012_lesson_list.dart';
 import 'package:goski_instructor/view_model/instructor_main_view_model.dart';
 import 'package:logger/logger.dart';
 
@@ -314,6 +313,7 @@ class _InstructorMainScreenState extends State<InstructorMainScreen> {
 
 class BuildTimeContainer extends StatelessWidget {
   final String hour;
+
   const BuildTimeContainer({
     super.key,
     required this.hour,
@@ -417,24 +417,27 @@ class UserMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          iconImage,
-          width: 45,
-          height: 45,
-          colorFilter: const ColorFilter.mode(
-            goskiBlack,
-            BlendMode.srcIn,
+    return GestureDetector(
+      onTap: onClick,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            iconImage,
+            width: 45,
+            height: 45,
+            colorFilter: const ColorFilter.mode(
+              goskiBlack,
+              BlendMode.srcIn,
+            ),
           ),
-        ),
-        GoskiText(
-          text: tr(
-            iconName,
-          ),
-          size: goskiFontLarge,
-        )
-      ],
+          GoskiText(
+            text: tr(
+              iconName,
+            ),
+            size: goskiFontLarge,
+          )
+        ],
+      ),
     );
   }
 }

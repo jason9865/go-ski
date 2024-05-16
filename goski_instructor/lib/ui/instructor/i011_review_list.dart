@@ -132,20 +132,12 @@ class _ReviewListScreenState extends State<ReviewListScreen> {
                               spacing: 8.0,
                               runSpacing: 4.0,
                               children: [
-                                ...review.instructorTags
-                                    .take(2)
+                                ...review.instructorTags!
                                     .map((tag) => GoskiBadge(
                                           text: tag.tagName,
                                           backgroundColor: goskiLightGray,
                                           textColor: goskiBlack,
                                         )),
-                                if (review.instructorTags.length > 2)
-                                  GoskiBadge(
-                                    text:
-                                        '+${review.instructorTags.length - 2}',
-                                    backgroundColor: goskiLightGray,
-                                    textColor: goskiBlack,
-                                  ),
                               ],
                             ),
                           ],
