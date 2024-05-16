@@ -69,7 +69,7 @@ Future<void> setFCM() async {
       notificationViewModel.hasUnread.value = true;
     }
 
-    late String title;
+    late String title = '';
     if (message.data['notificationType'] == "2") {
       title = tr('lessonAdded');
       instructorMainViewModel.getScheduleList();
