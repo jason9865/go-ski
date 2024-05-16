@@ -2,6 +2,7 @@ package com.go.ski.lesson.support.dto;
 
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
+import com.go.ski.team.core.model.SkiResort;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -21,10 +22,16 @@ public class LessonResponseDTO {
     private final String lessonStatus;
 
     public LessonResponseDTO(Lesson lesson, LessonInfo lessonInfo) {
+        SkiResort skiResort = lesson.getTeam().getSkiResort();
+
         lessonId = lesson.getLessonId();
         teamId = lesson.getTeam().getTeamId();
         teamName = lesson.getTeam().getTeamName();
-        resortName = lesson.getTeam().getSkiResort().getResortName();
+        if (skiResort != null) {
+            resortName = skiResort.getResortName();
+        } else {
+            resortName = null;
+        }
         lessonDate = lessonInfo.getLessonDate();
         startTime = lessonInfo.getStartTime();
         duration = lessonInfo.getDuration();
