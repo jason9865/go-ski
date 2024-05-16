@@ -33,14 +33,15 @@ public class SecurityConfig {
             "/api/v1/user/signout", "/api/v1/user/resign",
             "/api/v1/notification/token","/api/v1/notification","/api/v1/notification/read-all",
             "/api/v1/notification/delete/*","/api/v1/notification/dm","/api/v1/notification/setting",
-            "/api/v1/team/*"
+            "/api/v1/team/*",
+            "/api/v1/lesson/review/tags","/api/v1/lesson/review/create",
+            "/api/v1/lesson/review/*","/api/v1/lesson/review/list/*",
     };
 
     private static final String[] STUDENT_ROUTES = {
             "/api/v1/user/update/user", "/api/v1/user/profile/user",
             "/api/v1/lesson/reserve/novice/*", "/api/v1/lesson/reserve/advanced", "/api/v1/lesson/list/user",
-            "/api/v1/lesson/feedback/*","/api/v1/lesson/review/tags","/api/v1/lesson/review/create",
-            "/api/v1/lesson/review/*","/api/v1/lesson/review/list/*",
+            "/api/v1/lesson/feedback/*"
     };
 
     private static final String[] INSTRUCTOR_ROUTES = {
