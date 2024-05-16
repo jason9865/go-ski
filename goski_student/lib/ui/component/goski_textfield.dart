@@ -10,7 +10,7 @@ import '../../const/util/text_formatter.dart';
 /// textEditingController에는 TextEditingController() 사용하면 됨
 class GoskiTextField extends StatefulWidget {
   final double width;
-  final bool canEdit, hasInnerPadding, isDigitOnly;
+  final bool canEdit, hasInnerPadding, isDigitOnly, isNewLine;
   final int? maxLines, minLines;
   final String text, hintText;
   final TextAlign textAlign;
@@ -26,6 +26,7 @@ class GoskiTextField extends StatefulWidget {
     required this.hintText,
     this.hasInnerPadding = true,
     this.isDigitOnly = false,
+    this.isNewLine = false,
     this.textAlign = TextAlign.start,
     required this.onTextChange,
   });
@@ -79,8 +80,9 @@ class _GoskiTextFieldState extends State<GoskiTextField> {
           FilteringTextInputFormatter.digitsOnly,
           TextFormatter(),
         ] : [],
-        keyboardType: widget.isDigitOnly ? TextInputType.number : TextInputType.text,
+        keyboardType: widget.isDigitOnly ? TextInputType.number : TextInputType.multiline,
         minLines: widget.minLines,
+        textInputAction: widget.isNewLine ? TextInputAction.newline : TextInputAction.go,
       ),
     );
   }
