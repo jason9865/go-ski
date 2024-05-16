@@ -12,6 +12,8 @@ class SettlementViewModel extends GetxController {
 
     List<Settlement> response = await settlementRepository.getSettlementList();
 
+    response.sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
+
     settlementList.value = response;
 
     isLoading.value = false;
