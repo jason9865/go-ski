@@ -20,7 +20,7 @@ class Noti {
   String content;
   String? imageUrl;
   int isRead;
-  DateTime createdAt;
+  DateTime? createdAt;
   bool isExpanded;
 
   Noti({
@@ -32,9 +32,9 @@ class Noti {
     this.content = '',
     this.imageUrl,
     this.isRead = -1,
-    createdAt,
+    this.createdAt,
     this.isExpanded = false,
-  }) : createdAt = DateTime.now();
+  });
 }
 
 class NotiResponse {
@@ -46,7 +46,7 @@ class NotiResponse {
   String content;
   String? imageUrl;
   int isRead;
-  DateTime createdAt;
+  DateTime? createdAt;
 
   NotiResponse({
     required this.notificationId,
@@ -57,8 +57,8 @@ class NotiResponse {
     required this.content,
     this.imageUrl,
     required this.isRead,
-    createdAt,
-  }) : createdAt = DateTime.now();
+    this.createdAt,
+  });
 
   factory NotiResponse.fromJson(Map<String, dynamic> json) {
     return NotiResponse(
