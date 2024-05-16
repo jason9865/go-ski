@@ -91,58 +91,60 @@ class _InstructorsIntroductionScreen
                 },
                 itemCount: widget.instructorList.length,
                 itemBuilder: (context, index) => GoskiCard(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      color: goskiWhite,
-                      child: Column(
-                        children: [
-                          Container(
-                            color: goskiLightGray,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: screenSizeController
-                                      .getHeightByRatio(0.01)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GoskiText(
-                                    text: tr(widget.teamInfo.teamName),
-                                    size: goskiFontXLarge,
-                                  ),
-                                  // GoskiText(
-                                  //   text: ' - ',
-                                  //   size: goskiFontXLarge,
-                                  // ),
-                                  // GoskiText(
-                                  //   text: '팀이름1',
-                                  //   size: goskiFontXLarge,
-                                  // ),
-                                ],
-                              ),
+                  child: Container(
+                    color: goskiWhite,
+                    child: Column(
+                      children: [
+                        Container(
+                          color: goskiLightGray,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenSizeController
+                                    .getHeightByRatio(0.01)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GoskiText(
+                                  text: tr(widget.teamInfo.teamName),
+                                  size: goskiFontXLarge,
+                                ),
+                                // GoskiText(
+                                //   text: ' - ',
+                                //   size: goskiFontXLarge,
+                                // ),
+                                // GoskiText(
+                                //   text: '팀이름1',
+                                //   size: goskiFontXLarge,
+                                // ),
+                              ],
                             ),
                           ),
-                          Column(
-                            children: [
-                              const Divider(
-                                height: 0,
-                              ),
-                              buildProfile(index),
-                              const Divider(
-                                height: 0,
-                              ),
-                              buildSelfIntroduction(index),
-                              const Divider(
-                                height: 0,
-                              ),
-                              buildCertificateImages(index),
-                              const Divider(
-                                height: 0,
-                              ),
-                              buildReviews(index),
-                            ],
+                        ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                const Divider(
+                                  height: 0,
+                                ),
+                                buildProfile(index),
+                                const Divider(
+                                  height: 0,
+                                ),
+                                buildSelfIntroduction(index),
+                                const Divider(
+                                  height: 0,
+                                ),
+                                buildCertificateImages(index),
+                                const Divider(
+                                  height: 0,
+                                ),
+                                buildReviews(index),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -152,7 +154,12 @@ class _InstructorsIntroductionScreen
             SmoothPageIndicator(
               controller: _pageController,
               count: widget.instructorList.length,
-              effect: const WormEffect(),
+              effect: ScrollingDotsEffect(
+                dotHeight: screenSizeController.getHeightByRatio(0.01),
+                dotWidth: screenSizeController.getHeightByRatio(0.01),
+                activeDotScale: 1.3,
+                activeDotColor: goskiBlack
+              ),
             ),
           ],
         ),
