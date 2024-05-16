@@ -191,16 +191,13 @@ class _ReservationTeamSelectScreenState
                       height: screenSizeController.getWidthByRatio(0.25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GoskiText(
-                                text: team.teamName,
-                                size: goskiFontLarge,
-                              ),
-                            ],
+                          GoskiText(
+                            text: team.teamName,
+                            size: goskiFontLarge,
+                            maxLine: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Expanded(
                             child: Row(
