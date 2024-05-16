@@ -193,10 +193,12 @@ public class LessonService {
             try {
                 LessonInfo lessonInfo = lessonInfoRepository.findById(lesson.getLessonId()).orElseThrow();
                 List<StudentInfo> studentInfos = studentInfoRepository.findByLessonInfo(lessonInfo);
+                List<StudentInfoResponseDTO> studentInfoResponseDTOs = studentInfos.stream()
+                        .map(StudentInfoResponseDTO::new).toList();
+
                 boolean isDesignated = lessonPaymentInfoRepository.findById(lesson.getLessonId())
                         .map(LessonPaymentInfo::getDesignatedFee).isPresent();
-                log.info("isDesignated: {}", isDesignated);
-                instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfos, isDesignated));
+                instructorLessonResponseDTOs.add(new InstructorLessonResponseDTO(lesson, lessonInfo, studentInfoResponseDTOs, isDesignated));
             } catch (NoSuchElementException ignored) {
             }
         }
