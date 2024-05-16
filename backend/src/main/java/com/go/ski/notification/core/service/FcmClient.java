@@ -43,16 +43,15 @@ public class FcmClient {
 
     public void sendMessageTo(MessageEvent messageEvent) {
         sendMessageTo(messageEvent.getReceiverId(), messageEvent.getDeviceType(),
-                messageEvent.getNotificationType(), new DmMessageGenerator(messageEvent));
+                new DmMessageGenerator(messageEvent));
     }
 
     public void sendMessageTo(Notification notification) {
         sendMessageTo(notification.getReceiverId(), notification.getDeviceType(),
-                notification.getNotificationType(), new NotificationMessageGenerator(notification));
+                new NotificationMessageGenerator(notification));
     }
 
-    public void sendMessageTo(Integer receiverId, DeviceType deviceType,
-                              Integer notificationType, MessageGenerator messageGenerator) {
+    public void sendMessageTo(Integer receiverId, DeviceType deviceType, MessageGenerator messageGenerator) {
         User user = getUser(receiverId);
         String targetToken = getFcmToken(user, deviceType);
         String message = messageGenerator.makeMessage(targetToken, objectMapper);
@@ -66,7 +65,8 @@ public class FcmClient {
 
         HttpEntity<String> httpEntity = new HttpEntity<>(message, httpHeaders);
 
-        String projectId = getProjectId(user);
+        String projectId = user.getRole().equals(Role.STUDENT) ?
+                            "goski-student" : "goski-instructor";
 
         String fcmRequestUrl = PREFIX_FCM_REQUEST_URL + projectId + POSTFIX_FCM_REQUEST_URL;
 
@@ -107,11 +107,6 @@ public class FcmClient {
     public User getUser(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(UserExceptionEnum.NO_PARAM));
-    }
-
-    public String getProjectId(User user){
-        return user.getRole().equals(Role.STUDENT) ?
-                "goski-student" : "goski-instructor";
     }
 
 }
