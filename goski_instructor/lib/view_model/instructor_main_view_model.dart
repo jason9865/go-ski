@@ -61,9 +61,13 @@ class InstructorMainViewModel extends GetxController {
       return lessonDate.isBefore(DateTime(now.year, now.month, now.day));
     });
     if (scheduleList.isEmpty) return;
-    DateTime firstLessonDate = DateTime.parse(scheduleList.first.lessonDate);
+    DateTime firstLessonDate =
+        DateTime.parse(DateTime.now().toString().substring(0, 10));
     DateTime lastLessonDate = DateTime.parse(scheduleList.last.lessonDate);
     int length = lastLessonDate.difference(firstLessonDate).inDays + 1;
+    if (length < 3) {
+      length = 3;
+    }
 
     Map<String, int> dateTimeIndex = {};
     for (int i = 0; i < length; i++) {

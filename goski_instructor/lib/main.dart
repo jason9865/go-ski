@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-    secureStorage.delete(key: "isLoggedIn");
+    // secureStorage.delete(key: "isLoggedIn");
     return GetMaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
             })),
         GetPage(
             name: '/reviewList',
-            page: () => ReviewListScreen(),
+            page: () => const ReviewListScreen(),
             binding: BindingsBuilder(() {
               Get.lazyPut(() => ReviewRepository());
               Get.lazyPut(() => ReviewService());
