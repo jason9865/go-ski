@@ -1,4 +1,5 @@
 package com.go.ski.team.core.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.go.ski.common.util.TimeConvertor;
 import com.go.ski.team.core.service.TeamService;
 import com.go.ski.team.support.dto.TeamUpdateRequestDTO;
@@ -16,6 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Team {
 
     @Id
