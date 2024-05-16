@@ -186,6 +186,7 @@ class AuthService extends GetxService {
     return false;
   }
 
+  // TODO: 사장 로그인 로직 수정 필요
   Future<bool> ownerSignUp(OwnerRequest owner) async {
     var uri = Uri.parse('$baseUrl/user/signup/user');
     var request = http.MultipartRequest('POST', uri);
