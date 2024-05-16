@@ -5,8 +5,6 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/const/util/screen_size_controller.dart';
-import 'package:goski_instructor/data/data_source/auth_service.dart';
-import 'package:goski_instructor/data/repository/auth_repository.dart';
 import 'package:goski_instructor/ui/common/i002_signup.dart';
 import 'package:goski_instructor/ui/instructor/i004_instructor_main.dart';
 import 'package:goski_instructor/view_model/login_view_model.dart';
@@ -53,15 +51,6 @@ class LoginContent extends StatelessWidget {
             height: screenSizeController.getHeightByRatio(0.33),
           ),
           const LogoImage(),
-          const Text(
-            'forInstructor',
-            style: TextStyle(
-              fontFamily: 'RubikGlitch',
-              fontSize: goskiFontMedium,
-              color: goskiBlack,
-              fontWeight: FontWeight.w100,
-            ),
-          ).tr(),
           Expanded(child: Container()), // 로고와 버튼 사이에 공간
           KakaoLoginButton(),
           Expanded(child: Container()), // 버튼과 텍스트 사이에 공간
