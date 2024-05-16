@@ -1,7 +1,6 @@
-CREATE DATABASE ski;
-USE ski;
+use `ski`;
 
-CREATE TABLE `user` (
+CREATE TABLE if not exists `user` (
 	`user_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`domain_user_key`	VARCHAR(255)	NOT NULL,
 	`domain_name`	ENUM('kakao')	NOT NULL,
@@ -18,14 +17,14 @@ CREATE TABLE `user` (
     CONSTRAINT `domain_unique` UNIQUE (`domain_user_key`, `domain_name`)
 );
 
-CREATE TABLE `instructor` (
+CREATE TABLE if not exists `instructor` (
 	`instructor_id`	INT(11)	NOT NULL,
 	`description`	VARCHAR(255)	NULL,
 	`is_instruct_available`	ENUM('SKI', 'BOARD', 'ALL')	NULL,
 	`dayoff`	INT	NOT NULL	DEFAULT 0
 );
 
-CREATE TABLE `team` (
+CREATE TABLE if not exists `team` (
 	`team_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`user_id`	INT(11)	NOT NULL,
 	`resort_id`	INT	NOT NULL,
@@ -36,62 +35,64 @@ CREATE TABLE `team` (
 	`dayoff`	INT	NOT NULL
 );
 
-CREATE TABLE `team_image` (
+CREATE TABLE if not exists `team_image` (
 	`team_image_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`team_id`	INT(11)	NOT NULL,
 	`image_url`	VARCHAR(255)	NOT NULL
 );
 
-CREATE TABLE `team_instructor` (
+CREATE TABLE if not exists `team_instructor` (
 	`team_instructor_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`team_id`	INT(11)	NOT NULL,
 	`user_id`	INT(11)	NOT NULL,
-	`is_invite_accepted`	BIT(1)	NOT NULL	DEFAULT FALSE
+	`is_invite_accepted`	BIT(1)	NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE `ski_resort` (
-	`resort_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`resort_name`	VARCHAR(50)	NULL,
-	`resort_location`	VARCHAR(255)	NULL
+CREATE TABLE if not exists `ski_resort` (
+	`resort_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`resort_name` varchar(50) DEFAULT NULL,
+	`resort_location` varchar(255) DEFAULT NULL,
+	`latitude` double NOT NULL,
+	`longitude` double NOT NULL
 );
 
-CREATE TABLE `certificate` (
+CREATE TABLE if not exists `certificate` (
 	`certificate_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`certificate_name`	VARCHAR(20)	NOT NULL,
 	`certificate_type`	VARCHAR(10)	NOT NULL
 );
 
-CREATE TABLE `instructor_cert` (
+CREATE TABLE if not exists `instructor_cert` (
 	`inst_cert_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`user_id`	INT(11)	NOT NULL,
 	`certificate_id`	INT(11)	NOT NULL,
 	`certificate_image_url`	VARCHAR(255)	NOT NULL
 );
 
-CREATE TABLE `permission` (
-	`team_instructor_id`	INT(11)	NOT NULL,
-	`invite_permission`	BIT(1)	NOT NULL	DEFAULT FALSE,
-	`add_permission`	BIT(1)	NOT NULL	DEFAULT FALSE,
-	`modify_permission`	BIT(1)	NOT NULL	DEFAULT FALSE,
-	`delete_permission`	BIT(1)	NOT NULL	DEFAULT FALSE,
-	`cost_permission`	BIT(1)	NOT NULL	DEFAULT FALSE,
-	`position`	TINYINT(1)	NOT NULL	DEFAULT 4,
-	`designated_cost`	INT(11)	NOT NULL	DEFAULT 0
+CREATE TABLE if not exists `permission` (
+	`team_instructor_id` int(11) NOT NULL,
+	`invite_permission` bit(1) NOT NULL DEFAULT b'0',
+	`add_permission` bit(1) NOT NULL DEFAULT b'0',
+	`modify_permission` bit(1) NOT NULL DEFAULT b'0',
+	`delete_permission` bit(1) NOT NULL DEFAULT b'0',
+	`cost_permission` bit(1) NOT NULL DEFAULT b'0',
+	`position` tinyint(1) NOT NULL DEFAULT 4,
+	`designated_cost` int(11) NOT NULL DEFAULT 0
 );
 
-CREATE TABLE `lesson_time` (
+CREATE TABLE if not exists `lesson_time` (
 	`lesson_time_id`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`resort_id`	INT(11)	NOT NULL,
 	`lesson_time`	INT	NOT NULL
 );
 
-CREATE TABLE `level_option` (
+CREATE TABLE if not exists `level_option` (
 	`team_id`	INT(11)	NOT NULL,
 	`intermediate_fee`	VARCHAR(255)	NULL,
 	`advanced_fee`	VARCHAR(255)	NULL
 );
 
-CREATE TABLE `one_to_n_option` (
+CREATE TABLE if not exists `one_to_n_option` (
 	`team_id`	INT(11)	NOT NULL,
 	`one_two_fee`	VARCHAR(255)	NULL,
 	`one_three_fee`	VARCHAR(255)	NULL,
@@ -99,7 +100,7 @@ CREATE TABLE `one_to_n_option` (
 	`one_n_fee`	VARCHAR(255)	NULL
 );
 
-CREATE TABLE `lesson` (
+CREATE TABLE if not exists `lesson` (
 	`lesson_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`user_id`	INT(11)	NOT NULL,
 	`team_id`	INT(11)	NOT NULL,
@@ -108,46 +109,48 @@ CREATE TABLE `lesson` (
 	`representative_name`	VARCHAR(255)	NULL
 );
 
-CREATE TABLE `payment` (
-	`payment_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`lesson_id`	INT(11)	NOT NULL,
-	`total_amount`	INT(11)	NOT NULL,
-	`payment_status`	TINYINT(1)	NOT NULL	DEFAULT 0,
-	`charge_id`	INT(11)	NOT NULL	DEFAULT 0,
-	`payment_date`	DATETIME(6)	NOT NULL
+CREATE TABLE if not exists `payment` (
+	`payment_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`lesson_id` int(11) NOT NULL,
+	`total_amount` int(11) NOT NULL,
+	`payment_status` tinyint(1) NOT NULL DEFAULT 0,
+	`charge_id` int(11) NOT NULL DEFAULT 0,
+	`payment_date` datetime(6) NOT NULL,
+	`tid` varchar(25) NOT NULL,
+	`payback_date` datetime(6) DEFAULT NULL
 );
 
-CREATE TABLE `lesson_info` (
-	`lesson_id`	INT(11)	NOT NULL,
-	`lesson_date`	DATETIME(6)	NOT NULL,
-	`start_time`	VARCHAR(4)	NOT NULL,
-	`duration`	TINYINT(1)	NOT NULL,
-	`lesson_type`	ENUM('SKI', 'BOARD', 'DAYOFF')	NOT NULL,
-	`student_count`	INTEGER	NOT NULL
+CREATE TABLE if not exists `lesson_info` (
+	`lesson_id` int(11) NOT NULL,
+	`lesson_date` datetime(6) NOT NULL,
+	`start_time` varchar(4) NOT NULL,
+	`lesson_type` varchar(7) NOT NULL DEFAULT '1000000',
+	`student_count` int(11) NOT NULL,
+	`request_complain` text DEFAULT NULL,
+	`lesson_status` tinyint(1) DEFAULT NULL,
+	`duration` tinyint(1) NOT NULL
 );
 
-CREATE TABLE `lesson_payment_info` (
+CREATE TABLE if not exists `lesson_payment_info` (
 	`lesson_id`	INT(11)	NOT NULL,
 	`basic_fee`	INT(11)	NOT NULL,
 	`designated_fee`	INT(11)	NULL,
 	`people_option_fee`	INT(11)	NULL,
 	`level_option_fee`	INT(11)	NULL,
-	`duration`	TINYINT(1)	NULL,
 	`coupon_id`	INT(11)	NOT NULL
 );
 
-CREATE TABLE `settlement` (
-	`settlement_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`user_id`	INT(11)	NOT NULL,
-	`settlement_amount`	INT(11)	NOT NULL,
-	`bank`	VARCHAR(20)	NOT NULL,
-	`depositor_name`	VARCHAR(10)	NOT NULL,
-	`account_number`	VARCHAR(30)	NOT NULL,
-	`balance`	INT(11)	NOT NULL,
-	`settlement_date`	DATETIME(6)	NOT NULL
+CREATE TABLE if not exists `settlement` (
+	`settlement_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`user_id` int(11) NOT NULL,
+	`settlement_amount` int(11) NOT NULL,
+  	`balance` int(11) NOT NULL,
+  	`settlement_date` datetime(6) NOT NULL,
+  	`payload` varchar(50) DEFAULT NULL,
+  	`deposit_status` tinyint(1) NOT NULL
 );
 
-CREATE TABLE `charge` (
+CREATE TABLE if not exists `charge` (
 	`charge_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`charge_name`	VARCHAR(30)	NOT NULL,
 	`student_charge_rate`	TINYINT(3)	NOT NULL,
@@ -155,69 +158,83 @@ CREATE TABLE `charge` (
 	`system_charge_rate`	TINYINT(3)	NOT NULL
 );
 
-CREATE TABLE `review` (
-	`review_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`lesson_id`	INT(11)	NOT NULL,
-	`contents`	VARCHAR(255)	NULL,
-	`rating`	INT(11)	NULL
+CREATE TABLE if not exists `review` (
+	`review_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`lesson_id` int(11) NOT NULL,
+	`contents` varchar(255) DEFAULT NULL,
+	`rating` int(11) DEFAULT NULL,
+	`created_at` datetime(6) DEFAULT current_timestamp(6)
 );
 
-CREATE TABLE `feedback` (
+CREATE TABLE if not exists `feedback` (
 	`feedback_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`lesson_id`	INT(11)	NOT NULL,
 	`content`	VARCHAR(255)	NULL
 );
 
-CREATE TABLE `feedback_media` (
+CREATE table if not exists  `feedback_media` (
 	`feedback_media_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`feedback_id`	INT(11)	NOT NULL,
 	`media_url`	VARCHAR(255)	NOT NULL
 );
 
-CREATE TABLE `tag_review` (
+CREATE TABLE if not exists `tag_review` (
 	`tag_review_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`tag_name`	VARCHAR(5)	NOT NULL
 );
 
-CREATE TABLE `tag_on_review` (
+CREATE TABLE if not exists `tag_on_review` (
 	`tag_on_review_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`review_id`	INT(11)	NOT NULL,
 	`tag_review_id`	INT(11)	NOT NULL
 );
 
-CREATE TABLE `student_info` (
+CREATE TABLE if not exists `student_info` (
     `student_info_id`    INT(11)    NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `lesson_id`    INT(11)    NOT NULL,
-    `height`    ENUM('140cm 미만', '140cm~150cm', '150cm~160cm', '160cm~170cm','170cm~180cm','180cm 이상')    NOT NULL,
-    `weight`    ENUM('40kg 미만', '40kg~49kg','50kg~59kg', '60kg~69kg', '70kg~79kg','80kg~89kg','90kg~99kg','100kg 초과')   NOT NULL,
+    `height`    ENUM('HEIGHT_UNDER_140CM','HEIGHT_140CM_TO_149CM','HEIGHT_150CM_TO_159CM','HEIGHT_160CM_TO_169CM','HEIGHT_170CM_TO_179CM','HEIGHT_ABOVE_180CM')  NOT NULL,
+    `weight`    ENUM('WEIGHT_UNDER_40KG','WEIGHT_40KG_TO_49KG','WEIGHT_50KG_TO_59KG','WEIGHT_60KG_TO_69KG','WEIGHT_70KG_TO_79KG','WEIGHT_80KG_TO_89KG','WEIGHT_90KG_TO_99KG','WEIGHT_ABOVE_100KG')   NOT NULL,
     `foot_size`    INT    NOT NULL,
-    `age`  ENUM("미취학 아동", "초등", "중고등", "20대", "30대", "40대", "50대", "60대 이상")    NOT NULL,
-    `gender`    ENUM('남자','여자')    NOT NULL,
+    `age`  ENUM('PRESCHOOL_CHILD','ELEMENTARY','MIDDLE_HIGH','TWENTIES','THIRTIES','FORTIES','FIFTIES','SIXTIES_OVER') NOT NULL,
+    `gender`   ENUM('MALE','FEMALE')  NOT NULL,
     `name`    VARCHAR(10)    NOT NULL
 );
 
--- 2024-04-29 추가
-CREATE TABLE `notification` (
-    `notification_id`	INT(11)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `type`	ENUM("INVITE","LESSON","MESSAGE")	NOT NULL,
-    `title`	VARCHAR(50)	NOT NULL,
-    `content`	VARCHAR(255)	NULL,
-    `image_url`	VARCHAR(255)	NULL,
-    `is_read`	BIT(1)	NOT NULL,
-    `receiver_id` int(11) NOT NULL,
-    `sender_id` int(11) NOT NULL,
-    `created_at` datetime(6) NOT NULL
+CREATE TABLE if not exists `notification` (
+    `notification_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`notification_type` int(1) NOT NULL,
+	`title` varchar(50) NOT NULL,
+	`content` mediumtext DEFAULT NULL,
+	`image_url` varchar(255) DEFAULT NULL,
+	`is_read` bit(1) NOT NULL,
+	`receiver_id` int(11) NOT NULL,
+	`sender_id` int(11) DEFAULT NULL,
+	`created_at` datetime(6) NOT NULL,
+	`device_type` ENUM('WEB','MOBILE') NOT null,
+	KEY `fk_notification_receiver_id` (`receiver_id`)
+);
+
+CREATE TABLE if not exists `notification_setting` (
+  `notification_setting_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `notification_type_id` int(11) NOT NULL,
+  `notification_status` bit(1) NOT NULL
+);
+
+CREATE TABLE if not exists `notification_type` (
+  `notification_type_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `notification_type_name` varchar(50) NOT NULL
 );
 
 
 ALTER TABLE `instructor`
-ADD CONSTRAINT `pk_instructor_user_id` PRIMARY KEY (`user_id`),
-ADD CONSTRAINT `fk_instructor_user_id` FOREIGN KEY (`user_id`)
+ADD CONSTRAINT `pk_instructor_user_id` PRIMARY KEY (`instructor_id`),
+ADD CONSTRAINT `fk_instructor_user_id` FOREIGN KEY (`instructor_id`)
 REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 
 ALTER TABLE `instructor_cert`
 ADD CONSTRAINT `fk_instructor_cert_user_id` FOREIGN KEY (`user_id`)
-REFERENCES `instructor` (`user_id`),
+REFERENCES `instructor` (`instructor_id`),
 ADD CONSTRAINT `fk_instructor_cert_certificate_id` FOREIGN KEY (`certificate_id`)
 REFERENCES `certificate` (`certificate_id`);
 
@@ -243,7 +260,7 @@ REFERENCES `tag_review` (`tag_review_id`);
 ALTER TABLE `lesson`
 ADD CONSTRAINT `fk_lesson_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
 ADD CONSTRAINT `fk_lesson_team_id` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`),
-ADD CONSTRAINT `fk_lesson_instructor_id` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`user_id`);
+ADD CONSTRAINT `fk_lesson_instructor_id` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`);
 
 -- 레슨 정보 테이블의 제약 조건 수정
 ALTER TABLE `lesson_info`
@@ -258,11 +275,11 @@ ADD CONSTRAINT `fk_student_info_lesson_id` FOREIGN KEY (`lesson_id`) REFERENCES 
 ALTER TABLE `lesson_payment_info`
 ADD CONSTRAINT `pk_lesson_payment_info_lesson_id` PRIMARY KEY (`lesson_id`),
 ADD CONSTRAINT `fk_lesson_payment_info_lesson_id` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`lesson_id`) ON DELETE CASCADE;
--- ADD CONSTRAINT `fk_lesson_payment_info_coupon_id` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`coupon_id`);
 
 -- 결제
 ALTER TABLE `payment`
-ADD CONSTRAINT `fk_payment_lesson_id` FOREIGN KEY (`lesson_id`) REFERENCES `lesson_payment_info` (lesson_id);
+ADD CONSTRAINT `fk_payment_lesson_id` FOREIGN KEY (`lesson_id`) REFERENCES `lesson_payment_info` (lesson_id)
+;
 
 -- 정산
 ALTER TABLE `settlement`
@@ -270,24 +287,24 @@ ADD CONSTRAINT `fk_settlement_user_id` FOREIGN KEY (`user_id`) REFERENCES `user`
 
 -- 강습 팀
 ALTER TABLE `team`
-ADD CONSTRAINT `fk_team_user_id` FOREIGN KEY (`user_id`) REFERENCES `user`,
-ADD CONSTRAINT `fk_team_resort_id` FOREIGN KEY (`resort_id`) REFERENCES `ski_resort`
+ADD CONSTRAINT `fk_team_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+ADD CONSTRAINT `fk_team_resort_id` FOREIGN KEY (`resort_id`) REFERENCES `ski_resort` (`resort_id`)
 ;
 
 -- 강습_팀_강사
 ALTER TABLE `team_instructor`
-ADD CONSTRAINT `fk_team_instructor_team` FOREIGN KEY (`team_id`) REFERENCES `team`,
-ADD CONSTRAINT `fk_team_instructor_instructor` FOREIGN KEY (`user_id`) REFERENCES `instructor`
+ADD CONSTRAINT `fk_team_instructor_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`),
+ADD CONSTRAINT `fk_team_instructor_instructor` FOREIGN KEY (`user_id`) REFERENCES `instructor` (`instructor_id`)
 ;
 
 -- 강습 팀 이미지
 ALTER TABLE `team_image`
-ADD CONSTRAINT `fk_team_image_team_id` FOREIGN KEY (`team_id`) REFERENCES `team`
+ADD CONSTRAINT `fk_team_image_team_id` FOREIGN KEY (`team_id`) REFERENCES `team`(`team_id`)
 ;
 
 -- 강습 시간 단위
 ALTER TABLE `lesson_time`
-ADD CONSTRAINT `fk_lesson_time_resort_id` FOREIGN KEY (`resort_id`) REFERENCES `ski_resort`
+ADD CONSTRAINT `fk_lesson_time_resort_id` FOREIGN KEY (`resort_id`) REFERENCES `ski_resort` (`resort_id`)
 ;
 
 -- 초중고급옵션
