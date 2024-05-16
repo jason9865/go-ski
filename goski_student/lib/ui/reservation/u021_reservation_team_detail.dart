@@ -101,13 +101,19 @@ class _ReservationTeamDetailScreenState
                       ),
                       Column(
                         children: [
-                          Column(
-                            children: widget.teamInformation.teamImages
-                                .map((teamImage) => Image.network(
-                                      teamImage.teamImageUrl,
-                                      width: double.infinity,
-                                    ))
-                                .toList(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  screenSizeController.getWidthByRatio(0.05),
+                            ),
+                            child: Column(
+                              children: widget.teamInformation.teamImages
+                                  .map((teamImage) => Image.network(
+                                        teamImage.teamImageUrl,
+                                        width: double.infinity,
+                                      ))
+                                  .toList(),
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(

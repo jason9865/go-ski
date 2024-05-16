@@ -128,14 +128,18 @@ class _ReservationInstructorListScreenState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          GoskiText(
-                              text: tr('dynamicInstructor',
-                                  args: [instructor.userName]),
-                              size: goskiFontXLarge),
+                          Expanded(
+                            child: GoskiText(
+                              text: instructor.userName,
+                              size: goskiFontXLarge,
+                              maxLine: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                           if (reservationViewModel
                                       .reservation.value.lessonType ==
                                   'SKI' &&
-                              instructor.skiCertificate.length > 0)
+                              instructor.skiCertificate.isNotEmpty)
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12.0),
@@ -148,13 +152,13 @@ class _ReservationInstructorListScreenState
                           else if (reservationViewModel
                                       .reservation.value.lessonType ==
                                   'BOARD' &&
-                              instructor.boardCertificate.length > 0)
+                              instructor.boardCertificate.isNotEmpty)
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: GoskiText(
                                 text: instructor.boardCertificate.first,
-                                size: goskiFontLarge,
+                                size: goskiFontMedium,
                                 color: goskiDarkGray,
                               ),
                             )
