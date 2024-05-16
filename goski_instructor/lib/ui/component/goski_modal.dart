@@ -24,8 +24,6 @@ onPressed: () {
 };
 */
 
-Logger logger = Logger();
-
 class GoskiModal extends StatelessWidget {
   // 헤더에 들어갈 모달 제목
   final String title;

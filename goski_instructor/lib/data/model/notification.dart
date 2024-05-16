@@ -11,6 +11,8 @@ notificationType  Type
       9           쪽지 수신 알림
  */
 
+import 'package:goski_instructor/main.dart';
+
 class Noti {
   int notificationId;
   int? senderId;
@@ -20,7 +22,7 @@ class Noti {
   String content;
   String? imageUrl;
   int isRead;
-  DateTime createdAt;
+  DateTime? createdAt;
   bool isExpanded;
 
   Noti({
@@ -32,9 +34,9 @@ class Noti {
     this.content = '',
     this.imageUrl,
     this.isRead = -1,
-    createdAt,
+    this.createdAt,
     this.isExpanded = false,
-  }) : createdAt = DateTime.now();
+  });
 }
 
 class NotiResponse {
@@ -46,7 +48,7 @@ class NotiResponse {
   String content;
   String? imageUrl;
   int isRead;
-  DateTime createdAt;
+  DateTime? createdAt;
 
   NotiResponse({
     required this.notificationId,
@@ -57,11 +59,11 @@ class NotiResponse {
     required this.content,
     this.imageUrl,
     required this.isRead,
-    createdAt,
-  }) : createdAt = DateTime.now();
+    this.createdAt,
+  });
 
   factory NotiResponse.fromJson(Map<String, dynamic> json) {
-    return NotiResponse(
+    NotiResponse ret = NotiResponse(
       notificationId: json['notificationId'],
       senderId: json['senderId'],
       senderName: json['senderName'],
@@ -72,6 +74,18 @@ class NotiResponse {
       isRead: json['isRead'],
       createdAt: DateTime.parse(json['createdAt']),
     );
+    return ret;
+    // return NotiResponse(
+    //   notificationId: json['notificationId'],
+    //   senderId: json['senderId'],
+    //   senderName: json['senderName'],
+    //   notificationType: json['notificationType'],
+    //   title: json['title'],
+    //   content: json['content'] ?? "", // null이면 빈 문자열로 처리
+    //   imageUrl: json['imageUrl'],
+    //   isRead: json['isRead'],
+    //   createdAt: DateTime.parse(json['createdAt']),
+    // );
   }
 }
 
