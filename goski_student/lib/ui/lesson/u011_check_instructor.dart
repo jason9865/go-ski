@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:goski_student/const/color.dart';
 import 'package:goski_student/const/default_image.dart';
@@ -401,9 +402,13 @@ class CheckInstructorScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GoskiText(
-                text: review.content,
-                size: goskiFontMedium,
+              Expanded(
+                child: GoskiText(
+                  text: review.content,
+                  size: goskiFontMedium,
+                  maxLine: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               Row(
                 children: starList,
