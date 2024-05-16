@@ -102,7 +102,11 @@ class _LessonDetailDialogState extends State<LessonDetailDialog> {
                       children: [
                         GoskiText(
                           text:
-                              "${instructorMainViewModel.lesson.studentInfos[index].age} / ${instructorMainViewModel.lesson.studentInfos[index].gender}\n${instructorMainViewModel.lesson.studentInfos[index].height} / ${instructorMainViewModel.lesson.studentInfos[index].weight} / ${instructorMainViewModel.lesson.studentInfos[index].footSize}",
+                              "${tr(instructorMainViewModel.lesson.studentInfos[index].age)} / ${tr(instructorMainViewModel.lesson.studentInfos[index].gender)}\n${tr(instructorMainViewModel.lesson.studentInfos[index].height)} / ${tr(instructorMainViewModel.lesson.studentInfos[index].weight)} / ${tr('footSize', args: [
+                                instructorMainViewModel
+                                    .lesson.studentInfos[index].footSize
+                                    .toString()
+                              ])}",
                           size: goskiFontMedium,
                         )
                       ],
