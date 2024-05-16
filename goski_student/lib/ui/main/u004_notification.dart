@@ -75,7 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       switch (item.notificationType) {
                         case 8:
                           return FeedbackNotificationCard(
-                              dateTime: item.createdAt,
+                              dateTime: item.createdAt!,
                               title: item.title,
                               onItemDeleteClicked: () {
                                 notificationViewModel
@@ -87,7 +87,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               });
                         case 9:
                           return MessageNotificationCard(
-                            dateTime: item.createdAt,
+                            dateTime: item.createdAt!,
                             title: item.senderName!,
                             subtitle: item.title,
                             content: item.content,
@@ -109,7 +109,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           );
                         default:
                           return LessonNotificationCard(
-                            dateTime: item.createdAt,
+                            dateTime: item.createdAt!,
                             title: item.title,
                             content: item.content,
                             isExpanded: item.isExpanded,
@@ -411,16 +411,20 @@ class LessonNotificationCard extends StatelessWidget {
     String inputLessonDate = data["lessonDate"];
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
     DateTime dateTime = inputFormat.parse(inputLessonDate);
-    DateFormat outputFormat = DateFormat(tr('lessonNotificationOutputFormat'), 'ko_KR');
+    DateFormat outputFormat =
+        DateFormat(tr('lessonNotificationOutputFormat'), 'ko_KR');
 
     String lessonDate = outputFormat.format(dateTime);
-    String lessonTime =
-        tr('lessonNotificationLessonTime', args: [data["lessonTime"].substring(0, 2), data["lessonTime"].substring(3, 5)]);
+    String lessonTime = tr('lessonNotificationLessonTime', args: [
+      data["lessonTime"].substring(0, 2),
+      data["lessonTime"].substring(3, 5)
+    ]);
     String resortName = data["resortName"];
     String studentCount = data["studentCount"];
     String lessonType = data["lessonType"];
 
-    return tr('lessonNotificationContent', args: [lessonDate, lessonTime, resortName, studentCount, lessonType]);
+    return tr('lessonNotificationContent',
+        args: [lessonDate, lessonTime, resortName, studentCount, lessonType]);
   }
 }
 
@@ -478,7 +482,8 @@ class MessageNotificationCard extends StatelessWidget {
             Row(
               children: [
                 GoskiText(
-                  text: tr('messageNotificationContent', args: [title, subtitle]),
+                  text:
+                      tr('messageNotificationContent', args: [title, subtitle]),
                   size: goskiFontMedium,
                   isBold: true,
                 ),
