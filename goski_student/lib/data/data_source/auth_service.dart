@@ -8,12 +8,12 @@ import 'package:goski_student/const/util/custom_dio.dart';
 import 'package:goski_student/const/util/parser.dart';
 import 'package:goski_student/data/data_source/main_service.dart';
 import 'package:goski_student/data/model/user.dart';
+import 'package:goski_student/fcm/fcm_config.dart';
 import 'package:goski_student/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class AuthService extends GetxService {
-
   Future<AuthStatus> loginWithKakao() async {
     try {
       OAuthToken token; // 카카오 로그인 성공 시 받은 토큰을 저장할 변수
@@ -65,7 +65,7 @@ class AuthService extends GetxService {
               key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
           await secureStorage.write(
               key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
-
+          setFCM();
           logger.d('New Tokens from server stored successfully');
           return AuthStatus.already;
         } else {
@@ -134,7 +134,20 @@ class AuthService extends GetxService {
 
     try {
       var response = await request.send();
+
       if (response.statusCode == 200) {
+        String? serverAccessToken = response.headers['accesstoken'];
+        String? serverRefreshToken = response.headers['refreshtoken'];
+        if (serverAccessToken != null && serverRefreshToken != null) {
+          await secureStorage.write(
+              key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
+          await secureStorage.write(
+              key: dotenv.env['REFRESH_TOKEN_KEY']!, value: serverRefreshToken);
+          setFCM();
+          logger.w('Succeed in write tokens after signup');
+        } else {
+          logger.e('Failed to write tokens after signup');
+        }
         logger.d("Succeed in SignUp!");
         logger.d("responseData : $response");
         return true;
