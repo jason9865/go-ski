@@ -45,13 +45,14 @@ class LessonPaymentViewModel {
       ReservationRequest reservationRequest,
       BeginnerResponse beginnerResponse,
       List<StudentInfo> studentInfo,
-      String requestComplain) async {
+      String requestComplain,
+      BuildContext context) async {
     try {
       KakaoPayPrepareResponse kakaoPayPrepareResponse =
           await lessonPaymentRepository.teamLessonPayment(reservationRequest,
               beginnerResponse, studentInfo, requestComplain);
-      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty) {
-        _showWebView(kakaoPayPrepareResponse,
+      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty && context.mounted) {
+        _showWebView(kakaoPayPrepareResponse, context,
             beginnerResponse: beginnerResponse);
       } else {
         if (Get.isSnackbarOpen) {
@@ -71,13 +72,14 @@ class LessonPaymentViewModel {
       BeginnerResponse beginnerResponse,
       Instructor instructor,
       List<StudentInfo> studentInfo,
-      String requestComplain) async {
+      String requestComplain,
+      BuildContext context) async {
     try {
       KakaoPayPrepareResponse kakaoPayPrepareResponse =
           await lessonPaymentRepository.instLessonPayment(reservationRequest,
               beginnerResponse, instructor, studentInfo, requestComplain);
-      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty) {
-        _showWebView(kakaoPayPrepareResponse,
+      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty && context.mounted) {
+        _showWebView(kakaoPayPrepareResponse, context,
             beginnerResponse: beginnerResponse, instructor: instructor);
       } else {
         if (!Get.isSnackbarOpen) {
@@ -96,13 +98,14 @@ class LessonPaymentViewModel {
       ReservationRequest reservationRequest,
       Instructor instructor,
       List<StudentInfo> studentInfo,
-      String requestComplain) async {
+      String requestComplain,
+      BuildContext context) async {
     try {
       KakaoPayPrepareResponse kakaoPayPrepareResponse =
           await lessonPaymentRepository.advancedLessonPayment(
               reservationRequest, instructor, studentInfo, requestComplain);
-      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty) {
-        _showWebView(kakaoPayPrepareResponse, instructor: instructor);
+      if (kakaoPayPrepareResponse.next_redirect_pc_url.isNotEmpty && context.mounted) {
+        _showWebView(kakaoPayPrepareResponse, context, instructor: instructor);
       } else {
         if (!Get.isSnackbarOpen) {
           Get.snackbar('Payment Error', 'Failed to initiate payment');
@@ -116,13 +119,15 @@ class LessonPaymentViewModel {
     }
   }
 
-  void _showWebView(KakaoPayPrepareResponse response,
+  void _showWebView(KakaoPayPrepareResponse response, BuildContext context,
       {BeginnerResponse? beginnerResponse, Instructor? instructor}) {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(response.next_redirect_app_url))
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (request) async {
+          logger.d(request.url);
+
           getAppUrl(String url) async {
             var parsingUrl = await methodChannel
                 .invokeMethod('getAppUrl', <String, Object>{'url': url});
@@ -133,6 +138,30 @@ class LessonPaymentViewModel {
             var parsingURl = await methodChannel
                 .invokeMethod('getMarketUrl', <String, Object>{'url': url});
             return parsingURl;
+          }
+
+          if (request.url.startsWith('https://developers.kakao.com/success')) {
+            Uri uri = Uri.parse(request.url);
+            String? pgToken = uri.queryParameters['pg_token'];
+            logger.d(pgToken);
+            if (pgToken != null) {
+              Get.back(); // Close the WebView dialog
+              if (await _approvePayment(response.tid, pgToken)) {
+                if (instructor == null) {
+                  Get.to(() => ReservationCompleteScreen(
+                      teamInformation: beginnerResponse));
+                } else if (beginnerResponse == null) {
+                  Get.to(
+                          () => ReservationCompleteScreen(instructor: instructor));
+                } else {
+                  Get.to(() => ReservationCompleteScreen(
+                    teamInformation: beginnerResponse,
+                    instructor: instructor,
+                  ));
+                }
+              }
+            }
+            return NavigationDecision.prevent;
           }
 
           if (!request.url.startsWith('http') &&
@@ -164,29 +193,29 @@ class LessonPaymentViewModel {
           debugPrint('url change to ${change.url}');
         },
         onPageFinished: (String url) async {
-          debugPrint('page finished loading: $url');
-          if (url.startsWith('https://developers.kakao.com/success')) {
-            Uri uri = Uri.parse(url);
-            String? pgToken = uri.queryParameters['pg_token'];
-            logger.d(pgToken);
-            if (pgToken != null) {
-              Get.back(); // Close the WebView dialog
-              if (await _approvePayment(response.tid, pgToken)) {
-                if (instructor == null) {
-                  Get.to(() => ReservationCompleteScreen(
-                      teamInformation: beginnerResponse));
-                } else if (beginnerResponse == null) {
-                  Get.to(
-                      () => ReservationCompleteScreen(instructor: instructor));
-                } else {
-                  Get.to(() => ReservationCompleteScreen(
-                        teamInformation: beginnerResponse,
-                        instructor: instructor,
-                      ));
-                }
-              }
-            }
-          }
+          // debugPrint('page finished loading: $url');
+          // if (url.startsWith('https://developers.kakao.com/success')) {
+          //   Uri uri = Uri.parse(url);
+          //   String? pgToken = uri.queryParameters['pg_token'];
+          //   logger.d(pgToken);
+          //   if (pgToken != null) {
+          //     Get.back(); // Close the WebView dialog
+          //     if (await _approvePayment(response.tid, pgToken)) {
+          //       if (instructor == null) {
+          //         Get.to(() => ReservationCompleteScreen(
+          //             teamInformation: beginnerResponse));
+          //       } else if (beginnerResponse == null) {
+          //         Get.to(
+          //             () => ReservationCompleteScreen(instructor: instructor));
+          //       } else {
+          //         Get.to(() => ReservationCompleteScreen(
+          //               teamInformation: beginnerResponse,
+          //               instructor: instructor,
+          //             ));
+          //       }
+          //     }
+          //   }
+          // }
         },
       ));
     Get.dialog(
