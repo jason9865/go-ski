@@ -155,7 +155,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                   widget.teamInformation!,
                   widget.instructor!,
                   studentInfoViewModel.studentInfoList,
-                  requestComplain);
+                  requestComplain,
+                  context);
             } else if (widget.instructor == null &&
                 widget.teamInformation != null) {
               // 팀만 있고, 지정강사는 없는경우 -> 초급, 팀 강습
@@ -163,7 +164,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                   reservationInfo,
                   widget.teamInformation!,
                   studentInfoViewModel.studentInfoList,
-                  requestComplain);
+                  requestComplain,
+                  context);
             } else if (widget.instructor != null &&
                 widget.teamInformation == null) {
               // 팀은 없고, 강사만 있는 경우 -> 중급, 고급 지정 강습
@@ -171,7 +173,8 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                   reservationInfo,
                   widget.instructor!,
                   studentInfoViewModel.studentInfoList,
-                  requestComplain);
+                  requestComplain,
+                  context);
             }
           } else if (studentInfoViewModel.studentInfoList.length !=
               reservationInfo.studentCount) {
@@ -300,7 +303,9 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                           SizedBox(height: titlePadding),
                           GoskiText(
                             text: tr('reservationPeopleCount', args: [
-                              studentInfoViewModel.studentInfoList.length.toString(), reservationInfo.studentCount.toString()
+                              studentInfoViewModel.studentInfoList.length
+                                  .toString(),
+                              reservationInfo.studentCount.toString()
                             ]),
                             size: goskiFontMedium,
                             isBold: true,
