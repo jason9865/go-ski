@@ -28,7 +28,7 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
 
     }
 
-    public static LessonCreateInstructorEvent of(Lesson lesson, Integer receiverId, String deviceType) {
+    public static LessonCreateInstructorEvent of(Integer lessonId, Integer receiverId, String deviceType) {
 
         return new LessonCreateInstructorEvent(
                 receiverId,
@@ -36,7 +36,7 @@ public class LessonCreateInstructorEvent extends NotificationEvent{
                 NOTIFICATION_TYPE,
                 DeviceType.valueOf(deviceType),
                 "강습이 예약되었습니다", // title
-                lesson.getLessonId()
+                lessonId
         );
     }
 

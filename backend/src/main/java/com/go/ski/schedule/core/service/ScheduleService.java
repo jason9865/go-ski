@@ -266,7 +266,7 @@ public class ScheduleService {
                         for (ReserveScheduleVO reserveScheduleVO : reserveScheduleVOs) {
                             log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
                             lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
-                            eventPublisher.publishDesignatedEvent(reserveScheduleVO.getLessonId());
+                            eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
                         }
                     }
                 }
