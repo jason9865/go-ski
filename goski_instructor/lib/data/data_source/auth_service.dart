@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
-import 'package:goski_instructor/const/util/base64_encoder.dart';
 import 'package:goski_instructor/const/util/custom_dio.dart';
 import 'package:goski_instructor/const/util/parser.dart';
 import 'package:goski_instructor/data/model/instructor.dart';
@@ -160,8 +158,8 @@ class AuthService extends GetxService {
       logger.d(response.data);
 
       if (response.data['status'] == 'success') {
-        String? serverAccessToken = response.headers['accesstoken'];
-        String? serverRefreshToken = response.headers['refreshtoken'];
+        String? serverAccessToken = response.headers['accesstoken'][0];
+        String? serverRefreshToken = response.headers['refreshtoken'][0];
         if (serverAccessToken != null && serverRefreshToken != null) {
           await secureStorage.write(
               key: dotenv.env['ACCESS_TOKEN_KEY']!, value: serverAccessToken);
