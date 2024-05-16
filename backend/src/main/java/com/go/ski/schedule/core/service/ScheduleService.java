@@ -15,7 +15,6 @@ import com.go.ski.redis.repository.ScheduleCacheRepository;
 import com.go.ski.schedule.support.exception.ScheduleExceptionEnum;
 import com.go.ski.schedule.support.vo.ReserveScheduleVO;
 import com.go.ski.team.core.model.Permission;
-import com.go.ski.team.core.model.SkiResort;
 import com.go.ski.team.core.model.Team;
 import com.go.ski.team.core.model.TeamInstructor;
 import com.go.ski.team.core.repository.PermissionRepository;
@@ -29,10 +28,12 @@ import com.go.ski.user.support.vo.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -245,6 +246,25 @@ public class ScheduleService {
             lessonTime++;
         }
         return lessonTime << startTime;
+    }
+
+    // 매일 자정에 실행되는 스케줄러
+    @Scheduled(cron = "0 0 17 * * ?")
+    @Transactional
+    public void updateDatabase() {
+        // instructorId가 null인 데이터에 대해 업데이트
+        Set<String> keys = redisTemplate.keys("scheduleCache:*:*:" + LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        if (keys != null) {
+            for (String key : keys) {
+                Optional<ScheduleCacheDto> scheduleCacheDto = scheduleCacheRepository.findById(key);
+                if (scheduleCacheDto.isPresent()) {
+                    List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
+                    for (ReserveScheduleVO reserveScheduleVO : reserveScheduleVOs) {
+                        lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                    }
+                }
+            }
+        }
     }
 
 }

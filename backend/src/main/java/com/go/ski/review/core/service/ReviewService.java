@@ -1,5 +1,7 @@
 package com.go.ski.review.core.service;
 
+import com.go.ski.common.exception.ApiExceptionFactory;
+import com.go.ski.lesson.support.exception.LessonExceptionEnum;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.repository.LessonRepository;
 import com.go.ski.review.core.model.Review;
@@ -12,6 +14,7 @@ import com.go.ski.review.support.dto.InstructorReviewResponseDTO;
 import com.go.ski.review.support.dto.ReviewCreateRequestDTO;
 import com.go.ski.review.support.dto.ReviewResponseDTO;
 import com.go.ski.review.support.dto.TagReviewResponseDTO;
+import com.go.ski.review.support.exception.ReviewExceptionEnum;
 import com.go.ski.review.support.vo.InstructorReviewVO;
 import com.go.ski.review.support.vo.InstructorTagsVO;
 import com.go.ski.user.core.model.Instructor;
@@ -48,9 +51,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public void createReview(ReviewCreateRequestDTO request) {
-        Lesson lesson = lessonRepository.findById(request.getLessonId())
-                .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!")); // 추후 변경 예정
+    public void createReview(User user, ReviewCreateRequestDTO request) {
+        Lesson lesson = getLesson(request.getLessonId());
+
+        validateWriteReview(lesson,user);
 
         // 리뷰 저장
         Review review = Review.builder()
@@ -77,8 +81,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<ReviewResponseDTO> getReviews(Integer lessonId) {
-        Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("해당 강습이 존재하지 않습니다!")); // 추후 변경 예정
+        Lesson lesson = getLesson(lessonId);
 
         List<Review> reviewList= reviewRepository.findByLesson(lesson);
 
@@ -104,5 +107,21 @@ public class ReviewService {
             result.add(InstructorReviewResponseDTO.toDTO(reviewVO,instructorTags));
         }
         return result;
+    }
+
+    private Lesson getLesson(Integer lessonId){
+        return  lessonRepository.findById(lessonId)
+                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.NO_PARAM));
+    }
+
+    private void validateWriteReview(Lesson lesson, User user) {
+        if(!user.getUserId().equals(lesson.getUser().getUserId())){ // 대표 결제자가 아니면 리뷰 작성 불가
+            throw ApiExceptionFactory.fromExceptionEnum(ReviewExceptionEnum.WRONG_REQUEST);
+        }
+        
+        if(reviewRepository.existsByLesson(lesson)){
+            throw ApiExceptionFactory.fromExceptionEnum(ReviewExceptionEnum.REVIEW_ALREADY_EXISTS);
+        }
+        
     }
 }
