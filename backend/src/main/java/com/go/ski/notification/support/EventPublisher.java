@@ -89,13 +89,13 @@ public class EventPublisher {
         if (lesson.getInstructor() != null) {
             applicationEventPublisher.publishEvent(
                 LessonCreateInstructorEvent.of(
-                        lesson, lesson.getInstructor().getInstructorId(),deviceType));
+                        lesson.getLessonId(), lesson.getInstructor().getInstructorId(),deviceType));
         }
 
         // 사장 알림
         applicationEventPublisher.publishEvent(
                 LessonCreateInstructorEvent.of(
-                        lesson, team.getUser().getUserId(), deviceType));
+                        lesson.getLessonId(), team.getUser().getUserId(), deviceType));
 
         // 결제 대표자 알림
         applicationEventPublisher.publishEvent(
@@ -129,13 +129,11 @@ public class EventPublisher {
     }
 
     // 미지정 -> 지정 강습으로 변하는 경우 알림
-    public void publishDesignatedEvent(Integer lessonId) {
-        Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> ApiExceptionFactory.fromExceptionEnum(LessonExceptionEnum.NO_PARAM));
+    public void publishDesignatedEvent(Integer instructorId, Integer lessonId) {
 
         applicationEventPublisher.publishEvent(
                 LessonCreateInstructorEvent.of(
-                        lesson, lesson.getInstructor().getInstructorId(),"Mobile")// 추후변경 예정
+                        lessonId, instructorId,"MOBILE")// 추후변경 예정
         );
 
     }
