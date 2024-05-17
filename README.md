@@ -1,5 +1,9 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 100px; height: 100px;">
+    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 200px; height: 200px;">
     <h1 style="margin-left: 20px;">모바일 스키 강습 플랫폼 GOSKI</h1>
 </div>
 
@@ -229,3 +233,8 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 ## 참고
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
