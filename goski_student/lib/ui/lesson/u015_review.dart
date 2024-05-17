@@ -43,6 +43,10 @@ class ReviewScreen extends StatelessWidget {
                     await lessonListViewModel.getLessonList();
 
                     if (result) {
+                      if (!Get.isSnackbarOpen) {
+                        Get.snackbar(
+                            tr("notification"), tr("sucessWriteReview"));
+                      }
                       if (goFeedbackScreen) {
                         Get.off(() => FeedbackScreen());
                       } else {
