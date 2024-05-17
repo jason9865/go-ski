@@ -251,7 +251,7 @@ public class ScheduleService {
     }
 
     // 매일 자정에 실행되는 스케줄러
-    @Scheduled(cron = "0 0 18 * * ?")
+    @Scheduled(cron = "0 0 12 * * ?")
     @Transactional
     public void updateDatabase() {
         // instructorId가 null인 데이터에 대해 업데이트
@@ -270,6 +270,13 @@ public class ScheduleService {
                         }
                     }
                 }
+
+                String[] parts = key.split(":");
+                Integer teamId = Integer.parseInt(parts[2]);
+                LocalDate lessonDate = LocalDate.parse(parts[3]);
+                Team team = Team.builder().teamId(teamId).build();
+                log.info("{}번 팀 스케쥴 캐싱하기", teamId);
+                scheduleCaching(team, lessonDate);
             }
         }
     }
