@@ -221,6 +221,7 @@
   "feetSize": "신발 사이즈",
   "rewriteFootSize": "신발 사이즈를 확인해주세요",
   "hintFeetSize": "신발 사이즈를 10 단위로 입력해주세요. ex) 265 -> 270",
+  "feetSizeDialogContent": "신발 사이즈는 100 ~ 350 사이에서 10 단위로만 입력 가능합니다. ex) 265 -> 270",
   "coupon": "쿠폰",
   "hintSelectCoupon": "쿠폰을 선택해주세요",
   "hintRequestMessage": "강사님께 바라는 요청을 적어주세요",
@@ -271,6 +272,11 @@
   "pleaseCheckPolicy": "필수 이용 약관을 모두 동의해주세요",
   "incompleteInformation": "수강생 정보",
   "pleaseEnterStudentInfo": "수강생 정보를 모두 입력해주세요",
+  "pleaseEnterStudentName": "수강생 이름을 입력해주세요",
+  "pleaseEnterStudentHeight": "수강생 신장을 입력해주세요",
+  "pleaseEnterStudentAge": "수강생 나이를 입력해주세요",
+  "pleaseEnterStudentWeight": "수강생 체중을 입력해주세요",
+  "pleaseEnterStudentFootSize": "수강생 신발 사이즈를 입력해주세요",
   "refundPolicyDetail": "이용일 7일 이전 취소 시 : 전액 환불\n이용일 7일 이내 취소 시 : 예약금의 50% 환불\n이용일 2일 이내 취소 불가능",
   "instructorProfile": "강사 프로필",
   "hintStudentCount": "{} 명",
@@ -331,5 +337,7 @@
   "failPayment": "결제 실패",
   "failPaymentTryLater": "결제에 실패하였습니다.\n다시 시도해주세요.",
   "successPayment": "결제 성공",
-  "successPaymentContent": "정상적으로 결제가 완료되었습니다"
+  "successPaymentContent": "정상적으로 결제가 완료되었습니다",
+  "errorStudentNumberTitle": "강습인원 입력 오류",
+  "errorStudentNumberContent": "강습인원은 최대 8명까지 가능합니다"
 }
