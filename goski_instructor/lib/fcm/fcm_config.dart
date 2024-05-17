@@ -73,6 +73,8 @@ Future<void> setFCM() async {
     if (message.data['notificationType'] == "2") {
       title = tr('lessonAdded');
       instructorMainViewModel.getScheduleList();
+    } else if (message.data['notificationType'] == "3") {
+      instructorMainViewModel.getScheduleList();
     }
     await flutterLocalNotificationsPlugin.show(
         0, title, '${message.data["title"]}', notificationDetails,
@@ -160,18 +162,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
 
-  // late String title;
-  // if (message.data['notificationType'] == 7) {
-  //   title = '강습 예약 완료';
-  // } else if (message.data['notificationType'] == 8) {
-  //   title = '피드백 도착';
-  // } else {
-  //   title = '쪽지 도착';
-  // }
-
-  // await flutterLocalNotificationsPlugin.show(
-  //     0, title, '${message.data["title"]}', notificationDetails,
-  //     payload: 'item x');
+  late String title = '';
+  if (message.data['notificationType'] == "2") {
+    title = tr('lessonAdded');
+  }
+  await flutterLocalNotificationsPlugin.show(
+      0, title, '${message.data["title"]}', notificationDetails,
+      payload: 'item x');
 
   logger.d("Handling a background message: ${message.messageId}");
 }
