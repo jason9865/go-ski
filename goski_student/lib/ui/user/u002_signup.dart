@@ -57,13 +57,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     signupViewModel
                         .userSignup(signupViewModel.user.value)
                         .then((value) => {
-                              if (value) {
-                                Get.offAll(() => const StudentMainScreen())
-                              } else {
-                                if (!Get.isSnackbarOpen) {
-                                  Get.snackbar(tr('failSignup'), tr('tryLater'))
+                              if (value)
+                                {
+                                  if (!Get.isSnackbarOpen)
+                                    {
+                                      Get.snackbar(
+                                          tr('successSignup'), tr('welcome'))
+                                    },
+                                  Get.offAll(() => const StudentMainScreen())
                                 }
-                              }
+                              else
+                                {
+                                  if (!Get.isSnackbarOpen)
+                                    {
+                                      Get.snackbar(
+                                          tr('failSignup'), tr('tryLater'))
+                                    }
+                                }
                             });
                   }
                 },
