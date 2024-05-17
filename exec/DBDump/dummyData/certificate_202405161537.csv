@@ -1,0 +1,15 @@
+﻿"certificate_id","certificate_name","certificate_type"
+1,Level1,SKI
+2,Level2,SKI
+3,Level3,SKI
+4,Teaching1,SKI
+5,Teaching2,SKI
+6,Teaching3,SKI
+7,Demonstrator,SKI
+8,Level1,BOARD
+9,Level2,BOARD
+10,Level3,BOARD
+11,Teaching1,BOARD
+12,Teaching2,BOARD
+13,Teaching3,BOARD
+14,Demonstrator,BOARD
