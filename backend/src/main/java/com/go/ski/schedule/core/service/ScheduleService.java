@@ -2,6 +2,7 @@ package com.go.ski.schedule.core.service;
 
 import com.go.ski.common.exception.ApiExceptionFactory;
 import com.go.ski.lesson.support.vo.LessonScheduleVO;
+import com.go.ski.notification.support.EventPublisher;
 import com.go.ski.payment.core.model.Lesson;
 import com.go.ski.payment.core.model.LessonInfo;
 import com.go.ski.payment.core.model.LessonPaymentInfo;
@@ -51,6 +52,7 @@ public class ScheduleService {
     private final PermissionRepository permissionRepository;
     private final ScheduleCacheRepository scheduleCacheRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final EventPublisher eventPublisher;
 
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
@@ -249,7 +251,7 @@ public class ScheduleService {
     }
 
     // 매일 자정에 실행되는 스케줄러
-    @Scheduled(cron = "0 0 18 * * ?")
+    @Scheduled(cron = "0 0 13 * * ?")
     @Transactional
     public void updateDatabase() {
         // instructorId가 null인 데이터에 대해 업데이트
@@ -264,7 +266,14 @@ public class ScheduleService {
                         for (ReserveScheduleVO reserveScheduleVO : reserveScheduleVOs) {
                             log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
                             lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                            eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
                         }
+                        String[] parts = key.split(":");
+                        Integer teamId = Integer.parseInt(parts[2]);
+                        LocalDate lessonDate = LocalDate.parse(parts[3]);
+                        Team team = Team.builder().teamId(teamId).build();
+                        log.info("{}번 팀 스케쥴 캐싱하기", teamId);
+                        scheduleCaching(team, lessonDate);
                     }
                 }
             }
