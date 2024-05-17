@@ -123,7 +123,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
               hintText: tr('hintFeetSize'),
               isDigitOnly: true,
               onTextChange: (text) {
-                studentInfo.footSize = int.parse(text);
+                studentInfo.footSize = int.parse(text.replaceAll(',', ''));
               },
             ),
             SizedBox(height: contentPadding * 2),
@@ -151,7 +151,21 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
                         showCheckFootSizeDialog(context);
                       }
                     } else {
-                      showCompleteStudentInfoDialog(context);
+                      String content = '';
+
+                      if (studentInfo.name == '') {
+                          content = tr('pleaseEnterStudentName');
+                      } else if (studentInfo.height == '') {
+                        content = tr('pleaseEnterStudentHeight');
+                      } else if (studentInfo.age == '') {
+                        content = tr('pleaseEnterStudentAge');
+                      } else if (studentInfo.weight == '') {
+                        content = tr('pleaseEnterStudentWeight');
+                      } else {
+                        content = tr('pleaseEnterStudentFootSize');
+                      }
+
+                      showCompleteStudentInfoDialog(context, content);
                     }
                   },
                 )
@@ -164,7 +178,7 @@ class _InputStudentInfoDialogState extends State<InputStudentInfoDialog> {
   }
 }
 
-void showCompleteStudentInfoDialog(BuildContext context) {
+void showCompleteStudentInfoDialog(BuildContext context, String content) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -174,7 +188,7 @@ void showCompleteStudentInfoDialog(BuildContext context) {
           size: goskiFontLarge,
         ),
         content: GoskiText(
-          text: tr('pleaseEnterStudentInfo'),
+          text: content,
           size: goskiFontMedium,
         ),
         actions: <Widget>[
@@ -203,7 +217,7 @@ void showCheckFootSizeDialog(BuildContext context) {
           size: goskiFontLarge,
         ),
         content: GoskiText(
-          text: tr('hintFeetSize'),
+          text: tr('feetSizeDialogContent'),
           size: goskiFontMedium,
         ),
         actions: <Widget>[
