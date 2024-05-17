@@ -57,6 +57,10 @@ class SettingScreen extends StatelessWidget {
                           content: tr('logout'),
                           onConfirm: () => {
                             secureStorage.deleteAll(),
+                            if (!Get.isSnackbarOpen)
+                              {
+                                Get.snackbar(tr("logout"), tr("successLogout")),
+                              },
                             Get.offAll(() => const LoginScreen())
                           },
                         ),

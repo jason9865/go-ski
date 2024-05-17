@@ -221,6 +221,10 @@ class FeedbackNotificationCard extends StatelessWidget {
               child: DeleteNotificationDialog(
                 onCancel: () => Navigator.pop(context),
                 onConfirm: () {
+                  if (!Get.isSnackbarOpen) {
+                    Get.snackbar(tr("deleteNotification"),
+                        tr("successDeleteNotification"));
+                  }
                   onItemDeleteClicked();
                   Navigator.pop(context);
                 },
@@ -352,6 +356,10 @@ class LessonNotificationCard extends StatelessWidget {
               child: DeleteNotificationDialog(
                 onCancel: () => Navigator.pop(context),
                 onConfirm: () {
+                  if (!Get.isSnackbarOpen) {
+                    Get.snackbar(tr("deleteNotification"),
+                        tr("successDeleteNotification"));
+                  }
                   onItemDeleteClicked();
                   Navigator.pop(context);
                 },
@@ -464,6 +472,10 @@ class MessageNotificationCard extends StatelessWidget {
               child: DeleteNotificationDialog(
                 onCancel: () => Navigator.pop(context),
                 onConfirm: () {
+                  if (!Get.isSnackbarOpen) {
+                    Get.snackbar(tr("deleteNotification"),
+                        tr("successDeleteNotification"));
+                  }
                   onItemDeleteClicked();
                   Navigator.pop(context);
                 },

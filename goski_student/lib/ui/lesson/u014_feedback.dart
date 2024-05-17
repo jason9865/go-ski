@@ -129,6 +129,10 @@ class FeedbackScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () async {
+                        if (!Get.isSnackbarOpen) {
+                          Get.snackbar(
+                              tr("photoDownload"), tr("startDownload"));
+                        }
                         String savedDir =
                             (await getApplicationDocumentsDirectory()).path;
 
@@ -187,6 +191,10 @@ class FeedbackScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () async {
+                        if (!Get.isSnackbarOpen) {
+                          Get.snackbar(
+                              tr("videoDownload"), tr("startDownload"));
+                        }
                         String savedDir = await ExternalPath
                             .getExternalStoragePublicDirectory(
                                 ExternalPath.DIRECTORY_DOWNLOADS);
