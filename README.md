@@ -1,17 +1,11 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
 
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 200px; height: 200px;">
+    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 50px; height: 50px;">
     <h1 style="margin-left: 20px;">모바일 스키 강습 플랫폼 GOSKI</h1>
 </div>
 
-<hr>
 
 ## 목차
-
-
 
 
 1. [**서비스 소개**](#1)
@@ -42,62 +36,36 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 ### 수강생
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 100%;">
-    <div style="text-align: left; width: 30%; margin-right: 50px;">
-        <h4>로그인</h4>
-        <img src="img/student_gif//수강생_01_로그인.gif" alt="로그인" style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4>리조트 선택</h4>
-        <img src="img/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
-    </div>
-</div>
+#### 로그인 / 리조트 선택
+<img src="img/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:30px;">
+<img src="img/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
+
 
 #### 강습내역
 <img src="img/student_gif/수강생_04_강습내역.gif" width="30%">
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 100%;">
-    <div style="text-align: left; width: 30%; margin-right: 50px;">
-        <h4>피드백</h4>
-        <img src="img/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백" style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4>리뷰</h4>
-        <img src="img/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰" style="width: 30%;">
-    </div>
-</div>
+#### 피드백 / 리뷰
+
+<img src="img/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백" style="width: 30%;  margin-right:30px;">
+<img src="img/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰" style="width: 30%;">
+
 
 #### 강사 프로필
 <img src="img/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필" style="width: 30%;">
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 30%;">
-    <div style="text-align: left; width: 30%; margin-right: 30px;">
-        <h4>강습 예약</h4>
-        <img src="img/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4>강습 취소</h4>
-        <img src="img/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
-    </div>
-</div>
+#### 강습 예약 / 강습 취소
+<img src="img/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%;  margin-right:30px;">
+<img src="img/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
 
 #### 결제 내역
-<img src="img/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%;">
+<img src="img/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%;  margin-right:30px;">
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 30%;">
-    <div style="text-align: left; width: 30%; margin-right: 30px;">
-        <h4>알림</h4>
-        <img src="img/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%; margin-right: 30px;">
-        <h4>알림 설정</h4>
-        <img src="img/student_gif/수강생_13_알림_설정.gif" alt="알림 설정"   style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4>실시간 쪽지</h4>
-        <img src="img/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기" style="width: 30%;">
-    </div>
-</div>
+#### 알림 / 실시간 쪽지
+<img src="img/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;  margin-right:30px;">
+<img src="img/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기" style="width: 30%;">
+
+#### 알림 설정
+<img src="img/student_gif/수강생_13_알림_설정.gif" alt="알림 설정"   style="width: 30%;">
 
 
 ### 강사
@@ -105,32 +73,17 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 #### 로그인 화면
 <img src="img/instructor_gif/강사_01_로그인.gif" alt="강사 로그인" style="width: 30%;">
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 100%;">
-    <div style="text-align: left; width: 30%; margin-right: 30px;">
-        <h4>일정확인</h4>
-        <img src="img/instructor_gif/강사_02_일정_확인.gif" alt="일정 확인"style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4>실시간 강습 예약</h4>
-        <img src="img/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
-    </div>
-</div>
-
+#### 일정 확인 / 실시간 강습 예약
+<img src="img/instructor_gif/강사_02_일정_확인.gif" alt="일정 확인"style="width: 30%; margin-right:30px;">
+<img src="img/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
 
 #### 알림 
 <img src="img/instructor_gif/강사_04_알림.gif" alt="알림" style="width: 30%;">  
 
+#### 강습 내역 / 피드백 작성
+<img src="img/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" style="width : 30%; margin-right:30px;">
+<img src="img/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성"style="width: 30%;">
 
-<div style="display: flex; justify-content: flex-start; align-items: flex-start; width: 30%;">
-    <div style="text-align: left; width: 30%; margin-right: 30px;">
-        <h4>강습 내역</h4>
-        <img src="img/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" style="width: 30%;">
-    </div>
-    <div style="text-align: left; width: 30%;">
-        <h4> 피드백 작성</h4>
-        <img src="img/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성"style="width: 30%;">
-    </div>
-</div>
 
 #### 리뷰 내역
 <img src="img/instructor_gif/강사_05_리뷰_내역.gif" alt="리뷰 내역" style="width: 30%;">  
@@ -232,9 +185,3 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 <div id="7"></div>
 
 ## 참고
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
