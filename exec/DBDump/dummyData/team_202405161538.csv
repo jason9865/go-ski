@@ -1,0 +1,14 @@
+﻿"team_id","user_id","resort_id","team_name","team_profile_url","description","team_cost","dayoff"
+19,14,1,고스키,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/3430152c-380e-4817-bc6c-02729e76d37b.png,스키는 역시 고스키! 설산에서의 유쾌한 질주를 펼쳐보세요!,50000,67
+21,14,1,다이스키,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/f870a396-a949-4b58-b3d2-ad2756162e02.png,스키가 제일 좋아! 아이들에게 겨울의 낭만을 선사하세요!,50000,67
+22,14,2,아이브,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/ba14c651-cd68-4f8f-9d0a-809759a7541f.png,"2021년 12월 1일에 데뷔한 스타쉽엔터테인먼트 소속의 6인조 다국적 걸그룹이다.",50000,67
+23,14,2,에스파,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/59883bc7-5e4c-4bfc-96ff-b3c6413dec08.png,"2020년 11월 17일에 데뷔한 SM엔터테인먼트 소속의 4인조 다국적 걸그룹.",60000,24
+24,14,2,뉴진스,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/d52ae9f2-404f-4cfe-94ae-a4fa150ceac8.png,우리민지가요어릴때는진짜더예뻤거든요진짜로지금보다더연습생때는애가진짜이뻤는데요. ,70000,6
+25,14,3,한화 이글스,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/bfd11ee7-9dae-4154-baf3-ebb4ad399671.png,"한화 이글스는 대한민국의 대전광역시를 연고지로 하는 KBO 소속 프로야구단이다. 홈 구장은 대전광역시 중구 부사동의 대전한화생명이글스파크이다. 제2구장은 충청북도 청주시 서원구 사직동의 청주종합경기장 야구장이고, 퓨처스 구장은 충청남도 서산시 성연면의 서산야구장이다.",50000,6
+26,14,3,SSG 랜더스,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/4092e377-31c7-482e-9571-393deffca5b0.png,"SSG 랜더스(SSG Landers)는 SK 와이번스를 인수하여 대한민국 인천광역시를 연고지로 하는 KBO 소속 프로야구단으로 신세계그룹의 계열사이다. 홈 구장은 인천광역시 미추홀구에 있는 인천SSG랜더스필드이다. SSG 구단 고유의 레드 컬러를 그대로 사용함으로서 과거와 미래를 하나로 연결하는 의미를 담았으며, 엠블럼에 삽입된 별은 SSG의 뛰어난 성과와 우승을 상징하고, 앞으로 팬들과 함께 써내려갈 승리의 역사를 강조했다고 한다. ",60000,24
+27,14,3,롯데 자이언츠,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/c337a972-af77-46fb-94a7-b83f0c285b13.png,"KBO 리그 인기 구단 중 하나이자 삼성 라이온즈와 함께 원년부터 연고지, 구단명, 모기업 전부 변하지 않고 현재까지 이어져 온 유이한 구단이며 한국실업야구 롯데 자이언트 시절을 포함한다면 KBO 리그 구단 중 가장 오랜 역사를 자랑하는 팀이다.애석하게도 긴 역사에 비해 성적은 영 신통찮은 편으로현재까지 KBO 한국시리즈 마지막 우승연도가 가장 오래된 팀이자 현존하는 KBO 리그 구단 중 키움 히어로즈와 더불어 단일 리그 페넌트 레이스 우승 경험이 없는 유이한 팀이다.",70000,65
+28,14,1,맨체스터 유나이티드,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/18529be0-f709-4f8d-827f-d85f98ebd72b.png,"영국 잉글랜드 그레이터맨체스터 주의 트래포드를 연고로 하는 프로축구 구단이다. 뉴턴 히스 LYR F.C.(Newton Heath LYR F.C.)라는 이름으로 창설되었다. 1902년 4월 26일 지금의 이름인 맨체스터 유나이티드 F.C.로 개칭하였고, 1910년에는 홈 경기장을 맨체스터 시 동북쪽의 뱅크 스트리트에서 서남쪽의 올드 트래포드로 이전했다.",50000,65
+29,14,1,맨체스터 시티,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/0b71be86-3e33-447d-bba8-8723d4d8e14b.png,영국 잉글랜드 프리미어 리그 소속 프로축구 클럽. 연고지는 그레이터맨체스터주 맨체스터. 홈 구장은 에티하드 스타디움.,60000,6
+30,14,1,레알 마드리드,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/b95b5cc9-b9bc-40d7-9aa9-6d6b537435e1.png,"스페인 마드리드 차마르틴을 연고로 하는 프로 축구단이다. 소속 리그는 라리가, 홈구장은 에스타디오 산티아고 베르나베우이다.",70000,24
+31,14,2,아일릿,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/c033fb33-4077-4c32-94e3-c0f2ccd57438.png,아일릿 팀입니다. 보드 만 가르칩니다,50000,24
+32,14,3,해군,https://go-ski.s3.ap-northeast-2.amazonaws.com/team-profile/b7abe8d8-23a4-4f29-99f0-77deba316662.png,해군 팀입니다. 스키 좋아,50000,24
