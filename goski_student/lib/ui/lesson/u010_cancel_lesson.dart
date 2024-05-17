@@ -32,9 +32,13 @@ class CancelLessonScreen extends StatelessWidget {
         body: GoskiContainer(
           buttonName: "cancelLesson",
           onConfirm: () async {
-            bool result = await cancelLessonViewModel.cancelLesson(lessonListViewModel.selectedLesson.value.lessonId);
+            bool result = await cancelLessonViewModel.cancelLesson(
+                lessonListViewModel.selectedLesson.value.lessonId);
 
             if (result) {
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("cancelLesson"), tr("tryLater"));
+              }
               await lessonListViewModel.getLessonList();
               Get.back();
             }
@@ -79,8 +83,9 @@ class CancelLessonScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   GoskiText(
-                                      text: tr('designatedInstructor',
-                                          args: [lesson.instructorName ?? tr('noName')]),
+                                      text: tr('designatedInstructor', args: [
+                                        lesson.instructorName ?? tr('noName')
+                                      ]),
                                       size: goskiFontMedium),
                                 ],
                               ),
@@ -112,7 +117,8 @@ class CancelLessonScreen extends StatelessWidget {
                                 color: goskiDarkGray,
                               ),
                               GoskiText(
-                                  text: tr('hintStudentCount', args: [lesson.studentCount.toString()]),
+                                  text: tr('hintStudentCount',
+                                      args: [lesson.studentCount.toString()]),
                                   size: goskiFontMedium),
                             ],
                           ),
@@ -127,8 +133,10 @@ class CancelLessonScreen extends StatelessWidget {
                                 size: goskiFontMedium,
                               ),
                               GoskiText(
-                                text: tr('moneyUnit',
-                                    args: [formatFromInt(cancelLessonViewModel.lessonCost.value)]),
+                                text: tr('moneyUnit', args: [
+                                  formatFromInt(
+                                      cancelLessonViewModel.lessonCost.value)
+                                ]),
                                 size: goskiFontMedium,
                               )
                             ],
@@ -174,10 +182,13 @@ class CancelLessonScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GoskiText(
-                                text: tr('paymentAmount'), size: goskiFontMedium),
+                                text: tr('paymentAmount'),
+                                size: goskiFontMedium),
                             GoskiText(
-                                text: tr('moneyUnit',
-                                    args: [formatFromInt(cancelLessonViewModel.lessonCost.value)]),
+                                text: tr('moneyUnit', args: [
+                                  formatFromInt(
+                                      cancelLessonViewModel.lessonCost.value)
+                                ]),
                                 size: goskiFontMedium),
                           ],
                         ),
@@ -185,9 +196,17 @@ class CancelLessonScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GoskiText(
-                                text: tr('refundCharge'), size: goskiFontMedium),
+                                text: tr('refundCharge'),
+                                size: goskiFontMedium),
                             GoskiText(
-                                text: '- ${tr('moneyUnit', args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * (100 - cancelLessonViewModel.paybackRate.value))])}',
+                                text: '- ${tr('moneyUnit', args: [
+                                      formatFromInt(cancelLessonViewModel
+                                              .lessonCost.value ~/
+                                          100 *
+                                          (100 -
+                                              cancelLessonViewModel
+                                                  .paybackRate.value))
+                                    ])}',
                                 size: goskiFontMedium),
                           ],
                         ),
@@ -204,8 +223,12 @@ class CancelLessonScreen extends StatelessWidget {
                               size: goskiFontMedium,
                             ),
                             GoskiText(
-                              text: tr('moneyUnit',
-                                  args: [formatFromInt(cancelLessonViewModel.lessonCost.value ~/ 100 * cancelLessonViewModel.paybackRate.value)]),
+                              text: tr('moneyUnit', args: [
+                                formatFromInt(
+                                    cancelLessonViewModel.lessonCost.value ~/
+                                        100 *
+                                        cancelLessonViewModel.paybackRate.value)
+                              ]),
                               size: goskiFontMedium,
                             ),
                           ],
@@ -228,16 +251,14 @@ class CancelLessonScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GoskiText(
-          text: DateFormat('yyyy.MM.dd (E)')
-              .format(lesson.startTime)
-              .toString(),
+          text:
+              DateFormat('yyyy.MM.dd (E)').format(lesson.startTime).toString(),
           size: goskiFontMedium,
         ),
         Row(
           children: [
             GoskiText(
-              text:
-                  DateFormat('HH:mm').format(lesson.startTime).toString(),
+              text: DateFormat('HH:mm').format(lesson.startTime).toString(),
               size: goskiFontMedium,
             ),
             GoskiText(

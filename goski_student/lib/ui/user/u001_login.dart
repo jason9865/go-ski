@@ -90,14 +90,20 @@ class KakaoLoginButton extends StatelessWidget {
         loginViewModel.loginWithKakao().then((result) {
           switch (result) {
             case AuthStatus.already:
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("successLogin"), tr("welcome"));
+              }
               Get.offAll(() => const StudentMainScreen());
               break;
             case AuthStatus.first:
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("successLogin"), tr("redirectToSignUpScreen"));
+              }
               Get.off(() => const SignUpScreen());
               break;
             case AuthStatus.error:
               if (!Get.isSnackbarOpen) {
-                Get.snackbar("Login Failed", "Please try again.");
+                Get.snackbar(tr("failedToLogin"), tr("tryLater"));
               }
               break;
           }
