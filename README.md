@@ -1,6 +1,5 @@
-
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 50px; height: 50px;">
+    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 20%; height: 20%;">
     <h1 style="margin-left: 20px;">모바일 스키 강습 플랫폼 GOSKI</h1>
 </div>
 
@@ -42,7 +41,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 
 #### 강습내역
-<img src="img/student_gif/수강생_04_강습내역.gif" width="30%">
+<img src="img/student_gif/수강생_04_강습내역.gif" style="width: 30%;">
 
 #### 피드백 / 리뷰
 
