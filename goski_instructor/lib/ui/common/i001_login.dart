@@ -26,14 +26,16 @@ class BackgroundContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/splash.jpg"),
-          fit: BoxFit.cover,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/splash.jpg"),
+            fit: BoxFit.cover,
+          ),
         ),
+        child: const LoginContent(),
       ),
-      child: const LoginContent(),
     );
   }
 }
