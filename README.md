@@ -1,5 +1,5 @@
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 50px; height: 50px;">
+    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 20%; height: 20%;">
     <h1 style="margin-left: 20px;">모바일 스키 강습 플랫폼 GOSKI</h1>
 </div>
 
