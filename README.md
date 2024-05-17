@@ -160,7 +160,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
             <img src="exec/images/장승호.png" width="140px" /> <br> 장승호 <br>(Back-End) </a> <br></td>
     </tr>
     <tr>
-        <td align="center">강습 예약 페이지 UI</br>팀 목록 UI</br>강사 목록 UI</br>강사/팀 상세페이지 UI
+        <td align="center">강습 예약 페이지 UI<br>팀 목록 UI<br>강사 목록 UI<br>강사/팀 상세페이지 UI
         <td align="center">로그인 페이지 UI<br> 회원가입 페이지 UI <br> FCM 연동 <br> 알림 설정 UI
         <td align="center">메인 페이지 UI<br>강습 내역 UI<br>결제 내역 UI<br>피드백 UI<br> 쪽지 UI <br> 리조트 날씨 API 연동
         <td align="center">Infra<br/>회원 관리 API</br>강습 내역 API<br/> 스케줄 API</br>
