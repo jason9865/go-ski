@@ -16,7 +16,7 @@ public class TeamInstructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer teamInstructorId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 

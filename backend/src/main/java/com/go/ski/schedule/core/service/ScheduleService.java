@@ -26,6 +26,8 @@ import com.go.ski.user.core.model.User;
 import com.go.ski.user.core.repository.InstructorRepository;
 import com.go.ski.user.core.repository.UserRepository;
 import com.go.ski.user.support.vo.Role;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -53,6 +55,8 @@ public class ScheduleService {
     private final ScheduleCacheRepository scheduleCacheRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final EventPublisher eventPublisher;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public List<ReserveScheduleVO> getMySchedule(User user) {
         // 소속 팀 + userId로 현재 이후의 스케줄 조회
@@ -251,7 +255,7 @@ public class ScheduleService {
     }
 
     // 매일 자정에 실행되는 스케줄러
-    @Scheduled(cron = "0 0 13 * * ?")
+    @Scheduled(cron = "0 0 18 * * ?")
     @Transactional
     public void updateDatabase() {
         // instructorId가 null인 데이터에 대해 업데이트
@@ -264,10 +268,30 @@ public class ScheduleService {
                     List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
                     if (reserveScheduleVOs != null && !reserveScheduleVOs.isEmpty()) {
                         for (ReserveScheduleVO reserveScheduleVO : reserveScheduleVOs) {
-                            log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
-                            lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
-                            eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                            Optional<Lesson> lesson = lessonRepository.findById(reserveScheduleVO.getLessonId());
+                            if (lesson.isPresent() && lesson.get().getInstructor() == null) {
+                                log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
+                                lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                                eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                            }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 1 18 * * ?")
+    public void updateSchedule() {
+        // instructorId가 null인 데이터에 대해 업데이트
+        log.info("스케쥴 업데이트 - 날짜: {}", LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        Set<String> keys = redisTemplate.keys("scheduleCache:*:*:" + LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (keys != null && !keys.isEmpty()) {
+            for (String key : keys) {
+                Optional<ScheduleCacheDto> scheduleCacheDto = scheduleCacheRepository.findById(key.substring(14));
+                if (scheduleCacheDto.isPresent()) {
+                    List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
+                    if (reserveScheduleVOs != null && !reserveScheduleVOs.isEmpty()) {
                         String[] parts = key.split(":");
                         Integer teamId = Integer.parseInt(parts[2]);
                         LocalDate lessonDate = LocalDate.parse(parts[3]);
@@ -279,5 +303,4 @@ public class ScheduleService {
             }
         }
     }
-
 }
