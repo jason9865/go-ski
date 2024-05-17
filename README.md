@@ -54,11 +54,11 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 <img src="img/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필" style="width: 30%;">
 
 #### 강습 예약 / 강습 취소
-<img src="img/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%;  margin-right:30px;">
+<img src="img/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%; margin-right:30px;">
 <img src="img/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
 
 #### 결제 내역
-<img src="img/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%;  margin-right:30px;">
+<img src="img/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%; margin-right:30px;">
 
 #### 알림 / 실시간 쪽지
 <img src="img/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;  margin-right:30px;">
@@ -74,7 +74,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 <img src="img/instructor_gif/강사_01_로그인.gif" alt="강사 로그인" style="width: 30%;">
 
 #### 일정 확인 / 실시간 강습 예약
-<img src="img/instructor_gif/강사_02_일정_확인.gif" alt="일정 확인"style="width: 30%; margin-right:30px;">
+<img src="img/instructor_gif/강사_02_일정_확인.gif" alt="강습 내역" style="width : 30%; margin-right:30px;">
 <img src="img/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
 
 #### 알림 
