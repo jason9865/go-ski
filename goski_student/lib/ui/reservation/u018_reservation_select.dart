@@ -127,8 +127,18 @@ class _StudentNumberField extends StatelessWidget {
   _StudentNumberField() {
     _controller.addListener(() {
       if (_controller.text.isNotEmpty) {
+        if (int.tryParse(_controller.text)! > 8) {
+          _controller.text = "8";
+          if (!Get.isSnackbarOpen) {
+            Get.snackbar(tr('errorStudentNumberTitle'), tr('errorStudentNumberContent'));
+          }
+        }
+
         reservationViewModel
             .setTotalStudent(int.tryParse(_controller.text) ?? 0);
+      } else {
+        reservationViewModel
+            .setTotalStudent(0);
       }
     });
   }
