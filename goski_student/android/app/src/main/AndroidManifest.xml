@@ -1,0 +1,92 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:label="GOSKI"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        <provider
+            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+            android:authorities="${applicationId}.flutter_downloader.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+        <activity
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI, "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식 -->
+                <data
+                    android:scheme="@string/ANDROID_KAKAO_API_KEY"
+                    android:host="oauth" />
+
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            >
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+            <meta-data
+                android:name="firebase_messaging_auto_init_enabled"
+                android:value="false" />
+            <meta-data
+                android:name="firebase_analytics_collection_enabled"
+                android:value="false" />
+            <!--Push메세지의 중요도가 높다고 등록해야 정상적으로 수신 가능-->
+            <meta-data
+	            android:name="com.google.firebase.messaging.default_notification_channel_id"
+	            android:value="high_importance_channel" /> 
+            <!--Push 메시지를 클릭하여 앱에 진입할 때에 메시지 안에 담겨있는 정보를 받기 위해 추가하여야 하는 태그-->
+            <intent-filter>
+	            <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+	            <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+    <!-- Required to query activities that can process text, see:
+         https://developer.android.com/training/package-visibility?hl=en and
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+
+         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
+        </intent>
+        <package android:name="com.kakao.talk" />
+    </queries>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+</manifest>
