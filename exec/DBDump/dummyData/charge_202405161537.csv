@@ -1,0 +1,5 @@
+﻿"charge_id","charge_name","student_charge_rate","owner_charge_rate","system_charge_rate"
+0,기본 결제,100,70,30
+1,"7일 이상 기한 내  환불",100,0,0
+2,"3일 이상 기한 내 환불",50,30,20
+3,환불 불가,0,70,30

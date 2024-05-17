@@ -1,5 +1,5 @@
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-    <img src="img/goski-student-logo.png" alt="GOSKI" style="width: 20%; height: 20%;">
+    <img src="exec/images/goski-student-logo.png" alt="GOSKI" style="width: 20%; height: 20%;">
     <h1 style="margin-left: 20px;">모바일 스키 강습 플랫폼 GOSKI</h1>
 </div>
 
@@ -36,56 +36,56 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 ### 수강생
 
 #### 로그인 / 리조트 선택
-<img src="img/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:30px;">
-<img src="img/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:10px;">
+<img src="exec/images/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
 
 
 #### 강습내역
-<img src="img/student_gif/수강생_04_강습내역.gif" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_04_강습내역.gif" style="width: 30%;">
 
 #### 피드백 / 리뷰
 
-<img src="img/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백" style="width: 30%;  margin-right:30px;">
-<img src="img/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백" style="width: 30%;  margin-right:10px;">
+<img src="exec/images/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰" style="width: 30%;">
 
 
 #### 강사 프로필
-<img src="img/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필" style="width: 30%;">
 
 #### 강습 예약 / 강습 취소
-<img src="img/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%; margin-right:30px;">
-<img src="img/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%; margin-right:10px;">
+<img src="exec/images/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
 
 #### 결제 내역
-<img src="img/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%; margin-right:30px;">
+<img src="exec/images/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%; margin-right:10px;">
 
 #### 알림 / 실시간 쪽지
-<img src="img/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;  margin-right:30px;">
-<img src="img/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;  margin-right:10px;">
+<img src="exec/images/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기" style="width: 30%;">
 
 #### 알림 설정
-<img src="img/student_gif/수강생_13_알림_설정.gif" alt="알림 설정"   style="width: 30%;">
+<img src="exec/images/student_gif/수강생_13_알림_설정.gif" alt="알림 설정"   style="width: 30%;">
 
 
 ### 강사
 
 #### 로그인 화면
-<img src="img/instructor_gif/강사_01_로그인.gif" alt="강사 로그인" style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_01_로그인.gif" alt="강사 로그인" style="width: 30%;">
 
 #### 일정 확인 / 실시간 강습 예약
-<img src="img/instructor_gif/강사_02_일정_확인.gif" alt="강습 내역" style="width : 30%; margin-right:30px;">
-<img src="img/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_02_일정_확인.gif" alt="강습 내역" style="width : 30%; margin-right:10px;">
+<img src="exec/images/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
 
 #### 알림 
-<img src="img/instructor_gif/강사_04_알림.gif" alt="알림" style="width: 30%;">  
+<img src="exec/images/instructor_gif/강사_04_알림.gif" alt="알림" style="width: 30%;">  
 
 #### 강습 내역 / 피드백 작성
-<img src="img/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" style="width : 30%; margin-right:30px;">
-<img src="img/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성"style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" style="width : 30%; margin-right:10px;">
+<img src="exec/images/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성"style="width: 30%;">
 
 
 #### 리뷰 내역
-<img src="img/instructor_gif/강사_05_리뷰_내역.gif" alt="리뷰 내역" style="width: 30%;">  
+<img src="exec/images/instructor_gif/강사_05_리뷰_내역.gif" alt="리뷰 내역" style="width: 30%;">  
 
 <div id="3"></div>
 
@@ -138,7 +138,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 <div id="4"></div>
 
 ## 🗂️ 시스템 아키텍처
-<img src="img/goski-architecture.png" alt="시스템 아키텍처">
+<img src="exec/images/goski-architecture.png" alt="시스템 아키텍처">
 
 <div id="5"></div>
 
@@ -147,22 +147,22 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 <table>
     <tr>
         <td height="140px" align="center">
-            <img src="img/고승민.png" width="140px" /> <br><br> 고승민 <br>(Team Leader) </a> <br></td>
+            <img src="exec/images/고승민.png" width="140px" /> <br> 고승민 <br>(Team Leader) </a> <br></td>
         <td height="140px" align="center"> 
-            <img src="img/송준석.png" width="140px" /> <br><br> 송준석 <br>(Front-End) </a> <br></td>
+            <img src="exec/images/송준석.png" width="140px" /> <br> 송준석 <br>(Front-End) </a> <br></td>
         <td height="140px" align="center"> 
-            <img src="img/최지찬.png" width="140px"  /> <br><br> 최지찬 <br>(Front-End) </a> <br></td>
+            <img src="exec/images/최지찬.png" width="140px"  /> <br> 최지찬 <br>(Front-End) </a> <br></td>
         <td height="140px" align="center"> 
-            <img src="img/고정원.png" width="140px" /> <br><br> 고정원 <br>(Back-End) </a> <br></td>
+            <img src="exec/images/고정원.png" width="140px" /> <br> 고정원 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> 
-            <img src="img/임종율.png" width="140px" /> <br><br> 임종율 <br>(Back-End) </a> <br></td>
+            <img src="exec/images/임종율.png" width="140px" /> <br> 임종율 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> 
-            <img src="img/장승호.png" width="140px" /> <br><br> 장승호 <br>(Back-End) </a> <br></td>
+            <img src="exec/images/장승호.png" width="140px" /> <br> 장승호 <br>(Back-End) </a> <br></td>
     </tr>
     <tr>
-        <td align="center">Team Leader<br/>
-        <td align="center">
-        <td align="center">
+        <td align="center">강습 예약 페이지 UI</br>팀 목록 UI</br>강사 목록 UI</br>강사/팀 상세페이지 UI
+        <td align="center">로그인 페이지 UI<br> 회원가입 페이지 UI <br> FCM 연동 <br> 알림 설정 UI
+        <td align="center">메인 페이지 UI<br>강습 내역 UI<br>결제 내역 UI<br>피드백 UI<br> 쪽지 UI <br> 리조트 날씨 API 연동
         <td align="center">Infra<br/>회원 관리 API</br>강습 내역 API<br/> 스케줄 API</br>
         <td align="center">결제 API<br/>강습 예약 API</br>
         <td align="center">팀 API <br> 피드백 및 리뷰 API<br/> 알림기능
