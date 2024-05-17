@@ -164,8 +164,8 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
         <td align="center">로그인 페이지 UI<br> 회원가입 페이지 UI <br> FCM 연동 <br> 알림 설정 UI <br> 강사 스케줄 랜더링 <br> 스케줄 세부정보 UI
         <td align="center">메인 페이지 UI<br>강습 내역 UI<br>결제 내역 UI<br>피드백 UI<br> 쪽지 UI <br> 리조트 날씨 API 연동
         <td align="center">Infra<br>회원 관리 API<br>강습 내역 API<br> 스케줄 API<br>
-        <td align="center">결제 API<br>강습 예약 API<br>
-        <td align="center">팀 API <br> 피드백 및 리뷰 API<br> 알림기능
+        <td align="center">카카오 API 기반 결제 API<br>사장 정산 및 정산내역 조회 API<br>강사프로필 및 리조트 조회 API<br>codeF API 기반 계좌 실명 인증 기능
+        <td align="center">팀 API <br> 피드백 및 리뷰 API<br> FCM 알림기능
     </tr>
 </table>
 
