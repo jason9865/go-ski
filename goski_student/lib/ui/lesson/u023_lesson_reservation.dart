@@ -54,6 +54,7 @@ class LessonReservationScreen extends StatefulWidget {
 
 class _LessonReservationScreenState extends State<LessonReservationScreen> {
   final formatter = NumberFormat.simpleCurrency(locale: 'ko');
+  // TODO: 네이버 페이 추가시 Enum으로 변경하는 것이 좋을 것으로 예상
   String payment = tr('kakaoPay');
 
   void onPolicyCheckboxClicked(_DummyPolicy item, int index, bool value) {
