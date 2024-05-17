@@ -331,5 +331,7 @@
   "failPayment": "결제 실패",
   "failPaymentTryLater": "결제에 실패하였습니다.\n다시 시도해주세요.",
   "successPayment": "결제 성공",
-  "successPaymentContent": "정상적으로 결제가 완료되었습니다"
+  "successPaymentContent": "정상적으로 결제가 완료되었습니다",
+  "errorStudentNumberTitle": "강습인원 입력 오류",
+  "errorStudentNumberContent": "강습인원은 최대 8명까지 가능합니다"
 }
