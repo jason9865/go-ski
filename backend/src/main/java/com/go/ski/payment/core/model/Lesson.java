@@ -4,16 +4,14 @@ import com.go.ski.team.core.model.Team;
 import com.go.ski.user.core.model.Instructor;
 import com.go.ski.user.core.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
