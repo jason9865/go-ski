@@ -54,6 +54,7 @@ class LessonReservationScreen extends StatefulWidget {
 
 class _LessonReservationScreenState extends State<LessonReservationScreen> {
   final formatter = NumberFormat.simpleCurrency(locale: 'ko');
+  String payment = tr('kakaoPay');
 
   void onPolicyCheckboxClicked(_DummyPolicy item, int index, bool value) {
     if (index == 0) {
@@ -582,13 +583,22 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         isBold: true,
                       ),
                       SizedBox(height: titlePadding),
-                      GoskiPaymentButton(
-                        width: screenSizeController.getWidthByRatio(1),
-                        text: tr('kakaoPay'),
-                        imagePath: 'assets/images/kakaopay_button_image.png',
-                        backgroundColor: kakaoYellow,
-                        foregroundColor: goskiBlack,
-                        onTap: () {},
+                      RadioListTile(
+                        dense: true,
+                        visualDensity: VisualDensity.compact,
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: goskiBlack,
+                        title: GoskiPaymentButton(
+                          width: screenSizeController.getWidthByRatio(1),
+                          text: tr('kakaoPay'),
+                          imagePath: 'assets/images/kakaopay_button_image.png',
+                          backgroundColor: kakaoYellow,
+                          foregroundColor: goskiBlack,
+                          onTap: () {},
+                        ),
+                        value: tr('kakaoPay'),
+                        onChanged: (value) {  },
+                        groupValue: payment,
                       ),
                       SizedBox(height: titlePadding),
                       // GoskiPaymentButton(
