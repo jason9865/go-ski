@@ -101,8 +101,8 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                                 : '${lessonListViewModel.message.value.image!.name.split('.')[0].substring(0, 14)}···.${lessonListViewModel.message.value.image!.name.split('.')[1]}',
                             child: GoskiImageDialog(
                               isLocalImage: true,
-                              imageUrl: lessonListViewModel
-                                  .message.value.image!.path,
+                              imageUrl:
+                                  lessonListViewModel.message.value.image!.path,
                             ),
                           );
                         });
@@ -187,6 +187,10 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   onTap: () async {
                     bool result = await lessonListViewModel.sendMessage();
                     if (result) {
+                      if (!Get.isSnackbarOpen) {
+                        Get.snackbar(
+                            tr("notification"), tr("successSendMessage"));
+                      }
                       if (context.mounted) Navigator.pop(context);
                     }
                   },
