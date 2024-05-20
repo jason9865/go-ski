@@ -5,6 +5,7 @@ import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/font_size.dart';
 import 'package:goski_instructor/ui/component/goski_card.dart';
 import 'package:goski_instructor/ui/component/goski_container.dart';
+import 'package:goski_instructor/ui/component/goski_sub_header.dart';
 import 'package:goski_instructor/ui/component/goski_text.dart';
 import 'package:goski_instructor/ui/component/goski_textfield.dart';
 
@@ -34,122 +35,128 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GoskiContainer(
-      buttonName: tr('letSave'),
-      onConfirm: () => {print("저장하기 버튼")},
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            GoskiCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GoskiText(
-                            text: widget.resortName, size: goskiFontLarge),
-                        const GoskiText(text: " - ", size: goskiFontLarge),
-                        GoskiText(text: widget.teamName, size: goskiFontLarge),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GoskiText(
-                          text: tr(DateFormat('yyyy.MM.dd (E) HH:mm')
-                              .format(widget.startTime)
-                              .toString()),
-                          size: goskiFontSmall,
-                          color: goskiDarkGray,
-                        ),
-                        GoskiText(
-                          text: tr(DateFormat('~HH:mm')
-                              .format(widget.endTime)
-                              .toString()),
-                          size: goskiFontSmall,
-                          color: goskiDarkGray,
-                        ),
-                      ],
-                    ),
-                  ],
+    return Scaffold(
+      appBar: GoskiSubHeader(
+        title: tr('createFeedback'),
+      ),
+      body: GoskiContainer(
+        buttonName: tr('letSave'),
+        onConfirm: () => {print("저장하기 버튼")},
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              GoskiCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GoskiText(
+                              text: widget.resortName, size: goskiFontLarge),
+                          const GoskiText(text: " - ", size: goskiFontLarge),
+                          GoskiText(
+                              text: widget.teamName, size: goskiFontLarge),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GoskiText(
+                            text: tr(DateFormat('yyyy.MM.dd (E) HH:mm')
+                                .format(widget.startTime)
+                                .toString()),
+                            size: goskiFontSmall,
+                            color: goskiDarkGray,
+                          ),
+                          GoskiText(
+                            text: tr(DateFormat('~HH:mm')
+                                .format(widget.endTime)
+                                .toString()),
+                            size: goskiFontSmall,
+                            color: goskiDarkGray,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            GoskiCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GoskiText(text: tr('feedback'), size: goskiFontLarge),
-                    GoskiTextField(
-                      hintText: tr('feedbackHelp'),
-                      maxLines: 10,
-                      onTextChange: (text) => 0,
-                    )
-                  ],
+              GoskiCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GoskiText(text: tr('feedback'), size: goskiFontLarge),
+                      GoskiTextField(
+                        hintText: tr('feedbackHelp'),
+                        maxLines: 10,
+                        onTextChange: (text) => 0,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            GoskiCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GoskiText(
-                          text: tr("feedbackImage"),
-                          size: goskiFontLarge,
-                          isExpanded: true,
-                        ),
-                        IconButton(
-                          onPressed: pickFeedbackImage,
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
-                    ),
-                    feedbackImages.isNotEmpty
-                        ? buildFeedbackImageList()
-                        : Container(),
-                  ],
+              GoskiCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GoskiText(
+                            text: tr("feedbackImage"),
+                            size: goskiFontLarge,
+                            isExpanded: true,
+                          ),
+                          IconButton(
+                            onPressed: pickFeedbackImage,
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                      feedbackImages.isNotEmpty
+                          ? buildFeedbackImageList()
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            GoskiCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GoskiText(
-                          text: tr("feedbackVideo"),
-                          size: goskiFontLarge,
-                          isExpanded: true,
-                        ),
-                        IconButton(
-                          onPressed: pickFeedbackVideo,
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
-                    ),
-                    feedbackVideos.isNotEmpty
-                        ? buildFeedbackVideoList()
-                        : Container(),
-                  ],
+              GoskiCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GoskiText(
+                            text: tr("feedbackVideo"),
+                            size: goskiFontLarge,
+                            isExpanded: true,
+                          ),
+                          IconButton(
+                            onPressed: pickFeedbackVideo,
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                      feedbackVideos.isNotEmpty
+                          ? buildFeedbackVideoList()
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
