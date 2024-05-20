@@ -202,3 +202,5 @@ gradle-app.setting
 .env
 .keystore
 google-services.json
+firebase_options.dart
+GoogleService-info.plist
