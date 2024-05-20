@@ -152,7 +152,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                               ),
                             ),
                             Visibility(
-                              visible: list[index].designatedFee > 0,
+                              visible: list[index].paymentStatus == 0 && list[index].designatedFee > 0,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -170,7 +170,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                               ),
                             ),
                             Visibility(
-                              visible: list[index].peopleOptionFee > 0,
+                              visible: list[index].paymentStatus == 0 && list[index].peopleOptionFee > 0,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -188,7 +188,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                               ),
                             ),
                             Visibility(
-                              visible: list[index].levelOptionFee > 0,
+                              visible: list[index].paymentStatus == 0 && list[index].levelOptionFee > 0,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -217,7 +217,7 @@ class _SettlementScreenState extends State<SettlementScreen> {
                                   ),
                                   GoskiText(
                                     text:
-                                        '- ${formatFromInt(list[index].basicFee - list[index].totalAmount)}',
+                                        '- ${formatFromInt(list[index].basicFee + list[index].designatedFee + list[index].peopleOptionFee + list[index].levelOptionFee - list[index].totalAmount)}',
                                     size: goskiFontSmall,
                                   ),
                                 ],
