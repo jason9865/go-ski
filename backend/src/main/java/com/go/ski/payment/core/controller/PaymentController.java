@@ -42,114 +42,117 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/payment")
 public class PaymentController {
 
-	private final PayService payService;
-	private final KakaoPayService kakaoPayService;
+    private final PayService payService;
+    private final KakaoPayService kakaoPayService;
 
-	//결제 준비
-	@PostMapping("/charge")
-	public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(@RequestBody KakaopayPrepareRequestDTO request) {
-		KakaopayPrepareResponseDTO response = kakaoPayService.getPrepareResponse(request);
-		log.info("value : {}", response);
-		return ResponseEntity.ok().body(response);
-	}
-	//결제 승인
-	@PostMapping("/approve")
-	public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(@RequestBody KakaopayApproveRequestDTO request) {
-		KakaopayApproveResponseDTO response = kakaoPayService.getApproveResponse(request);
-		return ResponseEntity.ok().body(response);
-	}
+    //결제 준비
+    @PostMapping("/charge")
+    public ResponseEntity<KakaopayPrepareResponseDTO> preparePayment(@RequestBody KakaopayPrepareRequestDTO request) {
+        KakaopayPrepareResponseDTO response = kakaoPayService.getPrepareResponse(request);
+        log.info("value : {}", response);
+        return ResponseEntity.ok().body(response);
+    }
 
-	//결제 취소
-	@PostMapping("/cancel")
-	public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(@RequestBody KakaopayCancelRequestDTO request) {
-		KakaopayCancelResponseDTO response = kakaoPayService.getCancelResponse(request);
-		return ResponseEntity.ok().body(response);
-	}
-	//강습 예약 결제 API -> 요청 uri 나중에 페이 연동 많아지면 domain 추가
+    //결제 승인
+    @PostMapping("/approve")
+    public ResponseEntity<KakaopayApproveResponseDTO> approvePayment(@RequestBody KakaopayApproveRequestDTO request) {
+        KakaopayApproveResponseDTO response = kakaoPayService.getApproveResponse(request);
+        return ResponseEntity.ok().body(response);
+    }
 
-	//결제의 단계가 준비랑, 승인임
-	@PostMapping("/reserve/prepare")
-	public ResponseEntity<ApiResponse<?>> preparePayment(
-		HttpServletRequest httpServletRequest,
-		@RequestBody ReserveLessonPaymentRequestDTO request) {
+    //결제 취소
+    @PostMapping("/cancel")
+    public ResponseEntity<KakaopayCancelResponseDTO> cancelPayment(@RequestBody KakaopayCancelRequestDTO request) {
+        KakaopayCancelResponseDTO response = kakaoPayService.getCancelResponse(request);
+        return ResponseEntity.ok().body(response);
+    }
+    //강습 예약 결제 API -> 요청 uri 나중에 페이 연동 많아지면 domain 추가
 
-		KakaopayPrepareResponseDTO response = payService.getPrepareResponse(httpServletRequest, request);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
-	@PostMapping("/reserve/approve")
-	public ResponseEntity<ApiResponse<?>> approvePayment(
-		HttpServletRequest httpServletRequest,
-		@RequestBody ApprovePaymentRequestDTO request) {
+    //결제의 단계가 준비랑, 승인임
+    @PostMapping("/reserve/prepare")
+    public ResponseEntity<ApiResponse<?>> preparePayment(
+            HttpServletRequest httpServletRequest,
+            @RequestBody ReserveLessonPaymentRequestDTO request) {
+        log.info("예약 준비: {}", request);
+        KakaopayPrepareResponseDTO response = payService.getPrepareResponse(httpServletRequest, request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-		KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @PostMapping("/reserve/approve")
+    public ResponseEntity<ApiResponse<?>> approvePayment(
+            HttpServletRequest httpServletRequest,
+            @RequestBody ApprovePaymentRequestDTO request) {
 
-	@PostMapping("/reserve/cancel")
-	public ResponseEntity<?> cancelPayment(
-		HttpServletRequest httpServletRequest,
-		@RequestBody CancelPaymentRequestDTO request) {
+        KakaopayApproveResponseDTO response = payService.getApproveResponse(httpServletRequest, request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-		if(!payService.checkAuthorization(request.getLessonId(), httpServletRequest)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    @PostMapping("/reserve/cancel")
+    public ResponseEntity<?> cancelPayment(
+            HttpServletRequest httpServletRequest,
+            @RequestBody CancelPaymentRequestDTO request) {
 
-		payService.getCancelResponse(request);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
-	}
+        if (!payService.checkAuthorization(request.getLessonId(), httpServletRequest))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-	@GetMapping("/history")
-	public ResponseEntity<ApiResponse<?>> getUserPaymentHistory(HttpServletRequest httpServletRequest) {
-		List<UserPaymentHistoryResponseDTO> response = payService.getUserPaymentHistories(httpServletRequest);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+        payService.getCancelResponse(request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
 
-	@GetMapping("/history/head")
-	public ResponseEntity<ApiResponse<?>> getOwnerPaymentHistory(HttpServletRequest httpServletRequest) {
-		List<OwnerPaymentHistoryResponseDTO> response = payService.getOwnerPaymentHistories(httpServletRequest);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<?>> getUserPaymentHistory(HttpServletRequest httpServletRequest) {
+        List<UserPaymentHistoryResponseDTO> response = payService.getUserPaymentHistories(httpServletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-	@GetMapping("/history/{team_id}")
-	public ResponseEntity<ApiResponse<?>> getTeamPaymentHistory(HttpServletRequest httpServletRequest
-		, @PathVariable(value = "team_id") Integer teamId) {
-		List<OwnerPaymentHistoryResponseDTO> response = payService.getTeamPaymentHistories(httpServletRequest, teamId);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @GetMapping("/history/head")
+    public ResponseEntity<ApiResponse<?>> getOwnerPaymentHistory(HttpServletRequest httpServletRequest) {
+        List<OwnerPaymentHistoryResponseDTO> response = payService.getOwnerPaymentHistories(httpServletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-	@GetMapping("/withdrawal")
-	public ResponseEntity<ApiResponse<?>> getWithdrawalList(HttpServletRequest httpServletRequest) {
-		List<WithdrawalResponseDTO> response = payService.getWithdrawalList(httpServletRequest);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @GetMapping("/history/{team_id}")
+    public ResponseEntity<ApiResponse<?>> getTeamPaymentHistory(HttpServletRequest httpServletRequest
+            , @PathVariable(value = "team_id") Integer teamId) {
+        List<OwnerPaymentHistoryResponseDTO> response = payService.getTeamPaymentHistories(httpServletRequest, teamId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-	@GetMapping("/balance")
-	public ResponseEntity<ApiResponse<?>> getBalance(HttpServletRequest httpServletRequest) {
-		Integer response = payService.getBalance(httpServletRequest);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @GetMapping("/withdrawal")
+    public ResponseEntity<ApiResponse<?>> getWithdrawalList(HttpServletRequest httpServletRequest) {
+        List<WithdrawalResponseDTO> response = payService.getWithdrawalList(httpServletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-	@PostMapping("/validate_account")
-	public ResponseEntity<ApiResponse<?>> verifyAccount(@RequestBody VerifyAccountRequestDTO verifyAccountRequestDTO) throws
-		UnsupportedEncodingException,
-		JsonProcessingException,
-		InterruptedException {
-		VerifyAccountResponseDTO response = payService.requestToCodeF(verifyAccountRequestDTO);
+    @GetMapping("/balance")
+    public ResponseEntity<ApiResponse<?>> getBalance(HttpServletRequest httpServletRequest) {
+        Integer response = payService.getBalance(httpServletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+    @PostMapping("/validate_account")
+    public ResponseEntity<ApiResponse<?>> verifyAccount(@RequestBody VerifyAccountRequestDTO verifyAccountRequestDTO) throws
+            UnsupportedEncodingException,
+            JsonProcessingException,
+            InterruptedException {
+        VerifyAccountResponseDTO response = payService.requestToCodeF(verifyAccountRequestDTO);
 
-	@GetMapping("/lesson/{lesson_id}")
-	public ResponseEntity<ApiResponse<?>> getLessonCost(@PathVariable(value = "lesson_id") Integer lesson_id) {
-		LessonCostResponseDTO response = payService.getLessonCost(lesson_id);
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
-	}
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
 
-	//pgTokenTest
-	//pg 토큰 받아와야해서 이렇게 만들어봤음
-	// @GetMapping("/getPg/{pg_token}")
-	// public String returnPg(@PathVariable(value = "pg_token") String pgToken) {
-	// 	log.info(pgToken);
-	// 	return pgToken;
-	// }
+    @GetMapping("/lesson/{lesson_id}")
+    public ResponseEntity<ApiResponse<?>> getLessonCost(@PathVariable(value = "lesson_id") Integer lesson_id) {
+        LessonCostResponseDTO response = payService.getLessonCost(lesson_id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    //pgTokenTest
+    //pg 토큰 받아와야해서 이렇게 만들어봤음
+    // @GetMapping("/getPg/{pg_token}")
+    // public String returnPg(@PathVariable(value = "pg_token") String pgToken) {
+    // 	log.info(pgToken);
+    // 	return pgToken;
+    // }
 
 }
 
