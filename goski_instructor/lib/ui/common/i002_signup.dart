@@ -48,8 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onConfirm: () {
                   if (signupViewModel.user.value.isValid()) {
                     if (signupViewModel.user.value.isOwner) {
-                      Get.snackbar("지원하지 않는 기능입니다.", "사장 가입은 후추 구현 예정입니다.");
-                      // signupViewModel.ownerSignup(signupViewModel.user.value);
+                      signupViewModel.ownerSignup(signupViewModel.user.value);
                     } else {
                       signupViewModel
                           .instructorSignup(signupViewModel.user.value)
