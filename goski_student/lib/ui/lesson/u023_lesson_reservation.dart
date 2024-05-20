@@ -56,6 +56,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
   final formatter = NumberFormat.simpleCurrency(locale: 'ko');
   // TODO: 네이버 페이 추가시 Enum으로 변경하는 것이 좋을 것으로 예상
   String payment = tr('kakaoPay');
+  String requestComplain = '';
 
   void onPolicyCheckboxClicked(_DummyPolicy item, int index, bool value) {
     if (index == 0) {
@@ -89,7 +90,6 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
     final cardPadding = screenSizeController.getWidthByRatio(0.03);
     final checkboxSize = screenSizeController.getWidthByRatio(0.05);
     final reservationInfo = reservationViewModel.reservation.value;
-    String requestComplain = '';
 
     // final List<_AmountOfPayment> amountOfPaymentList = widget.instructor !=
     //             null &&
@@ -439,7 +439,9 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                         maxLines: 5,
                         minLines: 1,
                         onTextChange: (text) {
-                          requestComplain = text;
+                          setState(() {
+                            requestComplain = text;
+                          });
                         },
                         isNewLine: true,
                       ),
@@ -598,7 +600,7 @@ class _LessonReservationScreenState extends State<LessonReservationScreen> {
                           onTap: () {},
                         ),
                         value: tr('kakaoPay'),
-                        onChanged: (value) {  },
+                        onChanged: (value) {},
                         groupValue: payment,
                       ),
                       SizedBox(height: titlePadding),
