@@ -1,0 +1,3 @@
+enum NotificationType {
+  asdf,
+} // TODO:
