@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -146,8 +145,6 @@ public class ScheduleService {
             LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElse(null);
             if (!studentInfoDTOs.isEmpty() && lessonPaymentInfo != null) {
                 reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
-                if (lessonInfo.getLessonId() == 245)
-                    log.info("{}", new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
             }
         }
 
@@ -258,7 +255,7 @@ public class ScheduleService {
     }
 
     // 매일 자정에 실행되는 스케줄러
-    @Scheduled(cron = "0 10 14 * * ?")
+    @Scheduled(cron = "0 0 18 * * ?")
     @Transactional
     public void updateDatabase() {
         // instructorId가 null인 데이터에 대해 업데이트
@@ -271,9 +268,12 @@ public class ScheduleService {
                     List<ReserveScheduleVO> reserveScheduleVOs = scheduleCacheDto.get().getReserveScheduleVOs();
                     if (reserveScheduleVOs != null && !reserveScheduleVOs.isEmpty()) {
                         for (ReserveScheduleVO reserveScheduleVO : reserveScheduleVOs) {
-                            log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
-                            lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
-                            eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                            Optional<Lesson> lesson = lessonRepository.findById(reserveScheduleVO.getLessonId());
+                            if (lesson.isPresent() && lesson.get().getInstructor() == null) {
+                                log.info("{}번 강습 {}번 강사에게 배정", reserveScheduleVO.getLessonId(), reserveScheduleVO.getInstructorId());
+                                lessonRepository.updateInstructorId(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                                eventPublisher.publishDesignatedEvent(reserveScheduleVO.getInstructorId(), reserveScheduleVO.getLessonId());
+                            }
                         }
                     }
                 }
@@ -281,7 +281,7 @@ public class ScheduleService {
         }
     }
 
-    @Scheduled(cron = "0 11 14 * * ?")
+    @Scheduled(cron = "0 1 18 * * ?")
     public void updateSchedule() {
         // instructorId가 null인 데이터에 대해 업데이트
         log.info("스케쥴 업데이트 - 날짜: {}", LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
