@@ -186,10 +186,11 @@ class AuthService extends GetxService {
 
   // TODO: 사장 로그인 로직 수정 필요
   Future<bool> ownerSignUp(OwnerRequest owner) async {
-    var uri = Uri.parse('$baseUrl/user/signup/user');
-    var request = http.MultipartRequest('POST', uri);
+    FormData formData = FormData();
     String? domainUserKey = await secureStorage.read(key: "domainUserKey");
     String? kakaoProfileImage = await secureStorage.read(key: "profileUrl");
+    var uri = Uri.parse('$baseUrl/user/signup/user');
+    var request = http.MultipartRequest('POST', uri);
 
     request.fields['domainUserKey'] = domainUserKey!;
     request.fields['kakaoProfileImage'] = kakaoProfileImage!;
