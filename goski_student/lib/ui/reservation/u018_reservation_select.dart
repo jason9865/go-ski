@@ -130,15 +130,15 @@ class _StudentNumberField extends StatelessWidget {
         if (int.tryParse(_controller.text)! > 8) {
           _controller.text = "8";
           if (!Get.isSnackbarOpen) {
-            Get.snackbar(tr('errorStudentNumberTitle'), tr('errorStudentNumberContent'));
+            Get.snackbar(
+                tr('errorStudentNumberTitle'), tr('errorStudentNumberContent'));
           }
         }
 
         reservationViewModel
             .setTotalStudent(int.tryParse(_controller.text) ?? 0);
       } else {
-        reservationViewModel
-            .setTotalStudent(0);
+        reservationViewModel.setTotalStudent(0);
       }
     });
   }
@@ -243,7 +243,8 @@ class _DateTimeSelectors extends StatelessWidget {
                       surface: goskiBackground,
                       surfaceTint: Colors.transparent,
                     ),
-                    buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                    buttonTheme: const ButtonThemeData(
+                        textTheme: ButtonTextTheme.primary),
                   ),
                   child: GoskiModal(
                     title: tr('selectTime'),
@@ -311,7 +312,8 @@ class _DateTimeSelectors extends StatelessWidget {
               surface: goskiBackground,
               surfaceTint: Colors.transparent,
             ),
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -383,6 +385,10 @@ class _DateTimeSelectors extends StatelessWidget {
               onPressed: () {
                 selectedHour =
                     selectedHour.length == 1 ? "0$selectedHour" : selectedHour;
+                selectedMinute = selectedMinute.length == 1
+                    ? "0$selectedMinute"
+                    : selectedMinute;
+
                 reservationViewModel
                     .setStartTime("$selectedHour$selectedMinute");
                 Navigator.of(context).pop();
