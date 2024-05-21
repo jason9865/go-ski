@@ -335,8 +335,8 @@ public class PayService {
                 //tid 그대로 입력
                 .cid(testId)
                 .tid(payment.getTid())
-                .cancelAmount((int) payback)
-                .cancelVatAmount((int) (payback * 0.1))
+                .cancelAmount((int) (Math.ceil(payback * (10d/11))))
+                .cancelVatAmount((int) (Math.floor(payback * (1d/11))))
                 .cancelTaxFreeAmount(0)
                 .build();
         requestCancelToKakao(kakaopayCancelRequestDTO);
