@@ -144,6 +144,7 @@ public class ScheduleService {
                     .map(StudentInfoDTO::new).toList();
             LessonPaymentInfo lessonPaymentInfo = lessonPaymentInfoRepository.findById(lessonInfo.getLesson().getLessonId()).orElse(null);
             if (!studentInfoDTOs.isEmpty() && lessonPaymentInfo != null) {
+                log.info("{}", lessonInfo);
                 reserveScheduleVOs.add(new ReserveScheduleVO(lessonInfo, studentInfoDTOs, lessonPaymentInfo));
             }
         }
