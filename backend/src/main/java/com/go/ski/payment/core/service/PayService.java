@@ -335,10 +335,11 @@ public class PayService {
                 //tid 그대로 입력
                 .cid(testId)
                 .tid(payment.getTid())
-                .cancelAmount((int) (payback) * (10/11))
+                .cancelAmount((int) Math.floor(payback * 10/11))
                 .cancelTaxFreeAmount(0)
                 .build();
         requestCancelToKakao(kakaopayCancelRequestDTO);
+        log.info("취소금액 - {}",payback * 10/11);
 
         eventPublisher.publishCancelEvent(lesson, lessonInfo);
     }
