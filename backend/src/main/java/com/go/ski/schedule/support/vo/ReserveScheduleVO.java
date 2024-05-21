@@ -44,6 +44,7 @@ public class ReserveScheduleVO extends ReserveInfoVO {
         representativeName = lesson.getRepresentativeName();
         instructorId = lesson.getInstructor() != null ? lesson.getInstructor().getInstructorId() : null;
         isDesignated = instructorId != null;
+        requestComplain = lessonInfo.getRequestComplain();
     }
 
     public ReserveScheduleVO(CreateScheduleRequestDTO createScheduleRequestDTO) {
