@@ -21,7 +21,6 @@ public class KakaopayPrepareRequestDTO {
 	private Integer taxFreeAmount;
 
 	public static KakaopayPrepareRequestDTO toKakaopayPrepareRequestDTO(Lesson lesson, String itemName, Integer totalFee) {
-		totalFee = totalFee * (10/11);
 		return KakaopayPrepareRequestDTO.builder()
 			.partnerOrderId("partner_order_id")
 			.partnerUserId(String.valueOf(lesson.getUser().getUserId()))
