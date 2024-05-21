@@ -3,8 +3,10 @@ package com.go.ski.payment.support.dto.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Amount {
 	@JsonProperty("total")
 	private int total;

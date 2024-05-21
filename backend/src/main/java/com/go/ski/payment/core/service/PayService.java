@@ -336,9 +336,11 @@ public class PayService {
                 .cid(testId)
                 .tid(payment.getTid())
                 .cancelAmount((int) payback)
+                .cancelVatAmount((int) Math.round(payback / 11))
                 .cancelTaxFreeAmount(0)
                 .build();
         requestCancelToKakao(kakaopayCancelRequestDTO);
+        log.info("취소금액 - {}",payback);
 
         eventPublisher.publishCancelEvent(lesson, lessonInfo);
     }
@@ -361,6 +363,8 @@ public class PayService {
         params.put("cancel_url", cancelUrl);//url 보내줌
         params.put("fail_url", failUrl);//url 보내줌
 
+        log.info("Kakao pay prepare params : {}", params);
+
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
         ResponseEntity<KakaopayPrepareResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/ready",
                 requestEntity, KakaopayPrepareResponseDTO.class);
@@ -382,9 +386,13 @@ public class PayService {
         params.put("partner_user_id", request.getPartnerUserId());
         params.put("pg_token", request.getPgToken());
 
+        log.info("Kakao pay Approve params : {}", params);
+
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
         ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
                 requestEntity, KakaopayApproveResponseDTO.class);
+
+        log.info("responsEntity - {}",responseEntity.getBody());
 
         eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
 
@@ -398,6 +406,7 @@ public class PayService {
         params.put("cid", testId);
         params.put("tid", request.getTid());
         params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
+        params.put("cancel_vat_amount",Integer.toString(request.getCancelVatAmount()));
         params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
 
         log.info("params : {}", params);
