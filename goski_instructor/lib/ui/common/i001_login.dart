@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goski_instructor/const/color.dart';
 import 'package:goski_instructor/const/enum/auth_status.dart';
@@ -79,6 +80,38 @@ class LogoImage extends StatelessWidget {
   }
 }
 
+// class KakaoLoginButton extends StatelessWidget {
+//   final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
+
+//   KakaoLoginButton({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         loginViewModel.loginWithKakao().then((result) {
+//           switch (result) {
+//             case AuthStatus.already:
+//               Get.offAll(() => const InstructorMainScreen());
+//               break;
+//             case AuthStatus.first:
+//               Get.off(() => const SignUpScreen());
+//               break;
+//             case AuthStatus.error:
+//               Get.snackbar("Login Failed", "Please try again.");
+//               break;
+//           }
+//         });
+//       },
+//       child: Image.asset(
+//         "assets/images/kakao_login.png",
+//         width: 300,
+//         height: 60,
+//       ),
+//     );
+//   }
+// }
+
 class KakaoLoginButton extends StatelessWidget {
   final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
 
@@ -91,21 +124,74 @@ class KakaoLoginButton extends StatelessWidget {
         loginViewModel.loginWithKakao().then((result) {
           switch (result) {
             case AuthStatus.already:
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("successLogin"), tr("welcome"));
+              }
               Get.offAll(() => const InstructorMainScreen());
               break;
             case AuthStatus.first:
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("successLogin"), tr("redirectToSignUpScreen"));
+              }
               Get.off(() => const SignUpScreen());
               break;
             case AuthStatus.error:
-              Get.snackbar("Login Failed", "Please try again.");
+              if (!Get.isSnackbarOpen) {
+                Get.snackbar(tr("failedToLogin"), tr("tryLater"));
+              }
               break;
           }
         });
       },
-      child: Image.asset(
-        "assets/images/kakao_login.png",
-        width: 300,
-        height: 60,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(
+            0xffFEE500,
+          ),
+        ),
+        height: screenSizeController.getHeightByRatio(0.06),
+        width: screenSizeController.getWidthByRatio(0.75),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: screenSizeController.getWidthByRatio(0.035),
+              ),
+              child: SvgPicture.asset(
+                'assets/images/kakao_symbol.svg',
+                height: screenSizeController.getHeightByRatio(0.024),
+                colorFilter: const ColorFilter.mode(
+                  Color(
+                    0xff000000,
+                  ),
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: screenSizeController.getWidthByRatio(0.035),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      tr('kakaoLogin'),
+                      style: TextStyle(
+                        fontFamily: "NotoSansKR",
+                        fontSize: 20,
+                        color: const Color(0xff000000).withOpacity(0.85),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
