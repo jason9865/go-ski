@@ -19,7 +19,7 @@ public class Lesson {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;//다 대 1 user fk
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Team team;// 다 대 1 team fk
     @ManyToOne(fetch = FetchType.LAZY)
