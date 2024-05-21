@@ -106,7 +106,9 @@ public class EventPublisher {
     public void publishCancelEvent(Lesson lesson, LessonInfo lessonInfo) {
         // 사장과 강사에게
         List<Integer> receiverIds = new ArrayList<>();
-        receiverIds.add(lesson.getInstructor().getInstructorId()); // 강사에게
+        if (lesson.getInstructor() != null) { // 지정강사가 정해진 경우에만
+            receiverIds.add(lesson.getInstructor().getInstructorId()); 
+        }
         receiverIds.add(lesson.getTeam().getUser().getUserId()); // 사장에게
 
         publishEvent(lessonInfo, receiverIds);
