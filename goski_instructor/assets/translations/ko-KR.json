@@ -210,5 +210,11 @@
   "termsOfUse": "이용약관",
   "ask": "문의",
   "lessonAdded" : "강습이 예약되었습니다.",
-  "footSize": "{}mm"
+  "footSize": "{}mm",
+  "successLogin" : "로그인 성공",
+  "welcome" : "환영합니다.",
+  "redirectToSignUpScreen" : "회원가입 페이지로 이동합니다.",
+  "failedToLogin" : "로그인 실패",
+  "tryLater": "잠시 후 다시 시도해주세요",
+  "kakaoLogin" : "카카오 로그인"
 }
