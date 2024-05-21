@@ -335,10 +335,8 @@ public class PayService {
                 //tid 그대로 입력
                 .cid(testId)
                 .tid(payment.getTid())
-//                .cancelAmount((int) (Math.ceil(payback * (10d/11))))
-//                .cancelVatAmount((int) (Math.floor(payback * (1d/11))))
                 .cancelAmount((int) payback)
-                .cancelVatAmount(0)
+                .cancelVatAmount((int) Math.floor(payback / 11))
                 .cancelTaxFreeAmount(0)
                 .build();
         requestCancelToKakao(kakaopayCancelRequestDTO);
@@ -365,6 +363,8 @@ public class PayService {
         params.put("cancel_url", cancelUrl);//url 보내줌
         params.put("fail_url", failUrl);//url 보내줌
 
+        log.info("Kakao pay prepare params : {}", params);
+
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
         ResponseEntity<KakaopayPrepareResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/ready",
                 requestEntity, KakaopayPrepareResponseDTO.class);
@@ -386,9 +386,13 @@ public class PayService {
         params.put("partner_user_id", request.getPartnerUserId());
         params.put("pg_token", request.getPgToken());
 
+        log.info("Kakao pay Approve params : {}", params);
+
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(params, headers);
         ResponseEntity<KakaopayApproveResponseDTO> responseEntity = restTemplate.postForEntity(HOST + "/approve",
                 requestEntity, KakaopayApproveResponseDTO.class);
+
+        log.info("responsEntity - {}",responseEntity.getBody());
 
         eventPublisher.publish(lesson, lessonInfo, paymentCache, deviceType);
 
