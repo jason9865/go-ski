@@ -400,6 +400,7 @@ public class PayService {
         params.put("cid", testId);
         params.put("tid", request.getTid());
         params.put("cancel_amount", String.valueOf(request.getCancelAmount()));
+        params.put("cancel_vat_amount",Integer.toString(request.getCancelVatAmount()));
         params.put("cancel_tax_free_amount", String.valueOf(request.getCancelTaxFreeAmount()));
 
         log.info("params : {}", params);
