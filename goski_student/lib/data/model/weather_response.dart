@@ -1,5 +1,5 @@
 class WeatherResponse {
-  double temp;
+  String temp;
   String weather;
   String description;
   String iconUrl;
@@ -17,7 +17,7 @@ class WeatherResponse {
     Map<String, dynamic> main = json['main'];
 
     return WeatherResponse(
-      temp: main['temp'] as double,
+      temp: main['temp'].toStringAsFixed(0),
       weather: weather['main'] as String,
       description: weather['description'] as String,
       iconUrl: weather['icon'] as String,
@@ -31,7 +31,7 @@ class WeatherResponse {
 }
 
 class Weather {
-  int temp;
+  String temp;
   String weather;
   String description;
   String iconUrl;
@@ -52,7 +52,7 @@ class Weather {
 extension WeatherResponseToWeather on WeatherResponse {
   Weather toWeather() {
     return Weather(
-      temp: temp.toInt(),
+      temp: temp,
       weather: weather,
       description: description,
       iconUrl: 'https://openweathermap.org/img/wn/$iconUrl@2x.png',
