@@ -20,7 +20,7 @@ class MainViewModel extends GetxController {
   ).obs;
   RxBool isWeatherLoading = true.obs;
   Rx<Weather> weather = Weather(
-    temp: 0,
+    temp: '0',
     weather: '',
     description: '',
     iconUrl: '',

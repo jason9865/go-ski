@@ -281,7 +281,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             Row(
               children: [
                 GoskiText(
-                  text: mainViewModel.weather.value.temp.toString(),
+                  text: mainViewModel.weather.value.temp,
                   size: goskiFontXLarge,
                 ),
                 Image.asset(
