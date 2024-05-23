@@ -42,6 +42,15 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 test.dart
+.idea/
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
 .env
 .keystore
 google-services.json
+firebase_options.dart
+GoogleService-info.plist
+
+
