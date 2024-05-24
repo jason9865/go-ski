@@ -36,8 +36,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 ### 수강생
 
 #### 로그인 / 리조트 선택
-<img src="exec/images/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:10px;">
-<img src="exec/images/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:10px;"> <img src="exec/images/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
 
 
 #### 강습내역
