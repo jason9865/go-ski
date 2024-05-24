@@ -7,8 +7,10 @@ import com.go.ski.payment.support.dto.util.Amount;
 import com.go.ski.payment.support.dto.util.CardInfo;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class KakaopayApproveResponseDTO {
 	private String aid;
 	private String tid;

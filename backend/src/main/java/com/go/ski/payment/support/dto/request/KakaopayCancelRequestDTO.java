@@ -14,6 +14,7 @@ public class KakaopayCancelRequestDTO {
 	private String tid;
 	private Integer cancelAmount;
 	private Integer cancelTaxFreeAmount;
+	private Integer cancelVatAmount;
 	//사용할 수 있는 것
 	/*
 	* 어떻게 활용할지 고민하기

@@ -149,6 +149,7 @@ public class ScheduleService {
         }
 
         Map<Integer, List<ReserveScheduleVO>> reserveScheduleMap = assignLessons(reserveScheduleVOs, teamInstructors);
+        log.info("{}", reserveScheduleMap);
         if (reserveScheduleMap != null) {
             // 예약이 가능하면 기존에 저장되어 있던 것들을 지우고 새로 저장해야함
             String id = team.getTeamId() + ":" + lessonDate;
