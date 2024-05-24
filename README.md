@@ -36,55 +36,50 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 ### 수강생
 
 #### 로그인 / 리조트 선택
-<img src="exec/images/student_gif/수강생_01_로그인.gif" alt="로그인" style="width: 30%; margin-right:10px;"> <img src="exec/images/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_01_로그인.gif" alt="로그인" style="margin-right:10px;"> <img src="exec/images/student_gif/수강생_03_메인화면_리조트_선택_및_날씨.gif" alt="리조트선택_날씨" >
 
 
 #### 강습내역
-<img src="exec/images/student_gif/수강생_04_강습내역.gif" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_04_강습내역.gif" >
 
 #### 피드백 / 리뷰
 
-<img src="exec/images/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백" style="width: 30%;  margin-right:10px;">
-<img src="exec/images/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_05_강습내역_피드백.gif" alt="피드백"> <img src="exec/images/student_gif/수강생_06_강습내역_리뷰.gif" alt="리뷰">
 
 
 #### 강사 프로필
-<img src="exec/images/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_08_강습내역_강사프로필.gif" alt="강사 프로필">
 
 #### 강습 예약 / 강습 취소
-<img src="exec/images/student_gif/수강생_11_강습예약.gif" alt="강습예약"  style="width: 30%; margin-right:10px;">
-<img src="exec/images/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_11_강습예약.gif" alt="강습예약"> <img src="exec/images/student_gif/수강생_07_강습내역_예약취소.gif" alt="예약취소">
 
 #### 결제 내역
-<img src="exec/images/student_gif/수강생_09_결제내역.gif" alt="결제내역" style="width: 30%; margin-right:10px;">
+<img src="exec/images/student_gif/수강생_09_결제내역.gif" alt="결제내역">
 
 #### 알림 / 실시간 쪽지
-<img src="exec/images/student_gif/수강생_12_알림.gif" alt="알림"   style="width: 30%;  margin-right:10px;">
-<img src="exec/images/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_12_알림.gif" alt="알림"> <img src="exec/images/student_gif/수강생_14_쪽지.gif" alt="쪽지 보내기">
 
 #### 알림 설정
-<img src="exec/images/student_gif/수강생_13_알림_설정.gif" alt="알림 설정"   style="width: 30%;">
+<img src="exec/images/student_gif/수강생_13_알림_설정.gif" alt="알림 설정">
 
 
 ### 강사
 
 #### 로그인 화면
-<img src="exec/images/instructor_gif/강사_01_로그인.gif" alt="강사 로그인" style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_01_로그인.gif" alt="강사 로그인">
 
 #### 일정 확인 / 실시간 강습 예약
-<img src="exec/images/instructor_gif/강사_02_일정_확인.gif" alt="강습 내역" style="width : 30%; margin-right:10px;">
-<img src="exec/images/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약"style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_02_일정_확인.gif" alt="강습 내역"> <img src="exec/images/instructor_gif/강사_03_실시간 강습_예약.gif" alt="실시간 강습 예약">
 
 #### 알림 
-<img src="exec/images/instructor_gif/강사_04_알림.gif" alt="알림" style="width: 30%;">  
+<img src="exec/images/instructor_gif/강사_04_알림.gif" alt="알림">  
 
 #### 강습 내역 / 피드백 작성
-<img src="exec/images/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" style="width : 30%; margin-right:10px;">
-<img src="exec/images/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성"style="width: 30%;">
+<img src="exec/images/instructor_gif/강사_06_강습_내역.gif" alt="강습 내역" > <img src="exec/images/instructor_gif/강사_07_피드백_작성.gif" alt="피드백 작성">
 
 
 #### 리뷰 내역
-<img src="exec/images/instructor_gif/강사_05_리뷰_내역.gif" alt="리뷰 내역" style="width: 30%;">  
+<img src="exec/images/instructor_gif/강사_05_리뷰_내역.gif" alt="리뷰 내역">  
 
 <div id="3"></div>
 
