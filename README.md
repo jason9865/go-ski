@@ -41,7 +41,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 
 #### 강습내역
-<img src="exec/images/student_gif/수강생_04_강습내역.gif" style="width: 30%;">
+<img src="exec/images/student_gif/수강생_04_강습내역.gif">
 
 #### 피드백 / 리뷰
 
