@@ -140,17 +140,17 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 <table>
     <tr>
-        <td height="140px" align="center">
+        <td align="center" width="16%">
             <img src="exec/images/고승민.png" width="140px" /> <br> 고승민 <br>(Team Leader) </a> <br></td>
-        <td height="140px" align="center"> 
+        <td align="center" width="16%">
             <img src="exec/images/송준석.png" width="140px" /> <br> 송준석 <br>(Front-End) </a> <br></td>
-        <td height="140px" align="center"> 
-            <img src="exec/images/최지찬.png" width="140px"  /> <br> 최지찬 <br>(Front-End) </a> <br></td>
-        <td height="140px" align="center"> 
+        <td align="center" width="16%">
+            <img src="exec/images/최지찬.png" width="140px" /> <br> 최지찬 <br>(Front-End) </a> <br></td>
+        <td align="center" width="16%">
             <img src="exec/images/고정원.png" width="140px" /> <br> 고정원 <br>(Back-End) </a> <br></td>
-        <td height="140px" align="center"> 
+        <td align="center" width="16%">
             <img src="exec/images/임종율.png" width="140px" /> <br> 임종율 <br>(Back-End) </a> <br></td>
-        <td height="140px" align="center"> 
+        <td align="center" width="16%">
             <img src="exec/images/장승호.png" width="140px" /> <br> 장승호 <br>(Back-End) </a> <br></td>
     </tr>
     <tr>
